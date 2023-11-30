@@ -1,38 +1,93 @@
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+  min-height: 100vh;
+  background-color: lightgray;
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  margin-bottom: 5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: left;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: black;
 }
 
 .App-link {
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.container {
+  width: 85rem;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin-left: 3rem;
+  margin-top: 2rem;
+  margin-right: 1rem;
+}
+
+.title {
+  text-align: center;
+  color: #000;
+  font-family: Inter;
+  font-size: 1.875rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.filters {
+  width: 60rem;
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+}
+
+.applied-filters {
+  width: 40rem;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+}
+
+.filters-box {
+  width: 38.25rem;
+  height: 6rem;
+  background-color: white;
+  position: relative;
+}
+
+.clear-filters-div {
+  width: 8rem;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+.generate-summary-btn {
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  color: white;
+  font-weight: bold;
+  font-size: 1.875rem;
+}
+
+th {
+  height: 5rem;
+  text-align: center;
+}
+
+
+
+.select-btn {
+  display: flex;
+  position: absolute;
+  right: 0;
+  bottom: 0;
 }
