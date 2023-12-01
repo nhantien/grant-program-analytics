@@ -9,6 +9,8 @@ import IconButton from '@mui/material/IconButton';
 
 import { Project, YEARS, PROJECT_TYPE, FACULTY } from './constants/index.js';
 
+const BASE_URL = 'http://localhost:3001/';
+
 const handleSearch = (searchText) => {
   // Implement your search logic here using the searchText
   console.log('Searching for:', searchText);
@@ -20,6 +22,19 @@ const handleFilterSelect = (selectedOption) => {
   // Implement your filter logic here using the selectedOption
   console.log('Selected filter:', selectedOption);
 };
+
+const projects = [];
+fetch(BASE_URL)
+  .then((res) => {
+    return res.json();
+  }).then((json) => {
+    console.log(json);
+    json.map((data) => {
+      projects.push(new Project(data.FundingYear, data.ProjectType, data.Investigator, data.Faculty, data.Title, data.ProjectYear, data.Amount, data.ProjectStatus));
+    });
+  }).catch((err) => {
+    console.log(err);
+  });
 
 function App() {
 
@@ -39,9 +54,6 @@ function App() {
     const newFilters = [];
     setAppliedFilters(newFilters);
   };
-
-  const sampleProject = new Project("2022/23", "Large TLEF", "Carle Ferreira", "Applied Science", "Integrating and expanding simulation pedagogy", 
-  "1", "122,835", "Active");
 
   return (
     <div className="App">
@@ -95,8 +107,8 @@ function App() {
       </header>
 
       <div style={{ width: "100%" }}>
-        <table style={{width: "100%", borderCollapse: 'collapse'}}>
-          <thead style={{color: 'white', backgroundColor: 'black'}}>
+        <table style={{ width: "100%", borderCollapse: 'collapse' }}>
+          <thead style={{ color: 'white', backgroundColor: 'black' }}>
             <tr>
               <th>Funding Year</th>
               <th>Project Type</th>
@@ -111,7 +123,11 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            <TableItem project={sampleProject} />
+            {
+              projects.map((project) => (
+                <TableItem project={project} />
+              ))
+            }
           </tbody>
         </table>
       </div>
