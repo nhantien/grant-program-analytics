@@ -25,7 +25,13 @@ const handleFilterSelect = (selectedOption) => {
 
 function App() {
 
-  const [appliedFilters, setAppliedFilters] = useState(["2022/2023"]);
+  const [appliedFilters, setAppliedFilters] = useState({
+    "FundingYear": ["2022/2023"],
+    "ProjectType": [],
+    "Faculty": [],
+    "FocusArea": [],
+  });
+
   const [projects, setProjects] = useState([]);
   const [sort, setSort] = useState({
     "order": "asc",
@@ -33,27 +39,47 @@ function App() {
   });
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    const fetchFilteredData = async () => {
+      try {
+        const res = await fetch(BASE_URL + "filter", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", },
+          body: JSON.stringify({ appliedFilters }),
+        });
+        if (!res.ok) throw new Error("Network response was not ok");
 
-  const fetchData = async () => {
-    try {
-      const response = await fetch(BASE_URL);
-      const data = await response.json();
-      data.map((proj) => {
-        projects.push(new Project(proj.FundingYear, proj.ProjectType, proj.Investigator, proj.Faculty, proj.Title, proj.ProjectYear, proj.Amount, proj.ProjectStatus));
-      });
-      setProjects([...projects]);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+        const data = await res.json();
+        const newProjects = data.map((proj) => {
+          // Log the properties of each project for debugging
+          console.log("Project Properties:", proj);
+
+          // Make sure to return the new Project instance
+          return new Project(
+            proj.FundingYear,
+            proj.ProjectType,
+            proj.Investigator,
+            proj.Faculty,
+            proj.Title,
+            proj.ProjectYear,
+            proj.Amount,
+            proj.ProjectStatus
+          );
+        });
+
+        setProjects(newProjects);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchFilteredData();
+  }, [appliedFilters]);
 
   const handleSort = (property) => {
     if (property === sort["property"]) {
       setSort({
         "order": sort["order"] === "asc" ? "desc" : "asc",
-        "property" : sort["property"]
+        "property": sort["property"]
       });
     } else {
       setSort({
@@ -74,18 +100,30 @@ function App() {
     }
   });
 
-  const handleSelectFilter = (selectedFilter) => {
-    const newFilters = [...appliedFilters, selectedFilter];
-    setAppliedFilters(newFilters);
+  const handleSelectFilter = (selectedFilter, filterType) => {
+    const newFilters = [...appliedFilters[filterType], selectedFilter];
+    setAppliedFilters((prevFilters) => ({
+      ...prevFilters,
+      [filterType]: newFilters,
+    }));
   }
 
-  const handleClearFilter = (filterToRemove) => {
-    const updatedFilters = appliedFilters.filter((filter) => filter !== filterToRemove);
-    setAppliedFilters(updatedFilters);
+  const handleClearFilter = (filterToRemove, filterType) => {
+    const updatedFilters = appliedFilters[filterType].filter((filter) => filter !== filterToRemove);
+    setAppliedFilters((prevFilters) => ({
+      ...prevFilters,
+      [filterType]: updatedFilters,
+    }));
   };
 
   const handleClearAll = () => {
-    const newFilters = [];
+    const newFilters = {
+      "FundingYear": ["2022/23"],
+      "ProjectType": [],
+      "Faculty": [],
+      "FocusArea": [],
+
+    };
     setAppliedFilters(newFilters);
   };
 
@@ -102,10 +140,10 @@ function App() {
           <div style={{ width: "65rem", marginLeft: '3rem' }}>
             <p style={{ fontSize: "1.25rem" }} >Filter by</p>
             <div className='filters'>
-              <Filter options={YEARS} onSelect={handleSelectFilter} defaultValue="" />
-              <Filter options={PROJECT_TYPE} onSelect={handleSelectFilter} defaultValue="Project Type (Any)" />
-              <Filter options={FACULTY} onSelect={handleSelectFilter} defaultValue="Faculty (Any)" />
-              <Filter options={options} onSelect={handleSelectFilter} defaultValue="Focus Area" />
+              <Filter options={YEARS} onSelect={handleSelectFilter} defaultValue="" type="FundingYear" />
+              <Filter options={PROJECT_TYPE} onSelect={handleSelectFilter} defaultValue="Project Type (Any)" type="ProjectType" />
+              <Filter options={FACULTY} onSelect={handleSelectFilter} defaultValue="Faculty (Any)" type="Faculty" />
+              <Filter options={options} onSelect={handleSelectFilter} defaultValue="Focus Area" type="FocusArea" />
             </div>
           </div>
           <div style={{ width: "30rem", marginLeft: '3rem' }}>
