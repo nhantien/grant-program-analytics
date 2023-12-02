@@ -48,8 +48,8 @@
   width: 40rem;
   display: flex;
   flex-direction: column;
-  align-items: start;
-  justify-content: start;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
 .filters-box {
@@ -66,7 +66,7 @@
   right: 0;
   display: flex;
   align-items: center;
-  justify-content: end;
+  justify-content: flex-end;
 }
 
 .generate-summary-btn {
@@ -81,9 +81,13 @@
 th {
   height: 5rem;
   text-align: center;
+  cursor: pointer;
 }
 
-
+th:hover {
+  background-color: darkgray;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
 .select-btn {
   display: flex;
@@ -91,3 +95,4 @@ th {
   right: 0;
   bottom: 0;
 }
+

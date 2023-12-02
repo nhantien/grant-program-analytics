@@ -1,5 +1,5 @@
 import './App.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Filter from './components/Filter.jsx';
 import SearchBar from './components/SearchBar.jsx';
 import FilterList from './components/FilterList.jsx';
@@ -23,22 +23,56 @@ const handleFilterSelect = (selectedOption) => {
   console.log('Selected filter:', selectedOption);
 };
 
-const projects = [];
-fetch(BASE_URL)
-  .then((res) => {
-    return res.json();
-  }).then((json) => {
-    console.log(json);
-    json.map((data) => {
-      projects.push(new Project(data.FundingYear, data.ProjectType, data.Investigator, data.Faculty, data.Title, data.ProjectYear, data.Amount, data.ProjectStatus));
-    });
-  }).catch((err) => {
-    console.log(err);
-  });
-
 function App() {
 
   const [appliedFilters, setAppliedFilters] = useState(["2022/2023"]);
+  const [projects, setProjects] = useState([]);
+  const [sort, setSort] = useState({
+    "order": "asc",
+    "property": null
+  });
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(BASE_URL);
+      const data = await response.json();
+      data.map((proj) => {
+        projects.push(new Project(proj.FundingYear, proj.ProjectType, proj.Investigator, proj.Faculty, proj.Title, proj.ProjectYear, proj.Amount, proj.ProjectStatus));
+      });
+      setProjects([...projects]);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleSort = (property) => {
+    if (property === sort["property"]) {
+      setSort({
+        "order": sort["order"] === "asc" ? "desc" : "asc",
+        "property" : sort["property"]
+      });
+    } else {
+      setSort({
+        "order": "asc",
+        "property": property
+      });
+    }
+  };
+
+  const sortedProjects = [...projects].sort((a, b) => {
+    const aValue = a[sort["property"]] || "";
+    const bValue = b[sort["property"]] || "";
+
+    if (sort["order"] === 'asc') {
+      return aValue.localeCompare(bValue, undefined, { numeric: true });
+    } else {
+      return bValue.localeCompare(aValue, undefined, { numeric: true });
+    }
+  });
 
   const handleSelectFilter = (selectedFilter) => {
     const newFilters = [...appliedFilters, selectedFilter];
@@ -54,6 +88,7 @@ function App() {
     const newFilters = [];
     setAppliedFilters(newFilters);
   };
+
 
   return (
     <div className="App">
@@ -111,20 +146,20 @@ function App() {
           <thead style={{ color: 'white', backgroundColor: 'black' }}>
             <tr>
               <th>Funding Year</th>
-              <th>Project Type</th>
-              <th>Principal Investigator</th>
-              <th>Department/Faculty</th>
-              <th>Title</th>
-              <th>Project Year</th>
-              <th>Amount</th>
-              <th>Status</th>
+              <th onClick={() => handleSort("type")}>Project Type {sort["order"] === "asc" ? '▲' : '▼'}</th>
+              <th onClick={() => handleSort("investigator")}>Principal Investigator {sort["order"] === "asc" ? '▲' : '▼'}</th>
+              <th onClick={() => handleSort("faculty")}>Department/Faculty {sort["order"] === "asc" ? '▲' : '▼'}</th>
+              <th onClick={() => handleSort("title")}>Title {sort["order"] === "asc" ? '▲' : '▼'}</th>
+              <th onClick={() => handleSort("projectYear")}>Project Year {sort["order"] === "asc" ? '▲' : '▼'}</th>
+              <th onClick={() => handleSort("amount")}>Amount {sort["order"] === "asc" ? '▲' : '▼'}</th>
+              <th onClick={() => handleSort("status")}>Status {sort["order"] === "asc" ? '▲' : '▼'}</th>
               <th>Report</th>
               <th>Poster</th>
             </tr>
           </thead>
           <tbody>
             {
-              projects.map((project) => (
+              sortedProjects.map((project) => (
                 <TableItem project={project} />
               ))
             }
