@@ -1,6 +1,7 @@
 .App {
   min-height: 100vh;
   background-color: lightgray;
+  padding-bottom: 3rem;
 }
 
 .App-header {
@@ -20,7 +21,7 @@
 .container {
   width: 85rem;
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
   margin-left: 3rem;
   margin-top: 2rem;
@@ -96,3 +97,15 @@ th:hover {
   bottom: 0;
 }
 
+.page-btn {
+  width: 6.125rem;
+  height: 3.125rem;
+  background-color: black;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.page-btn:disabled {
+  background-color: gray;
+}

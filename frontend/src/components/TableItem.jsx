@@ -1,4 +1,3 @@
-import { Project } from "../constants";
 import "./TableItem.css";
 
 const TableItem = ({ project }) => {
@@ -8,7 +7,7 @@ const TableItem = ({ project }) => {
       <td>{project.type}</td>
       <td>{project.investigator}</td>
       <td>{project.faculty}</td>
-      <td>{project.title}</td>
+      <td style={{textAlign: "start"}}>{project.title}</td>
       <td>{project.projectYear}</td>
       <td>${project.amount}</td>
       <td>{project.status}</td>
