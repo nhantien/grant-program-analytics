@@ -12,7 +12,7 @@ const FilterList = ({ filters, onClearFilter }) => {
             label={filter}
             onDelete={() => onClearFilter(filter, filterType)}
             deleteIcon={<ClearIcon />}
-            style={{ margin: '4px' }}
+            style={{ margin: '4px', backgroundColor: '#77AEED' }}
           />
         ))
       )}
