@@ -1,6 +1,6 @@
 .App {
   min-height: 100vh;
-  background-color: lightgray;
+  background-color: #DFF2FF;
   padding-bottom: 3rem;
 }
 
@@ -58,6 +58,8 @@
   height: 6rem;
   background-color: white;
   position: relative;
+  border: solid lightgray;
+  border-radius: 0.5rem;
 }
 
 .clear-filters-div {
@@ -73,20 +75,22 @@
 .generate-summary-btn {
   width: 100%;
   height: 100%;
-  background-color: black;
+  background-color: #081252;
   color: white;
   font-weight: bold;
   font-size: 1.875rem;
+  border-radius: 0.5rem;
 }
 
 th {
+  border-top: 1px solid black;
   height: 5rem;
   text-align: center;
   cursor: pointer;
 }
 
 th:hover {
-  background-color: darkgray;
+  background-color: #194980;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -100,10 +104,13 @@ th:hover {
 .page-btn {
   width: 6.125rem;
   height: 3.125rem;
-  background-color: black;
+  background-color: #081252;
   color: white;
   font-size: 2rem;
   font-weight: bold;
+  border-radius: 0.5rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
 .page-btn:disabled {

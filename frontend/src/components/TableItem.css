@@ -3,13 +3,13 @@
     position: absolute;
     right: 0;
     bottom: 0;
+    margin-bottom: 0.5rem;
 }
 
 
 td {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
-    background-color: white;
     height: 9rem;
     border-top: 1px solid black;
     border-bottom: 1px solid black;

@@ -186,7 +186,7 @@ function App() {
 
       <div style={{ width: "100%" }}>
         <table style={{ width: "100%", borderCollapse: 'collapse' }}>
-          <thead style={{ color: 'white', backgroundColor: 'black' }}>
+          <thead style={{ color: 'white', backgroundColor: '#081252' }}>
             <tr>
               <th>Funding Year</th>
               <th onClick={() => handleSort("type")}>Project Type {sort["order"] === "asc" ? '▲' : '▼'}</th>
@@ -206,8 +206,8 @@ function App() {
               <h3 style={{ textAlign: "center" }}>No projects found.</h3>
             }
             {
-              sortedProjects.map((project) => (
-                <TableItem project={project} />
+              sortedProjects.map((project, index) => (
+                <TableItem project={project} color={index % 2 === 0} />
               ))
             }
           </tbody>
@@ -219,11 +219,11 @@ function App() {
         <input type="checkbox" />
       </div>
 
-      <div style={{width: "100%", display: "flex", justifyContent: "flex-end", alignItems: "center"}}>
+      <div style={{width: "100%", display: "flex", justifyContent: "flex-end", alignItems: "center", marginTop: "3rem"}}>
         <button className='page-btn' onClick={() => setCurrentPage((prevPage) => Math.max(prevPage - 1, 1))} disabled={currentPage === 1}>
           &lt;
         </button>
-        <span style={{marginLeft: "1rem", marginRight: "1rem", fontSize: "1.5rem", fontWeight: "bold"}}>Current Page: {currentPage}</span>
+        <span style={{ fontSize: "1.5rem", fontWeight: "bold" }}>Current Page: {currentPage}</span>
         <button className='page-btn' onClick={() => setCurrentPage((prevPage) => prevPage + 1)} disabled={projectsPerPage === "All" || projects.length < projectsPerPage}>
           &gt;
         </button>

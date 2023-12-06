@@ -68,7 +68,7 @@ app.post('/filter', (req, res) => {
       return;
     }
 
-    console.log("results length: " + results.length);
+    console.log(results);
 
     res.json(results);
   });
