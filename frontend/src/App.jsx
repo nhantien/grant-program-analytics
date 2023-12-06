@@ -5,7 +5,7 @@ import SearchBar from './components/SearchBar.jsx';
 import FilterList from './components/FilterList.jsx';
 import TableItem from './components/TableItem.jsx';
 import ClearIcon from '@mui/icons-material/Clear';
-import IconButton from '@mui/material/IconButton';
+import { IconButton, Select, MenuItem } from '@mui/material';
 
 import { Project, YEARS, PROJECT_TYPE, FACULTY } from './constants/index.js';
 
@@ -18,11 +18,6 @@ const handleSearch = (searchText) => {
 
 const options = ['Option 1', 'Option 2', 'Option 3'];
 
-const handleFilterSelect = (selectedOption) => {
-  // Implement your filter logic here using the selectedOption
-  console.log('Selected filter:', selectedOption);
-};
-
 function App() {
 
   const [appliedFilters, setAppliedFilters] = useState({
@@ -31,7 +26,8 @@ function App() {
     "Faculty": [],
     "FocusArea": [],
   });
-
+  const [projectsPerPage, setProjectsPerPage] = useState('All');
+  const [currentPage, setCurrentPage] = useState(1);
   const [projects, setProjects] = useState([]);
   const [sort, setSort] = useState({
     "order": "asc",
@@ -44,7 +40,7 @@ function App() {
         const res = await fetch(BASE_URL + "filter", {
           method: "POST",
           headers: { "Content-Type": "application/json", },
-          body: JSON.stringify({ appliedFilters }),
+          body: JSON.stringify({ appliedFilters, projectsPerPage, currentPage }),
         });
         if (!res.ok) throw new Error("Network response was not ok");
 
@@ -60,7 +56,7 @@ function App() {
             proj.Investigator,
             proj.Faculty,
             proj.Title,
-            proj.ProjectYear,
+            "1",
             proj.Amount,
             proj.ProjectStatus
           );
@@ -73,7 +69,7 @@ function App() {
     };
 
     fetchFilteredData();
-  }, [appliedFilters]);
+  }, [appliedFilters, sort, projectsPerPage, currentPage]);
 
   const handleSort = (property) => {
     if (property === sort["property"]) {
@@ -118,7 +114,7 @@ function App() {
 
   const handleClearAll = () => {
     const newFilters = {
-      "FundingYear": ["2022/23"],
+      "FundingYear": ["2022/2023"],
       "ProjectType": [],
       "Faculty": [],
       "FocusArea": [],
@@ -140,19 +136,28 @@ function App() {
           <div style={{ width: "65rem", marginLeft: '3rem' }}>
             <p style={{ fontSize: "1.25rem" }} >Filter by</p>
             <div className='filters'>
-              <Filter options={YEARS} onSelect={handleSelectFilter} defaultValue="" type="FundingYear" />
-              <Filter options={PROJECT_TYPE} onSelect={handleSelectFilter} defaultValue="Project Type (Any)" type="ProjectType" />
-              <Filter options={FACULTY} onSelect={handleSelectFilter} defaultValue="Faculty (Any)" type="Faculty" />
+              <Filter options={YEARS} onSelect={handleSelectFilter} defaultValue="Funding Year" type="FundingYear" />
+              <Filter options={PROJECT_TYPE} onSelect={handleSelectFilter} defaultValue="Project Type" type="ProjectType" />
+              <Filter options={FACULTY} onSelect={handleSelectFilter} defaultValue="Faculty" type="Faculty" />
               <Filter options={options} onSelect={handleSelectFilter} defaultValue="Focus Area" type="FocusArea" />
             </div>
           </div>
           <div style={{ width: "30rem", marginLeft: '3rem' }}>
             <p style={{ fontSize: '1.25rem' }}>Displayed per page</p>
-            <Filter options={options} onSelect={handleFilterSelect} defaultValue="All" />
+            <Select
+              style={{ width: "14.4375rem", backgroundColor: "white" }}
+              value={projectsPerPage}
+              onChange={(e) => setProjectsPerPage(Number(e.target.value) || "All")}
+            >
+              <MenuItem value={"All"}>All</MenuItem>
+              <MenuItem value={10}>10</MenuItem>
+              <MenuItem value={20}>20</MenuItem>
+              <MenuItem value={30}>30</MenuItem>
+            </Select>
           </div>
         </div>
 
-        <div style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "end", marginLeft: "5rem" }}>
+        <div style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginLeft: "5rem" }}>
           <div className='applied-filters'>
             <span style={{ marginTop: "1rem", marginBottom: "1rem" }}>Applied Filters</span>
             <div className='filters-box'>
@@ -197,12 +202,31 @@ function App() {
           </thead>
           <tbody>
             {
+              sortedProjects.length === 0 &&
+              <h3 style={{ textAlign: "center" }}>No projects found.</h3>
+            }
+            {
               sortedProjects.map((project) => (
                 <TableItem project={project} />
               ))
             }
           </tbody>
         </table>
+      </div>
+
+      <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+        <p style={{ width: "4.4375rem", fontSize: "0.9375rem", fontWeight: "bold" }}>Select All</p>
+        <input type="checkbox" />
+      </div>
+
+      <div style={{width: "100%", display: "flex", justifyContent: "flex-end", alignItems: "center"}}>
+        <button className='page-btn' onClick={() => setCurrentPage((prevPage) => Math.max(prevPage - 1, 1))} disabled={currentPage === 1}>
+          &lt;
+        </button>
+        <span style={{marginLeft: "1rem", marginRight: "1rem", fontSize: "1.5rem", fontWeight: "bold"}}>Current Page: {currentPage}</span>
+        <button className='page-btn' onClick={() => setCurrentPage((prevPage) => prevPage + 1)} disabled={projectsPerPage === "All" || projects.length < projectsPerPage}>
+          &gt;
+        </button>
       </div>
     </div>
   );

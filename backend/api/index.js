@@ -39,7 +39,12 @@ app.get('/', (req, res) => {
 });
 
 app.post('/filter', (req, res) => {
-  const { appliedFilters } = req.body;
+  const { appliedFilters, projectsPerPage, currentPage } = req.body;
+
+  const startIndex = (projectsPerPage !== "All" && projectsPerPage > 0) ? (currentPage - 1) * projectsPerPage : null;
+
+  console.log("Projects per page: " + projectsPerPage);
+  console.log("Start index: " + startIndex);
 
   // Build your SQL query based on appliedFilters
   let sql = 'SELECT * FROM Projects WHERE 1';
@@ -53,6 +58,8 @@ app.post('/filter', (req, res) => {
     }
   });
 
+  if (startIndex !== null) sql += ` LIMIT ${projectsPerPage} OFFSET ${startIndex}`;
+
   // Execute the query
   connection.query(sql, (err, results) => {
     if (err) {
@@ -61,7 +68,8 @@ app.post('/filter', (req, res) => {
       return;
     }
 
-    console.log(results);
+    console.log("results length: " + results.length);
+
     res.json(results);
   });
 });
