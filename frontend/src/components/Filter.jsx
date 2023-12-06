@@ -2,11 +2,11 @@ import React from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
-const Filter = ({ options, onSelect, defaultValue }) => {
+const Filter = ({ options, onSelect, defaultValue, type }) => {
 
   const handleChange = (event) => {
     const value = event.target.value;
-    onSelect(value);
+    onSelect(value, type);
   };
 
   return (
