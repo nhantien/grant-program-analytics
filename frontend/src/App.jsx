@@ -11,15 +11,11 @@ import { Project, YEARS, PROJECT_TYPE, FACULTY } from './constants/index.js';
 
 const BASE_URL = 'http://localhost:3001/';
 
-const handleSearch = (searchText) => {
-  // Implement your search logic here using the searchText
-  console.log('Searching for:', searchText);
-};
-
 const options = ['Option 1', 'Option 2', 'Option 3'];
 
 function App() {
 
+  const [searchText, setSearchText] = useState("");
   const [appliedFilters, setAppliedFilters] = useState({
     "FundingYear": ["2022/2023"],
     "ProjectType": [],
@@ -33,6 +29,7 @@ function App() {
     "order": "asc",
     "property": null
   });
+  const [selectedProjects, setSelectedProjects] = useState([]);
 
   useEffect(() => {
     const fetchFilteredData = async () => {
@@ -40,14 +37,12 @@ function App() {
         const res = await fetch(BASE_URL + "filter", {
           method: "POST",
           headers: { "Content-Type": "application/json", },
-          body: JSON.stringify({ appliedFilters, projectsPerPage, currentPage }),
+          body: JSON.stringify({ appliedFilters, searchText }),
         });
         if (!res.ok) throw new Error("Network response was not ok");
 
         const data = await res.json();
         const newProjects = data.map((proj) => {
-          // Log the properties of each project for debugging
-          console.log("Project Properties:", proj);
 
           // Make sure to return the new Project instance
           return new Project(
@@ -69,7 +64,7 @@ function App() {
     };
 
     fetchFilteredData();
-  }, [appliedFilters, sort, projectsPerPage, currentPage]);
+  }, [appliedFilters, sort, projectsPerPage, currentPage, searchText]);
 
   const handleSort = (property) => {
     if (property === sort["property"]) {
@@ -112,7 +107,7 @@ function App() {
     }));
   };
 
-  const handleClearAll = () => {
+  const handleClearAllFilters = () => {
     const newFilters = {
       "FundingYear": ["2022/2023"],
       "ProjectType": [],
@@ -123,17 +118,38 @@ function App() {
     setAppliedFilters(newFilters);
   };
 
+  const handleSelectAllProjects = (event) => {
+    if (event.target.checked === true) {
+      sortedProjects.map((proj) => {
+        proj.isSelected = true;
+        return proj;
+      });
+
+      setSelectedProjects(sortedProjects);
+    } else {
+      sortedProjects.map((proj) => {
+        proj.isSelected = false;
+        return proj;
+      });
+
+      setSelectedProjects([]);
+    }
+  }
+
+  const startIndex = (projectsPerPage === "All") ? 0 : (currentPage - 1) * projectsPerPage;
+  const endIndex = (projectsPerPage === "All" || startIndex + projectsPerPage > sortedProjects.length) ? sortedProjects.length : startIndex + projectsPerPage;
+  const projectsToDisplay = sortedProjects.slice(startIndex, endIndex);
 
   return (
     <div className="App">
       <header className="App-header">
         <div className="container">
           <h2 style={{ textAlign: "start" }} className='title'>TLEF Funded Proposals</h2>
-          <SearchBar onSearch={handleSearch} />
+          <SearchBar setSearchText={setSearchText} />
         </div>
 
         <div style={{ width: '100%', display: 'flex', justifyContent: "space-between" }}>
-          <div style={{ width: "65rem", marginLeft: '3rem' }}>
+          <div style={{ width: "65rem", marginLeft: '2.5rem' }}>
             <p style={{ fontSize: "1.25rem" }} >Filter by</p>
             <div className='filters'>
               <Filter options={YEARS} onSelect={handleSelectFilter} defaultValue="Funding Year" type="FundingYear" />
@@ -142,7 +158,7 @@ function App() {
               <Filter options={options} onSelect={handleSelectFilter} defaultValue="Focus Area" type="FocusArea" />
             </div>
           </div>
-          <div style={{ width: "30rem", marginLeft: '3rem' }}>
+          <div style={{ marginRight: "2.5rem" }}>
             <p style={{ fontSize: '1.25rem' }}>Displayed per page</p>
             <Select
               style={{ width: "14.4375rem", backgroundColor: "white" }}
@@ -164,7 +180,7 @@ function App() {
               <FilterList filters={appliedFilters} onClearFilter={handleClearFilter} />
               <div className="clear-filters-div">
                 <p style={{ fontSize: "0.9375rem", textAlign: "start" }}>Clear All</p>
-                <IconButton onClick={handleClearAll} size="small">
+                <IconButton onClick={handleClearAllFilters} size="small">
                   <ClearIcon />
                 </IconButton>
               </div>
@@ -173,7 +189,7 @@ function App() {
 
           <div style={{ display: "flex", marginRight: "5rem" }}>
             <div style={{ width: "25.5625rem", height: "3.125rem" }}>
-              <span style={{ textAlign: "start", fontSize: "1.25rem" }}>(selected n projects)</span>
+              <span style={{ textAlign: "start", fontSize: "1.25rem" }}>(selected {selectedProjects.length} projects)</span>
               <br />
               <span style={{ textAlign: "start", fontSize: "1.875rem", fontWeight: 700 }}>Generate Project Summary</span>
             </div>
@@ -188,7 +204,7 @@ function App() {
         <table style={{ width: "100%", borderCollapse: 'collapse' }}>
           <thead style={{ color: 'white', backgroundColor: '#081252' }}>
             <tr>
-              <th>Funding Year</th>
+              <th onClick={() => handleSort("fundingYear")}>Funding Year {sort["order"] === "asc" ? '▲' : '▼'}</th>
               <th onClick={() => handleSort("type")}>Project Type {sort["order"] === "asc" ? '▲' : '▼'}</th>
               <th onClick={() => handleSort("investigator")}>Principal Investigator {sort["order"] === "asc" ? '▲' : '▼'}</th>
               <th onClick={() => handleSort("faculty")}>Department/Faculty {sort["order"] === "asc" ? '▲' : '▼'}</th>
@@ -206,8 +222,8 @@ function App() {
               <h3 style={{ textAlign: "center" }}>No projects found.</h3>
             }
             {
-              sortedProjects.map((project, index) => (
-                <TableItem project={project} color={index % 2 === 0} />
+              projectsToDisplay.map((project, index) => (
+                <TableItem project={project} color={index % 2 === 0} onSelect={handleSelectAllProjects} />
               ))
             }
           </tbody>
@@ -216,15 +232,15 @@ function App() {
 
       <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
         <p style={{ width: "4.4375rem", fontSize: "0.9375rem", fontWeight: "bold" }}>Select All</p>
-        <input type="checkbox" />
+        <input type="checkbox" onClick={handleSelectAllProjects} />
       </div>
 
-      <div style={{width: "100%", display: "flex", justifyContent: "flex-end", alignItems: "center", marginTop: "3rem"}}>
+      <div style={{ width: "100%", display: "flex", justifyContent: "flex-end", alignItems: "center", marginTop: "3rem" }}>
         <button className='page-btn' onClick={() => setCurrentPage((prevPage) => Math.max(prevPage - 1, 1))} disabled={currentPage === 1}>
           &lt;
         </button>
         <span style={{ fontSize: "1.5rem", fontWeight: "bold" }}>Current Page: {currentPage}</span>
-        <button className='page-btn' onClick={() => setCurrentPage((prevPage) => prevPage + 1)} disabled={projectsPerPage === "All" || projects.length < projectsPerPage}>
+        <button className='page-btn' onClick={() => setCurrentPage((prevPage) => prevPage + 1)} disabled={endIndex >= sortedProjects.length}>
           &gt;
         </button>
       </div>

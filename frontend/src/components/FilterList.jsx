@@ -4,7 +4,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 const FilterList = ({ filters, onClearFilter }) => {
 
   return (
-    <div style={{ with: '38.25rem' }}>
+    <div style={{ with: '45rem' }}>
       {Object.entries(filters).map(([filterType, filterValues]) =>
         filterValues.map((filter, index) => (
           <Chip
