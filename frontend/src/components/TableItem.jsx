@@ -1,6 +1,7 @@
 import "./TableItem.css";
+import { Link } from "react-router-dom";
 
-function TableItem ({ project, color, onSelect }) {
+function TableItem({ project, color, onSelect }) {
 
   const bgColor = color ? "white" : "#DFF2FF";
   const statusColor = project.status === "Active\r" ? "#d4734c" : "#64b53c";
@@ -14,10 +15,10 @@ function TableItem ({ project, color, onSelect }) {
   const handleSelect = () => {
     if (project.isSelected) {
       project.isSelected = false;
-      onSelect(arr => arr.filter((proj) => proj !== project));
+      onSelect(prevSelected => prevSelected.filter(proj => proj !== project));
     } else {
       project.isSelected = true;
-      onSelect(arr => [...arr, project]);
+      onSelect(prevSelected => [...prevSelected, project]);
     }
   };
 
@@ -27,7 +28,7 @@ function TableItem ({ project, color, onSelect }) {
       <td>{project.type}</td>
       <td>{project.investigator}</td>
       <td>{project.faculty}</td>
-      <td style={{textAlign: "start"}}>{project.title}</td>
+      <td style={{ textAlign: "start" }}> <Link to={`/summary/${project.id}`}>{project.title}</Link> </td>
       <td>{project.projectYear}</td>
       <td>{formattedAmount}</td>
       <td style={{ color: statusColor }}>{project.status}</td>
@@ -35,7 +36,7 @@ function TableItem ({ project, color, onSelect }) {
       <td><a href={project.poster}>Link to Poster</a></td>
       <div className="select-btn">
         <span>Select project</span>
-        <input type="checkbox" checked={project.isSelected} onInput={handleSelect} />
+        <input type="checkbox" checked={project.isSelected} onChange={handleSelect} />
       </div>
     </tr>
   );

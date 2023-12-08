@@ -1,7 +1,7 @@
 import Chip from '@mui/material/Chip';
 import ClearIcon from '@mui/icons-material/Clear';
 
-const FilterList = ({ filters, onClearFilter }) => {
+function FilterList ({ filters, onClearFilter }) {
 
   return (
     <div style={{ with: '45rem' }}>
@@ -20,4 +20,4 @@ const FilterList = ({ filters, onClearFilter }) => {
   );
 };
 
-export default FilterList
+export default FilterList;

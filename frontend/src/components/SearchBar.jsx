@@ -4,7 +4,7 @@ import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 
-const SearchBar = ({ setSearchText }) => {
+function SearchBar ({ setSearchText }) {
 
   const [inputValue, setInputValue] = useState("");
 

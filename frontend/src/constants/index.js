@@ -1,4 +1,5 @@
 class Project {
+    id;
     fundingYear;
     type;
     investigator;
@@ -11,7 +12,8 @@ class Project {
     poster;
     isSelected;
 
-    constructor(fundingYear, type, investigator, faculty, title, projectYear, amount, status) {
+    constructor(id, fundingYear, type, investigator, faculty, title, projectYear, amount, status) {
+        this.id = id;
         this.fundingYear = fundingYear;
         this.type = type;
         this.investigator = investigator;
