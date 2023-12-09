@@ -66,10 +66,26 @@ app.post('/filter', (req, res) => {
       return;
     }
 
-    console.log(results);
-
     res.json(results);
   });
+});
+
+app.get('/project', (req, res) => {
+  const projectId = parseInt(req.query.id);
+  console.log(projectId);
+  let sql = `SELECT * FROM Projects WHERE ID = ${projectId}`;
+
+  connection.query(sql, (err, result) => {
+    if (err) {
+      console.log('Error executing SQL query:', err);
+      res.status(500).json({ error: 'Internal Server Error' });
+      return;
+    }
+
+    console.log(result);
+    res.json(result);
+  });
+
 });
 
 app.listen(port, () => {
