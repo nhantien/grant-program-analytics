@@ -6,5 +6,7 @@ import SummaryTitle from "./SummaryTitle";
 import SummaryDescription from "./SummaryDescription";
 import SummaryTable from "./SummaryTable";
 import SummaryTableItem from "./SummaryTableItem";
+import Posters from "./Posters";
+import SimilarProjects from "./SimilarProjects";
 
-export { Filter, FilterList, TableItem, SearchBar, SummaryTitle, SummaryDescription, SummaryTable, SummaryTableItem };
+export { Filter, FilterList, TableItem, SearchBar, SummaryTitle, SummaryDescription, SummaryTable, SummaryTableItem, Posters, SimilarProjects };

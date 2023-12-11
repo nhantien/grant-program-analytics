@@ -60,7 +60,14 @@ const SAMPLE_STUDENT_REACH = [
     "XXXX 000: Some Course Name", "XXXX 000: Some Course Name", "XXXX 000: Some Course Name", "XXXX 000: Some Course Name"
 ];
 
+const SAMPLE_SIMILAR_PROJECTS = {
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Jane Doe. 2020.": "Resource sustainability, Community health; Course 2, Course 5, Course 6; Resource Development, Infrastructure Development; Davide Elmo, Anne...",
+    "Maecenas ac pretium nunc, non faucibus nisl. Benjamin Apple. 2018.": "Resource sustainability, Community health; Course 2, Course 5, Course 6; Resource Development, Infrastructure Development; Davide Elmo, Anne...",
+    "Integer quis mollis mi. Jim Doe. 2015.": "Resource sustainability, Community health; Course 2, Course 5, Course 6; Resource Development, Infrastructure Development; Davide Elmo, Anne...",
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Jane Doe. 2021.": "Resource sustainability, Community health; Course 2, Course 5, Course 6; Resource Development, Infrastructure Development; Davide Elmo, Anne...",
+}
+
 
 const PROJECTS_PER_PAGE = [10, 20, 30, 40, 50];
 
-export {Project,YEARS, PROJECT_TYPE, FACULTY, PROJECTS_PER_PAGE, SAMPLE_TEAM_MEMBERS, SAMPLE_STUDENT_REACH}
+export {Project,YEARS, PROJECT_TYPE, FACULTY, PROJECTS_PER_PAGE, SAMPLE_TEAM_MEMBERS, SAMPLE_STUDENT_REACH, SAMPLE_SIMILAR_PROJECTS}

@@ -21,7 +21,7 @@ function SummaryTable({ project }) {
     return (
         <div className={styles.bg}>
             <div className={styles.title}>
-                Year 1 (2022/23)
+                Year 1 (2020/21)
             </div>
 
             <SummaryTableItem field="Primary Investigator" data={project.investigator} color="#FFF" />

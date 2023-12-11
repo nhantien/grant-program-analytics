@@ -1,0 +1,62 @@
+.bg {
+    width: 84rem;
+    margin-top: 3.75rem;
+    margin-left: 3rem;
+    margin-right: 3rem;
+}
+
+.title {
+    text-align: start;
+    color: #000;
+    font-family: Inter;
+    font-size: 1.875rem;
+    font-style: normal;
+    font-weight: 400;
+}
+
+.container {
+    margin-top: 3rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.slideElement {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #000;
+    font-family: Inter;
+    font-size: 1.25rem;
+    font-style: italic;
+    font-weight: 700;
+}
+
+.poster {
+    margin-top: 1rem;
+    width: 65rem;
+    height: 40rem;
+    border: 2px solid #000;
+    background-color: #fff;
+}
+
+.btn {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    border: none;
+    background-color: transparent;
+    color: #081252;
+    font-size: 5rem;
+    font-family: bold;
+}
+
+.btn:hover {
+    background-color: #E8ECEE;
+    box-shadow: 0 0 5px 10px #E8ECEE;
+}
+
+.btn:active {
+    background-color: darkgray;
+    box-shadow: 0 0 5px 10px darkgray;
+}

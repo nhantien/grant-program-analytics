@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Project } from "../constants";
-import { SummaryTitle, SummaryDescription, SummaryTable } from "../components";
+import { SummaryTitle, SummaryDescription, SummaryTable, Posters, SimilarProjects } from "../components";
 import "./Summary.css";
 
 const BASE_URL = 'http://localhost:3001/';
@@ -52,6 +52,8 @@ function Summary() {
             <SummaryTitle project={project} />
             <SummaryDescription project={project} />
             <SummaryTable project={project} />
+            <Posters project={project} />
+            <SimilarProjects project={project} />
         </div>
 
 
