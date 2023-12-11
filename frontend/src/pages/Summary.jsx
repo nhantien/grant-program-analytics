@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Project } from "../constants";
-import { SummaryTitle, SummaryDescription } from "../components";
+import { SummaryTitle, SummaryDescription, SummaryTable } from "../components";
 import "./Summary.css";
 
 const BASE_URL = 'http://localhost:3001/';
@@ -43,14 +43,18 @@ function Summary() {
 
         fetchProjectFromId();
     }, []);
-    
+
     if (!project) return null;
 
     return (
+
         <div className="Summary">
             <SummaryTitle project={project} />
             <SummaryDescription project={project} />
+            <SummaryTable project={project} />
         </div>
+
+
     );
 };
 

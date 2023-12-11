@@ -44,6 +44,23 @@ const FACULTY = [
     "UBC Health", "UBC Library", "Vantage College", "VP Academic", "VP Students", "Other..."
 ];
 
+const SAMPLE_TEAM_MEMBERS = {  
+    "Elmo, Davide.": "Associate Professor of Teaching, EOAS, Faculty of Science",
+    "Allen, Susan.": "Professor, EOAS, Faculty of Science",
+    "Austin, Phil.": "Associate Professor, EOAS, Faculty of Science",
+    "Beckie, Roger.": "Professor, EOAS, Faculty of Science",
+    "Bostock, Michael.": "Professor, EOAS, Faculty of Science",
+    "Haber, Eldad.": "Professor, EOAS, Faculty of Science",
+    "Jellinek, Mark.": "Professor, EOAS, Faculty of Science",
+};
+
+const SAMPLE_STUDENT_REACH = [
+    "CPSC 100: Some Course Name", "XXXX 200: Some Course Name", "XXXX 300: Some Course Name", "XXXX 000: Some Course Name", "XXXX 000: Some Course Name",
+    "XXXX 000: Some Course Name", "XXXX 000: Some Course Name", "ENVN 100: Some Course Name", "XXXX 200: Some Course Name", "XXXX 300: Some Course Name",
+    "XXXX 000: Some Course Name", "XXXX 000: Some Course Name", "XXXX 000: Some Course Name", "XXXX 000: Some Course Name"
+];
+
+
 const PROJECTS_PER_PAGE = [10, 20, 30, 40, 50];
 
-export {Project,YEARS, PROJECT_TYPE, FACULTY, PROJECTS_PER_PAGE}
+export {Project,YEARS, PROJECT_TYPE, FACULTY, PROJECTS_PER_PAGE, SAMPLE_TEAM_MEMBERS, SAMPLE_STUDENT_REACH}

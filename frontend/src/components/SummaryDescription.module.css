@@ -12,7 +12,6 @@
     padding-left: 2rem;
     padding-right: 2rem;
     padding-top: 1.75rem;
-    padding-bottom: 1.75rem;
     display: flex;
 }
 
@@ -44,8 +43,8 @@
 
 .image {
     background-color: gray;
-    width: 33%;
-    height: 21.5rem;
+    width: 36.5%;
+    height: 22rem;
 }
 
 .report {
