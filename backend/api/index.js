@@ -39,7 +39,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/filter', (req, res) => {
-  const { appliedFilters, searchText } = req.body;
+  const { appliedFilters } = req.body;
 
   // Build your SQL query based on appliedFilters
   let sql = 'SELECT * FROM Projects WHERE 1';
@@ -47,16 +47,18 @@ app.post('/filter', (req, res) => {
   // Iterate over each key-value pair in appliedFilters
   Object.entries(appliedFilters).forEach(([filterType, filterValues]) => {
     if (filterValues.length > 0) {
-      // Modify the query based on filterValues
-      // Note: This is a simple example, and you should validate and sanitize inputs
-      sql += ` AND ${filterType} IN ('${filterValues.join("','")}')`;
+      if (filterType === "SearchText") {
+        sql += ` AND (`
+        for (const index in filterValues) {
+          sql += `Title LIKE '%${filterValues[index]}%' OR Investigator LIKE '%${filterValues[index]}%' OR `;
+        }
+        const lastIndex = sql.lastIndexOf('OR ');
+        sql = sql.slice(0, lastIndex) + ')';
+      } else {
+        sql += ` AND ${filterType} IN ('${filterValues.join("','")}')`;
+      }
     }
   });
-
-  if (searchText !== "") {
-    // Add conditions for each column you want to search
-    sql += ` AND (FundingYear LIKE '%${searchText}%' OR ProjectType LIKE '%${searchText}%' OR Investigator LIKE '%${searchText}%' OR Title LIKE '%${searchText}%')`;
-  }
 
   // Execute the query
   connection.query(sql, (err, results) => {

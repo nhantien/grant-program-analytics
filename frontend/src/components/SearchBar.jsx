@@ -4,17 +4,17 @@ import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 
-function SearchBar ({ setSearchText }) {
+function SearchBar ({ onSearch, onClear }) {
 
   const [inputValue, setInputValue] = useState("");
 
   const handleClear = () => {
     setInputValue("");
-    setSearchText("");
+    onClear();
   };
 
   const handleSearch = () => {
-    setSearchText(inputValue);
+    onSearch(inputValue.split(", "));
   }
 
   const handleKeyPress = (e) => {
@@ -30,7 +30,7 @@ function SearchBar ({ setSearchText }) {
         onInput={(e) => setInputValue(e.target.value)}
         onKeyDown={handleKeyPress}
         onChange={(e) => setInputValue(e.target.value)}
-        label="Search"
+        label="Search by Title/Investigator: separate by commas to search for multiple keywords (e.g. one, two)"
         variant="outlined"
         size="small"
         InputProps={{

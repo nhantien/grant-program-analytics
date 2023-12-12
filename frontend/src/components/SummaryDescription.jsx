@@ -17,7 +17,7 @@ function SummaryDescription({ project }) {
                 </div>
             </div>
 
-            <div className={styles.report}>Report: <a href="#">2022-TLEF-Final-Report-Elmo-WEB.pdf</a></div>
+            { project.status === "Completed\r" && <div className={styles.report}>Report: <a href="#">2022-TLEF-Final-Report-Elmo-WEB.pdf</a></div>}
 
         </div>
     );
