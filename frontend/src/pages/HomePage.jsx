@@ -18,6 +18,7 @@ function HomePage() {
         "ProjectType": [],
         "Faculty": [],
         "FocusArea": [],
+        "SearchText": []
     });
     const [projectsPerPage, setProjectsPerPage] = useState('All');
     const [currentPage, setCurrentPage] = useState(1);
@@ -34,7 +35,7 @@ function HomePage() {
                 const res = await fetch(BASE_URL + "filter", {
                     method: "POST",
                     headers: { "Content-Type": "application/json", },
-                    body: JSON.stringify({ appliedFilters, searchText }),
+                    body: JSON.stringify({ appliedFilters }),
                 });
                 if (!res.ok) throw new Error("Network response was not ok");
 
@@ -95,7 +96,14 @@ function HomePage() {
             ...prevFilters,
             [filterType]: newFilters,
         }));
-    }
+    };
+
+    const handleSelectSearchTextFilter = (keywords) => {
+        setAppliedFilters((prevFilters) => ({
+            ...prevFilters,
+            ["SearchText"]: keywords,
+        }));
+    };
 
     const handleClearFilter = (filterToRemove, filterType) => {
         const updatedFilters = appliedFilters[filterType].filter((filter) => filter !== filterToRemove);
@@ -105,13 +113,20 @@ function HomePage() {
         }));
     };
 
+    const handleClearSearchTextFilter = () => {
+        setAppliedFilters((prevFilters) => ({
+            ...prevFilters,
+            ["SearchText"]: [],
+        }));
+    };
+
     const handleClearAllFilters = () => {
         const newFilters = {
             "FundingYear": ["2022/2023"],
             "ProjectType": [],
             "Faculty": [],
             "FocusArea": [],
-
+            "SearchText": []
         };
         setAppliedFilters(newFilters);
     };
@@ -138,7 +153,7 @@ function HomePage() {
             <header className="App-header">
                 <div className="container">
                     <h2 style={{ textAlign: "start" }} className='title'>TLEF Funded Proposals</h2>
-                    <SearchBar setSearchText={setSearchText} />
+                    <SearchBar onSearch={handleSelectSearchTextFilter} onClear={handleClearSearchTextFilter} />
                 </div>
 
                 <div style={{ width: '100%', display: 'flex', justifyContent: "space-between" }}>

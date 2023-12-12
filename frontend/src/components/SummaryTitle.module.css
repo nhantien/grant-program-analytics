@@ -1,0 +1,50 @@
+.bg {
+    width: 100%;
+}
+
+.normal-text {
+    color: black;
+    font-size: 1.375rem;
+    font-family: Inter;
+    font-style: normal;
+}
+
+.container {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    width: 84rem;
+    margin-top: 0.75rem;
+    margin-left: 3rem;
+    margin-right: 3rem;
+}
+
+.title {
+    composes: normal-text;
+    width: 55rem;
+    text-align: start;
+    font-weight: 700;
+}
+
+.status {
+    composes: normal-text;
+    width: 15rem;
+    height: 2.25rem;
+    text-align: end;
+    font-weight: 400;
+}
+
+.faculty {
+    composes: normal-text;
+    text-align: start;
+    width: 30rem;
+    height: 2.25rem;
+}
+
+.years {
+    composes: normal-text;
+    text-align: end;
+    width: 30rem;
+    height: 2.25rem;
+}
+
