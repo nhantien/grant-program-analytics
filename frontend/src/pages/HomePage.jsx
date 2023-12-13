@@ -12,7 +12,6 @@ const options = ['Option 1', 'Option 2', 'Option 3'];
 
 function HomePage() {
 
-    const [searchText, setSearchText] = useState("");
     const [appliedFilters, setAppliedFilters] = useState({
         "FundingYear": ["2022/2023"],
         "ProjectType": [],
@@ -63,7 +62,7 @@ function HomePage() {
         };
 
         fetchFilteredData();
-    }, [appliedFilters, sort, projectsPerPage, currentPage, searchText]);
+    }, [appliedFilters, sort, projectsPerPage, currentPage]);
 
     const handleSort = (property) => {
         if (property === sort["property"]) {
@@ -106,6 +105,13 @@ function HomePage() {
     };
 
     const handleClearFilter = (filterToRemove, filterType) => {
+        if (filterType === "SearchText") {
+            setAppliedFilters((prevFilters) => ({
+                ...prevFilters,
+                ["SearchText"]: [],
+            }));
+            return;
+        }
         const updatedFilters = appliedFilters[filterType].filter((filter) => filter !== filterToRemove);
         setAppliedFilters((prevFilters) => ({
             ...prevFilters,
@@ -215,7 +221,7 @@ function HomePage() {
                             <th onClick={() => handleSort("fundingYear")}>Funding Year {sort["order"] === "asc" ? '▲' : '▼'}</th>
                             <th onClick={() => handleSort("type")}>Project Type {sort["order"] === "asc" ? '▲' : '▼'}</th>
                             <th onClick={() => handleSort("investigator")}>Principal Investigator {sort["order"] === "asc" ? '▲' : '▼'}</th>
-                            <th onClick={() => handleSort("faculty")}>Department/Faculty {sort["order"] === "asc" ? '▲' : '▼'}</th>
+                            <th onClick={() => handleSort("faculty")}>Faculty {sort["order"] === "asc" ? '▲' : '▼'}</th>
                             <th onClick={() => handleSort("title")}>Title {sort["order"] === "asc" ? '▲' : '▼'}</th>
                             <th onClick={() => handleSort("projectYear")}>Project Year {sort["order"] === "asc" ? '▲' : '▼'}</th>
                             <th onClick={() => handleSort("amount")}>Amount {sort["order"] === "asc" ? '▲' : '▼'}</th>
