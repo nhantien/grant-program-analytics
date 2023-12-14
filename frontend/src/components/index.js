@@ -9,5 +9,6 @@ import SummaryTableItem from "./SummaryTableItem";
 import Posters from "./Posters";
 import SimilarProjects from "./SimilarProjects";
 import SnapshotHeader from "./SnapshotHeader";
+import SnapshotBox from "./SnapshotBox";
 
-export { Filter, FilterList, TableItem, SearchBar, SummaryTitle, SummaryDescription, SummaryTable, SummaryTableItem, Posters, SimilarProjects, SnapshotHeader };
+export { Filter, FilterList, TableItem, SearchBar, SummaryTitle, SummaryDescription, SummaryTable, SummaryTableItem, Posters, SimilarProjects, SnapshotHeader, SnapshotBox };
