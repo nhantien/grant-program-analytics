@@ -12,9 +12,6 @@ function SummaryDescription({ project }) {
                         Qui quasi consequatur sed reprehenderit quia sit suscipit officiis quo provident deleniti ea corporis nostrum et dolorum voluptatem et assumenda aliquam? Sit sunt dolorum id commodi iste aut ducimus odio ut iste asperiores id nostrum ipsam est tempora consequuntur qui voluptatem eveniet?
                     </div>
                 </div>
-
-                <div className={styles.image}>
-                </div>
             </div>
 
             { project.status === "Completed\r" && <div className={styles.report}>Report: <a href="#">2022-TLEF-Final-Report-Elmo-WEB.pdf</a></div>}

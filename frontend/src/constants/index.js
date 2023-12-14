@@ -44,7 +44,7 @@ const FACULTY = [
     "UBC Health", "UBC Library", "Vantage College", "VP Academic", "VP Students", "Other..."
 ];
 
-const SAMPLE_TEAM_MEMBERS = {  
+const SAMPLE_TEAM_MEMBERS = { 
     "Elmo, Davide.": "Associate Professor of Teaching, EOAS, Faculty of Science",
     "Allen, Susan.": "Professor, EOAS, Faculty of Science",
     "Austin, Phil.": "Associate Professor, EOAS, Faculty of Science",
@@ -60,12 +60,19 @@ const SAMPLE_STUDENT_REACH = [
     "XXXX 000: Some Course Name", "XXXX 000: Some Course Name", "XXXX 000: Some Course Name", "XXXX 000: Some Course Name"
 ];
 
-const SAMPLE_SIMILAR_PROJECTS = {
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Jane Doe. 2020.": "Resource sustainability, Community health; Course 2, Course 5, Course 6; Resource Development, Infrastructure Development; Davide Elmo, Anne...",
-    "Maecenas ac pretium nunc, non faucibus nisl. Benjamin Apple. 2018.": "Resource sustainability, Community health; Course 2, Course 5, Course 6; Resource Development, Infrastructure Development; Davide Elmo, Anne...",
-    "Integer quis mollis mi. Jim Doe. 2015.": "Resource sustainability, Community health; Course 2, Course 5, Course 6; Resource Development, Infrastructure Development; Davide Elmo, Anne...",
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Jane Doe. 2021.": "Resource sustainability, Community health; Course 2, Course 5, Course 6; Resource Development, Infrastructure Development; Davide Elmo, Anne...",
-}
+const SAMPLE_SIMILAR_PROJECTS = [
+    new Project(100, "2020/2021", "Small TLEF", "Jane Doe", "Applied Science", "Lorem ipsum dolor sit amet, consectetur adipiscing elit", 1, 12500, "Active\r"),
+    new Project(101, "2018/2019", "Small TLEF", "Benjamin Apple", "Applied Science", "Maecenas ac pretium nunc, non faucibus nisl", 1, 12500, "Active\r"),
+    new Project(102, "2015/2016", "Small TLEF", "Jim Doe", "Applied Science", "Integer quis mollis mi", 1, 12500, "Active\r"),
+    new Project(103, "2021/2022", "Small TLEF", "Jane Doe", "Applied Science", "Lorem ipsum dolor sit amet, consectetur adipiscing elit", 1, 12500, "Active\r"),
+    new Project(103, "2021/2022", "Small TLEF", "Jane Doe", "Applied Science", "Lorem ipsum dolor sit amet, consectetur adipiscing elit", 1, 12500, "Active\r"),
+    new Project(103, "2021/2022", "Small TLEF", "Jane Doe", "Applied Science", "Lorem ipsum dolor sit amet, consectetur adipiscing elit", 1, 12500, "Active\r"),
+    new Project(103, "2021/2022", "Small TLEF", "Jane Doe", "Applied Science", "Lorem ipsum dolor sit amet, consectetur adipiscing elit", 1, 12500, "Active\r"),
+    new Project(103, "2021/2022", "Small TLEF", "Jane Doe", "Applied Science", "Lorem ipsum dolor sit amet, consectetur adipiscing elit", 1, 12500, "Active\r"),
+    new Project(103, "2021/2022", "Small TLEF", "Jane Doe", "Applied Science", "Lorem ipsum dolor sit amet, consectetur adipiscing elit", 1, 12500, "Active\r"),
+    new Project(103, "2021/2022", "Small TLEF", "Jane Doe", "Applied Science", "Lorem ipsum dolor sit amet, consectetur adipiscing elit", 1, 12500, "Active\r"),
+    new Project(103, "2021/2022", "Small TLEF", "Jane Doe", "Applied Science", "Lorem ipsum dolor sit amet, consectetur adipiscing elit", 1, 12500, "Active\r"),
+]
 
 
 const PROJECTS_PER_PAGE = [10, 20, 30, 40, 50];
