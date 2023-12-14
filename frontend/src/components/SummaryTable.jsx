@@ -21,6 +21,9 @@ function SummaryTable({ project }) {
     const nameArray = project.investigator.split(" ");
     const formattedName = nameArray[1] + ", " + nameArray[0] + ".";
 
+    const memberNames = Array.from(Object.keys(SAMPLE_TEAM_MEMBERS)).sort();
+
+
     return (
         <div className={styles.bg}>
             <div className={styles.title}>
@@ -31,7 +34,7 @@ function SummaryTable({ project }) {
             <SummaryTableItem field="Project Type" data={project.type} color="#DFF2FF" />
             <SummaryTableItem field="Funded Amount" data={formattedAmount} color="#FFF" />
             <SummaryTableItem field="Focus Area(s)" data={focusAreas} color="#DFF2FF" />
-            <SummaryTableItem field="Team Members" data={SAMPLE_TEAM_MEMBERS} color="#FFF" />
+            <SummaryTableItem field="Team Members" data={memberNames} color="#FFF" />
             <SummaryTableItem field="Student Reach" data={SAMPLE_STUDENT_REACH} color="#DFF2FF" />
             <SummaryTableItem field="Co-curricular Reach" data={coCurricularReach} color="#FFF" />
         </div>
