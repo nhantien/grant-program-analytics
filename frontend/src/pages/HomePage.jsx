@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Filter, SearchBar, FilterList, TableItem } from "../components";
 import ClearIcon from '@mui/icons-material/Clear';
 import { IconButton, Select, MenuItem } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 import { Project, YEARS, PROJECT_TYPE, FACULTY } from '../constants';
 
@@ -208,7 +209,15 @@ function HomePage() {
                             <span style={{ textAlign: "start", fontSize: "1.875rem", fontWeight: 700 }}>Generate Project Summary</span>
                         </div>
                         <div style={{ width: "6.125rem", height: "4rem" }}>
-                            <button className="generate-summary-btn">Go</button>
+                            <button className="generate-summary-btn">
+                                <Link
+                                    to="/snapshot"
+                                    state={{ projects: selectedProjects.length === 0 ? projects : selectedProjects }}
+                                    style={{ textDecoration: "none", color: "white" }}
+                                >
+                                    Go
+                                </Link>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -237,7 +246,7 @@ function HomePage() {
                         }
                         {
                             projectsToDisplay.map((project, index) => (
-                                <TableItem project={project} color={index % 2 === 0} onSelect={setSelectedProjects} />
+                                <TableItem key={project.id} project={project} color={index % 2 === 0} onSelect={setSelectedProjects} />
                             ))
                         }
                     </tbody>

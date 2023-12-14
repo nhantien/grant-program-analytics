@@ -7,14 +7,15 @@ import { SAMPLE_SIMILAR_PROJECTS } from "../constants";
 import { Link } from "react-router-dom";
 
 
-function SimilarProjects({ project }) {
+function SimilarProjects({ project, type }) {
 
     const [showAll, setShowAll] = useState(false);
     const itemsToDisplay = showAll ? SAMPLE_SIMILAR_PROJECTS : SAMPLE_SIMILAR_PROJECTS.slice(0, 5);
+    const titleClass = type === "individual" ? styles["title-individual"] : styles["title-snapshot"];
 
     return (
         <div className={styles.bg}>
-            <div className={styles.title}>
+            <div className={titleClass}>
                 Similar Projects
             </div>
 

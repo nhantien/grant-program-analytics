@@ -53,7 +53,7 @@ function Summary() {
             <SummaryDescription project={project} />
             <SummaryTable project={project} />
             <Posters project={project} />
-            <SimilarProjects project={project} />
+            <SimilarProjects project={project} type="individual" />
         </div>
 
 

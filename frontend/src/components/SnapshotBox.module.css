@@ -1,0 +1,43 @@
+.bg {
+    width: 90rem;
+    padding-top: 2.5rem;
+    padding-bottom: 3rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
+}
+
+.title {
+    color: #000;
+    font-family: Inter;
+    font-size: 1.875rem;
+    font-style: normal;
+    font-weight: 700;
+}
+
+.container {
+    width: 100%;
+    margin-top: 3rem;
+    display: flex;
+    align-items: flex-start;
+}
+
+.chart {
+    width: 50%;
+    height: 30rem;
+    background-color: lightgray;
+    border: 1px solid #000;
+}
+
+.space {
+    width: 5%;
+}
+
+.description {
+    width: 35%;
+    height: 30rem;
+    color: #000;
+    font-family: Inter;
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 400;
+}
