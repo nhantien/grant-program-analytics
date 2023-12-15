@@ -1,6 +1,6 @@
 import styles from "./SnapshotBox.module.css";
 
-function SnapshotBox({ projects, type, title }) {
+function SnapshotBox({ chart, type, title }) {
 
     const bgColor = type === 0 ? "#FFF" : "#DFF2FF";
     const flexDir = type === 0 ? "row" : "row-reverse";
@@ -12,7 +12,7 @@ function SnapshotBox({ projects, type, title }) {
                 {title}
             </div>
             <div className={styles.container} style={{ flexDirection: flexDir, justifyContent: justifyContent }}>
-                <div className={styles.chart}></div>
+                <div className={styles.chart}>{chart}</div>
                 <div className={styles.space}></div>
                 <div className={styles.description} >
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
