@@ -14,8 +14,12 @@
     justify-content: space-around;
 }
 
-.navbar a {
+.navbar button {
     text-decoration: none;
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: transparent;
     color: #FFF;
     font-family: Inter;
     font-size: 0.9375rem;
