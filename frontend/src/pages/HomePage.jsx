@@ -101,7 +101,7 @@ function HomePage() {
     const handleSelectSearchTextFilter = (keywords) => {
         setAppliedFilters((prevFilters) => ({
             ...prevFilters,
-            ["SearchText"]: keywords,
+            "SearchText": keywords,
         }));
     };
 
@@ -109,7 +109,7 @@ function HomePage() {
         if (filterType === "SearchText") {
             setAppliedFilters((prevFilters) => ({
                 ...prevFilters,
-                ["SearchText"]: [],
+                "SearchText": [],
             }));
             return;
         }
@@ -123,7 +123,7 @@ function HomePage() {
     const handleClearSearchTextFilter = () => {
         setAppliedFilters((prevFilters) => ({
             ...prevFilters,
-            ["SearchText"]: [],
+            "SearchText": [],
         }));
     };
 
