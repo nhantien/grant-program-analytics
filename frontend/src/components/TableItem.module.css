@@ -1,0 +1,33 @@
+.select-btn {
+    display: flex;
+    position: absolute;
+    right: 1%;
+    bottom: 0;
+    margin-bottom: 0.5rem;
+}
+
+
+td {
+    padding-left: 0.125%;
+    padding-right: 0.125%;
+    height: 9rem;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    text-align: center;
+}
+
+@media screen and (max-width: 576px) {
+
+    td {
+        font-size: 0.875rem;
+        height: 7rem;
+    }
+
+    .select-btn {
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+        align-items: center;
+        left: 1%;
+        font-size: 0.75rem;
+    }
+}

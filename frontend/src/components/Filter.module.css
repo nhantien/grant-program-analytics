@@ -1,0 +1,23 @@
+.container {
+    width: 22%;
+}
+
+.filter {
+    background-color: white;
+    border: 0.5px solid black;
+}
+
+@media screen and (max-width: 576px) {
+
+    .container {
+        width: 60%;
+        font-size: 0.25rem;
+    }
+
+    .filter {
+        background-color: white;
+        border: 0.25px solid black;
+        margin-bottom: 0.25rem;
+        font-size: 0.875rem;
+    }
+}

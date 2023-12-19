@@ -1,0 +1,315 @@
+.bg {
+  min-height: 100vh;
+  background-color: #DFF2FF;
+  padding-bottom: 3rem;
+}
+
+.app-header {
+  margin-bottom: 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: calc(10px + 2vmin);
+  color: black;
+}
+
+.box {
+  width: 95%;
+  margin-left: 2.5%;
+  margin-right: 2.5%;
+}
+
+.text {
+  color: #000;
+  font-family: Inter;
+  font-style: normal;
+  line-height: normal;
+}
+
+.container {
+  composes: box;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.title {
+  composes: text;
+  text-align: start;
+  font-size: 1.875rem;
+  font-weight: 700;
+}
+
+.open-search {
+  composes: box;
+  display: none;
+}
+
+.open-search button {
+  height: 100%;
+  text-align: start;
+  color: #081252;
+  font-size: 0.625rem;
+  font-weight: 700;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.open-search button:active {
+  background-color: rgba(237, 237, 237, 0.6);
+}
+
+.filters-div {
+  composes: box;
+  display: flex;
+  justify-content: space-between;
+}
+
+.project-filters {
+  width: 70%;
+}
+
+.filter-text {
+  font-size: 1.25rem;
+}
+
+.filters {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.display-per-page {
+  width: 17%;
+}
+
+.lower-header-div {
+  composes: box;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.applied-filters {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.filters-box {
+  width: 80%;
+  height: 6rem;
+  background-color: white;
+  position: relative;
+  border: solid lightgray;
+  border-radius: 0.5rem;
+}
+
+.clear-filters-div p {
+  font-size: 0.9375rem;
+  text-align: start;
+}
+
+.clear-filters-div {
+  width: 15%;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.generate-summary {
+  width: 40%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.num-selected {
+  composes: text;
+  text-align: start;
+  font-size: 1.25rem;
+}
+
+.generate-summary-btn {
+  width: 100%;
+  height: 100%;
+  background-color: #081252;
+  color: white;
+  font-weight: bold;
+  font-size: 1.875rem;
+  border-radius: 0.5rem;
+}
+
+table {
+  display: block;
+  overflow-x: auto;
+}
+
+th {
+  border-top: 1px solid black;
+  height: 5rem;
+  text-align: center;
+  cursor: pointer;
+}
+
+th:hover {
+  background-color: #194980;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.select-all-div {
+  width: 99%;
+  margin-right: 1%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.select-all-div p {
+  text-align: end;
+  width: 10%;
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
+
+.pagination {
+  width: 99%;
+  margin-right: 1%;
+  margin-top: 3rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.pagination span {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-left: 1%;
+  margin-right: 1%;
+}
+
+.page-btn {
+  width: 6.5%;
+  height: 3.125rem;
+  background-color: #081252;
+  color: white;
+  font-size: 2rem;
+  font-weight: 700;
+  border-radius: 0.5rem;
+}
+
+.page-btn:disabled {
+  background-color: gray;
+}
+
+/* Mobile Version UI */
+/*
+TODO: animaion when search filters are shown/hidden
+*/
+@media screen and (max-width: 576px) {
+
+  .app-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .title {
+    font-size: 1.25rem;
+  }
+
+  .container {
+    display: block;
+  }
+
+  .open-search {
+    display: block;
+  }
+
+  .filters-div {
+    display: none;
+  }
+
+  .project-filters {
+    width: 60%;
+  }
+
+  .filter-text {
+    font-size: 1rem;
+  }
+
+  .display-per-page {
+    width: 40%;
+  }
+
+  .filters {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .lower-header-div {
+    display: block;
+  }
+
+  .applied-filters {
+    width: 100%;
+  }
+
+  .filters-box {
+    width: 100%;
+  }
+
+  .clear-filters-div {
+    width: 25%;
+  }
+
+  .clear-filters-div p {
+    font-size: 0.75rem;
+  }
+
+  .generate-summary {
+    margin-top: 1.5rem;
+    width: 100%;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .num-selected {
+    font-size: 0.875rem;
+  }
+
+  th {
+    font-size: 0.875rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .select-all-div {
+    margin-left: 1.75%;
+    flex-direction: row-reverse;
+  }
+
+  .select-all-div p {
+    width: 17%;
+  }
+
+  .pagination {
+    margin-top: 1.5rem;
+  }
+
+  .pagination span {
+    font-size: 1rem;
+  }
+
+  .page-btn {
+    width: 9%;
+    height: 2rem;
+    font-size: 1.25rem;
+  }
+
+}

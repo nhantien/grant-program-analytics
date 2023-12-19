@@ -2,6 +2,8 @@ import React from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
+import styles from "./Filter.module.css";
+
 function Filter ({ options, onSelect, defaultValue, type }) {
 
   const handleChange = (event) => {
@@ -10,9 +12,9 @@ function Filter ({ options, onSelect, defaultValue, type }) {
   };
 
   return (
-    <div style={{width: '14.4375rem'}}>
+    <div className={styles.container}>
       <Select
-        style={{backgroundColor: "white" }}
+        className={styles.filter}
         onChange={handleChange}
         displayEmpty
         fullWidth

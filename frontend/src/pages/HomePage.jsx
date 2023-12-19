@@ -1,4 +1,4 @@
-import './HomePage.css';
+import styles from './HomePage.module.css';
 import { useState, useEffect } from 'react';
 import { Filter, SearchBar, FilterList, TableItem } from "../components";
 import ClearIcon from '@mui/icons-material/Clear';
@@ -151,32 +151,47 @@ function HomePage() {
         setSelectedProjects(isChecked ? updatedProjects : []);
     }
 
+    const handleOpenSearch = (e) => {
+        let filters = document.getElementById("filters");
+        if (filters.style.display === "none") {
+            filters.style.display = "flex";
+            e.target.innerHTML = "Close Advanced Search";
+        } else {
+            filters.style.display = "none";
+            e.target.innerHTML = "Open Advanced Search";
+        }
+    };
+
     const startIndex = (projectsPerPage === "All") ? 0 : (currentPage - 1) * projectsPerPage;
     const endIndex = (projectsPerPage === "All" || startIndex + projectsPerPage > sortedProjects.length) ? sortedProjects.length : startIndex + projectsPerPage;
     const projectsToDisplay = sortedProjects.slice(startIndex, endIndex);
 
     return (
-        <div className="App">
-            <header className="App-header">
-                <div className="container">
-                    <h2 style={{ textAlign: "start" }} className='title'>TLEF Funded Proposals</h2>
+        <div className={styles.bg}>
+            <header className={styles["app-header"]}>
+                <div className={styles.container}>
+                    <h2 className={styles.title}>TLEF Funded Proposals</h2>
                     <SearchBar onSearch={handleSelectSearchTextFilter} onClear={handleClearSearchTextFilter} />
                 </div>
 
-                <div style={{ width: '100%', display: 'flex', justifyContent: "space-between" }}>
-                    <div style={{ width: "65rem", marginLeft: '2.5rem' }}>
-                        <p style={{ fontSize: "1.25rem" }} >Filter by</p>
-                        <div className='filters'>
+                <div className={styles["open-search"]}>
+                    <button onClick={(e) => handleOpenSearch(e)}>Open Advanced Search</button>
+                </div>
+
+                <div id="filters" className={styles["filters-div"]}>
+                    <div className={styles["project-filters"]}>
+                        <p className={styles["filter-text"]}>Filter by</p>
+                        <div className={styles.filters}>
                             <Filter options={YEARS} onSelect={handleSelectFilter} defaultValue="Funding Year" type="FundingYear" />
                             <Filter options={PROJECT_TYPE} onSelect={handleSelectFilter} defaultValue="Project Type" type="ProjectType" />
                             <Filter options={FACULTY} onSelect={handleSelectFilter} defaultValue="Faculty" type="Faculty" />
                             <Filter options={options} onSelect={handleSelectFilter} defaultValue="Focus Area" type="FocusArea" />
                         </div>
                     </div>
-                    <div style={{ marginRight: "2.5rem" }}>
-                        <p style={{ fontSize: '1.25rem' }}>Displayed per page</p>
+                    <div className={styles["display-per-page"]}>
+                        <p className={styles["filter-text"]}>Displayed per page</p>
                         <Select
-                            style={{ width: "14.4375rem", backgroundColor: "white" }}
+                            style={{ width: "100%", backgroundColor: "white" }}
                             value={projectsPerPage}
                             onChange={(e) => setProjectsPerPage(Number(e.target.value) || "All")}
                         >
@@ -188,13 +203,14 @@ function HomePage() {
                     </div>
                 </div>
 
-                <div style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginLeft: "5rem" }}>
-                    <div className='applied-filters'>
+                <div className={styles["lower-header-div"]}>
+
+                    <div className={styles["applied-filters"]}>
                         <span style={{ marginTop: "1rem", marginBottom: "1rem" }}>Applied Filters</span>
-                        <div className='filters-box'>
+                        <div className={styles["filters-box"]}>
                             <FilterList filters={appliedFilters} onClearFilter={handleClearFilter} />
-                            <div className="clear-filters-div">
-                                <p style={{ fontSize: "0.9375rem", textAlign: "start" }}>Clear All</p>
+                            <div className={styles["clear-filters-div"]}>
+                                <p className={styles.text}>Clear All</p>
                                 <IconButton onClick={handleClearAllFilters} size="small">
                                     <ClearIcon />
                                 </IconButton>
@@ -202,14 +218,14 @@ function HomePage() {
                         </div>
                     </div>
 
-                    <div style={{ display: "flex", marginRight: "5rem" }}>
-                        <div style={{ width: "25.5625rem", height: "3.125rem" }}>
-                            <span style={{ textAlign: "start", fontSize: "1.25rem" }}>(selected {selectedProjects.length} projects)</span>
+                    <div className={styles["generate-summary"]}>
+                        <div style={{ width: "80%"}}>
+                            <span className={styles["num-selected"]}>(selected {selectedProjects.length} projects)</span>
                             <br />
-                            <span style={{ textAlign: "start", fontSize: "1.875rem", fontWeight: 700 }}>Generate Project Summary</span>
+                            <span className={styles.title}>Generate Project Summary</span>
                         </div>
-                        <div style={{ width: "6.125rem", height: "4rem" }}>
-                            <button className="generate-summary-btn">
+                        <div style={{ width: "20%", height: "3rem"}}>
+                            <button className={styles["generate-summary-btn"]}>
                                 <Link
                                     to="/snapshot"
                                     state={{ projects: selectedProjects.length === 0 ? projects : selectedProjects }}
@@ -223,7 +239,7 @@ function HomePage() {
                 </div>
             </header>
 
-            <div style={{ width: "100%" }}>
+            <div>
                 <table style={{ width: "100%", borderCollapse: 'collapse' }}>
                     <thead style={{ color: 'white', backgroundColor: '#081252' }}>
                         <tr>
@@ -253,17 +269,17 @@ function HomePage() {
                 </table>
             </div>
 
-            <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
-                <p style={{ width: "4.4375rem", fontSize: "0.9375rem", fontWeight: "bold" }}>Select All</p>
+            <div className={styles["select-all-div"]}>
+                <p>Select All</p>
                 <input type="checkbox" onChange={handleSelectAllProjects} />
             </div>
 
-            <div style={{ width: "100%", display: "flex", justifyContent: "flex-end", alignItems: "center", marginTop: "3rem" }}>
-                <button className='page-btn' onClick={() => setCurrentPage((prevPage) => Math.max(prevPage - 1, 1))} disabled={currentPage === 1}>
+            <div className={styles.pagination}>
+                <button className={styles["page-btn"]} onClick={() => setCurrentPage((prevPage) => Math.max(prevPage - 1, 1))} disabled={currentPage === 1}>
                     &lt;
                 </button>
-                <span style={{ fontSize: "1.5rem", fontWeight: "bold" }}>Current Page: {currentPage}</span>
-                <button className='page-btn' onClick={() => setCurrentPage((prevPage) => prevPage + 1)} disabled={endIndex >= sortedProjects.length}>
+                <span>Current Page: {currentPage}</span>
+                <button className={styles["page-btn"]} onClick={() => setCurrentPage((prevPage) => prevPage + 1)} disabled={endIndex >= sortedProjects.length}>
                     &gt;
                 </button>
             </div>
