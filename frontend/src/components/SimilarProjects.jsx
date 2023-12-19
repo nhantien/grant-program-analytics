@@ -7,11 +7,13 @@ import { SAMPLE_SIMILAR_PROJECTS } from "../constants";
 import { Link } from "react-router-dom";
 
 
+//TODO: alignment of expand/collapse button for mobile UI
 function SimilarProjects({ project, type }) {
 
     const [showAll, setShowAll] = useState(false);
     const itemsToDisplay = showAll ? SAMPLE_SIMILAR_PROJECTS : SAMPLE_SIMILAR_PROJECTS.slice(0, 5);
     const titleClass = type === "individual" ? styles["title-individual"] : styles["title-snapshot"];
+    const btnAlignment = (window.screen.width <= 576) ? "left" : "center";
 
     return (
         <div className={styles.bg}>
@@ -20,25 +22,30 @@ function SimilarProjects({ project, type }) {
             </div>
 
             <TableContainer component={Paper}>
-                <Table aria-label="customized-table">
+                <Table className={styles.wrapper} aria-label="customized-table">
 
                     <TableBody>
                         <TableRow sx={{ borderBottom: 1, height: 10 }}>
-                            <TableCell style={{ width: "33%", height: "4rem", fontWeight: 700, fontSize: "1.125rem" }}>Title</TableCell>
-                            <TableCell style={{ width: "33%", height: "4rem", fontWeight: 700, fontSize: "1.125rem" }}>Primary Investigator</TableCell>
-                            <TableCell style={{ width: "33%", height: "4rem", fontWeight: 700, fontSize: "1.125rem" }}>Funding Year</TableCell>
+                            <TableCell className={styles.TableHeader}>Title</TableCell>
+                            <TableCell className={styles.TableHeader}>Project Type</TableCell>
+                            <TableCell className={styles.TableHeader}>Primary Investigator</TableCell>
+                            <TableCell className={styles.TableHeader}>Faculty</TableCell>
+                            <TableCell className={styles.TableHeader}>Funding Year</TableCell>
                         </TableRow>
 
                         {itemsToDisplay.map((proj) =>
                             <TableRow>
-                                <TableCell style={{ fontSize: "0.9375rem", height: "4rem" }}><Link to="#">{proj.title}</Link></TableCell>
-                                <TableCell style={{ fontSize: "0.9375rem", height: "4rem" }}>{proj.investigator}</TableCell>
-                                <TableCell style={{ fontSize: "0.9375rem", height: "4rem" }}>{proj.fundingYear}</TableCell>
+                                <TableCell className={styles.TableCell}><Link to="#">{proj.title}</Link></TableCell>
+                                <TableCell className={styles.TableCell}>{proj.type}</TableCell>
+                                <TableCell className={styles.TableCell}>{proj.investigator}</TableCell>
+                                <TableCell className={styles.TableCell}>{proj.faculty}</TableCell>
+                                <TableCell className={styles.TableCell}>{proj.fundingYear}</TableCell>
                             </TableRow>
                         )}
                     </TableBody>
+
                     <TableRow>
-                        <TableCell style={{ height: "2rem" }} colSpan={3} align="center">
+                        <TableCell style={{ height: "2rem" }} colSpan={5} align={btnAlignment}>
                             <Button onClick={() => setShowAll(!showAll)} fullWidth>
                                 {showAll ?
                                     <div className={styles.btn}>
