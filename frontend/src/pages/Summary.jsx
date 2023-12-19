@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Project } from "../constants";
 import { SummaryTitle, SummaryDescription, SummaryTable, Posters, SimilarProjects } from "../components";
-import "./Summary.css";
+import styles from "./Summary.module.css";
 
 const BASE_URL = 'http://localhost:3001/';
 
@@ -48,7 +48,7 @@ function Summary() {
 
     return (
 
-        <div className="Summary">
+        <div className={styles.summary}>
             <SummaryTitle project={project} />
             <SummaryDescription project={project} />
             <SummaryTable project={project} />

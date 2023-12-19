@@ -4,6 +4,8 @@ import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 
+import styles from "./SearchBar.module.css";
+
 function SearchBar ({ onSearch, onClear }) {
 
   const [inputValue, setInputValue] = useState("");
@@ -22,7 +24,7 @@ function SearchBar ({ onSearch, onClear }) {
   }
 
   return (
-    <div style={{width: '70rem', height: '3.125rem'}}>
+    <div className={styles.container}>
       <TextField
         style={{backgroundColor: "white"}}
         fullWidth
@@ -30,7 +32,7 @@ function SearchBar ({ onSearch, onClear }) {
         onInput={(e) => setInputValue(e.target.value)}
         onKeyDown={handleKeyPress}
         onChange={(e) => setInputValue(e.target.value)}
-        label="Search by Title/Investigator: separate by commas to search for multiple keywords (e.g. one, two)"
+        label="Search by Title/Investigator"
         variant="outlined"
         size="small"
         InputProps={{

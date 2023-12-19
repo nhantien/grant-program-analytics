@@ -1,5 +1,6 @@
-import "./TableItem.css";
 import { Link } from "react-router-dom";
+
+import styles from "./TableItem.module.css";
 
 function TableItem({ project, color, onSelect }) {
 
@@ -11,6 +12,8 @@ function TableItem({ project, color, onSelect }) {
     currency: "CAD",
     minimumFractionDigits: 0
   });
+
+  const titleText = (window.screen.width <= 576 && project.title.length > 30) ? project.title.slice(0, 30) + "..." : project.title;
 
   const handleSelect = () => {
     if (project.isSelected) {
@@ -28,13 +31,13 @@ function TableItem({ project, color, onSelect }) {
       <td>{project.type}</td>
       <td>{project.investigator}</td>
       <td>{project.faculty}</td>
-      <td style={{ textAlign: "start" }}> <Link to={`/summary/${project.id}`}>{project.title}</Link> </td>
+      <td style={{ textAlign: "start" }}> <Link to={`/summary/${project.id}`}>{titleText}</Link> </td>
       <td>{project.projectYear}</td>
       <td>{formattedAmount}</td>
       <td style={{ color: statusColor }}>{project.status}</td>
       <td><a href={project.report}>Link to Report</a></td>
       <td><a href={project.poster}>Link to Poster</a></td>
-      <div className="select-btn">
+      <div className={styles["select-btn"]}>
         <span>Select project</span>
         <input type="checkbox" checked={project.isSelected} onChange={handleSelect} />
       </div>
