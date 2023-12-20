@@ -1,6 +1,6 @@
 .chart {
     width: 50%;
-    height: 30rem;
+    min-height: 30rem;
 }
 
 .space {
@@ -9,10 +9,37 @@
 
 .description {
     width: 35%;
-    height: 30rem;
     color: #000;
     font-family: Inter;
     font-size: 0.9375rem;
     font-style: normal;
     font-weight: 400;
+}
+
+
+
+@media screen and (max-width: 576px) {
+    .chart {
+        width: 100%;
+        margin-bottom: 2rem;
+    }
+
+    .space {
+        display: none;
+    }
+
+    .description {
+        width: 100%;
+    }
+
+    .funding-tooltip {
+        background-color: rgba(75, 205, 216, 0.5);
+    }
+
+    .funding-tooltip p {
+        color: #081252;
+        margin: 0.25rem;
+        font-style: italic;
+        font-weight: 700;
+    }
 }

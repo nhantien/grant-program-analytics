@@ -30,12 +30,12 @@ function SnapshotHeader({ projects }) {
 
             <div className={styles.filters}>
                 <div className={styles.faculty}>
-                    <p>Filter by</p>
+                    <p>Filter by:</p>
                     <Filter options={FACULTY} onSelect={onSelect} defaultValue="Faculty" type="Faculty" />
                 </div>
 
                 <div className={styles.slider}>
-                    <p>Year range</p>
+                    <p>Year range:</p>
                     <Slider
                         getAriaLabel={() => "Year range"}
                         max={2023}

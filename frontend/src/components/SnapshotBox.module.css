@@ -1,16 +1,18 @@
 .bg {
-    width: 90rem;
-    padding-top: 2.5rem;
-    padding-bottom: 3rem;
-    padding-left: 3rem;
-    padding-right: 3rem;
+    width: 100%;
+    padding: 2.5rem 2.5% 3rem 2.5%;
+    min-height: 30rem;
+}
+
+.text {
+    color: #000;
+    font-family: Inter;
+    font-style: normal;
 }
 
 .title {
-    color: #000;
-    font-family: Inter;
+    composes: text;
     font-size: 1.875rem;
-    font-style: normal;
     font-weight: 700;
 }
 
@@ -21,21 +23,20 @@
     align-items: flex-start;
 }
 
-.chart {
-    width: 50%;
-    height: 30rem;
-}
+@media screen and (max-width: 576px) {
 
-.space {
-    width: 5%;
-}
+    .container {
+        display: block;
+    }
 
-.description {
-    width: 35%;
-    height: 30rem;
-    color: #000;
-    font-family: Inter;
-    font-size: 0.9375rem;
-    font-style: normal;
-    font-weight: 400;
+    .funding-tooltip {
+        width: 40%;
+        background-color: rgba(237, 237, 237, 0.4);
+    }
+
+    .title {
+        font-size: 1.375rem;
+    }
+
+
 }

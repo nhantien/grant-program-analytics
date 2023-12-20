@@ -13,7 +13,6 @@ function SimilarProjects({ project, type }) {
     const [showAll, setShowAll] = useState(false);
     const itemsToDisplay = showAll ? SAMPLE_SIMILAR_PROJECTS : SAMPLE_SIMILAR_PROJECTS.slice(0, 5);
     const titleClass = type === "individual" ? styles["title-individual"] : styles["title-snapshot"];
-    const btnAlignment = (window.screen.width <= 576) ? "left" : "center";
 
     return (
         <div className={styles.bg}>
@@ -25,7 +24,7 @@ function SimilarProjects({ project, type }) {
                 <Table className={styles.wrapper} aria-label="customized-table">
 
                     <TableBody>
-                        <TableRow sx={{ borderBottom: 1, height: 10 }}>
+                        <TableRow>
                             <TableCell className={styles.TableHeader}>Title</TableCell>
                             <TableCell className={styles.TableHeader}>Project Type</TableCell>
                             <TableCell className={styles.TableHeader}>Primary Investigator</TableCell>
@@ -45,7 +44,7 @@ function SimilarProjects({ project, type }) {
                     </TableBody>
 
                     <TableRow>
-                        <TableCell style={{ height: "2rem" }} colSpan={5} align={btnAlignment}>
+                        <TableCell style={{ height: "2rem" }} colSpan={5} align="center">
                             <Button onClick={() => setShowAll(!showAll)} fullWidth>
                                 {showAll ?
                                     <div className={styles.btn}>

@@ -140,7 +140,7 @@
 
 .generate-summary-btn {
   width: 100%;
-  height: 100%;
+  height: 4rem;
   background-color: #081252;
   color: white;
   font-weight: bold;
@@ -281,6 +281,10 @@ TODO: animaion when search filters are shown/hidden
 
   .num-selected {
     font-size: 0.875rem;
+  }
+
+  .generate-summary-btn {
+    height: 100%;
   }
 
   th {
