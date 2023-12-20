@@ -1,18 +1,18 @@
 .bg {
-    width: 84rem;
+    width: 95%;
     height: 25rem;
     margin-top: 3.75rem;
-    margin-left: 3rem;
-    margin-right: 3rem;
+    margin-left: 2.5%;
+    margin-right: 2.5%;
 }
 
 .container {
     background-color: white;
     height: 100%;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    width: 95%;
+    padding-left: 2.5%;
+    padding-right: 2.5%;
     padding-top: 1.75rem;
-    display: flex;
 }
 
 .description-text {
@@ -20,11 +20,6 @@
     font-family: Inter;
     font-weight: 400;
     font-style: normal;
-}
-
-.description {
-    width: 100%;
-    margin-right: 1.53rem;
 }
 
 .title {
@@ -43,14 +38,49 @@
 
 .report {
     margin-top: 1.5rem;
-    width: 84rem;
+    width: 100%;
     color: black;
     text-align: end;
     font-size: 0.9375rem;
     font-style: italic;
     font-weight: 700;
-}   
+}  
 
-a.report:visited {
+.report a {
+    color: inherit;
+}
+
+.report a:visited {
     color: black;
+}
+
+@media screen and (max-width: 576px) {
+    
+    .bg {
+        margin-top: 2rem;
+        height: auto;
+    }
+
+    .container {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+
+    .title {
+        height: 1.125rem;
+        margin-bottom: 1rem;
+        font-size: 1.125rem;
+    }
+
+    .description-body {
+        height: auto;
+        font-size: 0.875rem;
+    }
+
+    .report {
+        margin-top: 0.9375rem;
+        font-size: 0.875rem;
+    }
+
+
 }

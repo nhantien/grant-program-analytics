@@ -35,3 +35,9 @@
     background-color: rgba(236, 236, 236, 0.2);
 }
 
+@media screen and (max-width: 576px) {
+    .navbar {
+        display: none;
+    }
+}
+

@@ -48,7 +48,7 @@ function Summary() {
 
     return (
 
-        <div className={styles.summary}>
+        <div className={styles.Summary}>
             <SummaryTitle project={project} />
             <SummaryDescription project={project} />
             <SummaryTable project={project} />

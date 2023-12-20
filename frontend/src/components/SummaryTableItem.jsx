@@ -5,9 +5,10 @@ function SummaryTableItem({ field, data, color }) {
 
     let dataHTML;
 
+    //TODO: remove course name & replace with section code
     if (field === "Team Members") {
         dataHTML = (
-            <div className={styles.teamMembers} style={{ backgroundColor: color }}>
+            <div className={styles.data} style={{ backgroundColor: color }}>
                 {data.map((name) =>
                     <div className={styles.member}>
                         <div className={styles.name}>
@@ -23,7 +24,7 @@ function SummaryTableItem({ field, data, color }) {
     } else if (field === "Student Reach") {
         console.log(data);
         dataHTML = (
-            <div className={styles.studentReach} style={{ backgroundColor: color }}>
+            <div className={styles.data} style={{ backgroundColor: color }}>
                 <div className={styles.courses}>
                     {data.map((course) => (
                         <div className={styles.course}>{course}</div>
