@@ -1,6 +1,6 @@
 import styles from "./SummaryTable.module.css";
 import SummaryTableItem from "./SummaryTableItem";
-import { SAMPLE_TEAM_MEMBERS, SAMPLE_STUDENT_REACH } from "../constants";
+import { SAMPLE_TEAM_MEMBERS, SAMPLE_STUDENT_REACH } from "../../constants";
 
 function SummaryTable({ project }) {
 

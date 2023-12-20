@@ -1,7 +1,7 @@
 import styles from "./SnapshotHeader.module.css";
 import { Slider } from "@mui/material";
-import { Filter } from "../components";
-import { FACULTY } from "../constants";
+import { Filter } from "../util";
+import { FACULTY } from "../../constants";
 import { useState } from "react";
 
 
