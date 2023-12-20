@@ -1,6 +1,7 @@
 import styles from './HomePage.module.css';
 import { useState, useEffect } from 'react';
-import { Filter, SearchBar, FilterList, TableItem } from "../components";
+import { FilterList, SearchBar, TableItem } from '../components/home';
+import { Filter } from "../components/util";
 import ClearIcon from '@mui/icons-material/Clear';
 import { IconButton, Select, MenuItem } from '@mui/material';
 import { Link } from 'react-router-dom';

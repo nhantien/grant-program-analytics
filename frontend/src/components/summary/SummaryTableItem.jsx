@@ -1,5 +1,5 @@
 import styles from "./SummaryTableItem.module.css";
-import { SAMPLE_TEAM_MEMBERS } from "../constants";
+import { SAMPLE_TEAM_MEMBERS } from "../../constants";
 
 function SummaryTableItem({ field, data, color }) {
 

@@ -3,7 +3,7 @@ import styles from "./SimilarProjects.module.css";
 import { Table, TableBody, TableCell, TableContainer, TableRow, Paper, Button } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import { SAMPLE_SIMILAR_PROJECTS } from "../constants";
+import { SAMPLE_SIMILAR_PROJECTS } from "../../constants";
 import { Link } from "react-router-dom";
 
 

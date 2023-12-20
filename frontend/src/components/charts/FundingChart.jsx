@@ -84,7 +84,7 @@ function FundingChart({ projects }) {
                 <BarChart width={width} height={height} layout={layout} data={res} >
                     {xAxis}
                     {yAxis}
-                    <Tooltip content={<CustomToolTip />} cursor={{ fill: "transparent" }} position={{ x: 100, y: 25 }}/>
+                    { isMobile() && <Tooltip content={<CustomToolTip />} cursor={{ fill: "transparent" }} position={{ x: 100, y: 25 }}/>}
                     <Bar dataKey="value" fill="#081252" background={{ fill: "#EEE" }}>
                         {label}
                     </Bar>

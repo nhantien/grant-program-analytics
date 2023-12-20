@@ -1,5 +1,6 @@
 import { useLocation } from "react-router-dom";
-import { SnapshotHeader, SnapshotBox, SimilarProjects } from "../components";
+import { SnapshotHeader, SnapshotBox } from "../components/snapshot";
+import { SimilarProjects } from "../components/util";
 import { FundingChart, NumGrantsChart, NumProjectsChart, StudentReachChart, TeamMemberChart } from "../components/charts";
 import styles from "./Snapshot.module.css";
 
