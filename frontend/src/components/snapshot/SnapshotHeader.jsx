@@ -1,7 +1,7 @@
 import styles from "./SnapshotHeader.module.css";
 import { Slider } from "@mui/material";
 import { Filter } from "../util";
-import { FACULTY } from "../../constants";
+import { FACULTY, PROJECT_TYPE } from "../../constants";
 import { useState } from "react";
 
 
@@ -29,8 +29,13 @@ function SnapshotHeader({ projects }) {
             </div>
 
             <div className={styles.filters}>
-                <div className={styles.faculty}>
+
+                <div className={styles.filter}>
                     <p>Filter by:</p>
+                    <Filter options={PROJECT_TYPE} onSelect={onSelect} defaultValue="Project Type" type="ProjectType" />
+                </div>
+
+                <div className={styles.filter}>
                     <Filter options={FACULTY} onSelect={onSelect} defaultValue="Faculty" type="Faculty" />
                 </div>
 
