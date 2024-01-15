@@ -26,15 +26,15 @@
 .filters {
     width: 100%;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: flex-start;
 }
 
-.faculty {
-    width: 40%;
+.filter {
+    width: 60%;
     font-size: 1.25rem;
     font-weight: 400;
-    margin-right: -25%;
+    margin-right: -43%;
 }
 
 .slider {
@@ -66,8 +66,8 @@
         margin-top: 1.5rem;
     }
 
-    .faculty {
-        display: flex;
+    .filter {
+        display: block;
         width:  80%;
         margin: 0;
         font-size: 1rem;

@@ -1,6 +1,6 @@
 import styles from './HomePage.module.css';
 import { useState, useEffect } from 'react';
-import { FilterList, SearchBar, TableItem } from '../components/home';
+import { FilterList, SearchBar, TableItem, VerticalTableItem } from '../components/home';
 import { Filter } from "../components/util";
 import ClearIcon from '@mui/icons-material/Clear';
 import { IconButton, Select, MenuItem } from '@mui/material';
@@ -220,12 +220,12 @@ function HomePage() {
                     </div>
 
                     <div className={styles["generate-summary"]}>
-                        <div style={{ width: "80%"}}>
+                        <div style={{ width: "80%" }}>
                             <span className={styles["num-selected"]}>(selected {selectedProjects.length} projects)</span>
                             <br />
                             <span className={styles.title}>Generate Project Summary</span>
                         </div>
-                        <div style={{ width: "20%", height: "3rem"}}>
+                        <div style={{ width: "20%", height: "3rem" }}>
                             <button className={styles["generate-summary-btn"]}>
                                 <Link
                                     to="/snapshot"
@@ -241,7 +241,7 @@ function HomePage() {
             </header>
 
             <div>
-                <table style={{ width: "100%", borderCollapse: 'collapse' }}>
+                <table className={styles["home-table"]} style={{ width: "100%", borderCollapse: 'collapse' }}>
                     <thead style={{ color: 'white', backgroundColor: '#081252' }}>
                         <tr>
                             <th onClick={() => handleSort("fundingYear")}>Funding Year {sort["order"] === "asc" ? '▲' : '▼'}</th>
@@ -262,12 +262,32 @@ function HomePage() {
                             <h3 style={{ textAlign: "center" }}>No projects found.</h3>
                         }
                         {
+                            window.screen.width > 576 &&
                             projectsToDisplay.map((project, index) => (
-                                <TableItem key={project.id} project={project} color={index % 2 === 0} onSelect={setSelectedProjects} />
+                                <TableItem key={project.id} project={project} color={index % 2 === 0} isSelected={selectedProjects.includes(project.id)} onSelect={setSelectedProjects} />
                             ))
                         }
                     </tbody>
                 </table>
+
+                <div className={styles["mobile-table"]}>
+                    {
+                        window.screen.width <= 576 &&
+                        <div className={styles["num-selected-div"]}>
+                            <div className={styles["button-like-div"]}>
+                                You have selected {selectedProjects.length} projects.
+                            </div>
+                        </div>
+
+                    }
+                    {
+                        window.screen.width <= 576 &&
+                        projectsToDisplay.map((project) => (
+                            <VerticalTableItem key={project.id} project={project} isSelected={selectedProjects.includes(project.id)} onSelect={setSelectedProjects} />
+                        ))
+                    }
+
+                </div>
             </div>
 
             <div className={styles["select-all-div"]}>

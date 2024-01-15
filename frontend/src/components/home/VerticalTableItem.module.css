@@ -1,0 +1,44 @@
+.wrapper {
+    width: 100%;
+    margin: 2rem 0 2rem 0;
+}
+
+.field {
+    width: 95%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 2.5% 0.8rem 2.5%;
+
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    margin-top: -1px;
+    margin-bottom: -1px;
+}
+
+.title {
+    color: white;
+    font-weight: 700;
+}
+
+a.title {
+    color: white;
+    font-weight: 700;
+}
+
+.key {
+    width: 40%;
+    text-align: start;
+    font-size: 0.875rem;
+}
+
+.value {
+    width: 55%;
+    text-align: start;
+}
+
+.select-btn {
+    width: 100%;
+    margin-top: 0.4rem;
+    display: flex;
+    justify-content: flex-end;
+}
