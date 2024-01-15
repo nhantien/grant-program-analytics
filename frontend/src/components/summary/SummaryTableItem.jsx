@@ -5,7 +5,6 @@ function SummaryTableItem({ field, data, color }) {
 
     let dataHTML;
 
-    //TODO: remove course name & replace with section code
     if (field === "Team Members") {
         dataHTML = (
             <div className={styles.data} style={{ backgroundColor: color }}>

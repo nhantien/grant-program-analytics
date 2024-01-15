@@ -1,7 +1,7 @@
 .container {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     width: 100%;
 }
 
@@ -18,13 +18,14 @@
     height: 1.5rem;
     font-size: 1rem;
     font-weight: 700;
+    padding-top: 0.75rem;
 }
 
 .data {
     composes: text;
     border: 1px solid #000;
     width: 80%;
-    padding: 1.75rem 0 1.75rem 2.5%;
+    padding: 0.75rem 0 0.75rem 2.5%;
     margin-top: -1px;
     margin-bottom: -1px;
     font-size: 0.9375rem;

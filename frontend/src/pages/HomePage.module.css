@@ -5,7 +5,7 @@
 }
 
 .app-header {
-  margin-bottom: 5rem;
+  margin-bottom: 3rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -66,6 +66,7 @@
   composes: box;
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
 }
 
 .project-filters {
@@ -79,7 +80,7 @@
 .filters {
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
 }
 
