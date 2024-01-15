@@ -55,9 +55,9 @@ const SAMPLE_TEAM_MEMBERS = {
 };
 
 const SAMPLE_STUDENT_REACH = [
-    "CPSC 100: Some Course Name", "XXXX 200: Some Course Name", "XXXX 300: Some Course Name", "XXXX 000: Some Course Name", "XXXX 000: Some Course Name",
-    "XXXX 000: Some Course Name", "XXXX 000: Some Course Name", "ENVN 100: Some Course Name", "XXXX 200: Some Course Name", "XXXX 300: Some Course Name",
-    "XXXX 000: Some Course Name", "XXXX 000: Some Course Name", "XXXX 000: Some Course Name", "XXXX 000: Some Course Name"
+    "CPSC 100 000", "XXXX 200 000", "XXXX 300 000", "XXXX 000 000", "XXXX 000 000",
+    "XXXX 000 000", "XXXX 000 000", "XXXX 000 000", "XXXX 000 000", "XXXX 000 000",
+    "XXXX 000 000", "XXXX 000 000", "XXXX 000 000", "XXXX 000 000", "XXXX 000 000"
 ];
 
 const SAMPLE_SIMILAR_PROJECTS = [

@@ -287,6 +287,32 @@ TODO: animaion when search filters are shown/hidden
     height: 100%;
   }
 
+  .home-table {
+    display: none;
+  }
+
+  .num-selected-div {
+    width: 100%;
+    position: sticky;
+    top: 5px;
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .button-like-div {
+    width: 80%;
+    padding: 0.5rem 0 0.5rem 0;
+    background-color: rgba(200, 200, 200, 0.8);
+    border: 1.5px solid rgba(200, 200, 200, 1);
+    text-align: center;
+    border-radius: 3px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    font-style: italic;
+  }
+
   th {
     font-size: 0.875rem;
     padding-left: 1.5rem;
@@ -299,7 +325,7 @@ TODO: animaion when search filters are shown/hidden
   }
 
   .select-all-div p {
-    width: 17%;
+    width: 20%;
   }
 
   .pagination {

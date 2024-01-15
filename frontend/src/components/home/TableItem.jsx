@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
 
 import styles from "./TableItem.module.css";
+import { useState } from "react";
 
-function TableItem({ project, color, onSelect }) {
+function TableItem({ project, color, isSelected, onSelect }) {
+
+  const [status, setStatus] = useState(isSelected);
 
   const bgColor = color ? "white" : "#DFF2FF";
   const statusColor = project.status === "Active\r" ? "#d4734c" : "#64b53c";
@@ -16,12 +19,12 @@ function TableItem({ project, color, onSelect }) {
   const titleText = (window.screen.width <= 576 && project.title.length > 30) ? project.title.slice(0, 30) + "..." : project.title;
 
   const handleSelect = () => {
-    if (project.isSelected) {
-      project.isSelected = false;
-      onSelect(prevSelected => prevSelected.filter(proj => proj !== project));
+    if (status) {
+      setStatus(false);
+      onSelect(prevSelected => prevSelected.filter(proj => proj !== project.id));
     } else {
-      project.isSelected = true;
-      onSelect(prevSelected => [...prevSelected, project]);
+      setStatus(true);
+      onSelect(prevSelected => [...prevSelected, project.id]);
     }
   };
 
@@ -39,7 +42,7 @@ function TableItem({ project, color, onSelect }) {
       <td><a href={project.poster}>Link to Poster</a></td>
       <div className={styles["select-btn"]}>
         <span>Select project</span>
-        <input type="checkbox" checked={project.isSelected} onChange={handleSelect} />
+        <input type="checkbox" checked={status} onChange={handleSelect} />
       </div>
     </tr>
   );

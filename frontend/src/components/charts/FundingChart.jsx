@@ -1,4 +1,4 @@
-import { Bar, BarChart, LabelList, Tooltip, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, LabelList, Rectangle, Tooltip, XAxis, YAxis } from 'recharts';
 import React from 'react';
 import styles from "./charts.module.css";
 
@@ -85,14 +85,14 @@ function FundingChart({ projects }) {
                     {xAxis}
                     {yAxis}
                     { isMobile() && <Tooltip content={<CustomToolTip />} cursor={{ fill: "transparent" }} position={{ x: 100, y: 25 }}/>}
-                    <Bar dataKey="value" fill="#081252" background={{ fill: "#EEE" }}>
+                    <Bar dataKey="value" fill="#081252" background={{ fill: "#EEE" }} activeBar={<Rectangle fill="lightblue" />}>
                         {label}
                     </Bar>
                 </BarChart>
             </div>
             <div className={styles.space}></div>
             <div className={styles.description}>
-                The TLEF awarded the total of {total} funding for selected {len} projects.
+                The TLEF awarded the total of {formattedAmount(total)} funding for selected {len} projects.
             </div>
         </React.Fragment>
     );
