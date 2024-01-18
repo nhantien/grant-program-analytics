@@ -139,18 +139,6 @@ function HomePage() {
         setAppliedFilters(newFilters);
     };
 
-    const handleSelectAllProjects = (event) => {
-        const isChecked = event.target.checked;
-
-        const updatedProjects = sortedProjects.map((proj) => {
-            // Ensure that each project has the isSelected property
-            proj.isSelected = isChecked;
-
-            return proj;
-        });
-
-        setSelectedProjects(isChecked ? updatedProjects : []);
-    }
 
     const handleOpenSearch = (e) => {
         let filters = document.getElementById("filters");
@@ -181,18 +169,18 @@ function HomePage() {
 
                 <div id="filters" className={styles["filters-div"]}>
                     <div className={styles["project-filters"]}>
-                        <p className={styles["filter-text"]}>Filter by</p>
+                        <span className={styles["filter-text"]}>Filter by</span>
                         <div className={styles.filters}>
-                            <Filter options={YEARS} onSelect={handleSelectFilter} defaultValue="Funding Year" type="FundingYear" />
-                            <Filter options={PROJECT_TYPE} onSelect={handleSelectFilter} defaultValue="Project Type" type="ProjectType" />
-                            <Filter options={FACULTY} onSelect={handleSelectFilter} defaultValue="Faculty" type="Faculty" />
-                            <Filter options={options} onSelect={handleSelectFilter} defaultValue="Focus Area" type="FocusArea" />
+                            <Filter options={YEARS} onSelect={handleSelectFilter} defaultValue="Funding Year" type="FundingYear" snapshot={false} />
+                            <Filter options={PROJECT_TYPE} onSelect={handleSelectFilter} defaultValue="Project Type" type="ProjectType" snapshot={false} />
+                            <Filter options={FACULTY} onSelect={handleSelectFilter} defaultValue="Faculty" type="Faculty" snapshot={false} />
+                            <Filter options={options} onSelect={handleSelectFilter} defaultValue="Focus Area" type="FocusArea" snapshot={false} />
                         </div>
                     </div>
                     <div className={styles["display-per-page"]}>
-                        <p className={styles["filter-text"]}>Displayed per page</p>
+                        <span className={styles["filter-text"]} style={{ display: "block", textAlign: "right" }}>Displayed per page</span>
                         <Select
-                            style={{ width: "100%", backgroundColor: "white" }}
+                            className={styles["display-pp-dropdown"]}
                             value={projectsPerPage}
                             onChange={(e) => setProjectsPerPage(Number(e.target.value) || "All")}
                         >
@@ -207,7 +195,7 @@ function HomePage() {
                 <div className={styles["lower-header-div"]}>
 
                     <div className={styles["applied-filters"]}>
-                        <span style={{ marginTop: "1rem", marginBottom: "1rem" }}>Applied Filters</span>
+                        <span style={{ marginTop: "1rem", marginBottom: "0.5rem" }}>Applied Filters</span>
                         <div className={styles["filters-box"]}>
                             <FilterList filters={appliedFilters} onClearFilter={handleClearFilter} />
                             <div className={styles["clear-filters-div"]}>
@@ -220,19 +208,17 @@ function HomePage() {
                     </div>
 
                     <div className={styles["generate-summary"]}>
-                        <div style={{ width: "80%" }}>
-                            <span className={styles["num-selected"]}>(selected {selectedProjects.length} projects)</span>
-                            <br />
-                            <span className={styles.title}>Generate Project Summary</span>
-                        </div>
-                        <div style={{ width: "20%", height: "3rem" }}>
+                        <div>
                             <button className={styles["generate-summary-btn"]}>
                                 <Link
                                     to="/snapshot"
-                                    state={{ projects: selectedProjects.length === 0 ? projects : selectedProjects }}
+                                    state={{ 
+                                        projects: selectedProjects.length === 0 ? projects : selectedProjects,
+                                        filters: appliedFilters
+                                    }}
                                     style={{ textDecoration: "none", color: "white" }}
                                 >
-                                    Go
+                                    Genarete Project Summary
                                 </Link>
                             </button>
                         </div>
@@ -288,11 +274,6 @@ function HomePage() {
                     }
 
                 </div>
-            </div>
-
-            <div className={styles["select-all-div"]}>
-                <p>Select All</p>
-                <input type="checkbox" onChange={handleSelectAllProjects} />
             </div>
 
             <div className={styles.pagination}>

@@ -1,6 +1,6 @@
 .bg {
     width: 95%;
-    margin: 3rem 2.5% 5rem 2.5%;
+    margin: 0rem 2.5% 2rem 2.5%;
 }
 
 .text {
@@ -25,21 +25,60 @@
 
 .filters {
     width: 100%;
+    margin-top: 1.5rem;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.dropdowns {
+    width: 50%;
+    background-color: lightgray;
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+.dropdown-filters {
+    width: 100%;
+    display: flex;
     justify-content: flex-start;
 }
 
-.filter {
-    width: 60%;
-    font-size: 1.25rem;
-    font-weight: 400;
-    margin-right: -43%;
+.applied-filters {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.filters-box {
+    width: 100%;
+    min-height: 6rem;
+    background-color: white;
+    position: relative;
+    border: solid lightgray;
+    border-radius: 0.5rem;
+}
+
+.clear-filters-div p {
+    font-size: 0.9375rem;
+    text-align: start;
+}
+
+.clear-filters-div {
+    width: 15%;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
 }
 
 .slider {
-    width: 50%;
-    font-size: 1.25rem;
+    width: 45%;
+    font-size: 1.75rem;
     font-weight: 400;
 }
 
@@ -48,7 +87,7 @@
 }
 
 @media screen and (max-width: 576px) {
-    
+
     .bg {
         margin-top: 0rem;
     }
@@ -68,7 +107,7 @@
 
     .filter {
         display: block;
-        width:  80%;
+        width: 80%;
         margin: 0;
         font-size: 1rem;
     }
@@ -84,7 +123,7 @@
         font-size: 1rem;
         margin-top: 1.375rem;
     }
-    
+
     .slider p {
         width: 40%;
         text-align: start;

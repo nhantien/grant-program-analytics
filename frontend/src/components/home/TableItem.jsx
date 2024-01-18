@@ -40,10 +40,6 @@ function TableItem({ project, color, isSelected, onSelect }) {
       <td style={{ color: statusColor }}>{project.status}</td>
       <td><a href={project.report}>Link to Report</a></td>
       <td><a href={project.poster}>Link to Poster</a></td>
-      <div className={styles["select-btn"]}>
-        <span>Select project</span>
-        <input type="checkbox" checked={status} onChange={handleSelect} />
-      </div>
     </tr>
   );
 

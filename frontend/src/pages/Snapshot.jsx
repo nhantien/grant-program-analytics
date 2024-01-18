@@ -1,32 +1,73 @@
 import { useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { SnapshotHeader, SnapshotBox } from "../components/snapshot";
 import { SimilarProjects } from "../components/util";
 import { FundingChart, NumGrantsChart, NumProjectsChart, StudentReachChart, TeamMemberChart } from "../components/charts";
+import { Project } from "../constants";
 import styles from "./Snapshot.module.css";
 
 function Snapshot() {
 
     const location = useLocation();
-    const { projects } = location.state || {};
+    console.log(location.state);
+    const { projects, filters } = location.state;
 
-    
+    const [selectedProjects, setSelectedProjects] = useState(projects);
+    const [appliedFilters, setAppliedFilters] = useState(filters);
+
+    const BASE_URL = 'http://localhost:3001/';
+    useEffect(() => {
+        const fetchFilteredData = async () => {
+            try {
+                const res = await fetch(BASE_URL + "filter", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", },
+                    body: JSON.stringify({ appliedFilters }),
+                });
+                if (!res.ok) throw new Error("Network response was not ok");
+
+                const data = await res.json();
+                const newProjects = data.map((proj) => {
+
+                    // Make sure to return the new Project instance
+                    return new Project(
+                        proj.ID,
+                        proj.FundingYear,
+                        proj.ProjectType,
+                        proj.Investigator,
+                        proj.Faculty,
+                        proj.Title,
+                        "1",
+                        proj.Amount,
+                        proj.ProjectStatus
+                    );
+                });
+
+                setSelectedProjects(newProjects);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+
+        fetchFilteredData();
+    }, [appliedFilters]);
 
     const handleClick = (section) => {
         document.getElementById(section).scrollIntoView({ behavior: "smooth" });
     };
 
     const charts = {
-        numGrants: (<NumGrantsChart projects={projects} />),
-        numProjects: (<NumProjectsChart projects={projects} />),
-        funding: (<FundingChart projects={projects} />),
-        studentReach: (<StudentReachChart projects={projects} />),
-        teamMember: (<TeamMemberChart projects={projects} />)
+        numGrants: (<NumGrantsChart projects={selectedProjects} />),
+        numProjects: (<NumProjectsChart projects={selectedProjects} />),
+        funding: (<FundingChart projects={selectedProjects} />),
+        studentReach: (<StudentReachChart projects={selectedProjects} />),
+        teamMember: (<TeamMemberChart projects={selectedProjects} />)
     };
 
     return (
         <div className={styles.Snapshot}>
 
-            <SnapshotHeader projects={projects} />
+            <SnapshotHeader projects={selectedProjects} filters={appliedFilters} setFilters={setAppliedFilters} />
 
             <div className={styles.navbar}>
                 <button onClick={() => handleClick("num-grants")}>Number of Grants</button>

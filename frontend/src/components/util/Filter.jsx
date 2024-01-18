@@ -4,7 +4,7 @@ import Select from '@mui/material/Select';
 
 import styles from "./Filter.module.css";
 
-function Filter ({ options, onSelect, defaultValue, type }) {
+function Filter ({ options, onSelect, defaultValue, type, snapshot }) {
 
   const handleChange = (event) => {
     const value = event.target.value;
@@ -12,7 +12,7 @@ function Filter ({ options, onSelect, defaultValue, type }) {
   };
 
   return (
-    <div className={styles.container}>
+    <div style={{ width: snapshot ? "25%" : "" }} className={styles.container}>
       <Select
         className={styles.filter}
         onChange={handleChange}
