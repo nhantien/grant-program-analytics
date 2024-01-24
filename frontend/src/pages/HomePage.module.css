@@ -176,6 +176,10 @@ table {
   overflow-x: auto;
 }
 
+tr {
+  width: 100%;
+}
+
 th {
   border-top: 1px solid black;
   height: 5rem;

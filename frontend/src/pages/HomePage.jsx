@@ -3,10 +3,10 @@ import { useState, useEffect } from 'react';
 import { FilterList, SearchBar, TableItem, VerticalTableItem } from '../components/home';
 import { Filter } from "../components/util";
 import ClearIcon from '@mui/icons-material/Clear';
-import { IconButton, Select, MenuItem } from '@mui/material';
+import { IconButton, Select, MenuItem, CircularProgress } from '@mui/material';
 import { Link } from 'react-router-dom';
 
-import { Project, BASE_URL, YEARS, PROJECT_TYPE, FACULTY } from '../constants';
+import { Project, BASE_URL, YEARS, PROJECT_TYPE, FACULTY, sleep, SAMPLE_PROJECT } from '../constants';
 
 const options = ['Option 1', 'Option 2', 'Option 3'];
 
@@ -26,11 +26,13 @@ function HomePage() {
         "order": "asc",
         "property": null
     });
-    const [selectedProjects, setSelectedProjects] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchFilteredData = async () => {
             try {
+                setProjects([]);
+                setLoading(true);
                 const res = await fetch(BASE_URL + "filter", {
                     method: "POST",
                     headers: { "Content-Type": "application/json", },
@@ -56,13 +58,14 @@ function HomePage() {
                 });
 
                 setProjects(newProjects);
+                setLoading(false);
             } catch (err) {
                 console.log(err);
             }
         };
 
         fetchFilteredData();
-    }, [appliedFilters, sort, projectsPerPage, currentPage]);
+    }, [appliedFilters]);
 
     const handleSort = (property) => {
         if (property === sort["property"]) {
@@ -88,6 +91,10 @@ function HomePage() {
             return bValue.localeCompare(aValue, undefined, { numeric: true });
         }
     });
+
+    const startIndex = (projectsPerPage === "All") ? 0 : (currentPage - 1) * projectsPerPage;;
+    const endIndex = (projectsPerPage === "All" || startIndex + projectsPerPage > sortedProjects.length) ? sortedProjects.length : startIndex + projectsPerPage;
+    const projectsToDisplay = sortedProjects.slice(startIndex, endIndex);
 
     const handleSelectFilter = (selectedFilter, filterType) => {
         const newFilters = [...appliedFilters[filterType], selectedFilter];
@@ -137,6 +144,11 @@ function HomePage() {
         setAppliedFilters(newFilters);
     };
 
+    const handleSelectDisplayPerPage = (e) => {
+        setProjectsPerPage(Number(e.target.value) || "All");
+        setCurrentPage(1);
+    }
+
 
     const handleOpenSearch = (e) => {
         let filters = document.getElementById("filters");
@@ -149,9 +161,14 @@ function HomePage() {
         }
     };
 
-    const startIndex = (projectsPerPage === "All") ? 0 : (currentPage - 1) * projectsPerPage;
-    const endIndex = (projectsPerPage === "All" || startIndex + projectsPerPage > sortedProjects.length) ? sortedProjects.length : startIndex + projectsPerPage;
-    const projectsToDisplay = sortedProjects.slice(startIndex, endIndex);
+    const handleNavigateBack = () => {
+        setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+    }
+
+    const handleNavigateForward = () => {
+        setCurrentPage((prevPage) => prevPage + 1);
+    }
+
 
     return (
         <div className={styles.bg}>
@@ -180,7 +197,7 @@ function HomePage() {
                         <Select
                             className={styles["display-pp-dropdown"]}
                             value={projectsPerPage}
-                            onChange={(e) => setProjectsPerPage(Number(e.target.value) || "All")}
+                            onChange={(e) => handleSelectDisplayPerPage(e)}
                         >
                             <MenuItem value={"All"}>All</MenuItem>
                             <MenuItem value={10}>10</MenuItem>
@@ -206,13 +223,13 @@ function HomePage() {
                     </div>
 
                     <div className={styles["generate-summary"]}>
-                        <p className={styles["generate-summary-txt"]}>View an enriched summary of the currently displayed projects</p>
+                        <p className={styles["generate-summary-txt"]}>View a detailed summary of the currently displayed projects</p>
                         <div>
                             <button className={styles["generate-summary-btn"]}>
                                 <Link
                                     to="/snapshot"
-                                    state={{ 
-                                        projects: selectedProjects.length === 0 ? projects : selectedProjects,
+                                    state={{
+                                        projects: sortedProjects,
                                         filters: appliedFilters
                                     }}
                                     style={{ textDecoration: "none", color: "white" }}
@@ -227,7 +244,7 @@ function HomePage() {
 
             <div>
                 <table className={styles["home-table"]} style={{ width: "100%", borderCollapse: 'collapse' }}>
-                    <thead style={{ color: 'white', backgroundColor: '#081252' }}>
+                    <thead style={{ width: "100%", color: 'white', backgroundColor: '#081252' }}>
                         <tr>
                             <th onClick={() => handleSort("fundingYear")}>Funding Year {sort["order"] === "asc" ? '▲' : '▼'}</th>
                             <th onClick={() => handleSort("type")}>Project Type {sort["order"] === "asc" ? '▲' : '▼'}</th>
@@ -244,43 +261,45 @@ function HomePage() {
                     <tbody>
                         {
                             sortedProjects.length === 0 &&
-                            <h3 style={{ textAlign: "center" }}>No projects found.</h3>
+                            <TableItem key={-1} project={SAMPLE_PROJECT} color={false} />
                         }
                         {
-                            window.screen.width > 576 &&
+                            (window.screen.width > 576) &&
                             projectsToDisplay.map((project, index) => (
-                                <TableItem key={project.id} project={project} color={index % 2 === 0} isSelected={selectedProjects.includes(project.id)} onSelect={setSelectedProjects} />
+                                <TableItem key={project.id} project={project} color={index % 2 === 0} />
                             ))
                         }
                     </tbody>
                 </table>
 
+                {
+                    loading &&
+                    <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+                        <CircularProgress />
+                    </div>
+                }
+
+                {
+                    (sortedProjects.length === 0 && loading === false) &&
+                    <h2 style={{ width: "100%", textAlign: "center", marginTop: 0 }}>No projects found.</h2>
+                }
+
                 <div className={styles["mobile-table"]}>
                     {
                         window.screen.width <= 576 &&
-                        <div className={styles["num-selected-div"]}>
-                            <div className={styles["button-like-div"]}>
-                                You have selected {selectedProjects.length} projects.
-                            </div>
-                        </div>
-
-                    }
-                    {
-                        window.screen.width <= 576 &&
                         projectsToDisplay.map((project) => (
-                            <VerticalTableItem key={project.id} project={project} isSelected={selectedProjects.includes(project.id)} onSelect={setSelectedProjects} />
+                            <VerticalTableItem key={project.id} project={project} />
                         ))
                     }
-
                 </div>
             </div>
 
             <div className={styles.pagination}>
-                <button className={styles["page-btn"]} onClick={() => setCurrentPage((prevPage) => Math.max(prevPage - 1, 1))} disabled={currentPage === 1}>
+                <button className={styles["page-btn"]} onClick={handleNavigateBack} disabled={currentPage === 1}>
                     &lt;
                 </button>
                 <span>Current Page: {currentPage}</span>
-                <button className={styles["page-btn"]} onClick={() => setCurrentPage((prevPage) => prevPage + 1)} disabled={endIndex >= sortedProjects.length}>
+                <button className={styles["page-btn"]} onClick={handleNavigateForward} disabled={endIndex >= sortedProjects.length}>
                     &gt;
                 </button>
             </div>

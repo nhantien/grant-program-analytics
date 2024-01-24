@@ -28,8 +28,8 @@ class Project {
     };
 };
 
-const BASE_URL = "http://localhost:3001/";
-// const BASE_URL = "https://n65lw6cwdghn4mrdgfkot3xiy40iwzcl.lambda-url.ca-central-1.on.aws/";
+// const BASE_URL = "http://localhost:3001/";
+const BASE_URL = "https://n65lw6cwdghn4mrdgfkot3xiy40iwzcl.lambda-url.ca-central-1.on.aws/";
 
 const YEARS = [
     "2023/2024", "2022/2023", "2021/2022", "2020/2021", "2019/2020", "2018/2019", "2017/2018", "2016/2017", "2015/2016", "2014/2015", "2013/2014",
@@ -77,7 +77,12 @@ const SAMPLE_SIMILAR_PROJECTS = [
     new Project(103, "2021/2022", "Small TLEF", "Jane Doe", "Applied Science", "Lorem ipsum dolor sit amet, consectetur adipiscing elit", 1, 12500, "Active\r"),
 ]
 
-
 const PROJECTS_PER_PAGE = [10, 20, 30, 40, 50];
 
-export {Project, BASE_URL, YEARS, PROJECT_TYPE, FACULTY, PROJECTS_PER_PAGE, SAMPLE_TEAM_MEMBERS, SAMPLE_STUDENT_REACH, SAMPLE_SIMILAR_PROJECTS}
+const sleep = (ms) => {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+const SAMPLE_PROJECT = new Project(-1, "2020/2021", "Small TLEF", "Jane Doe", "Applied Science", "Development of a guided self-directed study online German for Reading Knowledge course on the beginner level applicable in various hybrid instructional modes", 1, 12500, "Active\r");
+
+export {Project, BASE_URL, YEARS, PROJECT_TYPE, FACULTY, PROJECTS_PER_PAGE, SAMPLE_TEAM_MEMBERS, SAMPLE_STUDENT_REACH, SAMPLE_SIMILAR_PROJECTS, sleep, SAMPLE_PROJECT }

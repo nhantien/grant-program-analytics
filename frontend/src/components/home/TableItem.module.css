@@ -6,11 +6,21 @@
     margin-bottom: 0.5rem;
 }
 
+.hide {
+    visibility: hidden;
+}
+
+.hide td {
+    height: 0.1rem;
+    color: transparent;
+    border: none;
+}
+
 
 td {
     padding-left: 0.125%;
     padding-right: 0.125%;
-    height: 7rem;
+    height: 5.5rem;
     border-top: 1px solid black;
     border-bottom: 1px solid black;
     text-align: center;

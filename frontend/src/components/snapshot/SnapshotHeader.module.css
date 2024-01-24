@@ -32,7 +32,10 @@
 }
 
 .dropdowns {
-    width: 50%;
+    width: 70%;
+    background-color: lightgray;
+    border-radius: 10px;
+    padding: 1.5rem;
 }
 
 .snapshot-filter {
@@ -49,12 +52,6 @@
     background-color: white;
     border: 0.5px solid black;
     margin-bottom: 0.75rem;
-}
-
-.filters-wrapper {
-    background-color: lightgray;
-    border-radius: 10px;
-    padding: 1rem;
 }
 
 .dropdown-filters {
@@ -96,8 +93,11 @@
 }
 
 .slider {
-    width: 45%;
-    font-size: 1.75rem;
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    margin-top: 3rem;
+    font-size: 1.125rem;
     font-weight: 400;
 }
 

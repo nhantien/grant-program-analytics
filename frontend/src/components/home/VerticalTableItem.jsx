@@ -3,9 +3,8 @@ import { Link } from "react-router-dom";
 import styles from "./VerticalTableItem.module.css";
 import { useState } from "react";
 
-function VerticalTableItem({ project, isSelected, onSelect }) {
+function VerticalTableItem({ project }) {
 
-    const [status, setStatus] = useState(isSelected);
     const statusColor = project.status === "Active\r" ? "#d4734c" : "#64b53c";
 
     const formattedAmount = parseInt(project.amount).toLocaleString("en-CA", {
@@ -15,16 +14,6 @@ function VerticalTableItem({ project, isSelected, onSelect }) {
     });
 
     const titleText = project.title.slice(0, 30) + "...";
-
-    const handleSelect = () => {
-        if (status) {
-            setStatus(false);
-            onSelect(prevSelected => prevSelected.filter(proj => proj !== project.id));
-        } else {
-            setStatus(true);
-            onSelect(prevSelected => [...prevSelected, project.id]);
-        }
-    };
 
     return (
         <div className={styles.wrapper}>
@@ -76,11 +65,6 @@ function VerticalTableItem({ project, isSelected, onSelect }) {
             <div className={styles.field}>
                 <div className={styles.key}>Poster:</div>
                 <div className={styles.value}><a href={project.poster}>Link to Poster</a></div>
-            </div>
-
-            <div className={styles["select-btn"]}>
-                <span>Select project</span>
-                <input type="checkbox" checked={status} onChange={handleSelect} />
             </div>
 
         </div>
