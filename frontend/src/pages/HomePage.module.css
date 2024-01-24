@@ -142,7 +142,8 @@
 .generate-summary {
   width: 40%;
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .num-selected {
@@ -151,12 +152,21 @@
   font-size: 1.25rem;
 }
 
+.generate-summary-txt {
+  font-size: 1rem;
+  text-align: right;
+  font-weight: 600;
+  font-style: italic;
+  margin-bottom: 0.25rem;
+  color: #081252;
+}
+
 .generate-summary-btn {
-  height: 4rem;
+  height: 3rem;
   background-color: #081252;
   color: white;
   font-weight: bold;
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-style: italic;
   border-radius: 0.5rem;
 }

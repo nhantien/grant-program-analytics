@@ -6,9 +6,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { IconButton, Select, MenuItem } from '@mui/material';
 import { Link } from 'react-router-dom';
 
-import { Project, YEARS, PROJECT_TYPE, FACULTY } from '../constants';
-
-const BASE_URL = 'http://localhost:3001/';
+import { Project, BASE_URL, YEARS, PROJECT_TYPE, FACULTY } from '../constants';
 
 const options = ['Option 1', 'Option 2', 'Option 3'];
 
@@ -208,6 +206,7 @@ function HomePage() {
                     </div>
 
                     <div className={styles["generate-summary"]}>
+                        <p className={styles["generate-summary-txt"]}>View an enriched summary of the currently displayed projects</p>
                         <div>
                             <button className={styles["generate-summary-btn"]}>
                                 <Link
@@ -218,7 +217,7 @@ function HomePage() {
                                     }}
                                     style={{ textDecoration: "none", color: "white" }}
                                 >
-                                    Genarete Project Summary
+                                    Generate Project Summary
                                 </Link>
                             </button>
                         </div>

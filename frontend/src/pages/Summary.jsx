@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Project } from "../constants";
+import { Project, BASE_URL } from "../constants";
 import { SummaryTitle, SummaryDescription, SummaryTable, Posters } from "../components/summary";
 import { SimilarProjects } from "../components/util";
 import styles from "./Summary.module.css";
 
-const BASE_URL = 'http://localhost:3001/';
 
 function Summary() {
     const { id } = useParams();

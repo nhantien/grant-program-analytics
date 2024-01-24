@@ -33,6 +33,25 @@
 
 .dropdowns {
     width: 50%;
+}
+
+.snapshot-filter {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+}
+
+.snapshot-dropdown {
+    width: 65%;
+    height: 3rem;
+    background-color: white;
+    border: 0.5px solid black;
+    margin-bottom: 0.75rem;
+}
+
+.filters-wrapper {
     background-color: lightgray;
     border-radius: 10px;
     padding: 1rem;

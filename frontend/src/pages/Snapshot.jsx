@@ -2,7 +2,7 @@ import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { SnapshotHeader, SnapshotBox } from "../components/snapshot";
 import { FundingChart, NumGrantsChart, NumProjectsChart, StudentReachChart, TeamMemberChart } from "../components/charts";
-import { Project } from "../constants";
+import { Project, BASE_URL } from "../constants";
 import styles from "./Snapshot.module.css";
 
 function Snapshot() {
@@ -14,7 +14,6 @@ function Snapshot() {
     const [selectedProjects, setSelectedProjects] = useState(projects);
     const [appliedFilters, setAppliedFilters] = useState(filters);
 
-    const BASE_URL = 'http://localhost:3001/';
     useEffect(() => {
         const fetchFilteredData = async () => {
             try {
