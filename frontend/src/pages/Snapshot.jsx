@@ -8,11 +8,11 @@ import styles from "./Snapshot.module.css";
 function Snapshot() {
 
     const location = useLocation();
-    console.log(location.state);
-    const { projects, filters } = location.state;
+    const { projects, filters, range } = location.state;
 
     const [selectedProjects, setSelectedProjects] = useState(projects);
     const [appliedFilters, setAppliedFilters] = useState(filters);
+    const [selectedRange, setSelectedRange] = useState(range);
 
     useEffect(() => {
         const fetchFilteredData = async () => {
@@ -58,28 +58,28 @@ function Snapshot() {
         numGrants: (<NumGrantsChart projects={selectedProjects} />),
         numProjects: (<NumProjectsChart projects={selectedProjects} />),
         funding: (<FundingChart projects={selectedProjects} />),
-        studentReach: (<StudentReachChart projects={selectedProjects} />),
-        teamMember: (<TeamMemberChart projects={selectedProjects} />)
+        studentReach: (<StudentReachChart projects={selectedProjects} filters={appliedFilters} />),
+        teamMember: (<TeamMemberChart projects={selectedProjects} filters={appliedFilters} />)
     };
 
     return (
         <div className={styles.Snapshot}>
 
-            <SnapshotHeader projects={selectedProjects} filters={appliedFilters} setFilters={setAppliedFilters} />
+            <SnapshotHeader filters={appliedFilters} setFilters={setAppliedFilters} range={selectedRange} setRange={setSelectedRange} />
 
             <div className={styles.navbar}>
                 <button onClick={() => handleClick("num-grants")}>Number of Grants</button>
                 <button onClick={() => handleClick("num-projects")}>Number of Projects</button>
                 <button onClick={() => handleClick("funding")}>Funding Awarded</button>
                 <button onClick={() => handleClick("student-reach")}>Student Reach</button>
-                <button onClick={() => handleClick("team-member")}>Team Member Counts</button>
+                <button onClick={() => handleClick("faculty-engagement")}>Faculty Engagement</button>
             </div>
 
             <section id="num-grants"> <SnapshotBox chart={charts.numGrants} type={0} title="Number of Grants" /> </section>
             <section id="num-projects"> <SnapshotBox chart={charts.numProjects} type={1} title="Number of Projects" /> </section>
             <section id="funding"> <SnapshotBox chart={charts.funding} type={0} title="Funding Awarded" /> </section>
             <section id="student-reach"> <SnapshotBox chart={charts.studentReach} type={1} title="Student Reach" /> </section>
-            <section id="team-member"> <SnapshotBox chart={charts.teamMember} type={0} title="Team Member Counts" /> </section>
+            <section id="faculty-engagement"> <SnapshotBox chart={charts.teamMember} type={0} title="Faculty Engagement" /> </section>
         </div>
     );
 };
