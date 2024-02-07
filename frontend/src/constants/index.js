@@ -42,12 +42,12 @@ const PROJECT_TYPE = [
 ];
 
 const FACULTY = [
-    "Applied Science", "Arts", "Dentistry", "Education", "First Nations House of Learning", "Forestry", "Graduate Studies", 
+    "Applied Science", "Arts", "Dentistry", "Education", "First Nations House of Learning", "Forestry", "Graduate Studies",
     "Land & Food Systems", "Allard School of Law", "Medicine", "Pharmaceutical Sciences", "Sauder School of Business", "Science",
     "UBC Health", "UBC Library", "Vantage College", "VP Academic", "VP Students", "Other..."
 ];
 
-const SAMPLE_TEAM_MEMBERS = { 
+const SAMPLE_TEAM_MEMBERS = {
     "Elmo, Davide.": "Associate Professor of Teaching, EOAS, Faculty of Science",
     "Allen, Susan.": "Professor, EOAS, Faculty of Science",
     "Austin, Phil.": "Associate Professor, EOAS, Faculty of Science",
@@ -83,6 +83,30 @@ const sleep = (ms) => {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+const MARKS = [
+    {
+        value: 1999,
+        label: "1999",
+    },
+    {
+        value: 2023,
+        label: "2023",
+    }
+]
+
 const SAMPLE_PROJECT = new Project(-1, "2020/2021", "Small TLEF", "Jane Doe", "Applied Science", "Development of a guided self-directed study online German for Reading Knowledge course on the beginner level applicable in various hybrid instructional modes", 1, 12500, "Active\r");
 
-export {Project, BASE_URL, YEARS, PROJECT_TYPE, FACULTY, PROJECTS_PER_PAGE, SAMPLE_TEAM_MEMBERS, SAMPLE_STUDENT_REACH, SAMPLE_SIMILAR_PROJECTS, sleep, SAMPLE_PROJECT }
+export { 
+    Project, 
+    BASE_URL, 
+    YEARS, 
+    PROJECT_TYPE, 
+    FACULTY, 
+    PROJECTS_PER_PAGE, 
+    SAMPLE_TEAM_MEMBERS, 
+    SAMPLE_STUDENT_REACH, 
+    SAMPLE_SIMILAR_PROJECTS, 
+    sleep, 
+    SAMPLE_PROJECT,
+    MARKS, 
+}

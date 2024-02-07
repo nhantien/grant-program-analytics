@@ -16,6 +16,23 @@
     font-weight: 400;
 }
 
+.funding-tooltip {
+    background-color: rgba(255, 255, 255);
+    padding: 0.5rem;
+    border: 0.5px solid rgba(200, 200, 200, 1);
+    border-radius: 5px;
+}
+
+.funding-tooltip-content {
+    width: 100%;
+    border-top: 1px solid rgba(200, 200, 200, 1);
+    padding-top: 0.4rem;
+}
+
+.warning {
+    color: red;
+    font-style: italic;
+}
 
 
 @media screen and (max-width: 576px) {

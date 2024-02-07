@@ -1,12 +1,12 @@
 import styles from './HomePage.module.css';
 import { useState, useEffect } from 'react';
-import { FilterList, SearchBar, TableItem, VerticalTableItem } from '../components/home';
-import { Filter } from "../components/util";
+import { FilterList, SearchBar, TableItem, VerticalTableItem, ProjectTable } from '../components/home';
+import { Filter, FundingYearFilter } from "../components/util";
 import ClearIcon from '@mui/icons-material/Clear';
-import { IconButton, Select, MenuItem, CircularProgress } from '@mui/material';
+import { IconButton, CircularProgress, Collapse, Slider } from '@mui/material';
 import { Link } from 'react-router-dom';
 
-import { Project, BASE_URL, YEARS, PROJECT_TYPE, FACULTY, sleep, SAMPLE_PROJECT } from '../constants';
+import { Project, BASE_URL, PROJECT_TYPE, FACULTY, MARKS } from '../constants';
 
 const options = ['Option 1', 'Option 2', 'Option 3'];
 
@@ -19,18 +19,16 @@ function HomePage() {
         "FocusArea": [],
         "SearchText": []
     });
-    const [projectsPerPage, setProjectsPerPage] = useState('All');
-    const [currentPage, setCurrentPage] = useState(1);
     const [projects, setProjects] = useState([]);
-    const [sort, setSort] = useState({
-        "order": "asc",
-        "property": null
-    });
     const [loading, setLoading] = useState(true);
+    const [showSlider, setShowSlider] = useState(false);
+    const [range, setRange] = useState([1999, 2023]);
+    const [rangeString, setRangeString] = useState("");
 
     useEffect(() => {
         const fetchFilteredData = async () => {
             try {
+                console.log(appliedFilters);
                 setProjects([]);
                 setLoading(true);
                 const res = await fetch(BASE_URL + "filter", {
@@ -67,37 +65,7 @@ function HomePage() {
         fetchFilteredData();
     }, [appliedFilters]);
 
-    const handleSort = (property) => {
-        if (property === sort["property"]) {
-            setSort({
-                "order": sort["order"] === "asc" ? "desc" : "asc",
-                "property": sort["property"]
-            });
-        } else {
-            setSort({
-                "order": "asc",
-                "property": property
-            });
-        }
-    };
-
-    const sortedProjects = [...projects].sort((a, b) => {
-        const aValue = a[sort["property"]] || "";
-        const bValue = b[sort["property"]] || "";
-
-        if (sort["order"] === 'asc') {
-            return aValue.localeCompare(bValue, undefined, { numeric: true });
-        } else {
-            return bValue.localeCompare(aValue, undefined, { numeric: true });
-        }
-    });
-
-    const startIndex = (projectsPerPage === "All") ? 0 : (currentPage - 1) * projectsPerPage;;
-    const endIndex = (projectsPerPage === "All" || startIndex + projectsPerPage > sortedProjects.length) ? sortedProjects.length : startIndex + projectsPerPage;
-    const projectsToDisplay = sortedProjects.slice(startIndex, endIndex);
-
-    const handleSelectFilter = (selectedFilter, filterType) => {
-        const newFilters = [...appliedFilters[filterType], selectedFilter];
+    const handleSelectFilter = (newFilters, filterType) => {
         setAppliedFilters((prevFilters) => ({
             ...prevFilters,
             [filterType]: newFilters,
@@ -108,21 +76,6 @@ function HomePage() {
         setAppliedFilters((prevFilters) => ({
             ...prevFilters,
             "SearchText": keywords,
-        }));
-    };
-
-    const handleClearFilter = (filterToRemove, filterType) => {
-        if (filterType === "SearchText") {
-            setAppliedFilters((prevFilters) => ({
-                ...prevFilters,
-                "SearchText": [],
-            }));
-            return;
-        }
-        const updatedFilters = appliedFilters[filterType].filter((filter) => filter !== filterToRemove);
-        setAppliedFilters((prevFilters) => ({
-            ...prevFilters,
-            [filterType]: updatedFilters,
         }));
     };
 
@@ -144,12 +97,6 @@ function HomePage() {
         setAppliedFilters(newFilters);
     };
 
-    const handleSelectDisplayPerPage = (e) => {
-        setProjectsPerPage(Number(e.target.value) || "All");
-        setCurrentPage(1);
-    }
-
-
     const handleOpenSearch = (e) => {
         let filters = document.getElementById("filters");
         if (filters.style.display === "none") {
@@ -161,14 +108,26 @@ function HomePage() {
         }
     };
 
-    const handleNavigateBack = () => {
-        setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+    const handleSliderChange = (event, newRange) => {
+        setRange(newRange);
     }
 
-    const handleNavigateForward = () => {
-        setCurrentPage((prevPage) => prevPage + 1);
-    }
+    const applyRangeFilter = (range) => {
+        const min = range[0];
+        const max = range[1];
+        let years = [];
+        for (let i = min; i <= max; i++) {
+            const year = i + "/" + (i + 1);
+            years.push(year);
+        }
 
+        setAppliedFilters((prevFilters) => ({
+            ...prevFilters,
+            ["FundingYear"]: years,
+        }));
+
+        setRangeString(min + "/" + (min+1) + " - " + max + "/" + (max+1));
+    }
 
     return (
         <div className={styles.bg}>
@@ -186,13 +145,14 @@ function HomePage() {
                     <div className={styles["project-filters"]}>
                         <span className={styles["filter-text"]}>Filter by</span>
                         <div className={styles.filters}>
-                            <Filter options={YEARS} onSelect={handleSelectFilter} defaultValue="Funding Year" type="FundingYear" snapshot={false} />
-                            <Filter options={PROJECT_TYPE} onSelect={handleSelectFilter} defaultValue="Project Type" type="ProjectType" snapshot={false} />
-                            <Filter options={FACULTY} onSelect={handleSelectFilter} defaultValue="Faculty" type="Faculty" snapshot={false} />
-                            <Filter options={options} onSelect={handleSelectFilter} defaultValue="Focus Area" type="FocusArea" snapshot={false} />
+                            <FundingYearFilter filters={appliedFilters} setFilters={setAppliedFilters} setShowSlider={setShowSlider} snapshot={false} />
+                            <Filter options={PROJECT_TYPE} filters={appliedFilters} onSelect={handleSelectFilter} defaultValue="Project Type" type="ProjectType" snapshot={false} />
+                            <Filter options={FACULTY} filters={appliedFilters} onSelect={handleSelectFilter} defaultValue="Faculty" type="Faculty" snapshot={false} />
+                            <Filter options={options} filters={appliedFilters} onSelect={handleSelectFilter} defaultValue="Focus Area" type="FocusArea" snapshot={false} />
                         </div>
                     </div>
-                    <div className={styles["display-per-page"]}>
+
+                    {/* <div className={styles["display-per-page"]}>
                         <span className={styles["filter-text"]} style={{ display: "block", textAlign: "right" }}>Displayed per page</span>
                         <Select
                             className={styles["display-pp-dropdown"]}
@@ -204,7 +164,28 @@ function HomePage() {
                             <MenuItem value={20}>20</MenuItem>
                             <MenuItem value={30}>30</MenuItem>
                         </Select>
-                    </div>
+                    </div> */}
+                </div>
+
+                <div style={{ width: "95%", marginLeft: "2.5%", marginRight: "2.5%" }}>
+                    <Collapse
+                        in={showSlider}
+                        timeout="auto"
+                        unmountOnExit
+                    >
+                        <div className={styles.slider}>
+                            <span style={{ width: "15%" }}>Year Range:</span>
+                            <Slider
+                                max={2023}
+                                min={1999}
+                                value={range}
+                                onChange={handleSliderChange}
+                                onChangeCommitted={() => applyRangeFilter(range)}
+                                marks={MARKS}
+                                valueLabelDisplay="on"
+                            />
+                        </div>
+                    </Collapse>
                 </div>
 
                 <div className={styles["lower-header-div"]}>
@@ -212,7 +193,7 @@ function HomePage() {
                     <div className={styles["applied-filters"]}>
                         <span style={{ marginTop: "1rem", marginBottom: "0.5rem" }}>Applied Filters</span>
                         <div className={styles["filters-box"]}>
-                            <FilterList filters={appliedFilters} onClearFilter={handleClearFilter} />
+                            <FilterList filters={appliedFilters} setFilters={setAppliedFilters} rangeString={rangeString} setRangeString={setRangeString} />
                             <div className={styles["clear-filters-div"]}>
                                 <p className={styles.text}>Clear All</p>
                                 <IconButton onClick={handleClearAllFilters} size="small">
@@ -229,21 +210,23 @@ function HomePage() {
                                 <Link
                                     to="/snapshot"
                                     state={{
-                                        projects: sortedProjects,
-                                        filters: appliedFilters
+                                        projects: projects,
+                                        filters: appliedFilters,
+                                        range: range,
                                     }}
                                     style={{ textDecoration: "none", color: "white" }}
                                 >
-                                    Generate Project Summary
+                                    Generate Program Summary
                                 </Link>
                             </button>
                         </div>
                     </div>
+
                 </div>
             </header>
 
             <div>
-                <table className={styles["home-table"]} style={{ width: "100%", borderCollapse: 'collapse' }}>
+                {/* <table className={styles["home-table"]} style={{ width: "100%", borderCollapse: 'collapse' }}>
                     <thead style={{ width: "100%", color: 'white', backgroundColor: '#081252' }}>
                         <tr>
                             <th onClick={() => handleSort("fundingYear")}>Funding Year {sort["order"] === "asc" ? '▲' : '▼'}</th>
@@ -270,31 +253,36 @@ function HomePage() {
                             ))
                         }
                     </tbody>
-                </table>
+                </table> */}
 
                 {
-                    loading &&
-                    <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-                        <CircularProgress />
-                    </div>
+                    loading ?
+                        (
+                            <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+                                <CircularProgress />
+                            </div>
+                        ) :
+                        (
+                            <ProjectTable projects={projects} />
+                        )
                 }
 
                 {
-                    (sortedProjects.length === 0 && loading === false) &&
+                    (projects.length === 0 && loading === false) &&
                     <h2 style={{ width: "100%", textAlign: "center", marginTop: 0 }}>No projects found.</h2>
                 }
 
                 <div className={styles["mobile-table"]}>
                     {
                         window.screen.width <= 576 &&
-                        projectsToDisplay.map((project) => (
+                        projects.map((project) => (
                             <VerticalTableItem key={project.id} project={project} />
                         ))
                     }
                 </div>
             </div>
 
-            <div className={styles.pagination}>
+            {/* <div className={styles.pagination}>
                 <button className={styles["page-btn"]} onClick={handleNavigateBack} disabled={currentPage === 1}>
                     &lt;
                 </button>
@@ -302,7 +290,7 @@ function HomePage() {
                 <button className={styles["page-btn"]} onClick={handleNavigateForward} disabled={endIndex >= sortedProjects.length}>
                     &gt;
                 </button>
-            </div>
+            </div> */}
         </div>
     );
 }
