@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FormControl, Select, OutlinedInput, MenuItem, Checkbox } from '@mui/material';
+import { FormControl, Select, OutlinedInput, MenuItem, Checkbox, Typography } from '@mui/material';
 import { YEARS } from '../../constants';
 
 import styles from "./Filter.module.css";
@@ -31,33 +31,25 @@ function FundingYearFilter({ filters, setFilters, setShowSlider, snapshot }) {
 
     return (
         <div style={{ width: snapshot ? "25%" : "" }} className={styles.container}>
+
             <FormControl sx={{ width: "100%" }}>
-                {/* <InputLabel>{defaultValue}</InputLabel> */}
                 <Select
                     label="Funding Year"
                     className={styles.filter}
                     onChange={handleChange}
                     displayEmpty
                     fullWidth
-                    variant="outlined"
                     value={filters["FundingYear"]}
                     input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-                    // renderValue={(selected) => (
-                    //   <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                    //     {selected.map((value) => (
-                    //       <Chip key={value} label={value} />
-                    //     ))}
-                    //   </Box>
-                    // )}
                     renderValue={(selected) => (
-                        <span>Funding Year</span>
+                        <em>Funding Year</em>
                     )}
                     MenuProps={MenuProps}
                 >
-                    <MenuItem value="select range of years">select range of years</MenuItem>
+                    <MenuItem value="select range of years">Select range of years</MenuItem>
                     {YEARS.map((year) => (
                         <MenuItem key={year} value={year}>
-                            {year}
+                            <Typography>{year}</Typography>
                         </MenuItem>
                     ))}
                 </Select>
