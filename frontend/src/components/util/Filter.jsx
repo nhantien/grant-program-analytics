@@ -7,7 +7,8 @@ function Filter({ options, filters, onSelect, defaultValue, type, snapshot }) {
 
   const handleChange = (event) => {
     const value = event.target.value;
-    onSelect(value, type);
+    if (value.indexOf("") > -1) onSelect([], type);
+    else onSelect(value, type);
   };
 
   const ITEM_HEIGHT = 48;
@@ -24,7 +25,6 @@ function Filter({ options, filters, onSelect, defaultValue, type, snapshot }) {
   return (
     <div style={{ width: snapshot ? "25%" : "" }} className={styles.container}>
       <FormControl sx={{ width: "100%" }}>
-        {/* <InputLabel>{defaultValue}</InputLabel> */}
         <Select
           label={defaultValue}
           className={styles.filter}
@@ -32,21 +32,23 @@ function Filter({ options, filters, onSelect, defaultValue, type, snapshot }) {
           displayEmpty
           fullWidth
           multiple
-          variant="outlined"
           value={filters[type]}
           input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-          // renderValue={(selected) => (
-          //   <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-          //     {selected.map((value) => (
-          //       <Chip key={value} label={value} />
-          //     ))}
-          //   </Box>
-          // )}
-          renderValue={(selected) => (
-            <span>{defaultValue}</span>
-          )}
+          renderValue={(selected) => {
+            if (selected.length === 0) { return <em>{defaultValue} (All)</em>; }
+            return (
+              <em>{defaultValue} ({selected.length})</em>
+            )
+          }}
           MenuProps={MenuProps}
         >
+          <MenuItem
+            selected={false}
+            value=""
+            sx={{ backgroundColor: "#EBECEE", borderRadius: "5px", padding: "0.5rem 0 0.5rem 0", display: "flex", justifyContent: "center" }}
+          >
+            <Typography>Clear All</Typography>
+          </MenuItem>
           {options.map((option) => (
             <MenuItem key={option} value={option}>
               <Checkbox checked={filters[type].indexOf(option) > -1} />
