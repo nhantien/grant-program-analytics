@@ -62,19 +62,6 @@ function FundingChart({ projects }) {
         return window.screen.width <= 576;
     }
 
-    const { width, height, layout } = (isMobile())
-        ? { width: 350, height: 500, layout: "horizontal" }
-        : { width: 700, height: 500, layout: "vertical" };
-
-    const xAxis = (isMobile())
-        ? (<XAxis type="category" hide />) : (<XAxis type="number" padding={{ right: 100 }} hide />);
-
-    const yAxis = (isMobile())
-        ? (<YAxis type="number" padding={{ top: 150 }} hide />) : (<YAxis type="category" dataKey="name" width={120} />);
-
-    const label = (isMobile())
-        ? null : <LabelList width={500} dataKey="label" position="right" fill="#081252" style={{ fontStyle: "italic" }} />;
-
     const CustomToolTip = ({ active, payload, label }) => {
 
         if (active && payload && label) {
@@ -97,23 +84,48 @@ function FundingChart({ projects }) {
         return null;
     }
 
+    const customLabel = (props) => {
+        const { x, y, width, height, value } = props;
+        return (
+            <text x={690} y={y + height / 3 * 2} textAnchor="end" fill="#081252" fontStyle="italic">
+                {value}
+            </text>
+        )
+    }
+
+    const { width, height, layout } = (isMobile())
+        ? { width: 350, height: 500, layout: "horizontal" }
+        : { width: 700, height: 500, layout: "vertical" };
+
+    const xAxis = (isMobile())
+        ? (<XAxis type="category" hide />) : (<XAxis type="number" padding={{ right: 150 }} hide />);
+
+    const yAxis = (isMobile())
+        ? (<YAxis type="number" padding={{ top: 150 }} hide />) : (<YAxis type="category" dataKey="name" width={120} />);
+
+    const label = (isMobile())
+        ? null : <LabelList width={500} content={customLabel} position="right" dataKey="label" fill="#081252" style={{ fontStyle: "italic" }} />;
+
     return (
         <React.Fragment>
+
+            <div className={styles.description}>
+                The TLEF awarded the total of <b>{formattedAmount(total)}</b> funding for selected {len} projects.
+            </div>
+            <div className={styles.space}></div>
             <div className={styles.chart}>
-                <BarChart width={width} height={height} layout={layout} data={res} >
+                <BarChart width={width} height={height} layout={layout} data={res}>
                     {xAxis}
                     {yAxis}
                     {isMobile() && <Tooltip content={<CustomToolTip />} cursor={{ fill: "transparent" }} position={{ x: 100, y: 25 }} />}
                     <Tooltip content={CustomToolTip} />
                     <Legend verticalAlign='top' iconType='square' height={36} />
                     <Bar dataKey="Small TLEF" stackId="a" background={{ fill: "#EEEE" }} fill="#13588B" />
-                    <Bar dataKey="Large TLEF" stackId="a" fill="#FB812D" />
+                    <Bar dataKey="Large TLEF" stackId="a" fill="#FB812D">{label}</Bar>
+                    
                 </BarChart>
             </div>
-            <div className={styles.space}></div>
-            <div className={styles.description}>
-                The TLEF awarded the total of <b>{formattedAmount(total)}</b> funding for selected {len} projects.
-            </div>
+            
         </React.Fragment>
     );
 
