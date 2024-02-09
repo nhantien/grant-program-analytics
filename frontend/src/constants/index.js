@@ -44,7 +44,7 @@ const PROJECT_TYPE = [
 const FACULTY = [
     "Applied Science", "Arts", "Dentistry", "Education", "First Nations House of Learning", "Forestry", "Graduate Studies",
     "Land & Food Systems", "Allard School of Law", "Medicine", "Pharmaceutical Sciences", "Sauder School of Business", "Science",
-    "UBC Health", "UBC Library", "Vantage College", "VP Academic", "VP Students", "Other..."
+    "UBC Health", "UBC Library", "Vantage College", "VP Academic", "VP Students", "Other"
 ];
 
 const SAMPLE_TEAM_MEMBERS = {
