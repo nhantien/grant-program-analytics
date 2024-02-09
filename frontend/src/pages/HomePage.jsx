@@ -147,7 +147,7 @@ function HomePage() {
                         <div className={styles.filters}>
                             <FundingYearFilter filters={appliedFilters} setFilters={setAppliedFilters} setShowSlider={setShowSlider} snapshot={false} />
                             <Filter options={PROJECT_TYPE} filters={appliedFilters} onSelect={handleSelectFilter} defaultValue="Project Type" type="ProjectType" snapshot={false} />
-                            <Filter options={FACULTY} filters={appliedFilters} onSelect={handleSelectFilter} defaultValue="Faculty" type="Faculty" snapshot={false} />
+                            <Filter options={FACULTY} filters={appliedFilters} onSelect={handleSelectFilter} defaultValue="Faculty/Unit" type="Faculty" snapshot={false} />
                             <Filter options={options} filters={appliedFilters} onSelect={handleSelectFilter} defaultValue="Focus Area" type="FocusArea" snapshot={false} />
                         </div>
                     </div>
