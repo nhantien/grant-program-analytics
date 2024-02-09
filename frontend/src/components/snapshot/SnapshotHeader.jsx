@@ -89,7 +89,7 @@ function SnapshotHeader({ filters, setFilters, range, setRange }) {
                     <div className={styles["dropdown-filters"]}>
                         <FundingYearFilter filters={filters} setFilters={setFilters} setShowSlider={setShowSlider} snapshot={true} />
                         <Filter options={PROJECT_TYPE} filters={filters} onSelect={onSelect} defaultValue="Project Type" type="ProjectType" snapshot={true} />
-                        <Filter options={FACULTY} filters={filters} onSelect={onSelect} defaultValue="Faculty" type="Faculty" snapshot={true} />
+                        <Filter options={FACULTY} filters={filters} onSelect={onSelect} defaultValue="Faculty/Unit" type="Faculty" snapshot={true} />
                         <Filter options={options} filters={filters} onSelect={onSelect} defaultValue="Focus Area" type="FocusArea" snapshot={true} />
                     </div>
 
