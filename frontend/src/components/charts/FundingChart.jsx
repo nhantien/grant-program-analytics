@@ -87,7 +87,7 @@ function FundingChart({ projects }) {
     const customLabel = (props) => {
         const { x, y, width, height, value } = props;
         return (
-            <text x={690} y={y + height / 3 * 2} textAnchor="end" fill="#081252" fontStyle="italic">
+            <text x={840} y={y + height / 3 * 2} textAnchor="end" fill="#081252" fontStyle="italic">
                 {value}
             </text>
         )
@@ -95,7 +95,7 @@ function FundingChart({ projects }) {
 
     const { width, height, layout } = (isMobile())
         ? { width: 350, height: 500, layout: "horizontal" }
-        : { width: 700, height: 500, layout: "vertical" };
+        : { width: 850, height: 500, layout: "vertical" };
 
     const xAxis = (isMobile())
         ? (<XAxis type="category" hide />) : (<XAxis type="number" padding={{ right: 150 }} hide />);
