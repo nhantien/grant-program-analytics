@@ -22,8 +22,6 @@ function TeamMemberChart({ projects, filters }) {
 
     return (
         <React.Fragment>
-            <div className={styles.chart}></div>
-            <div className={styles.space}></div>
             <div className={styles.description}>
                 {!isDataComplete &&
                     <p className={styles.warning}>Please note, this particular TLEF metric is not available prior to the 2017/18 academic year.</p>
@@ -41,6 +39,8 @@ function TeamMemberChart({ projects, filters }) {
                 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
                 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
             </div>
+            <div className={styles.space}></div>
+            <div className={styles.chart}></div>
         </React.Fragment>
     );
 };
