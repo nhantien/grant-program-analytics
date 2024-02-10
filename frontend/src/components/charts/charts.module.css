@@ -1,6 +1,6 @@
 .chart {
     width: 60%;
-    min-height: 30rem;
+    min-height: 20rem;
 }
 
 .space {
@@ -82,6 +82,36 @@
     flex-direction: column;
     align-items: center;
 }
+
+/* Success Rate Chart */
+.sr {
+    width: 80%;
+    margin-left: 20%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sr-bar {
+    width: 100%;
+    margin-bottom: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.sr-title {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.sr-info {
+    margin-bottom: 0;
+    font-size: 1rem;
+}
+
+
 
 @media screen and (max-width: 576px) {
     .chart {

@@ -120,8 +120,8 @@ function FundingChart({ projects }) {
                     {isMobile() && <Tooltip content={<CustomToolTip />} cursor={{ fill: "transparent" }} position={{ x: 100, y: 25 }} />}
                     <Tooltip content={CustomToolTip} />
                     <Legend verticalAlign='top' iconType='square' height={36} />
-                    <Bar dataKey="Small TLEF" stackId="a" background={{ fill: "#EEEE" }} fill="#13588B" />
-                    <Bar dataKey="Large TLEF" stackId="a" fill="#FB812D">{label}</Bar>
+                    <Bar dataKey="Small TLEF" stackId="a" background={{ fill: "#EEEE" }} fill="#FB812D" />
+                    <Bar dataKey="Large TLEF" stackId="a" fill="#13588B">{label}</Bar>
                     
                 </BarChart>
             </div>
