@@ -47,29 +47,7 @@ function SuccessRateChart({ projects }) {
             <div className={styles.chart}>
                 <div className={styles.sr}>
 
-                    <div className={styles["sr-bar"]}>
-                        <p className={styles["sr-title"]}>Small TLEF Innovation Projects</p>
-                        <p className={styles["sr-info"]}>Proposals: 62 | Funded: 44</p>
-                        <BarChart width={600} height={70} layout="vertical" data={small}>
-                            <XAxis type="number" domain={domain} tick={ticks} tickCount={10} tickFormatter={toPercent} hide />
-                            <YAxis type="category" dataKey="name" hide />
-                            <Bar dataKey="value" fill="#FB812D" background={{ fill: "#DCDDDE" }}>
-                                <LabelList width={500} content={customLabel} position="right" dataKey="label" />
-                            </Bar>
-                        </BarChart>
-                    </div>
-
-                    <div className={styles["sr-bar"]}>
-                        <p className={styles["sr-title"]}>Large TLEF Innovation Projects</p>
-                        <p className={styles["sr-info"]}>Proposals: 13 | Funded: 10</p>
-                        <BarChart width={600} height={70} layout="vertical" data={large} stackOffset='expand'>
-                            <XAxis type="number" domain={domain} tick={ticks} tickCount={10} tickFormatter={toPercent} hide />
-                            <YAxis type="category" dataKey="name" hide />
-                            <Bar dataKey="value" fill="#13588B" background={{ fill: "#DCDDDE" }}>
-                                <LabelList width={500} content={customLabel} position="right" dataKey="label" />
-                            </Bar>
-                        </BarChart>
-                    </div>
+                    
 
                 </div>
             </div>
