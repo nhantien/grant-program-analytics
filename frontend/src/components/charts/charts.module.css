@@ -1,6 +1,6 @@
 .chart {
     width: 60%;
-    min-height: 30rem;
+    min-height: 20rem;
 }
 
 .space {
@@ -81,6 +81,41 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+/* Success Rate Chart */
+.sr {
+    width: 95%;
+    margin-left: 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sr-pie {
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.sr-title {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.sr-info {
+    margin-bottom: 0;
+    font-size: 1rem;
+}
+
+/* Student Reach Chart */
+.reach-annotation {
+    margin-top: 2rem;
+    font-size: 0.75rem;
+    font-weight: 300;
+    font-style: italic;
 }
 
 @media screen and (max-width: 576px) {

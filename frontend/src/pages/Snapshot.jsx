@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { SnapshotHeader, SnapshotBox } from "../components/snapshot";
-import { FundingChart, NumGrantsChart, NumProjectsChart, StudentReachChart, TeamMemberChart } from "../components/charts";
+import { FundingChart, NumGrantsChart, NumProjectsChart, StudentReachChart, TeamMemberChart, SuccessRateChart } from "../components/charts";
 import { Project, BASE_URL } from "../constants";
 import styles from "./Snapshot.module.css";
 
@@ -55,6 +55,7 @@ function Snapshot() {
     };
 
     const charts = {
+        successRate: (<SuccessRateChart projects={selectedProjects} />),
         numGrants: (<NumGrantsChart projects={selectedProjects} />),
         numProjects: (<NumProjectsChart projects={selectedProjects} />),
         funding: (<FundingChart projects={selectedProjects} />),
@@ -68,6 +69,7 @@ function Snapshot() {
             <SnapshotHeader filters={appliedFilters} setFilters={setAppliedFilters} range={selectedRange} setRange={setSelectedRange} />
 
             <div className={styles.navbar}>
+                <button onClick={() => handleClick("success-rate")}>Success Rate</button>
                 <button onClick={() => handleClick("num-grants")}>Number of Grants</button>
                 <button onClick={() => handleClick("num-projects")}>Number of Projects</button>
                 <button onClick={() => handleClick("funding")}>Funding Awarded</button>
@@ -75,6 +77,7 @@ function Snapshot() {
                 <button onClick={() => handleClick("faculty-engagement")}>Faculty Engagement</button>
             </div>
 
+            <section id="success-rate"> <SnapshotBox chart={charts.successRate} type={1} title="Success Rate" /></section>
             <section id="num-grants"> <SnapshotBox chart={charts.numGrants} type={0} title="Number of Grants" /> </section>
             <section id="num-projects"> <SnapshotBox chart={charts.numProjects} type={1} title="Number of Projects" /> </section>
             <section id="funding"> <SnapshotBox chart={charts.funding} type={0} title="Funding Awarded" /> </section>
