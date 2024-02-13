@@ -1,5 +1,7 @@
 import React from 'react';
 import styles from "./charts.module.css";
+import { SAMPLE_STUDENT_REACH } from '.';
+import { Bar, BarChart, LabelList, Legend, Rectangle, Tooltip, XAxis, YAxis } from 'recharts';
 
 function StudentReachChart({ projects, filters }) {
 
@@ -20,26 +22,41 @@ function StudentReachChart({ projects, filters }) {
         }
     });
 
+    const customLabel = (props) => {
+        const { x, y, width, height, value } = props;
+        return (
+            <text x={820} y={y + height / 3 * 2} textAnchor="end" fill="#081252" fontStyle="italic">
+                {value.toLocaleString()}
+            </text>
+        )
+    };
+
     return (
         <React.Fragment>
-            <div className={styles.chart}></div>
+            <div className={styles.chart}>
+                <BarChart width={850} height={500} layout='vertical' data={SAMPLE_STUDENT_REACH}>
+                    <XAxis type='number' padding={{ right: 150}} hide />
+                    <YAxis type='category' dataKey="name" width={120} />
+                    <Legend verticalAlign='top' iconType='square' height={36} />
+                    <Bar dataKey="Small TLEF" stackId="a" background={{ fill: "#EEEE" }} fill="#FB812D" />
+                    <Bar dataKey="Large TLEF" stackId="a" fill="#13588B">
+                    <LabelList width={500} content={customLabel} position="right" dataKey="total" fill="#081252" style={{ fontStyle: "italic" }} />
+                    </Bar>
+                </BarChart>
+            </div>
             <div className={styles.space}></div>
             <div className={styles.description}>
                 {!isDataComplete &&
                     <p className={styles.warning}>Please note, this particular TLEF metric is not available prior to the 2016/17 academic year.</p>
                 }
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                <p>TLEF projects funded in the selected year(s) reached <b>21,002</b> students in Small TLEF innovation projects and
+                 <b>11,493</b> students in Large TLEF Transformation projects.</p>
+                <p>Overall, the projects reached <b>162</b> courses (undergraduate and graduate) and <b>399</b> sections
+                 across 9 Faculties at the UBCV campus, impacting <b>32,495</b> enrolments and <b>18,182</b> unique students.*</p>
+
+                 <p className={styles["reach-annotation"]}>
+                    *Students enrolled in more than one TLEF-supported course are only counted once.
+                 </p>
             </div>
         </React.Fragment>
     );

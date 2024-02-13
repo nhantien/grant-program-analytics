@@ -110,7 +110,13 @@
     font-size: 1rem;
 }
 
-
+/* Student Reach Chart */
+.reach-annotation {
+    margin-top: 2rem;
+    font-size: 0.75rem;
+    font-weight: 300;
+    font-style: italic;
+}
 
 @media screen and (max-width: 576px) {
     .chart {
