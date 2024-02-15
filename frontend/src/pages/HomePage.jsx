@@ -7,13 +7,31 @@ import { IconButton, CircularProgress, Collapse, Slider } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 import { Project, BASE_URL, PROJECT_TYPE, FACULTY, MARKS } from '../constants';
+import { Amplify } from 'aws-amplify';
+import { generateClient } from 'aws-amplify/api'
+import config from '../aws-exports';
+
+Amplify.configure(config);
 
 const options = ['Option 1', 'Option 2', 'Option 3'];
 
+
 function HomePage() {
 
+    const query = `query test {
+        proposals(method: "all") {
+            grant_id
+            pi_name
+            faculty
+            title
+            project_year
+            amount
+        }
+    }
+    `;
+
     const [appliedFilters, setAppliedFilters] = useState({
-        "FundingYear": ["2022/2023"],
+        "FundingYear": ["2024/2025"],
         "ProjectType": [],
         "Faculty": [],
         "FocusArea": [],
@@ -26,44 +44,81 @@ function HomePage() {
     const [rangeString, setRangeString] = useState("");
 
     useEffect(() => {
-        const fetchFilteredData = async () => {
+        const fetchData = async () => {
             try {
-                console.log(appliedFilters);
-                setProjects([]);
-                setLoading(true);
-                const res = await fetch(BASE_URL + "filter", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json", },
-                    body: JSON.stringify({ appliedFilters }),
+                const client = generateClient()
+                const results = await client.graphql({
+                    query: query,
                 });
-                if (!res.ok) throw new Error("Network response was not ok");
 
-                const data = await res.json();
-                const newProjects = data.map((proj) => {
-
-                    // Make sure to return the new Project instance
+                const proposals = results.data.proposals;
+                const newProjects = proposals.map((proj) => {
+                    const split_id = proj.grant_id.split("-");
+                    const fundingYear = split_id[0] + "/" + (+split_id[0] + 1);
+                    const type = split_id[2].substring(0, 2);
                     return new Project(
-                        proj.ID,
-                        proj.FundingYear,
-                        proj.ProjectType,
-                        proj.Investigator,
-                        proj.Faculty,
-                        proj.Title,
-                        "1",
-                        proj.Amount,
-                        proj.ProjectStatus
+                        proj.grant_id,
+                        fundingYear,
+                        (type === "SP") ? "Small TLEF" : "Large TLEF",
+                        proj.pi_name,
+                        (proj.faculty.includes("Faculty of ")) ? proj.faculty.replace("Faculty of ", "") : proj.faculty,
+                        proj.title,
+                        proj.project_year,
+                        proj.amount,
+                        "Active"
                     );
                 });
-
+                       
                 setProjects(newProjects);
                 setLoading(false);
-            } catch (err) {
-                console.log(err);
+                
+            } catch (e) {
+                console.log(e);
             }
         };
 
-        fetchFilteredData();
+        fetchData();
     }, [appliedFilters]);
+
+    // useEffect(() => {
+    //     const fetchFilteredData = async () => {
+    //         try {
+    //             console.log(appliedFilters);
+    //             setProjects([]);
+    //             setLoading(true);
+    //             const res = await fetch(BASE_URL + "filter", {
+    //                 method: "POST",
+    //                 headers: { "Content-Type": "application/json", },
+    //                 body: JSON.stringify({ appliedFilters }),
+    //             });
+    //             if (!res.ok) throw new Error("Network response was not ok");
+
+    //             const data = await res.json();
+    //             const newProjects = data.map((proj) => {
+
+    //                 // Make sure to return the new Project instance
+    //                 return new Project(
+    //                     proj.ID,
+    //                     proj.FundingYear,
+    //                     proj.ProjectType,
+    //                     proj.Investigator,
+    //                     proj.Faculty,
+    //                     proj.Title,
+    //                     "1",
+    //                     proj.Amount,
+    //                     proj.ProjectStatus
+    //                 );
+    //             });
+
+    //             setProjects(newProjects);
+    //             setLoading(false);
+    //         } catch (err) {
+    //             console.log(err);
+    //         }
+    //     };
+
+    //     fetchFilteredData();
+    // }, [appliedFilters]);
 
     const handleSelectFilter = (newFilters, filterType) => {
         setAppliedFilters((prevFilters) => ({

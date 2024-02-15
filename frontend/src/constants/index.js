@@ -28,11 +28,10 @@ class Project {
     };
 };
 
-// const BASE_URL = "http://localhost:3001/";
 const BASE_URL = "https://n65lw6cwdghn4mrdgfkot3xiy40iwzcl.lambda-url.ca-central-1.on.aws/";
 
 const YEARS = [
-    "2023/2024", "2022/2023", "2021/2022", "2020/2021", "2019/2020", "2018/2019", "2017/2018", "2016/2017", "2015/2016", "2014/2015", "2013/2014",
+    "2024/2025", "2023/2024", "2022/2023", "2021/2022", "2020/2021", "2019/2020", "2018/2019", "2017/2018", "2016/2017", "2015/2016", "2014/2015", "2013/2014",
     "2012/2013", "2011/2012", "2010/2011", "2009/2010", "2008/2009", "2007/2008", "2006/2007", "2005/2006", "2004/2005", "2003/2004", "2002/2003",
     "2001/2002", "2000/2001", "1999/2000"
 ];
@@ -96,6 +95,18 @@ const MARKS = [
 
 const SAMPLE_PROJECT = new Project(-1, "2020/2021", "Small TLEF", "Jane Doe", "Applied Science", "Development of a guided self-directed study online German for Reading Knowledge course on the beginner level applicable in various hybrid instructional modes", 1, 12500, "Active\r");
 
+const HOME_PAGE_QUERY = `query test {
+    proposals (method: "all") {
+        grant_id
+        pi_name
+        faculty
+        title
+        project_year
+        amount
+    }
+}
+`;
+
 export { 
     Project, 
     BASE_URL, 
@@ -109,4 +120,5 @@ export {
     sleep, 
     SAMPLE_PROJECT,
     MARKS, 
+    HOME_PAGE_QUERY,
 }

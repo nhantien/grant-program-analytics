@@ -190,12 +190,9 @@ function EnhancedTableHead(props) {
 }
 
 EnhancedTableHead.propTypes = {
-    numSelected: PropTypes.number.isRequired,
     onRequestSort: PropTypes.func.isRequired,
-    onSelectAllClick: PropTypes.func.isRequired,
     order: PropTypes.oneOf(['asc', 'desc']).isRequired,
     orderBy: PropTypes.string.isRequired,
-    rowCount: PropTypes.number.isRequired,
 };
 
 function EnhancedTableToolbar(props) {
@@ -227,10 +224,6 @@ function EnhancedTableToolbar(props) {
         </Toolbar>
     );
 }
-
-EnhancedTableToolbar.propTypes = {
-    numSelected: PropTypes.number.isRequired,
-};
 
 export default function ProjectTable({ projects }) {
     const [order, setOrder] = React.useState('asc');

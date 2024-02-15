@@ -4,8 +4,25 @@ import { SnapshotHeader, SnapshotBox } from "../components/snapshot";
 import { FundingChart, NumGrantsChart, NumProjectsChart, StudentReachChart, TeamMemberChart, SuccessRateChart } from "../components/charts";
 import { Project, BASE_URL } from "../constants";
 import styles from "./Snapshot.module.css";
+import { Amplify } from 'aws-amplify';
+import { generateClient } from 'aws-amplify/api'
+import config from '../aws-exports';
+
+Amplify.configure(config);
 
 function Snapshot() {
+
+    const query = `query test {
+        proposals(method: "all") {
+            grant_id
+            pi_name
+            faculty
+            title
+            project_year
+            amount
+        }
+    }
+    `;
 
     const location = useLocation();
     const { projects, filters, range } = location.state;
@@ -15,40 +32,74 @@ function Snapshot() {
     const [selectedRange, setSelectedRange] = useState(range);
 
     useEffect(() => {
-        const fetchFilteredData = async () => {
+        const fetchData = async () => {
             try {
-                const res = await fetch(BASE_URL + "filter", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json", },
-                    body: JSON.stringify({ appliedFilters }),
+                const client = generateClient()
+                const results = await client.graphql({
+                    query: query,
                 });
-                if (!res.ok) throw new Error("Network response was not ok");
 
-                const data = await res.json();
-                const newProjects = data.map((proj) => {
-
-                    // Make sure to return the new Project instance
+                const proposals = results.data.proposals;
+                const newProjects = proposals.map((proj) => {
                     return new Project(
-                        proj.ID,
-                        proj.FundingYear,
-                        proj.ProjectType,
-                        proj.Investigator,
-                        proj.Faculty,
-                        proj.Title,
-                        "1",
-                        proj.Amount,
-                        proj.ProjectStatus
+                        proj.grant_id,
+                        "2024/2025",
+                        "Small TLEF",
+                        proj.pi_name,
+                        (proj.faculty.includes("Faculty of ")) ? proj.faculty.replace("Faculty of ", "") : proj.faculty,
+                        proj.title,
+                        proj.project_year,
+                        proj.amount,
+                        "Active"
                     );
                 });
 
+                console.log(newProjects);
+                       
                 setSelectedProjects(newProjects);
-            } catch (err) {
-                console.log(err);
+            } catch (e) {
+                console.log(e);
             }
         };
 
-        fetchFilteredData();
+        fetchData();
     }, [appliedFilters]);
+
+    // useEffect(() => {
+    //     const fetchFilteredData = async () => {
+    //         try {
+    //             const res = await fetch(BASE_URL + "filter", {
+    //                 method: "POST",
+    //                 headers: { "Content-Type": "application/json", },
+    //                 body: JSON.stringify({ appliedFilters }),
+    //             });
+    //             if (!res.ok) throw new Error("Network response was not ok");
+
+    //             const data = await res.json();
+    //             const newProjects = data.map((proj) => {
+
+    //                 // Make sure to return the new Project instance
+    //                 return new Project(
+    //                     proj.ID,
+    //                     proj.FundingYear,
+    //                     proj.ProjectType,
+    //                     proj.Investigator,
+    //                     proj.Faculty,
+    //                     proj.Title,
+    //                     "1",
+    //                     proj.Amount,
+    //                     proj.ProjectStatus
+    //                 );
+    //             });
+
+    //             setSelectedProjects(newProjects);
+    //         } catch (err) {
+    //             console.log(err);
+    //         }
+    //     };
+
+    //     fetchFilteredData();
+    // }, [appliedFilters]);
 
     const handleClick = (section) => {
         document.getElementById(section).scrollIntoView({ behavior: "smooth" });
