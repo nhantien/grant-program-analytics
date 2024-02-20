@@ -50,9 +50,9 @@ function Filter({ options, filters, onSelect, defaultValue, type, snapshot }) {
             <Typography>Clear All</Typography>
           </MenuItem>
           {options.map((option) => (
-            <MenuItem key={option} value={option}>
-              <Checkbox checked={filters[type].indexOf(option) > -1} />
-              <Typography noWrap>{option}</Typography>
+            <MenuItem key={option.label} value={option.value}>
+              <Checkbox checked={filters[type].indexOf(option.value) > -1} />
+              <Typography noWrap>{option.label}</Typography>
             </MenuItem>
           ))}
         </Select>

@@ -13,25 +13,42 @@ import config from '../aws-exports';
 
 Amplify.configure(config);
 
-const options = ['Option 1', 'Option 2', 'Option 3'];
+// const options = ['Option 1', 'Option 2', 'Option 3'];
+
+const options = [
+    {
+        "label": "Option 1",
+        "value": 1
+    },
+    {
+        "label": "Option 2",
+        "value": 2
+    },
+    {
+        "label": "Option 3",
+        "value": 3
+    },
+];
 
 
 function HomePage() {
 
-    const query = `query test {
-        proposals(method: "all") {
-            grant_id
-            pi_name
-            faculty
-            title
-            project_year
-            amount
+    const query = `query testGetAllProjects {
+        getAllProjects(method: "getAllProjects") {
+          grant_id
+          project_id
+          funding_year
+          project_type
+          faculty
+          department
+          funding_amount
+          pi_name
         }
     }
     `;
 
     const [appliedFilters, setAppliedFilters] = useState({
-        "FundingYear": ["2024/2025"],
+        "FundingYear": ["2022"],
         "ProjectType": [],
         "Faculty": [],
         "FocusArea": [],
@@ -43,35 +60,65 @@ function HomePage() {
     const [range, setRange] = useState([1999, 2023]);
     const [rangeString, setRangeString] = useState("");
 
+    const generateQueryString = (filters) => {
+
+        const str = `query testGetFilteredProjects {
+            getFilteredProjects(method: "getFilteredProjects", filter: {
+                funding_year: ${JSON.stringify(filters["FundingYear"])},
+                faculty: ${JSON.stringify(filters["Faculty"])},
+                project_type: ${JSON.stringify(filters["ProjectType"])},
+                focus_area: ${JSON.stringify(filters["FocusArea"])},
+                search_text: ${JSON.stringify(filters["SearchText"])}
+            }) {
+                grant_id
+                project_id
+                funding_year
+                project_type
+                pi_name
+                faculty
+                department
+                funding_amount
+            }
+        }`;
+
+        console.log(str);
+
+        return str;
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             try {
+                setLoading(true);
+                const query_string = generateQueryString(appliedFilters);
                 const client = generateClient()
                 const results = await client.graphql({
-                    query: query,
+                    query: query_string,
                 });
 
-                const proposals = results.data.proposals;
+                const proposals = results.data.getFilteredProjects;
                 const newProjects = proposals.map((proj) => {
-                    const split_id = proj.grant_id.split("-");
-                    const fundingYear = split_id[0] + "/" + (+split_id[0] + 1);
-                    const type = split_id[2].substring(0, 2);
                     return new Project(
                         proj.grant_id,
-                        fundingYear,
-                        (type === "SP") ? "Small TLEF" : "Large TLEF",
+                        proj.funding_year + "/" + (+proj.funding_year + 1),
+                        proj.project_type,
                         proj.pi_name,
-                        (proj.faculty.includes("Faculty of ")) ? proj.faculty.replace("Faculty of ", "") : proj.faculty,
-                        proj.title,
-                        proj.project_year,
-                        proj.amount,
+                        proj.faculty,
+                        // (proj.faculty.includes("Faculty of ")) ? proj.faculty.replace("Faculty of ", "") : proj.faculty,
+                        "sample title",
+                        "1",
+                        // proj.project_year,
+                        proj.funding_amount,
+                        // proj.amount,
                         "Active"
                     );
                 });
-                       
+
+                console.log(proposals);
+
                 setProjects(newProjects);
                 setLoading(false);
-                
+
             } catch (e) {
                 console.log(e);
             }
@@ -125,6 +172,8 @@ function HomePage() {
             ...prevFilters,
             [filterType]: newFilters,
         }));
+
+        console.log(appliedFilters);
     };
 
     const handleSelectSearchTextFilter = (keywords) => {
@@ -173,7 +222,7 @@ function HomePage() {
         let years = [];
         for (let i = min; i <= max; i++) {
             const year = i + "/" + (i + 1);
-            years.push(year);
+            years.push(i.toString());
         }
 
         setAppliedFilters((prevFilters) => ({
@@ -181,7 +230,7 @@ function HomePage() {
             ["FundingYear"]: years,
         }));
 
-        setRangeString(min + "/" + (min+1) + " - " + max + "/" + (max+1));
+        setRangeString(min + "/" + (min + 1) + " - " + max + "/" + (max + 1));
     }
 
     return (

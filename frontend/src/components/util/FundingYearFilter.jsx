@@ -48,8 +48,8 @@ function FundingYearFilter({ filters, setFilters, setShowSlider, snapshot }) {
                 >
                     <MenuItem value="select range of years">Select range of years</MenuItem>
                     {YEARS.map((year) => (
-                        <MenuItem key={year} value={year}>
-                            <Typography>{year}</Typography>
+                        <MenuItem key={year.label} value={year.value}>
+                            <Typography>{year.label}</Typography>
                         </MenuItem>
                     ))}
                 </Select>
