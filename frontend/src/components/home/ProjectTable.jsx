@@ -190,12 +190,9 @@ function EnhancedTableHead(props) {
 }
 
 EnhancedTableHead.propTypes = {
-    numSelected: PropTypes.number.isRequired,
     onRequestSort: PropTypes.func.isRequired,
-    onSelectAllClick: PropTypes.func.isRequired,
     order: PropTypes.oneOf(['asc', 'desc']).isRequired,
     orderBy: PropTypes.string.isRequired,
-    rowCount: PropTypes.number.isRequired,
 };
 
 function EnhancedTableToolbar(props) {
@@ -227,10 +224,6 @@ function EnhancedTableToolbar(props) {
         </Toolbar>
     );
 }
-
-EnhancedTableToolbar.propTypes = {
-    numSelected: PropTypes.number.isRequired,
-};
 
 export default function ProjectTable({ projects }) {
     const [order, setOrder] = React.useState('asc');
@@ -347,7 +340,8 @@ export default function ProjectTable({ projects }) {
                                         <TableCell align="left" sx={{ height: "3rem" }}>{project.faculty}</TableCell>
                                         <TableCell align="left" sx={{ height: "3rem" }}><Link to={`/summary/${project.id}`}>{project.title}</Link></TableCell>
                                         <TableCell align="right" sx={{ height: "3rem" }}>{project.projectYear}</TableCell>
-                                        <TableCell align="right" sx={{ height: "3rem" }}>{formattedAmount(project.amount)}</TableCell>
+                                        <TableCell align="right" sx={{ height: "3rem" }}>{project.amount}</TableCell>
+                                        {/* <TableCell align="right" sx={{ height: "3rem" }}>{formattedAmount(project.amount)}</TableCell> */}
                                         <TableCell align="left" sx={{ height: "3rem", color: project.status === "Active\r" ? "#d4734c" : "#64b53c" }}>{project.status}</TableCell>
                                         <TableCell align="left" sx={{ height: "3rem" }}> <a href="#">report</a> </TableCell>
                                         <TableCell align="left" sx={{ height: "3rem" }}> <a href="#">poster</a></TableCell>
