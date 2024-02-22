@@ -32,12 +32,6 @@ export class VpcStack extends Stack {
         });
         this.vpc.addFlowLog("vpcFlowLog");
 
-        const defaultSecutiryGroup = ec2.SecurityGroup.fromSecurityGroupId(
-            this,
-            id,
-            this.vpc.vpcDefaultSecurityGroup
-        );
-
         this.vpc.addInterfaceEndpoint("ECR Endpoint", {
             service: ec2.InterfaceVpcEndpointAwsService.ECR,
             subnets: { subnetType: ec2.SubnetType.PRIVATE_ISOLATED },
