@@ -1,22 +1,18 @@
 import * as cdk from "aws-cdk-lib";
-import { RemovalPolicy, Stack, StackProps } from "aws-cdk-lib";
 import { Construct } from "constructs";
-import * as ec2 from "aws-cdk-lib/aws-ec2";
 import { VpcStack } from "./vpc-stack";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import * as s3deploy from "aws-cdk-lib/aws-s3-deployment";
 import * as iam from "aws-cdk-lib/aws-iam";
 import * as glue from "aws-cdk-lib/aws-glue";
 import * as lambda from "aws-cdk-lib/aws-lambda";
-import { triggers } from "aws-cdk-lib";
-import { Effect } from "aws-cdk-lib/aws-iam";
 
-export class DataPipelineStack extends Stack {
+export class DataPipelineStack extends cdk.Stack {
   constructor(
     scope: Construct,
     id: string,
     vpcStack: VpcStack,
-    props?: StackProps
+    props?: cdk.StackProps
   ) {
     super(scope, id, props);
 
@@ -40,7 +36,7 @@ export class DataPipelineStack extends Stack {
       encryption: s3.BucketEncryption.S3_MANAGED,
     });
 
-    const triggerLambda = new triggers.TriggerFunction(
+    const triggerLambda = new cdk.triggers.TriggerFunction(
       this,
       "createFolders-lambda",
       {
@@ -61,7 +57,7 @@ export class DataPipelineStack extends Stack {
 
     triggerLambda.addToRolePolicy(
       new iam.PolicyStatement({
-        effect: Effect.ALLOW,
+        effect: iam.Effect.ALLOW,
         actions: [
           "s3:ListBucket",
           "s3:ListObjectsV2",
@@ -77,7 +73,7 @@ export class DataPipelineStack extends Stack {
     );
     triggerLambda.addToRolePolicy(
       new iam.PolicyStatement({
-        effect: Effect.ALLOW,
+        effect: iam.Effect.ALLOW,
         actions: [
           // CloudWatch Logs
           "logs:CreateLogGroup",
@@ -156,6 +152,6 @@ export class DataPipelineStack extends Stack {
     dataBucket.grantReadWrite(glueRole);
 
     // Destroy Glue related resources when PatentDataStack is deleted
-    glueJob1.applyRemovalPolicy(RemovalPolicy.DESTROY);
+    glueJob1.applyRemovalPolicy(cdk.RemovalPolicy.DESTROY);
   }
 }
