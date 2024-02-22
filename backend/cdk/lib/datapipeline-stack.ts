@@ -100,14 +100,14 @@ export class DataPipelineStack extends Stack {
     const glueServiceRolePolicy = iam.ManagedPolicy.fromAwsManagedPolicyName(
       "service-role/AWSGlueServiceRole"
     );
-    const glueAmazonS3FullAccessPolicy =
-      iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonS3FullAccess");
+    // const glueAmazonS3FullAccessPolicy =
+    //   iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonS3FullAccess");
     const glueComprehendPolicy = iam.ManagedPolicy.fromAwsManagedPolicyName(
       "ComprehendFullAccess"
     );
 
     glueRole.addManagedPolicy(glueServiceRolePolicy);
-    glueRole.addManagedPolicy(glueAmazonS3FullAccessPolicy);
+    // glueRole.addManagedPolicy(glueAmazonS3FullAccessPolicy);
     glueRole.addManagedPolicy(glueComprehendPolicy);
 
     const PYTHON_VER = "3.9";
@@ -153,6 +153,7 @@ export class DataPipelineStack extends Stack {
 
     // Grant S3 read/write role to Glue
     glueS3Bucket.grantReadWrite(glueRole);
+    dataBucket.grantReadWrite(glueRole);
 
     // Destroy Glue related resources when PatentDataStack is deleted
     glueJob1.applyRemovalPolicy(RemovalPolicy.DESTROY);
