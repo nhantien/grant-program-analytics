@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { FiltersContext } from '../../App';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
@@ -6,17 +7,25 @@ import ClearIcon from '@mui/icons-material/Clear';
 
 import styles from "./SearchBar.module.css";
 
-function SearchBar ({ onSearch, onClear }) {
+function SearchBar () {
+
+  const { setAppliedFilters } = useContext(FiltersContext);
 
   const [inputValue, setInputValue] = useState("");
 
   const handleClear = () => {
     setInputValue("");
-    onClear();
+    setAppliedFilters((prevFilters) => ({
+      ...prevFilters,
+      "SearchText": [],
+    }));
   };
 
   const handleSearch = () => {
-    onSearch(inputValue.split(", "));
+    setAppliedFilters((prevFilters) => ({
+      ...prevFilters,
+      "SearchText": inputValue.split(", "),
+    }));
   }
 
   const handleKeyPress = (e) => {

@@ -1,17 +1,20 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { FormControl, Select, OutlinedInput, MenuItem, Checkbox, Typography } from '@mui/material';
 import { YEARS } from '../../constants';
+import { FiltersContext } from '../../App';
 
 import styles from "./Filter.module.css";
 
-function FundingYearFilter({ filters, setFilters, setShowSlider, snapshot }) {
+function FundingYearFilter({ setShowSlider, snapshot }) {
+
+    const { appliedFilters, setAppliedFilters } = useContext(FiltersContext);
 
     const handleChange = (event) => {
         const value = event.target.value;
         if (value === "select range of years") setShowSlider(true);
         else {
             setShowSlider(false);
-            setFilters((prevFilters) => ({
+            setAppliedFilters((prevFilters) => ({
                 ...prevFilters,
                 "FundingYear": [value],
             }));
@@ -39,7 +42,7 @@ function FundingYearFilter({ filters, setFilters, setShowSlider, snapshot }) {
                     onChange={handleChange}
                     displayEmpty
                     fullWidth
-                    value={filters["FundingYear"]}
+                    value={appliedFilters["FundingYear"]}
                     input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
                     renderValue={(selected) => (
                         <em>Funding Year</em>
