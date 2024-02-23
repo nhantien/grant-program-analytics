@@ -29,6 +29,8 @@ function FilterList({ rangeString, setRangeString }) {
     }));
   }
 
+  // for now 2022 is selected by default
+  // TODO: update default year to the most recent year
   const handleClearFundingYearRangeFilter = () => {
     setAppliedFilters((prevFilters) =>({
       ...prevFilters,

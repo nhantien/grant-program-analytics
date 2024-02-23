@@ -15,16 +15,19 @@ function StudentReachChart() {
 
     let isDataComplete = true;
 
+    // convert funding_year value from string to int
+    // e.g. "2022/2023" -> 2022
     const convertYear = (year) => {
         const yearStr = year.substring(0, year.indexOf("/"));
         return parseInt(yearStr);
     }
 
+    // no student reach data prior to 2016: flag if current filters contain years before 2016
+    // displays warning message
     const years = appliedFilters["funding_year"];
     console.log(years);
     years.map((year) => {
         const yearInt = convertYear(year);
-        console.log(yearInt);
         if (yearInt < 2016) {
             isDataComplete = false;
         }

@@ -2,7 +2,7 @@ import FundingChart from "./FundingChart";
 import NumGrantsChart from "./NumGrantsChart";
 import NumProjectsChart from "./NumProjectsChart";
 import StudentReachChart from "./StudentReachChart";
-import TeamMemberChart from "./TeamMemberChart";
+import FacultyEngagementChart from "./FacultyEngagementChart";
 import SuccessRateChart from "./SuccessRateChart";
 
 const SAMPLE_STUDENT_REACH = [
@@ -64,5 +64,5 @@ const SAMPLE_STUDENT_REACH = [
 ];
 
 
-export { FundingChart, NumGrantsChart, NumProjectsChart, StudentReachChart, TeamMemberChart, SuccessRateChart, SAMPLE_STUDENT_REACH }
+export { FundingChart, NumGrantsChart, NumProjectsChart, StudentReachChart, FacultyEngagementChart as TeamMemberChart, SuccessRateChart, SAMPLE_STUDENT_REACH }
 

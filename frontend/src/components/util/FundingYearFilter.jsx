@@ -9,9 +9,11 @@ function FundingYearFilter({ setShowSlider, snapshot }) {
 
     const { appliedFilters, setAppliedFilters } = useContext(FiltersContext);
 
+    // users can only select either "range of years" OR a single year
     const handleChange = (event) => {
         const value = event.target.value;
         if (value === "select range of years") setShowSlider(true);
+        // if a single year is selected, clears all the existing year filters and add the selected year
         else {
             setShowSlider(false);
             setAppliedFilters((prevFilters) => ({

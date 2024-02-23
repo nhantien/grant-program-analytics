@@ -7,6 +7,7 @@ import styles from "./charts.module.css";
 
 function SuccessRateChart({ projects }) {
 
+    // TODO: replace w/ actual data
     const small = [
         {
             "name": "Rejected Small TLEF Projects",
