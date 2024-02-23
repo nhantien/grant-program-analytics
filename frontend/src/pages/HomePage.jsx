@@ -122,6 +122,7 @@ function HomePage() {
         setAppliedFilters(newFilters);
     };
 
+    // for mobile UI
     const handleOpenSearch = (e) => {
         let filters = document.getElementById("filters");
         if (filters.style.display === "none") {
@@ -133,10 +134,12 @@ function HomePage() {
         }
     };
 
+    // when the slider changes but it is still on focus
     const handleSliderChange = (event, newRange) => {
         setRange(newRange);
     }
 
+    // update filters when the slider gets out of focus
     const applyRangeFilter = (range) => {
         const min = range[0];
         const max = range[1];

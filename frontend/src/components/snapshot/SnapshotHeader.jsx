@@ -28,23 +28,6 @@ function SnapshotHeader({ range, setRange }) {
         return parseInt(yearStr);
     }
 
-    useEffect(() => {
-        const years = appliedFilters["funding_year"];
-        if (years.indexOf("select range of years") >= 0) return;
-        let min = 0;
-        let max = 0;
-        years.map((year) => {
-            const yearInt = convertYear(year);
-            if (yearInt < min || min === 0) {
-                min = yearInt;
-            }
-            if (yearInt > max) {
-                max = yearInt;
-            }
-        })
-        setRange([min, max]);
-    }, [appliedFilters]);
-
     const handleClearAll = () => {
         const newFilters = {
             "funding_year": ["2022"],
@@ -56,10 +39,14 @@ function SnapshotHeader({ range, setRange }) {
         setAppliedFilters(newFilters);
     };
 
+    // called when the slider changes but is still on focus
     const handleSliderChange = (event, newRange) => {
         setRange(newRange);
     }
 
+    // called when the slider gets out of focus
+    // when the user changes the slider range, add years to appliedFilters one by one
+    // e.g. select '2020 - 2022' -> ["2020", "2021", "2022"]
     const applyRangeFilter = (range) => {
         const min = range[0];
         const max = range[1];

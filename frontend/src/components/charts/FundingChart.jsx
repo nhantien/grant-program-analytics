@@ -16,10 +16,10 @@ function FundingChart({ projects }) {
         )
     };
 
+
     const fundingData = () => {
         const map = new Map();
         let total = 0;
-        console.log(projects);
         projects.forEach((project) => {
             const t = project.type;
             const f = project.faculty;
@@ -53,8 +53,6 @@ function FundingChart({ projects }) {
             };
             res.push(data);
         }
-
-        console.log(res);
 
         return { res, total };
     };

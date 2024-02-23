@@ -11,17 +11,21 @@ import styles from "./charts.module.css";
 import { FiltersContext } from '../../App';
 
 
-function TeamMemberChart() {
+function FacultyEngagementChart() {
 
     const { appliedFilters } = useContext(FiltersContext);
 
     let isDataComplete = true;
 
+    // convert funding_year value from string to int
+    // e.g. "2022/2023" -> 2022
     const convertYear = (year) => {
         const yearStr = year.substring(0, year.indexOf("/"));
         return parseInt(yearStr);
     }
 
+    // no faculty engagement data prior to 2017: flag if the current filters contain projects before 2017
+    // displays warning message
     const years = appliedFilters["funding_year"];
     console.log(years);
     years.map((year) => {
@@ -112,4 +116,4 @@ function TeamMemberChart() {
     );
 };
 
-export default TeamMemberChart;
+export default FacultyEngagementChart;
