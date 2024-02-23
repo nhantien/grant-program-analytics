@@ -1,10 +1,15 @@
+// react
 import React, { useContext } from 'react';
-import styles from "./charts.module.css";
-import { FiltersContext } from '../../App';
+// mui
 import { BarChart } from "@mui/icons-material";
 import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
 import GroupsIcon from '@mui/icons-material/Groups';
 import SchoolIcon from '@mui/icons-material/School';
+// css style
+import styles from "./charts.module.css";
+// context
+import { FiltersContext } from '../../App';
+
 
 function TeamMemberChart() {
 
@@ -17,7 +22,7 @@ function TeamMemberChart() {
         return parseInt(yearStr);
     }
 
-    const years = appliedFilters["FundingYear"];
+    const years = appliedFilters["funding_year"];
     console.log(years);
     years.map((year) => {
         const yearInt = convertYear(year);

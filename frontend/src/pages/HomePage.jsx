@@ -1,21 +1,26 @@
-import styles from './HomePage.module.css';
+// react
 import { useState, useEffect, useContext } from 'react';
-import { FilterList, SearchBar, TableItem, VerticalTableItem, ProjectTable } from '../components/home';
-import { Filter, FundingYearFilter } from "../components/util";
+// react-router
+import { Link } from 'react-router-dom';
+// mui
 import ClearIcon from '@mui/icons-material/Clear';
 import { IconButton, CircularProgress, Collapse, Slider } from '@mui/material';
-import { Link } from 'react-router-dom';
-
-import { Project, BASE_URL, PROJECT_TYPE, FACULTY, MARKS } from '../constants';
+// amplify
 import { Amplify } from 'aws-amplify';
 import { generateClient } from 'aws-amplify/api'
 import config from '../aws-exports';
-
+// css styles
+import styles from './HomePage.module.css';
+// context
 import { FiltersContext } from '../App';
+// components
+import { FilterList, SearchBar, VerticalTableItem, ProjectTable } from '../components/home';
+import { Filter, FundingYearFilter } from "../components/util";
+// constants
+import { Project, PROJECT_TYPE, FACULTY, MARKS } from '../constants';
+
 
 Amplify.configure(config);
-
-// const options = ['Option 1', 'Option 2', 'Option 3'];
 
 const options = [
     {
@@ -87,12 +92,10 @@ function HomePage() {
                         proj.project_type,
                         proj.pi_name,
                         proj.project_faculty,
-                        // (proj.faculty.includes("Faculty of ")) ? proj.faculty.replace("Faculty of ", "") : proj.faculty,
                         "sample title",
                         "1",
                         // proj.project_year,
                         proj.funding_amount,
-                        // proj.amount,
                         "Active"
                     );
                 });
@@ -144,7 +147,7 @@ function HomePage() {
 
         setAppliedFilters((prevFilters) => ({
             ...prevFilters,
-            ["funding_year"]: years,
+            "funding_year": years,
         }));
 
         setRangeString(min + "/" + (min + 1) + " - " + max + "/" + (max + 1));

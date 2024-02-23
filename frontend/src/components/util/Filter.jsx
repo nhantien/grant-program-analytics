@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { FiltersContext } from '../../App';
-import { FormControl, Select, Chip, OutlinedInput, Box, MenuItem, InputLabel, Checkbox, Typography } from '@mui/material';
+import { FormControl, Select, OutlinedInput, MenuItem, Checkbox, Typography } from '@mui/material';
 
 import styles from "./Filter.module.css";
 

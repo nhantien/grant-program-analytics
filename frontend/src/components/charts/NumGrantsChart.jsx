@@ -1,4 +1,6 @@
+// react
 import React from 'react';
+// css style
 import styles from "./charts.module.css";
 
 function NumGrantsChart({ projects }) {

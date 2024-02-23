@@ -1,5 +1,8 @@
+// react
 import React, { createContext, useState } from "react";
-import { BrowserRouter as Router, Route, Routes, BrowserRouter } from "react-router-dom";
+// react-router
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+// components
 import HomePage from "./pages/HomePage";
 import Summary from "./pages/Summary";
 import Snapshot from "./pages/Snapshot";

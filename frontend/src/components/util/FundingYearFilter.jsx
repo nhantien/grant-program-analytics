@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { FormControl, Select, OutlinedInput, MenuItem, Checkbox, Typography } from '@mui/material';
+import React, { useContext } from 'react';
+import { FormControl, Select, OutlinedInput, MenuItem, Typography } from '@mui/material';
 import { YEARS } from '../../constants';
 import { FiltersContext } from '../../App';
 

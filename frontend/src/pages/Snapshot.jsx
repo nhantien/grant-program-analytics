@@ -1,13 +1,22 @@
-import { useLocation } from "react-router-dom";
+// react
 import { useState, useEffect, useContext } from "react";
-import { SnapshotHeader, SnapshotBox } from "../components/snapshot";
-import { FundingChart, NumGrantsChart, NumProjectsChart, StudentReachChart, TeamMemberChart, SuccessRateChart } from "../components/charts";
-import { Project, BASE_URL } from "../constants";
-import { FiltersContext } from "../App";
-import styles from "./Snapshot.module.css";
+// react-router
+import { useLocation } from "react-router-dom";
+// amplify
 import { Amplify } from 'aws-amplify';
 import { generateClient } from 'aws-amplify/api'
 import config from '../aws-exports';
+// css style
+import styles from "./Snapshot.module.css";
+// context
+import { FiltersContext } from "../App";
+// components
+import { SnapshotHeader, SnapshotBox } from "../components/snapshot";
+import { FundingChart, NumGrantsChart, NumProjectsChart, StudentReachChart, TeamMemberChart, SuccessRateChart } from "../components/charts";
+// constants
+import { Project } from "../constants";
+
+
 
 Amplify.configure(config);
 
@@ -63,7 +72,6 @@ function Snapshot() {
                         proj.project_type,
                         proj.pi_name,
                         proj.project_faculty,
-                        // (proj.faculty.includes("Faculty of ")) ? proj.faculty.replace("Faculty of ", "") : proj.faculty,
                         "sample title",
                         "1",
                         // proj.project_year,
