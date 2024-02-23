@@ -22,7 +22,7 @@ function TeamMemberChart() {
         return parseInt(yearStr);
     }
 
-    const years = appliedFilters["FundingYear"];
+    const years = appliedFilters["funding_year"];
     console.log(years);
     years.map((year) => {
         const yearInt = convertYear(year);
