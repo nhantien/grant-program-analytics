@@ -47,11 +47,11 @@ function HomePage() {
 
         const str = `query testGetFilteredProjects {
             getFilteredProjects(method: "getFilteredProjects", filter: {
-                funding_year: ${JSON.stringify(filters["FundingYear"])},
-                project_faculty: ${JSON.stringify(filters["Faculty"])},
-                project_type: ${JSON.stringify(filters["ProjectType"])},
-                focus_area: ${JSON.stringify(filters["FocusArea"])},
-                search_text: ${JSON.stringify(filters["SearchText"])}
+                funding_year: ${JSON.stringify(filters["funding_year"])},
+                project_faculty: ${JSON.stringify(filters["project_faculty"])},
+                project_type: ${JSON.stringify(filters["project_type"])},
+                focus_area: ${JSON.stringify(filters["focus_area"])},
+                search_text: ${JSON.stringify(filters["search_text"])}
             }) {
                 grant_id
                 project_id
@@ -73,10 +73,10 @@ function HomePage() {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const query_string = generateQueryString(appliedFilters);
+                const queryString = generateQueryString(appliedFilters);
                 const client = generateClient()
                 const results = await client.graphql({
-                    query: query_string,
+                    query: queryString,
                 });
 
                 const proposals = results.data.getFilteredProjects;
@@ -110,11 +110,11 @@ function HomePage() {
 
     const handleClearAllFilters = () => {
         const newFilters = {
-            "FundingYear": ["2022"],
-            "ProjectType": [],
-            "Faculty": [],
-            "FocusArea": [],
-            "SearchText": []
+            "funding_year": ["2022"],
+            "project_type": [],
+            "project_faculty": [],
+            "focus_area": [],
+            "search_text": []
         };
         setAppliedFilters(newFilters);
     };
@@ -139,13 +139,12 @@ function HomePage() {
         const max = range[1];
         let years = [];
         for (let i = min; i <= max; i++) {
-            const year = i + "/" + (i + 1);
             years.push(i.toString());
         }
 
         setAppliedFilters((prevFilters) => ({
             ...prevFilters,
-            ["FundingYear"]: years,
+            ["funding_year"]: years,
         }));
 
         setRangeString(min + "/" + (min + 1) + " - " + max + "/" + (max + 1));
@@ -168,9 +167,9 @@ function HomePage() {
                         <span className={styles["filter-text"]}>Filter by</span>
                         <div className={styles.filters}>
                             <FundingYearFilter setShowSlider={setShowSlider} snapshot={false} />
-                            <Filter options={PROJECT_TYPE} defaultValue="Project Type" type="ProjectType" snapshot={false} />
-                            <Filter options={FACULTY} defaultValue="Faculty/Unit" type="Faculty" snapshot={false} />
-                            <Filter options={options} defaultValue="Focus Area" type="FocusArea" snapshot={false} />
+                            <Filter options={PROJECT_TYPE} defaultValue="Project Type" type="project_type" snapshot={false} />
+                            <Filter options={FACULTY} defaultValue="Faculty/Unit" type="project_faculty" snapshot={false} />
+                            <Filter options={options} defaultValue="Focus Area" type="focus_area" snapshot={false} />
                         </div>
                     </div>
                 </div>

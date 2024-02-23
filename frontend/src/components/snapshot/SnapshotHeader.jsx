@@ -13,7 +13,7 @@ function SnapshotHeader({ range, setRange }) {
 
     const { appliedFilters, setAppliedFilters } = useContext(FiltersContext);
 
-    const [showSlider, setShowSlider] = useState(appliedFilters["FundingYear"].length > 1);
+    const [showSlider, setShowSlider] = useState(appliedFilters["funding_year"].length > 1);
     const [rangeString, setRangeString] = useState(range[0] + "/" + (range[0]+1) + " - " + range[1] + "/" + (range[1]+1));
 
     const options = ["Option 1", "Option 2", "Option 3"];
@@ -24,7 +24,7 @@ function SnapshotHeader({ range, setRange }) {
     }
 
     useEffect(() => {
-        const years = appliedFilters["FundingYear"];
+        const years = appliedFilters["funding_year"];
         if (years.indexOf("select range of years") >= 0) return;
         let min = 0;
         let max = 0;
@@ -40,20 +40,13 @@ function SnapshotHeader({ range, setRange }) {
         setRange([min, max]);
     }, [appliedFilters]);
 
-    const onSelect = (newFilters, filterType) => {
-        setAppliedFilters((prevFilters) => ({
-            ...prevFilters,
-            [filterType]: newFilters
-        }));
-    };
-
     const handleClearAll = () => {
         const newFilters = {
-            "FundingYear": ["2022"],
-            "ProjectType": [],
-            "Faculty": [],
-            "FocusArea": [],
-            "SearchText": []
+            "funding_year": ["2022"],
+            "project_type": [],
+            "project_faculty": [],
+            "focus_area": [],
+            "search_text": []
         };
         setAppliedFilters(newFilters);
     };
@@ -67,13 +60,12 @@ function SnapshotHeader({ range, setRange }) {
         const max = range[1];
         let years = [];
         for (let i = min; i <= max; i++) {
-            const year = i + "/" + (i + 1);
-            years.push(year);
+            years.push(i.toString());
         }
 
         setAppliedFilters((prevFilters) => ({
             ...prevFilters,
-            ["FundingYear"]: years,
+            ["funding_year"]: years,
         }));
 
         setRangeString(min + "/" + (min+1) + " - " + max + "/" + (max+1));
@@ -91,16 +83,10 @@ function SnapshotHeader({ range, setRange }) {
 
                     <div className={styles["dropdown-filters"]}>
                         <FundingYearFilter setShowSlider={setShowSlider} snapshot={true} />
-                        <Filter options={PROJECT_TYPE} defaultValue="Project Type" type="ProjectType" snapshot={true} />
-                        <Filter options={FACULTY} defaultValue="Faculty/Unit" type="Faculty" snapshot={true} />
-                        <Filter options={options} defaultValue="Focus Area" type="FocusArea" snapshot={true} />
+                        <Filter options={PROJECT_TYPE} defaultValue="Project Type" type="project_type" snapshot={true} />
+                        <Filter options={FACULTY} defaultValue="Faculty/Unit" type="project_faculty" snapshot={true} />
+                        <Filter options={options} defaultValue="Focus Area" type="focus_area" snapshot={true} />
                     </div>
-
-                    {/* <div>
-                        <IconButton onClick={() => {setShowSlider(!showSlider)}}>
-                            <span style={{ fontSize: "1rem", color: "#000" }}>select range of years</span> <ExpandMoreIcon />
-                        </IconButton>
-                    </div> */}
 
                     <Collapse
                         in={showSlider}

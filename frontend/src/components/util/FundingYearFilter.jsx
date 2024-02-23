@@ -16,7 +16,7 @@ function FundingYearFilter({ setShowSlider, snapshot }) {
             setShowSlider(false);
             setAppliedFilters((prevFilters) => ({
                 ...prevFilters,
-                "FundingYear": [value],
+                "funding_year": [value],
             }));
         }
     };
@@ -42,7 +42,7 @@ function FundingYearFilter({ setShowSlider, snapshot }) {
                     onChange={handleChange}
                     displayEmpty
                     fullWidth
-                    value={appliedFilters["FundingYear"]}
+                    value={appliedFilters["funding_year"]}
                     input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
                     renderValue={(selected) => (
                         <em>Funding Year</em>

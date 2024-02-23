@@ -17,14 +17,14 @@ function SearchBar () {
     setInputValue("");
     setAppliedFilters((prevFilters) => ({
       ...prevFilters,
-      "SearchText": [],
+      "search_text": [],
     }));
   };
 
   const handleSearch = () => {
     setAppliedFilters((prevFilters) => ({
       ...prevFilters,
-      "SearchText": inputValue.split(", "),
+      "search_text": inputValue.split(", "),
     }));
   }
 
