@@ -9,11 +9,11 @@ export const FiltersContext = createContext("filters");
 function App() {
 
   const [appliedFilters, setAppliedFilters] = useState({
-    "FundingYear": ["2022"],
-    "ProjectType": [],
-    "Faculty": [],
-    "FocusArea": [],
-    "SearchText": []
+    "funding_year": ["2022"],
+    "project_type": [],
+    "project_faculty": [],
+    "focus_area": [],
+    "search_text": []
   });
 
 

@@ -13,18 +13,6 @@ Amplify.configure(config);
 
 function Snapshot() {
 
-    const query = `query test {
-        proposals(method: "all") {
-            grant_id
-            pi_name
-            faculty
-            title
-            project_year
-            amount
-        }
-    }
-    `;
-
     const { appliedFilters } = useContext(FiltersContext);
     
     const location = useLocation();
@@ -32,32 +20,60 @@ function Snapshot() {
     const [selectedProjects, setSelectedProjects] = useState(projects);
     const [selectedRange, setSelectedRange] = useState(range);
 
+    const generateQueryString = (filters) => {
+
+        const str = `query testGetFilteredProjects {
+            getFilteredProjects(method: "getFilteredProjects", filter: {
+                funding_year: ${JSON.stringify(filters["funding_year"])},
+                project_faculty: ${JSON.stringify(filters["project_faculty"])},
+                project_type: ${JSON.stringify(filters["project_type"])},
+                focus_area: ${JSON.stringify(filters["focus_area"])},
+                search_text: ${JSON.stringify(filters["search_text"])}
+            }) {
+                grant_id
+                project_id
+                funding_year
+                project_type
+                pi_name
+                project_faculty
+                department
+                funding_amount
+            }
+        }`;
+
+        console.log(str);
+
+        return str;
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             try {
+                const query_string = generateQueryString(appliedFilters);
                 const client = generateClient()
                 const results = await client.graphql({
-                    query: query,
+                    query: query_string,
                 });
 
-                const proposals = results.data.proposals;
+                const proposals = results.data.getFilteredProjects;
                 const newProjects = proposals.map((proj) => {
                     return new Project(
                         proj.grant_id,
-                        "2024/2025",
-                        "Small TLEF",
+                        proj.funding_year + "/" + (+proj.funding_year + 1),
+                        proj.project_type,
                         proj.pi_name,
-                        (proj.project_faculty.includes("Faculty of ")) ? proj.project_faculty.replace("Faculty of ", "") : proj.project_faculty,
-                        proj.title,
-                        proj.project_year,
-                        proj.amount,
+                        proj.project_faculty,
+                        // (proj.faculty.includes("Faculty of ")) ? proj.faculty.replace("Faculty of ", "") : proj.faculty,
+                        "sample title",
+                        "1",
+                        // proj.project_year,
+                        proj.funding_amount,
                         "Active"
                     );
                 });
 
-                console.log(newProjects);
-                       
                 setSelectedProjects(newProjects);
+
             } catch (e) {
                 console.log(e);
             }

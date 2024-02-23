@@ -7,13 +7,13 @@ function FilterList({ rangeString, setRangeString }) {
 
   const { appliedFilters, setAppliedFilters } = useContext(FiltersContext);
 
-  const searchText = appliedFilters["SearchText"].join(" OR ");
+  const searchText = appliedFilters["search_text"].join(" OR ");
 
   const handleClearFilter = (filterValue, filterType) => {
-    if (filterType === "SearchText") {
+    if (filterType === "search_text") {
       setAppliedFilters((prevFilters) => ({
         ...prevFilters,
-        "SearchText": [],
+        "search_text": [],
       }));
       return;
     }
@@ -29,7 +29,7 @@ function FilterList({ rangeString, setRangeString }) {
   const handleClearFundingYearRangeFilter = () => {
     setAppliedFilters((prevFilters) =>({
       ...prevFilters,
-      "FundingYear": ["2022"],
+      "funding_year": ["2022"],
     }));
     setRangeString("");
   }
@@ -39,7 +39,7 @@ function FilterList({ rangeString, setRangeString }) {
   return (
     <div style={{ with: '45rem' }}>
       {Object.entries(appliedFilters).map(([filterType, filterValues]) => {
-        return filterType === 'SearchText' && filterValues.length > 0 ? (
+        return filterType === 'search_text' && filterValues.length > 0 ? (
           <Chip
             key={filterType}
             label={searchText}
@@ -50,7 +50,7 @@ function FilterList({ rangeString, setRangeString }) {
               backgroundColor: '#77AEED',
             }}
           />
-        ) : filterType === 'FundingYear' && filterValues.length > 1 ? (
+        ) : filterType === 'funding_year' && filterValues.length > 1 ? (
           <Chip
             key={filterType}
             label={rangeString}
