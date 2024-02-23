@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styles from "./charts.module.css";
+import { FiltersContext } from '../../App';
 import { SAMPLE_STUDENT_REACH } from '.';
 import { Bar, BarChart, LabelList, Legend, Rectangle, Tooltip, XAxis, YAxis } from 'recharts';
 
-function StudentReachChart({ projects, filters }) {
+function StudentReachChart() {
+
+    const { appliedFilters } = useContext(FiltersContext);
 
     let isDataComplete = true;
 
@@ -12,7 +15,7 @@ function StudentReachChart({ projects, filters }) {
         return parseInt(yearStr);
     }
 
-    const years = filters["FundingYear"];
+    const years = appliedFilters["FundingYear"];
     console.log(years);
     years.map((year) => {
         const yearInt = convertYear(year);

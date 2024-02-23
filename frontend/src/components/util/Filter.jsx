@@ -1,14 +1,28 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { FiltersContext } from '../../App';
 import { FormControl, Select, Chip, OutlinedInput, Box, MenuItem, InputLabel, Checkbox, Typography } from '@mui/material';
 
 import styles from "./Filter.module.css";
 
-function Filter({ options, filters, onSelect, defaultValue, type, snapshot }) {
+function Filter({ options, defaultValue, type, snapshot }) {
+
+  const { appliedFilters, setAppliedFilters } = useContext(FiltersContext);
 
   const handleChange = (event) => {
     const value = event.target.value;
-    if (value.indexOf("") > -1) onSelect([], type);
-    else onSelect(value, type);
+
+    // if "clear" is selected, clear all
+    if (value.indexOf("clear") > -1) {
+      setAppliedFilters((prevFilters) => ({
+        ...prevFilters,
+        [type]: [],
+      }));
+    } else {
+      setAppliedFilters((preFilters) => ({
+        ...preFilters,
+        [type]: value,
+      }))
+    }
   };
 
   const ITEM_HEIGHT = 48;
@@ -32,7 +46,7 @@ function Filter({ options, filters, onSelect, defaultValue, type, snapshot }) {
           displayEmpty
           fullWidth
           multiple
-          value={filters[type]}
+          value={appliedFilters[type]}
           input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
           renderValue={(selected) => {
             if (selected.length === 0) { return <em>{defaultValue} (All)</em>; }
@@ -44,14 +58,14 @@ function Filter({ options, filters, onSelect, defaultValue, type, snapshot }) {
         >
           <MenuItem
             selected={false}
-            value=""
+            value="clear"
             sx={{ backgroundColor: "#EBECEE", borderRadius: "5px", padding: "0.5rem 0 0.5rem 0", display: "flex", justifyContent: "center" }}
           >
             <Typography>Clear All</Typography>
           </MenuItem>
           {options.map((option) => (
             <MenuItem key={option.label} value={option.value}>
-              <Checkbox checked={filters[type].indexOf(option.value) > -1} />
+              <Checkbox checked={appliedFilters[type].indexOf(option.value) > -1} />
               <Typography noWrap>{option.label}</Typography>
             </MenuItem>
           ))}

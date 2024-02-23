@@ -19,10 +19,11 @@ function FundingChart({ projects }) {
     const fundingData = () => {
         const map = new Map();
         let total = 0;
+        console.log(projects);
         projects.forEach((project) => {
             const t = project.type;
             const f = project.faculty;
-            const a = parseInt(project.amount);
+            const a = Number(project.amount.replace(/[^0-9.-]+/g,""));
 
             if (map.has(f)) {
                 let newVal = map.get(f);
@@ -30,8 +31,8 @@ function FundingChart({ projects }) {
                 map.set(f, newVal);
             } else {
                 let newVal = {
-                    "Large TLEF": 0,
-                    "Small TLEF": 0
+                    "Large": 0,
+                    "Small": 0
                 };
                 newVal[t] = a;
                 map.set(f, newVal);
@@ -41,17 +42,19 @@ function FundingChart({ projects }) {
         });
         const res = [];
         for (let [faculty, value] of map) {
-            const amount = value["Large TLEF"] + value["Small TLEF"];
+            const amount = value["Large"] + value["Small"];
             const percentage = Math.round((amount / total) * 100 * 10) / 10;
             const data = {
                 "name": faculty,
-                "Large TLEF": value["Large TLEF"],
-                "Small TLEF": value["Small TLEF"],
+                "Large TLEF": value["Large"],
+                "Small TLEF": value["Small"],
                 "value": amount,
                 "label": `${formattedAmount(amount)} (${percentage}%)`
             };
             res.push(data);
         }
+
+        console.log(res);
 
         return { res, total };
     };

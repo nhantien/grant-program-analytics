@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styles from "./charts.module.css";
+import { FiltersContext } from '../../App';
 import { BarChart } from "@mui/icons-material";
 import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
 import GroupsIcon from '@mui/icons-material/Groups';
 import SchoolIcon from '@mui/icons-material/School';
 
-function TeamMemberChart({ projects, filters }) {
+function TeamMemberChart() {
+
+    const { appliedFilters } = useContext(FiltersContext);
 
     let isDataComplete = true;
 
@@ -14,7 +17,7 @@ function TeamMemberChart({ projects, filters }) {
         return parseInt(yearStr);
     }
 
-    const years = filters["FundingYear"];
+    const years = appliedFilters["FundingYear"];
     console.log(years);
     years.map((year) => {
         const yearInt = convertYear(year);

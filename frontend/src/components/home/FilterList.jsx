@@ -1,29 +1,35 @@
+import { FiltersContext } from '../../App';
 import Chip from '@mui/material/Chip';
 import ClearIcon from '@mui/icons-material/Clear';
+import { useContext } from 'react';
 
-function FilterList({ filters, setFilters, rangeString, setRangeString }) {
+function FilterList({ rangeString, setRangeString }) {
 
-  const searchText = filters["SearchText"].join(" OR ");
+  const { appliedFilters, setAppliedFilters } = useContext(FiltersContext);
+
+  const searchText = appliedFilters["SearchText"].join(" OR ");
 
   const handleClearFilter = (filterValue, filterType) => {
     if (filterType === "SearchText") {
-      setFilters((prevFilters) => ({
+      setAppliedFilters((prevFilters) => ({
         ...prevFilters,
         "SearchText": [],
       }));
       return;
     }
-    const updatedFilters = filters[filterType].filter((filter) => filter !== filterValue);
-    setFilters((prevFilters) => ({
+
+    // remove the selected item from the list of filters
+    const updatedFilters = appliedFilters[filterType].filter((filter) => filter !== filterValue);
+    setAppliedFilters((prevFilters) => ({
       ...prevFilters,
       [filterType]: updatedFilters,
     }));
   }
 
   const handleClearFundingYearRangeFilter = () => {
-    setFilters((prevFilters) =>({
+    setAppliedFilters((prevFilters) =>({
       ...prevFilters,
-      "FundingYear": ["2022/2023"],
+      "FundingYear": ["2022"],
     }));
     setRangeString("");
   }
@@ -32,7 +38,7 @@ function FilterList({ filters, setFilters, rangeString, setRangeString }) {
 
   return (
     <div style={{ with: '45rem' }}>
-      {Object.entries(filters).map(([filterType, filterValues]) => {
+      {Object.entries(appliedFilters).map(([filterType, filterValues]) => {
         return filterType === 'SearchText' && filterValues.length > 0 ? (
           <Chip
             key={filterType}
