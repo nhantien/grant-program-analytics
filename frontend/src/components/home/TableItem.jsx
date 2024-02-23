@@ -1,8 +1,9 @@
+// react-router
 import { Link } from "react-router-dom";
-
+// css style
 import styles from "./TableItem.module.css";
 
-function TableItem({ project, color, isSelected, onSelect }) {
+function TableItem({ project, color }) {
 
   const bgColor = color ? "white" : "#DFF2FF";
   const statusColor = project.status === "Active\r" ? "#d4734c" : "#64b53c";

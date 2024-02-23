@@ -1,7 +1,10 @@
-import { FiltersContext } from '../../App';
+// react
+import { useContext } from 'react';
+// mui
 import Chip from '@mui/material/Chip';
 import ClearIcon from '@mui/icons-material/Clear';
-import { useContext } from 'react';
+// context
+import { FiltersContext } from '../../App';
 
 function FilterList({ rangeString, setRangeString }) {
 

@@ -132,6 +132,7 @@ function FundingChart({ projects }) {
         </React.Fragment>
     );
 
+    // different version: bar graph with one color
     return (
         <React.Fragment>
             <div className={styles.chart}>

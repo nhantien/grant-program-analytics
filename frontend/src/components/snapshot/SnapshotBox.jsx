@@ -1,3 +1,4 @@
+// css style
 import styles from "./SnapshotBox.module.css";
 
 function SnapshotBox({ chart, type, title }) {

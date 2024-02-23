@@ -1,6 +1,9 @@
+// react
 import React from 'react';
-import styles from "./charts.module.css";
+// recharts
 import { PieChart, Pie, Cell, Label } from 'recharts';
+// css style
+import styles from "./charts.module.css";
 
 function SuccessRateChart({ projects }) {
 
@@ -50,7 +53,7 @@ function SuccessRateChart({ projects }) {
                                 endAngle={90}
                             >
                                 {small.map((entry, index) => {
-                                    if (index == 0) {
+                                    if (index === 0) {
                                         return <Cell key={`cell-${index}`} fill="#EEE" />
                                     }
                                     return <Cell key={`cell-${index}`} fill="#FB812D" />
@@ -84,7 +87,7 @@ function SuccessRateChart({ projects }) {
                                 endAngle={90}
                             >
                                 {small.map((entry, index) => {
-                                    if (index == 0) {
+                                    if (index === 0) {
                                         return <Cell key={`cell-${index}`} fill="#EEE" />
                                     }
                                     return <Cell key={`cell-${index}`} fill="#13588B" />

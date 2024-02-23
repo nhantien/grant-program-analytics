@@ -1,7 +1,7 @@
+// react-router
 import { Link } from "react-router-dom";
-
+// css style
 import styles from "./VerticalTableItem.module.css";
-import { useState } from "react";
 
 function VerticalTableItem({ project }) {
 

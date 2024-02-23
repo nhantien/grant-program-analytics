@@ -1,6 +1,8 @@
+// react
 import * as React from 'react';
-import PropTypes from 'prop-types';
-import { alpha } from '@mui/material/styles';
+// react-router
+import { Link } from 'react-router-dom';
+// mui
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -10,11 +12,10 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import { visuallyHidden } from '@mui/utils';
-import { Link } from 'react-router-dom';
+// prop-types
+import PropTypes from 'prop-types';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -167,36 +168,6 @@ EnhancedTableHead.propTypes = {
     order: PropTypes.oneOf(['asc', 'desc']).isRequired,
     orderBy: PropTypes.string.isRequired,
 };
-
-function EnhancedTableToolbar(props) {
-    const { numSelected } = props;
-
-    return (
-        <Toolbar
-            sx={{
-                pl: { sm: 2 },
-                pr: { xs: 1, sm: 1 },
-                ...(numSelected > 0 && {
-                    bgcolor: (theme) =>
-                        alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-                }),
-            }}
-        >
-            <Typography
-                sx={{ 
-                    flex: '1 1 100%',
-                    fontSize: "1.5rem",
-                    fontWeight: 600 
-                }}
-                variant="h6"
-                id="tableTitle"
-                component="div"
-            >
-                TLEF Funded Projects
-            </Typography>
-        </Toolbar>
-    );
-}
 
 export default function ProjectTable({ projects }) {
     const [order, setOrder] = React.useState('asc');

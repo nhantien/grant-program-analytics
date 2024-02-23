@@ -1,12 +1,17 @@
-import styles from "./SnapshotHeader.module.css";
-import { FiltersContext } from "../../App";
+// react
+import { useContext, useEffect, useState } from "react";
+// mui
+import ClearIcon from '@mui/icons-material/Clear';
 import { Slider, IconButton, Collapse } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+// css style
+import styles from "./SnapshotHeader.module.css";
+// context
+import { FiltersContext } from "../../App";
+// components
 import { Filter, FundingYearFilter } from "../util";
 import { FilterList } from "../home";
-import ClearIcon from '@mui/icons-material/Clear';
-import { YEARS, FACULTY, PROJECT_TYPE, MARKS } from "../../constants";
-import { useContext, useEffect, useState } from "react";
+// constants
+import { FACULTY, PROJECT_TYPE, MARKS } from "../../constants";
 
 
 function SnapshotHeader({ range, setRange }) {
@@ -65,7 +70,7 @@ function SnapshotHeader({ range, setRange }) {
 
         setAppliedFilters((prevFilters) => ({
             ...prevFilters,
-            ["funding_year"]: years,
+            "funding_year": years,
         }));
 
         setRangeString(min + "/" + (min+1) + " - " + max + "/" + (max+1));
