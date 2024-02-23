@@ -1,8 +1,9 @@
 import { useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { SnapshotHeader, SnapshotBox } from "../components/snapshot";
 import { FundingChart, NumGrantsChart, NumProjectsChart, StudentReachChart, TeamMemberChart, SuccessRateChart } from "../components/charts";
 import { Project, BASE_URL } from "../constants";
+import { FiltersContext } from "../App";
 import styles from "./Snapshot.module.css";
 import { Amplify } from 'aws-amplify';
 import { generateClient } from 'aws-amplify/api'
@@ -24,11 +25,11 @@ function Snapshot() {
     }
     `;
 
+    const { appliedFilters } = useContext(FiltersContext);
+    
     const location = useLocation();
-    const { projects, filters, range } = location.state;
-
+    const { projects, range } = location.state;
     const [selectedProjects, setSelectedProjects] = useState(projects);
-    const [appliedFilters, setAppliedFilters] = useState(filters);
     const [selectedRange, setSelectedRange] = useState(range);
 
     useEffect(() => {
@@ -46,7 +47,7 @@ function Snapshot() {
                         "2024/2025",
                         "Small TLEF",
                         proj.pi_name,
-                        (proj.faculty.includes("Faculty of ")) ? proj.faculty.replace("Faculty of ", "") : proj.faculty,
+                        (proj.project_faculty.includes("Faculty of ")) ? proj.project_faculty.replace("Faculty of ", "") : proj.project_faculty,
                         proj.title,
                         proj.project_year,
                         proj.amount,
@@ -65,42 +66,6 @@ function Snapshot() {
         fetchData();
     }, [appliedFilters]);
 
-    // useEffect(() => {
-    //     const fetchFilteredData = async () => {
-    //         try {
-    //             const res = await fetch(BASE_URL + "filter", {
-    //                 method: "POST",
-    //                 headers: { "Content-Type": "application/json", },
-    //                 body: JSON.stringify({ appliedFilters }),
-    //             });
-    //             if (!res.ok) throw new Error("Network response was not ok");
-
-    //             const data = await res.json();
-    //             const newProjects = data.map((proj) => {
-
-    //                 // Make sure to return the new Project instance
-    //                 return new Project(
-    //                     proj.ID,
-    //                     proj.FundingYear,
-    //                     proj.ProjectType,
-    //                     proj.Investigator,
-    //                     proj.Faculty,
-    //                     proj.Title,
-    //                     "1",
-    //                     proj.Amount,
-    //                     proj.ProjectStatus
-    //                 );
-    //             });
-
-    //             setSelectedProjects(newProjects);
-    //         } catch (err) {
-    //             console.log(err);
-    //         }
-    //     };
-
-    //     fetchFilteredData();
-    // }, [appliedFilters]);
-
     const handleClick = (section) => {
         document.getElementById(section).scrollIntoView({ behavior: "smooth" });
     };
@@ -110,14 +75,14 @@ function Snapshot() {
         numGrants: (<NumGrantsChart projects={selectedProjects} />),
         numProjects: (<NumProjectsChart projects={selectedProjects} />),
         funding: (<FundingChart projects={selectedProjects} />),
-        studentReach: (<StudentReachChart projects={selectedProjects} filters={appliedFilters} />),
-        teamMember: (<TeamMemberChart projects={selectedProjects} filters={appliedFilters} />)
+        studentReach: (<StudentReachChart />),
+        teamMember: (<TeamMemberChart />)
     };
 
     return (
         <div className={styles.Snapshot}>
 
-            <SnapshotHeader filters={appliedFilters} setFilters={setAppliedFilters} range={selectedRange} setRange={setSelectedRange} />
+            <SnapshotHeader range={selectedRange} setRange={setSelectedRange} />
 
             <div className={styles.navbar}>
                 <button onClick={() => handleClick("success-rate")}>Success Rate</button>

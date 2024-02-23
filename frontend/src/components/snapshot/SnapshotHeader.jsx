@@ -1,16 +1,19 @@
 import styles from "./SnapshotHeader.module.css";
+import { FiltersContext } from "../../App";
 import { Slider, IconButton, Collapse } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Filter, FundingYearFilter } from "../util";
 import { FilterList } from "../home";
 import ClearIcon from '@mui/icons-material/Clear';
 import { YEARS, FACULTY, PROJECT_TYPE, MARKS } from "../../constants";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 
-function SnapshotHeader({ filters, setFilters, range, setRange }) {
+function SnapshotHeader({ range, setRange }) {
 
-    const [showSlider, setShowSlider] = useState(filters["FundingYear"].length > 1);
+    const { appliedFilters, setAppliedFilters } = useContext(FiltersContext);
+
+    const [showSlider, setShowSlider] = useState(appliedFilters["FundingYear"].length > 1);
     const [rangeString, setRangeString] = useState(range[0] + "/" + (range[0]+1) + " - " + range[1] + "/" + (range[1]+1));
 
     const options = ["Option 1", "Option 2", "Option 3"];
@@ -21,7 +24,7 @@ function SnapshotHeader({ filters, setFilters, range, setRange }) {
     }
 
     useEffect(() => {
-        const years = filters["FundingYear"];
+        const years = appliedFilters["FundingYear"];
         if (years.indexOf("select range of years") >= 0) return;
         let min = 0;
         let max = 0;
@@ -35,10 +38,10 @@ function SnapshotHeader({ filters, setFilters, range, setRange }) {
             }
         })
         setRange([min, max]);
-    }, [filters]);
+    }, [appliedFilters]);
 
     const onSelect = (newFilters, filterType) => {
-        setFilters((prevFilters) => ({
+        setAppliedFilters((prevFilters) => ({
             ...prevFilters,
             [filterType]: newFilters
         }));
@@ -46,13 +49,13 @@ function SnapshotHeader({ filters, setFilters, range, setRange }) {
 
     const handleClearAll = () => {
         const newFilters = {
-            "FundingYear": ["2022/2023"],
+            "FundingYear": ["2022"],
             "ProjectType": [],
             "Faculty": [],
             "FocusArea": [],
             "SearchText": []
         };
-        setFilters(newFilters);
+        setAppliedFilters(newFilters);
     };
 
     const handleSliderChange = (event, newRange) => {
@@ -68,7 +71,7 @@ function SnapshotHeader({ filters, setFilters, range, setRange }) {
             years.push(year);
         }
 
-        setFilters((prevFilters) => ({
+        setAppliedFilters((prevFilters) => ({
             ...prevFilters,
             ["FundingYear"]: years,
         }));
@@ -87,10 +90,10 @@ function SnapshotHeader({ filters, setFilters, range, setRange }) {
                 <div className={styles.dropdowns}>
 
                     <div className={styles["dropdown-filters"]}>
-                        <FundingYearFilter filters={filters} setFilters={setFilters} setShowSlider={setShowSlider} snapshot={true} />
-                        <Filter options={PROJECT_TYPE} filters={filters} onSelect={onSelect} defaultValue="Project Type" type="ProjectType" snapshot={true} />
-                        <Filter options={FACULTY} filters={filters} onSelect={onSelect} defaultValue="Faculty/Unit" type="Faculty" snapshot={true} />
-                        <Filter options={options} filters={filters} onSelect={onSelect} defaultValue="Focus Area" type="FocusArea" snapshot={true} />
+                        <FundingYearFilter setShowSlider={setShowSlider} snapshot={true} />
+                        <Filter options={PROJECT_TYPE} defaultValue="Project Type" type="ProjectType" snapshot={true} />
+                        <Filter options={FACULTY} defaultValue="Faculty/Unit" type="Faculty" snapshot={true} />
+                        <Filter options={options} defaultValue="Focus Area" type="FocusArea" snapshot={true} />
                     </div>
 
                     {/* <div>
@@ -121,7 +124,7 @@ function SnapshotHeader({ filters, setFilters, range, setRange }) {
                     <div className={styles["applied-filters"]}>
                         <span style={{ marginTop: "1rem", marginBottom: "0.5rem" }}>Applied Filters</span>
                         <div className={styles["filters-box"]}>
-                            <FilterList filters={filters} setFilters={setFilters} rangeString={rangeString} setRangeString={setRangeString} />
+                            <FilterList rangeString={rangeString} setRangeString={setRangeString} />
                             <div className={styles["clear-filters-div"]}>
                                 <p className={styles.text}>Clear All</p>
                                 <IconButton onClick={handleClearAll} size="small">
@@ -132,18 +135,6 @@ function SnapshotHeader({ filters, setFilters, range, setRange }) {
                     </div>
 
                 </div>
-
-                {/* <div className={styles.slider}>
-                    <p>Year range:</p>
-                    <Slider
-                        getAriaLabel={() => "Year range"}
-                        max={2023}
-                        min={1999}
-                        value={range}
-                        onChange={handleChange}
-                        valueLabelDisplay="on"
-                    />
-                </div> */}
 
             </div>
         </div>

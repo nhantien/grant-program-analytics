@@ -54,6 +54,8 @@ function FundingChart({ projects }) {
             res.push(data);
         }
 
+        console.log(res);
+
         return { res, total };
     };
 

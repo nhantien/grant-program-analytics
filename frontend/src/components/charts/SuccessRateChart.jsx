@@ -30,28 +30,6 @@ function SuccessRateChart({ projects }) {
         }
     ];
 
-    const domain = [0, 1];
-    const ticks = [
-        0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1
-    ];
-
-    const toPercent = (decimal, fixed = 0) => `${(decimal * 100).toFixed(fixed)}%`;
-
-    const getPercent = (value, total) => {
-        const ratio = total > 0 ? value / total : 0;
-
-        return toPercent(ratio, 2);
-    };
-
-    const customLabel = (props) => {
-        const { x, y, width, height, value } = props;
-        return (
-            <text x={590} y={y + height / 3 * 2} textAnchor="end" fontStyle="italic">
-                {value}
-            </text>
-        )
-    }
-
     return (
         <React.Fragment>
             <div className={styles.chart}>

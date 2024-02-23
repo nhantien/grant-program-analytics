@@ -10,6 +10,7 @@ function Summary() {
     const { id } = useParams();
     const [project, setProject] = useState(null);
 
+    // TODO: replace this with a new GraphQL query
     useEffect(() => {
         const fetchProjectFromId = async () => {
             try {

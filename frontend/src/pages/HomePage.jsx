@@ -86,7 +86,7 @@ function HomePage() {
                         proj.funding_year + "/" + (+proj.funding_year + 1),
                         proj.project_type,
                         proj.pi_name,
-                        proj.faculty,
+                        proj.project_faculty,
                         // (proj.faculty.includes("Faculty of ")) ? proj.faculty.replace("Faculty of ", "") : proj.faculty,
                         "sample title",
                         "1",
@@ -219,7 +219,6 @@ function HomePage() {
                                     to="/snapshot"
                                     state={{
                                         projects: projects,
-                                        filters: appliedFilters,
                                         range: range,
                                     }}
                                     style={{ textDecoration: "none", color: "white" }}
