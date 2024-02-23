@@ -14,8 +14,8 @@ import styles from './HomePage.module.css';
 // context
 import { FiltersContext } from '../App';
 // components
-import { FilterList, SearchBar, VerticalTableItem, ProjectTable } from '../components/home';
-import { Filter, FundingYearFilter } from "../components/util";
+import { SearchBar, VerticalTableItem, ProjectTable } from '../components/home';
+import { Filter, FilterList, FundingYearFilter } from "../components/util";
 // constants
 import { Project, PROJECT_TYPE, FACULTY, MARKS } from '../constants';
 

@@ -1,5 +1,5 @@
 import Filter from "./Filter";
-import SimilarProjects from "./SimilarProjects";
+import FilterList from "./FilterList";
 import FundingYearFilter from "./FundingYearFilter";
 
-export { Filter, SimilarProjects, FundingYearFilter };
+export { Filter, FilterList, FundingYearFilter };
