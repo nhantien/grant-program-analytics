@@ -35,10 +35,3 @@ a.title {
     width: 55%;
     text-align: start;
 }
-
-.select-btn {
-    width: 100%;
-    margin-top: 0.4rem;
-    display: flex;
-    justify-content: flex-end;
-}

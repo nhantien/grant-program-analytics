@@ -16,13 +16,6 @@
     font-weight: 700;
 }
 
-.selectedProjects {
-    width: 100%;
-    margin-top: 0.75rem;
-    font-size: 1.25rem;
-    font-weight: 400;
-}
-
 .filters {
     width: 100%;
     margin-top: 1.5rem;
@@ -36,22 +29,6 @@
     background-color: lightgray;
     border-radius: 10px;
     padding: 1.5rem;
-}
-
-.snapshot-filter {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.25rem;
-}
-
-.snapshot-dropdown {
-    width: 65%;
-    height: 3rem;
-    background-color: white;
-    border: 0.5px solid black;
-    margin-bottom: 0.75rem;
 }
 
 .dropdown-filters {
@@ -115,24 +92,9 @@
         font-size: 1.5rem;
     }
 
-    .selectedProjects {
-        font-size: 1.125rem;
-    }
-
     .filters {
         display: block;
         margin-top: 1.5rem;
-    }
-
-    .filter {
-        display: block;
-        width: 80%;
-        margin: 0;
-        font-size: 1rem;
-    }
-
-    .faculty p {
-        margin-right: 0.5rem;
     }
 
     .slider {
