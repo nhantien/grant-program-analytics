@@ -8,8 +8,7 @@ import styles from "./SnapshotHeader.module.css";
 // context
 import { FiltersContext } from "../../App";
 // components
-import { Filter, FundingYearFilter } from "../util";
-import { FilterList } from "../home";
+import { Filter, FilterList, FundingYearFilter } from "../util";
 // constants
 import { FACULTY, PROJECT_TYPE, MARKS } from "../../constants";
 

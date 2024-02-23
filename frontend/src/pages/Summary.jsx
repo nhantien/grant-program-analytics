@@ -5,8 +5,7 @@ import { useParams } from "react-router-dom";
 // css styles
 import styles from "./Summary.module.css";
 // components
-import { SummaryTitle, SummaryDescription, SummaryTable, Posters } from "../components/summary";
-import { SimilarProjects } from "../components/util";
+import { SummaryTitle, SummaryDescription, SummaryTable, Posters, SimilarProjects } from "../components/summary";
 // constants
 import { Project } from "../constants";
 
