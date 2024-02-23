@@ -70,25 +70,6 @@ function VerticalTableItem({ project }) {
         </div>
     )
 
-    //   return (
-    //     <tr style={{ position: "relative", backgroundColor: bgColor }}>
-    //       <td>{project.fundingYear}</td>
-    //       <td>{project.type}</td>
-    //       <td>{project.investigator}</td>
-    //       <td>{project.faculty}</td>
-    //       <td style={{ textAlign: "start" }}> <Link to={`/summary/${project.id}`}>{titleText}</Link> </td>
-    //       <td>{project.projectYear}</td>
-    //       <td>{formattedAmount}</td>
-    //       <td style={{ color: statusColor }}>{project.status}</td>
-    //       <td><a href={project.report}>Link to Report</a></td>
-    //       <td><a href={project.poster}>Link to Poster</a></td>
-    //       <div className={styles["select-btn"]}>
-    //         <span>Select project</span>
-    //         <input type="checkbox" checked={status} onChange={handleSelect} />
-    //       </div>
-    //     </tr>
-    //   );
-
 }
 
 export default VerticalTableItem;
