@@ -27,8 +27,52 @@ function Snapshot() {
     const location = useLocation();
     const { projects, range } = location.state;
     const [selectedProjects, setSelectedProjects] = useState(projects);
+    const [selectedSuccessProjects, setSelectedSuccessProjects] = useState(projects);
+    const [selectedFacultyProjects, setSelectedFacultyProjects] = useState({});
     const [selectedRange, setSelectedRange] = useState(range);
 
+    // Success Rate Chart 
+    const generateSuccessQueryString = (filters) => {
+
+        const str = `query testCountDeclinedProjects {
+            countDeclinedProjects(method: "countDeclinedProjects", filter: {
+                funding_year: ${JSON.stringify(filters["funding_year"])},
+                project_faculty: ${JSON.stringify(filters["project_faculty"])},
+                project_type: ${JSON.stringify(filters["project_type"])},
+                focus_area: ${JSON.stringify(filters["focus_area"])},
+                search_text: ${JSON.stringify(filters["search_text"])}
+            }) {
+            }
+        }`;
+
+        console.log(str);
+
+        return str;
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const query_string = generateSuccessQueryString(appliedFilters);
+                const client = generateClient()
+                const results = await client.graphql({
+                    query: query_string,
+                });
+
+                const num = results.data.countDeclinedProjects;
+                // console.log(num)
+
+                setSelectedSuccessProjects(num);
+
+            } catch (e) {
+                console.log(e);
+            }
+        };
+
+        fetchData();
+    }, [appliedFilters]);
+
+    // Funding Chart
     const generateQueryString = (filters) => {
 
         const str = `query testGetFilteredProjects {
@@ -90,17 +134,75 @@ function Snapshot() {
         fetchData();
     }, [appliedFilters]);
 
+    // Faculty Engagement Chart 
+    const generateFacultyQueryString = (filters) => {
+
+        const str = `query testCountFacultyMembersByStream {
+            countFacultyMembersByStream(method: "countFacultyMembersByStream", filter: {
+                funding_year: ${JSON.stringify(filters["funding_year"])},
+                project_faculty: ${JSON.stringify(filters["project_faculty"])},
+                project_type: ${JSON.stringify(filters["project_type"])},
+                focus_area: ${JSON.stringify(filters["focus_area"])},
+                search_text: ${JSON.stringify(filters["search_text"])}
+            }) {
+                Large {
+                    Admin
+                    Student
+                    External
+                    PDF
+                    Research
+                    Teaching
+                }
+                Small {
+                    Admin
+                    Student
+                    External
+                    PDF
+                    Research
+                    Teaching
+                }
+            }
+        }`;
+
+        console.log(str);
+
+        return str;
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const query_string = generateFacultyQueryString(appliedFilters);
+                console.log(query_string)
+                const client = generateClient()
+                const results = await client.graphql({
+                    query: query_string,
+                });
+
+                const faculty = results.data.countFacultyMembersByStream;
+                console.log(faculty)
+
+                setSelectedFacultyProjects(faculty);
+
+            } catch (e) {
+                console.log(e);
+            }
+        };
+
+        fetchData();
+    }, [appliedFilters]);
+
     const handleClick = (section) => {
         document.getElementById(section).scrollIntoView({ behavior: "smooth" });
     };
 
     const charts = {
-        successRate: (<SuccessRateChart projects={selectedProjects} />),
+        successRate: (<SuccessRateChart projects={selectedSuccessProjects}/>),
         numGrants: (<NumGrantsChart projects={selectedProjects} />),
         numProjects: (<NumProjectsChart projects={selectedProjects} />),
         funding: (<FundingChart projects={selectedProjects} />),
         studentReach: (<StudentReachChart />),
-        teamMember: (<TeamMemberChart />)
+        teamMember: (<TeamMemberChart projects={selectedFacultyProjects}/>)
     };
 
     return (

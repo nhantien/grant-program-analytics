@@ -4,22 +4,29 @@ import React from 'react';
 import { PieChart, Pie, Cell, Label } from 'recharts';
 // css style
 import styles from "./charts.module.css";
+import { useState, useEffect } from 'react';
+import { API, graphqlOperation } from 'aws-amplify';
+import { generateClient } from 'aws-amplify/api'
 
 function SuccessRateChart({ projects }) {
 
+
+
     // TODO: replace w/ actual data
+    // need: total num funded projects, small funded projects - not funded, large funded - not funded
     const small = [
         {
             "name": "Rejected Small TLEF Projects",
-            "value": (62 - 44) / 62,
-            "label": `${100 - 71}%`
+            "value": 1,
+            "label": `0%`
         },
         {
             "name": "Funded Small TLEF Projects",
-            "value": 44 / 62,
-            "label": "71%"
+            "value": 1,
+            "label": "1%"
         }
     ];
+    console.log(projects)
 
     const large = [
         {
@@ -40,7 +47,7 @@ function SuccessRateChart({ projects }) {
                 <div className={styles.sr}>
                     <div className={styles["sr-pie"]}>
                         <p className={styles["sr-title"]}>Small TLEF Innovation Projects</p>
-                        <p className={styles["sr-info"]}>Proposals: 62 | Funded: 44</p>
+                        <p className={styles["sr-info"]}>Proposals: 62 | Funded: 10 </p>
                         <PieChart width={300} height={300}>
                             <Pie
                                 data={small}
