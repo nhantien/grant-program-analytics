@@ -18,13 +18,13 @@ function SuccessRateChart({ projects, totalprojects, largeprojects, smallproject
         {
             "name": "Rejected Small TLEF Projects",
             "value": projects.Small,
-            "label": ((projects.Small / 100) * 100)+"%" 
+            "label": Math.round(((projects.Small / 100) * 100))+"%" 
         },
         {
             "name": "Funded Small TLEF Projects",
             "value": smallprojects.length,
             // success rate: (numSuccessfulProjects / totalProjects) * 100
-            "label": ((smallprojects.length / (smallprojects.length + projects.Small)) * 100)+"%" 
+            "label": Math.round(((smallprojects.length / (smallprojects.length + projects.Small))) * 100)+"%" 
         }
     ];
     console.log(projects)
@@ -42,7 +42,7 @@ function SuccessRateChart({ projects, totalprojects, largeprojects, smallproject
         {
             "name": "Large TLEF Projects",
             "value": largeprojects.length,
-            "label": ((largeprojects.length  / (largeprojects.length + projects.Large)) * 100)+"%"
+            "label": Math.round(((largeprojects.length  / (largeprojects.length + projects.Large))) * 100)+"%"
         }
     ];
     console.log('large value:', large[0].value)
