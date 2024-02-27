@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react';
 import { API, graphqlOperation } from 'aws-amplify';
 import { generateClient } from 'aws-amplify/api'
 
-function SuccessRateChart({ projects }) {
+function SuccessRateChart({ projects, totalprojects, largeprojects, smallprojects }) {
 
 
 
@@ -17,29 +17,35 @@ function SuccessRateChart({ projects }) {
     const small = [
         {
             "name": "Rejected Small TLEF Projects",
-            "value": 1,
-            "label": `0%`
+            "value": projects.Small,
+            "label": ((projects.Small / 100) * 100)+"%" 
         },
         {
             "name": "Funded Small TLEF Projects",
-            "value": 1,
-            "label": "1%"
+            "value": smallprojects.length,
+            // success rate: (numSuccessfulProjects / totalProjects) * 100
+            "label": ((smallprojects.length / (smallprojects.length + projects.Small)) * 100)+"%" 
         }
     ];
     console.log(projects)
+    console.log('small value:', small[0].value)
+    console.log('small value:', small[0].label)
+    console.log('large projects:', largeprojects)
+    console.log('small projects:', smallprojects)
 
     const large = [
         {
             "name": "Rejected Large TLEF Projects",
-            "value": (13 - 10) / 13,
-            "label": `${100 - 77}%`
+            "value": projects.Large,
+            "label": ((projects.Large / 100) * 100)+"%"
         },
         {
             "name": "Large TLEF Projects",
-            "value": 10 / 13,
-            "label": "77%"
+            "value": largeprojects.length,
+            "label": ((largeprojects.length  / (largeprojects.length + projects.Large)) * 100)+"%"
         }
     ];
+    console.log('large value:', large[0].value)
 
     return (
         <React.Fragment>
@@ -47,7 +53,7 @@ function SuccessRateChart({ projects }) {
                 <div className={styles.sr}>
                     <div className={styles["sr-pie"]}>
                         <p className={styles["sr-title"]}>Small TLEF Innovation Projects</p>
-                        <p className={styles["sr-info"]}>Proposals: 62 | Funded: 10 </p>
+                        <p className={styles["sr-info"]}>Proposals: {smallprojects.length + projects.Small } | Funded: {smallprojects.length} </p>
                         <PieChart width={300} height={300}>
                             <Pie
                                 data={small}
@@ -68,7 +74,7 @@ function SuccessRateChart({ projects }) {
                                 })}
 
                                 <Label
-                                    value={"71%"}
+                                    value={small[1].label}
                                     position={"center"}
                                     style={{
                                         fontSize: "1.5rem",
@@ -81,7 +87,7 @@ function SuccessRateChart({ projects }) {
 
                     <div className={styles["sr-pie"]}>
                         <p className={styles["sr-title"]}>Large TLEF Innovation Projects</p>
-                        <p className={styles["sr-info"]}>Proposals: 13 | Funded: 10</p>
+                        <p className={styles["sr-info"]}>Proposals: {largeprojects.length + projects.Large } | Funded: {largeprojects.length} </p>
                         <PieChart width={300} height={300}>
                             <Pie
                                 data={large}
@@ -102,7 +108,7 @@ function SuccessRateChart({ projects }) {
                                 })}
 
                                 <Label
-                                    value={"77%"}
+                                    value={large[1].label}
                                     position={"center"}
                                     style={{
                                         fontSize: "1.5rem",
@@ -118,7 +124,7 @@ function SuccessRateChart({ projects }) {
             </div>
             <div className={styles.space}></div>
             <div className={styles.description}>
-                <p>{projects.length} projects received funding during selected TLEF rounds.</p>
+                <p>{totalprojects.length} projects received funding during selected TLEF rounds.</p>
             </div>
         </React.Fragment>
     );

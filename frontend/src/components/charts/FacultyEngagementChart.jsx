@@ -51,46 +51,39 @@ console.log(projects)
                 <div className={styles.fe}>
 
                     <div className={styles["fe-box"]}>
-                        <div className={styles["fe-circle"]}>
-                            <p>44</p>
-                        </div>
-                        <p className={styles["fe-title"]}>SMALL GRANTS AWARDED</p>
+                        <p className={styles["fe-title"]}>SMALL GRANTS</p>
                         <div className={styles["fe-category"]}>
                             <BarChart 
                                 sx={{ color: "#119FD5", fontSize: "3.25rem" }}
                             />
-                            <span> {projects.Small.Research} Research Faculty</span>
+                           <span> {projects.Small.Research} Research Faculty</span> 
                         </div>
                         <div className={styles["fe-category"]}>
                             <HistoryEduIcon 
                                 sx={{ color: "#119FD5", fontSize: "3.25rem" }}
                             />
-                            <span>{projects.Small.Teaching} Teaching Faculty</span>
+                             <span>{projects.Small.Teaching} Teaching Faculty</span> 
                         </div>
                         <div className={styles["fe-category"]}>
                             <GroupsIcon 
                                 sx={{ color: "#119FD5", fontSize: "3.25rem" }}
                             />
-                            <span>{projects.Small.Admin} Staff</span>
+                             <span>{projects.Small.Admin} Staff</span> 
                         </div>
                         <div className={styles["fe-category"]}>
                             <SchoolIcon 
                                 sx={{ color: "#119FD5", fontSize: "3.25rem" }}
                             />
-                            <span>{projects.Small.Student} Students</span>
+                             <span>{projects.Small.Student} Students</span> 
                         </div>
                     </div>
-
                     <div className={styles["fe-box"]}>
-                        <div className={styles["fe-circle"]}>
-                            <p>10</p>
-                        </div>
-                        <p className={styles["fe-title"]}>LARGE GRANTS AWARDED</p>
+                        <p className={styles["fe-title"]}>LARGE GRANTS</p>
                         <div className={styles["fe-category"]}>
                             <BarChart 
                                 sx={{ color: "#119FD5", fontSize: "3.25rem" }}
                             />
-                            <span>{projects.Large.Research} Research Faculty</span>
+                           <span>{projects.Large.Research} Research Faculty</span>
                         </div>
                         <div className={styles["fe-category"]}>
                             <HistoryEduIcon 
@@ -102,17 +95,17 @@ console.log(projects)
                             <GroupsIcon 
                                 sx={{ color: "#119FD5", fontSize: "3.25rem" }}
                             />
-                            <span>{projects.Large.Admin} Staff</span>
+                            <span>{projects.Large.Admin} Staff</span> 
                         </div>
                         <div className={styles["fe-category"]}>
                             <SchoolIcon 
                                 sx={{ color: "#119FD5", fontSize: "3.25rem" }}
                             />
-                            <span>{projects.Large.Student} Students</span>
+                             <span>{projects.Large.Student} Students</span>
+                        </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </React.Fragment>
     );
 };
