@@ -11,7 +11,7 @@ import styles from "./charts.module.css";
 import { FiltersContext } from '../../App';
 
 
-function FacultyEngagementChart() {
+function FacultyEngagementChart({projects}) {
 
     const { appliedFilters } = useContext(FiltersContext);
 
@@ -36,6 +36,7 @@ function FacultyEngagementChart() {
         }
     });
 
+console.log(projects)
     return (
         <React.Fragment>
             <div className={styles.description}>
@@ -50,68 +51,61 @@ function FacultyEngagementChart() {
                 <div className={styles.fe}>
 
                     <div className={styles["fe-box"]}>
-                        <div className={styles["fe-circle"]}>
-                            <p>44</p>
-                        </div>
-                        <p className={styles["fe-title"]}>SMALL GRANTS AWARDED</p>
+                        <p className={styles["fe-title"]}>SMALL GRANTS</p>
                         <div className={styles["fe-category"]}>
                             <BarChart 
                                 sx={{ color: "#119FD5", fontSize: "3.25rem" }}
                             />
-                            <span>61 Research Faculty</span>
+                           <span> {projects.Small.Research} Research Faculty</span> 
                         </div>
                         <div className={styles["fe-category"]}>
                             <HistoryEduIcon 
                                 sx={{ color: "#119FD5", fontSize: "3.25rem" }}
                             />
-                            <span>108 Teaching Faculty</span>
+                             <span>{projects.Small.Teaching} Teaching Faculty</span> 
                         </div>
                         <div className={styles["fe-category"]}>
                             <GroupsIcon 
                                 sx={{ color: "#119FD5", fontSize: "3.25rem" }}
                             />
-                            <span>47 Staff</span>
+                             <span>{projects.Small.Admin} Staff</span> 
                         </div>
                         <div className={styles["fe-category"]}>
                             <SchoolIcon 
                                 sx={{ color: "#119FD5", fontSize: "3.25rem" }}
                             />
-                            <span>33 Students</span>
+                             <span>{projects.Small.Student} Students</span> 
                         </div>
                     </div>
-
                     <div className={styles["fe-box"]}>
-                        <div className={styles["fe-circle"]}>
-                            <p>10</p>
-                        </div>
-                        <p className={styles["fe-title"]}>LARGE GRANTS AWARDED</p>
+                        <p className={styles["fe-title"]}>LARGE GRANTS</p>
                         <div className={styles["fe-category"]}>
                             <BarChart 
                                 sx={{ color: "#119FD5", fontSize: "3.25rem" }}
                             />
-                            <span>58 Research Faculty</span>
+                           <span>{projects.Large.Research} Research Faculty</span>
                         </div>
                         <div className={styles["fe-category"]}>
                             <HistoryEduIcon 
                                 sx={{ color: "#119FD5", fontSize: "3.25rem" }}
                             />
-                            <span>34 Teaching Faculty</span>
+                            <span>{projects.Large.Teaching} Teaching Faculty</span>
                         </div>
                         <div className={styles["fe-category"]}>
                             <GroupsIcon 
                                 sx={{ color: "#119FD5", fontSize: "3.25rem" }}
                             />
-                            <span>23 Staff</span>
+                            <span>{projects.Large.Admin} Staff</span> 
                         </div>
                         <div className={styles["fe-category"]}>
                             <SchoolIcon 
                                 sx={{ color: "#119FD5", fontSize: "3.25rem" }}
                             />
-                            <span>12 Students</span>
+                             <span>{projects.Large.Student} Students</span>
+                        </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </React.Fragment>
     );
 };

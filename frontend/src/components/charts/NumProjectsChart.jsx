@@ -7,21 +7,28 @@ function NumProjectsChart({ projects }) {
 
     return (
         <React.Fragment>
-            <div className={styles.chart}></div>
-            <div className={styles.space}></div>
-            <div className={styles.description}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            <div className={styles['section']}> 
+            <div className={styles['numchart']}>
+            <div className={styles["fe-circle"]}>
+                            <p>44</p>
+                        </div>
+                        <p className={styles["fe-title"]}>SMALL PROJECTS</p>
+            <div className={styles["fe-circle"]}>
+                        <p>44</p>
+                    </div>
+            <p className={styles["fe-title"]}>LARGE PROJECTS</p>
+            </div>
+            <div className={styles["numchart"]}>
+            <div className={styles["fe-circle2"]}>
+                            <p>44</p>
+                        </div>
+                        <p className={styles["fe-title"]}>SMALL GRANTS AWARDED </p>
+            <div className={styles["fe-circle2"]}>
+                        <p>44</p>
+                    </div>  
+            <p className={styles["fe-title"]}>LARGE GRANTS AWARDED</p>
+
+            </div>
             </div>
         </React.Fragment>
     );
