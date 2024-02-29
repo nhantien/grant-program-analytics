@@ -276,15 +276,14 @@ export default function ProjectTable({ projects }) {
                                             padding="normal"
                                             sx={{ height: "3rem" }}
                                         >
-                                            {project.fundingYear}
+                                            {project.funding_year}
                                         </TableCell>
-                                        <TableCell align="left" sx={{ height: "3rem" }}>{project.type}</TableCell>
-                                        <TableCell align="left" sx={{ height: "3rem" }}>{project.investigator}</TableCell>
-                                        <TableCell align="left" sx={{ height: "3rem" }}>{project.faculty}</TableCell>
+                                        <TableCell align="left" sx={{ height: "3rem" }}>{project.project_type}</TableCell>
+                                        <TableCell align="left" sx={{ height: "3rem" }}>{project.pi_name}</TableCell>
+                                        <TableCell align="left" sx={{ height: "3rem" }}>{project.project_faculty}</TableCell>
                                         <TableCell align="left" sx={{ height: "3rem" }}><Link to={`/summary/${project.id}`}>{project.title}</Link></TableCell>
-                                        <TableCell align="right" sx={{ height: "3rem" }}>{project.projectYear}</TableCell>
-                                        <TableCell align="right" sx={{ height: "3rem" }}>{project.amount}</TableCell>
-                                        {/* <TableCell align="right" sx={{ height: "3rem" }}>{formattedAmount(project.amount)}</TableCell> */}
+                                        <TableCell align="right" sx={{ height: "3rem" }}>{project.project_year}</TableCell>
+                                        <TableCell align="right" sx={{ height: "3rem" }}>{formattedAmount(project.funding_amount)}</TableCell>
                                         <TableCell align="left" sx={{ height: "3rem", color: project.status === "Active\r" ? "#d4734c" : "#64b53c" }}>{project.status}</TableCell>
                                         <TableCell align="left" sx={{ height: "3rem" }}> <a href="#">report</a> </TableCell>
                                         <TableCell align="left" sx={{ height: "3rem" }}> <a href="#">poster</a></TableCell>
