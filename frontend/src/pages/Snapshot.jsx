@@ -15,6 +15,7 @@ import { SnapshotHeader, SnapshotBox } from "../components/snapshot";
 import { FundingChart, NumGrantsChart, NumProjectsChart, StudentReachChart, TeamMemberChart, SuccessRateChart } from "../components/charts";
 // constants
 import { Project } from "../constants";
+import { FormatColorResetRounded } from "@mui/icons-material";
 
 
 
@@ -29,9 +30,17 @@ function Snapshot() {
     const [selectedProjects, setSelectedProjects] = useState(projects);
     const [selectedSuccessProjects, setSelectedSuccessProjects] = useState(projects);
     const [selectedFacultyProjects, setSelectedFacultyProjects] = useState({});
+    const [selectedReachProjects, setSelectedReachProjects] = useState({});
+    const [selectedReachInfoProjects, setSelectedReachInfoProjects] = useState({});
+    const [selectedCountProjects, setSelectedCountProjects] = useState({});
     const [selectedRange, setSelectedRange] = useState(range);
     const [selectedLargeProjects, setSelectedLargeProjects] = useState({});
     const [selectedSmallProjects, setSelectedSmallProjects] = useState({});
+
+    // loading states 
+    const [loading, setLoading] = useState(true);
+    const [reachLoading, setReachLoading] = useState(true);
+    const [countLoading, setCountLoading] = useState(true);
 
     // Success Rate Chart 
     const generateSuccessQueryString = (filters) => {
@@ -65,15 +74,66 @@ function Snapshot() {
 
                 const num = results.data.countDeclinedProjects;
                 console.log(num)
+                setCountLoading(false);
 
                 setSelectedSuccessProjects(num);
+
+            } catch (e) {
+                console.log(e);
+                setCountLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [appliedFilters]);
+
+    // Count projects and grants chart  
+    const generateCountProjectsAndGrantsString = (filters) => {
+
+        const str = `query testCountProjectsAndGrants {
+            countProjectsAndGrants(method: "countProjectsAndGrants", filter: {
+                funding_year: ${JSON.stringify(filters["funding_year"])},
+                project_faculty: ${JSON.stringify(filters["project_faculty"])},
+                project_type: ${JSON.stringify(filters["project_type"])},
+                focus_area: ${JSON.stringify(filters["focus_area"])},
+                search_text: ${JSON.stringify(filters["search_text"])}
+            }) {
+                project {
+                    Large
+                    Small
+                }
+                grant {
+                    Large
+                    Small
+                }
+            }
+        }`;
+
+        console.log(str);
+
+        return str;
+    }
+
+    useEffect(() => {
+        const fetchCountData = async () => {
+            try {
+                const query_string = generateCountProjectsAndGrantsString(appliedFilters);
+                const client = generateClient()
+                const results = await client.graphql({
+                    query: query_string,
+                });
+
+                const num = results.data.countProjectsAndGrants;
+                console.log(num)
+
+                setSelectedCountProjects(num);
 
             } catch (e) {
                 console.log(e);
             }
         };
 
-        fetchData();
+        fetchCountData();
     }, [appliedFilters]);
 
     // Funding Chart
@@ -135,7 +195,7 @@ function Snapshot() {
             setSelectedProjects(newProjects);
             setSelectedLargeProjects(largeProjects);
             setSelectedSmallProjects(smallProjects);
-            
+            console.log(smallProjects);
 
             } catch (e) {
                 console.log(e);
@@ -143,6 +203,105 @@ function Snapshot() {
         };
 
         fetchProjectData();
+    }, [appliedFilters]);
+
+    // Student Reach Chart 
+    const generateReachQueryString = (filters) => {
+
+        const str = `query testCountTotalReachByFaculty {
+            countTotalReachByFaculty(method: "countTotalReachByFaculty", filter: {
+                funding_year: ${JSON.stringify(filters["funding_year"])},
+                project_faculty: ${JSON.stringify(filters["project_faculty"])},
+                project_type: ${JSON.stringify(filters["project_type"])},
+                focus_area: ${JSON.stringify(filters["focus_area"])},
+                search_text: ${JSON.stringify(filters["search_text"])}
+            }) { 
+                Large {
+                    project_faculty
+                    reach
+                    }
+                Small {
+                    project_faculty
+                    reach
+                }
+            }
+        }`;
+
+        console.log(str);
+
+        return str;
+    }
+
+    useEffect(() => {
+        const fetchReachData = async () => {
+            try {
+                const query_string = generateReachQueryString(appliedFilters);
+                console.log(query_string)
+                const client = generateClient()
+                const results = await client.graphql({
+                    query: query_string,
+                });
+
+                const reach = results.data.countTotalReachByFaculty;
+                console.log(reach)
+                setReachLoading(false);
+
+                setSelectedReachProjects(reach);
+
+            } catch (e) {
+                console.log(e);
+                setReachLoading(false);
+            }
+        };
+
+        fetchReachData();
+    }, [appliedFilters]);
+
+    // Student Reach Chart 
+    const generateReachInfoQueryString = (filters) => {
+
+        const str = `query testGetStudentReachInfo {
+            getStudentReachInfo(method: "getStudentReachInfo", filter: {
+                funding_year: ${JSON.stringify(filters["funding_year"])},
+                project_faculty: ${JSON.stringify(filters["project_faculty"])},
+                project_type: ${JSON.stringify(filters["project_type"])},
+                focus_area: ${JSON.stringify(filters["focus_area"])},
+                search_text: ${JSON.stringify(filters["search_text"])}
+            }) {
+                faculty
+                course
+                section
+            }
+          }`;
+
+        console.log(str);
+
+        return str;
+    }
+
+    useEffect(() => {
+        const fetchReachInfoData = async () => {
+            try {
+                const query_string = generateReachInfoQueryString(appliedFilters);
+                console.log(query_string)
+                const client = generateClient()
+                const results = await client.graphql({
+                    query: query_string,
+                });
+
+                const reachinfo = results.data.getStudentReachInfo;
+                console.log('reach info', reachinfo)
+                setReachLoading(false);
+
+                setSelectedReachInfoProjects(reachinfo);
+
+            } catch (e) {
+                console.log(e);
+                setReachLoading(false);
+            }
+        };
+
+        fetchReachInfoData();
     }, [appliedFilters]);
 
     // Faculty Engagement Chart 
@@ -178,7 +337,6 @@ function Snapshot() {
         return str;
     }
 
-    const [loading, setLoading] = useState(true);
     useEffect(() => {
         const fetchFacultyData = async () => {
             try {
@@ -210,11 +368,10 @@ function Snapshot() {
 
     const charts = {
         successRate: (<SuccessRateChart projects={selectedSuccessProjects} totalprojects={selectedProjects} largeprojects={selectedLargeProjects} smallprojects={selectedSmallProjects}/> ),
-        numGrants: (<NumGrantsChart projects={selectedProjects} />),
-        numProjects: (<NumProjectsChart projects={selectedProjects} />),
+        numProjects: (<NumProjectsChart projects={selectedCountProjects} />),
         funding: (<FundingChart projects={selectedProjects} />),
-        studentReach: (<StudentReachChart />),
-        teamMember: (<TeamMemberChart projects={selectedFacultyProjects}/>)
+        studentReach: (<StudentReachChart projects={selectedReachProjects} reachdata={selectedReachInfoProjects}/>),
+        teamMember: (<TeamMemberChart projects={selectedFacultyProjects} amount={selectedProjects}/>)
     };
 
     return (
@@ -231,21 +388,32 @@ function Snapshot() {
                 <button onClick={() => handleClick("faculty-engagement")}>Faculty Engagement</button>
             </div>
 
-            <section id="success-rate"> <SnapshotBox chart={charts.successRate} type={0} title="Success Rate" /></section>
-            {/* <section id="num-grants"> <SnapshotBox chart={charts.numGrants} type={0} title="Number of Grants" /> </section> */}
-            <section id="num-projects"> <SnapshotBox chart={charts.numProjects} type={1} title="Number of Projects and Grants" /> </section>
-            <section id="funding"> <SnapshotBox chart={charts.funding} type={0} title="Funding Awarded" /> </section>
-            <section id="student-reach"> <SnapshotBox chart={charts.studentReach} type={1} title="Student Reach" /> </section>
             
-            {loading ? (
+            <section id="success-rate"> <SnapshotBox chart={charts.successRate} type={0} title="Success Rate" /></section>
+            {countLoading ? (
+            <div>Loading...</div>
+            ) : selectedCountProjects.project   ? (
+             <section id="num-projects"> <SnapshotBox chart={charts.numProjects} type={1} title="Number of Grants and Projects" /> </section>
+            ) : (
+                <div>No data available</div>
+            )}
+            <section id="funding"> <SnapshotBox chart={charts.funding} type={0} title="Funding Awarded" /> </section>
+            {reachLoading ? (
+         <div>Loading...</div>
+        ) : selectedReachProjects.Large   ? (
+            <section id="student-reach"> <SnapshotBox chart={charts.studentReach} type={1} title="Student Reach" /> </section>
+        ) : (
+            <div>No data available</div>
+        )}
+        {loading ? (
         // Display a loading circle or spinner while data is being fetched
-        <div>Loading...</div>
-      ) : selectedFacultyProjects.Large   ? (
+            <div>Loading...</div>
+            ) : selectedFacultyProjects.Large   ? (
         // render graph if data is available 
-        <section id="faculty-engagement"> <SnapshotBox chart={charts.teamMember} type={0} title="Faculty Engagement" /> </section>
-      ) : (
+            <section id="faculty-engagement"> <SnapshotBox chart={charts.teamMember} type={0} title="Faculty Engagement" /> </section>
+        ) : (
         // if data empty 
-        <div>No data available</div>
+            <div>No data available</div>
       )}
         </div>
     );

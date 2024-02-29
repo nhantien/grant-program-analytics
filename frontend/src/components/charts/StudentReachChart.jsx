@@ -9,9 +9,12 @@ import { FiltersContext } from '../../App';
 // constants
 import { SAMPLE_STUDENT_REACH } from '.';
 
-function StudentReachChart() {
+function StudentReachChart( {projects, reachdata}) {
 
     const { appliedFilters } = useContext(FiltersContext);
+
+    //const appliedscience = projects.filter(proj => projects.project_faculty === 'APSC');
+    //console.log(appliedscience)
 
     let isDataComplete = true;
 
@@ -37,16 +40,50 @@ function StudentReachChart() {
         const { x, y, width, height, value } = props;
         return (
             <text x={820} y={y + height / 3 * 2} textAnchor="end" fill="#081252" fontStyle="italic">
-                {value.toLocaleString()}
+                {value.toLocaleString()} Students
             </text>
         )
     };
 
+    // Transformation
+    const STUDENT_REACH = [];
+    console.log(projects)
+
+    const calculateSmallReach = (faculty) => {
+        const smallReach = projects.Small.find((item) => item.project_faculty === faculty)?.reach || 0;
+        return smallReach;
+      };
+
+    const calculateLargeReach = (faculty) => {
+        const largeReach = projects.Large.find((item) => item.project_faculty === faculty)?.reach || 0;
+        return largeReach;
+      };
+    
+      const totalLargeReach = projects.Large.reduce((sum, item) => sum + item.reach, 0);
+      const totalSmallReach = projects.Small.reduce((sum, item) => sum + item.reach, 0);
+      console.log('total large reach', totalLargeReach)
+    
+      projects.Small.forEach((item) => {
+        const faculty = item.project_faculty;
+        const smallReach = calculateSmallReach(faculty);
+        const largeReach = calculateLargeReach(faculty);    
+      
+        STUDENT_REACH.push({
+          name: faculty,
+          "Large TLEF": largeReach,
+          "Small TLEF": smallReach,
+          total: largeReach + smallReach
+        });
+    });
+    
+    console.log(STUDENT_REACH)
+    console.log(reachdata)
+
     return (
         <React.Fragment>
             <div className={styles.chart}>
-                <BarChart width={850} height={500} layout='vertical' data={SAMPLE_STUDENT_REACH}>
-                    <XAxis type='number' padding={{ right: 150}} hide />
+                <BarChart width={850} height={500} layout='vertical' data={STUDENT_REACH}>
+                    <XAxis type='number' padding={{ right: 150}} />
                     <YAxis type='category' dataKey="name" width={120} />
                     <Legend verticalAlign='top' iconType='square' height={36} />
                     <Bar dataKey="Small TLEF" stackId="a" background={{ fill: "#EEEE" }} fill="#FB812D" />
@@ -60,10 +97,10 @@ function StudentReachChart() {
                 {!isDataComplete &&
                     <p className={styles.warning}>Please note, this particular TLEF metric is not available prior to the 2016/17 academic year.</p>
                 }
-                <p>TLEF projects funded in the selected year(s) reached <b>21,002</b> students in Small TLEF innovation projects and
-                 <b>11,493</b> students in Large TLEF Transformation projects.</p>
-                <p>Overall, the projects reached <b>162</b> courses (undergraduate and graduate) and <b>399</b> sections
-                 across 9 Faculties at the UBCV campus, impacting <b>32,495</b> enrolments and <b>18,182</b> unique students.*</p>
+                <p>TLEF projects funded in the selected year(s) reached <b>{totalSmallReach}</b> students in Small TLEF innovation projects and
+                 <b> {totalLargeReach}</b> students in Large TLEF Transformation projects.</p>
+                <p>Overall, the projects reached <b>{reachdata.course}</b> courses (undergraduate and graduate) and <b>{reachdata.section}</b> sections
+                 across <b>{reachdata.faculty}</b> Faculties at the UBCV campus, impacting <b>{totalSmallReach + totalLargeReach}</b> enrolments and <b>1000</b> unique students.*</p>
 
                  <p className={styles["reach-annotation"]}>
                     *Students enrolled in more than one TLEF-supported course are only counted once.

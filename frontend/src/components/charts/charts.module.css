@@ -1,13 +1,44 @@
+b {
+    color: #081252;
+}
 
-.numchart {
+/* num grants and projects chart */
+.num-box {
     width: 60%;
-    min-height: 20rem;
+    min-height: 8rem;
+    padding: 2% 0% 2% 0%;
+    margin-bottom: 3rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: none;
+    justify-content: center;
+}
+
+.circle {
+    justify-content: center;
+    align-items: center;
+    display: inline-block;
+    text-align: center;
 }
 
 .section {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 2fr 2fr;
+    justify-items: stretch;
+    align-items: stretch;
+    column-gap: 50px;
+    row-gap: 20px;
     justify-content: center;
+}
+
+.circletitle {
+    margin: 1.5rem 0 1.5rem 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #081252;
+    text-align: center;
+    display: block;
 }
 
 .chart {

@@ -8,27 +8,30 @@ function NumProjectsChart({ projects }) {
     return (
         <React.Fragment>
             <div className={styles['section']}> 
-            <div className={styles['numchart']}>
-            <div className={styles["fe-circle"]}>
-                            <p>44</p>
+            <div className={styles['circle']}>
+                <div className={styles["fe-circle"]}>
+                            <p>{projects.project.Small}</p>
                         </div>
-                        <p className={styles["fe-title"]}>SMALL PROJECTS</p>
-            <div className={styles["fe-circle"]}>
-                        <p>44</p>
+                        <p className={styles["circletitle"]}>SMALL PROJECTS FUNDED</p>
+            </div>
+            <div className={styles['circle']}>
+                <div className={styles["fe-circle"]}>
+                        <p>{projects.project.Large}</p>
                     </div>
-            <p className={styles["fe-title"]}>LARGE PROJECTS</p>
+                    <p className={styles["circletitle"]}>LARGE PROJECTS FUNDED</p>
             </div>
-            <div className={styles["numchart"]}>
-            <div className={styles["fe-circle2"]}>
-                            <p>44</p>
-                        </div>
-                        <p className={styles["fe-title"]}>SMALL GRANTS AWARDED </p>
-            <div className={styles["fe-circle2"]}>
-                        <p>44</p>
+            <div className={styles['circle']}>
+                <div className={styles["fe-circle2"]}>
+                            <p>{projects.grant.Small}</p>
+                    </div>
+                    <p className={styles["circletitle"]}>SMALL GRANTS AWARDED </p>
+            </div>
+            <div className={styles['circle']}>
+                <div className={styles["fe-circle2"]}>
+                        <p>{projects.grant.Large}</p>
                     </div>  
-            <p className={styles["fe-title"]}>LARGE GRANTS AWARDED</p>
-
-            </div>
+                    <p className={styles["circletitle"]}>LARGE GRANTS AWARDED</p>
+                </div>
             </div>
         </React.Fragment>
     );
