@@ -64,5 +64,5 @@ const SAMPLE_STUDENT_REACH = [
 ];
 
 
-export { FundingChart, NumGrantsChart, NumProjectsChart, StudentReachChart, FacultyEngagementChart as TeamMemberChart, SuccessRateChart, SAMPLE_STUDENT_REACH }
+export { FundingChart, NumGrantsChart, NumProjectsChart, StudentReachChart, FacultyEngagementChart, SuccessRateChart }
 

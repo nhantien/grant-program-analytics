@@ -50,7 +50,7 @@ function HomePage() {
 
     const generateQueryString = (filters) => {
 
-        const str = `query homepage {
+        const str = `query homePage {
             getFilteredProposals(method: "getFilteredProposals", filter: {
                 funding_year: ${JSON.stringify(filters["funding_year"])},
                 project_faculty: ${JSON.stringify(filters["project_faculty"])},
