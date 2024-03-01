@@ -4,16 +4,9 @@ import React from 'react';
 import { PieChart, Pie, Cell, Label } from 'recharts';
 // css style
 import styles from "./charts.module.css";
-import { useState, useEffect } from 'react';
-import { API, graphqlOperation } from 'aws-amplify';
-import { generateClient } from 'aws-amplify/api'
 
 function SuccessRateChart({ projects, totalprojects, largeprojects, smallprojects }) {
 
-
-
-    // TODO: replace w/ actual data
-    // need: total num funded projects, small funded projects - not funded, large funded - not funded
     const small = [
         {
             "name": "Rejected Small TLEF Projects",
@@ -124,7 +117,7 @@ function SuccessRateChart({ projects, totalprojects, largeprojects, smallproject
             </div>
             <div className={styles.space}></div>
             <div className={styles.description}>
-                <p>{totalprojects.length} projects received funding during selected TLEF rounds.</p>
+                <p><b>{totalprojects.length}</b> projects received funding during selected TLEF rounds.</p>
             </div>
         </React.Fragment>
     );

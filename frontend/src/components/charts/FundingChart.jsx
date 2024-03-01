@@ -99,7 +99,7 @@ function FundingChart({ projects }) {
         : { width: 850, height: 500, layout: "vertical" };
 
     const xAxis = (isMobile())
-        ? (<XAxis type="category" hide />) : (<XAxis type="number" padding={{ right: 150 }} hide />);
+        ? (<XAxis type="category" />) : (<XAxis type="number" padding={{ right: 150 }} />);
 
     const yAxis = (isMobile())
         ? (<YAxis type="number" padding={{ top: 150 }} hide />) : (<YAxis type="category" dataKey="name" width={120} />);
