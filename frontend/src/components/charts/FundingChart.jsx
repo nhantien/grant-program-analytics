@@ -21,9 +21,9 @@ function FundingChart({ projects }) {
         const map = new Map();
         let total = 0;
         projects.forEach((project) => {
-            const t = project.type;
-            const f = project.faculty;
-            const a = Number(project.amount.replace(/[^0-9.-]+/g,""));
+            const t = project.project_type;
+            const f = project.project_faculty;
+            const a = project.funding_amount;
 
             if (map.has(f)) {
                 let newVal = map.get(f);
@@ -72,9 +72,9 @@ function FundingChart({ projects }) {
                         {label}
                     </span>
                     <div className={styles["funding-tooltip-content"]}>
-                        <span style={{ color: "#FB812D" }}>Large TLEF: {formattedAmount(payload[0].payload["Large TLEF"])}</span>
+                        <span style={{ color: "#13588B" }}>Large TLEF: {formattedAmount(payload[0].payload["Large TLEF"])}</span>
                         <br />
-                        <span style={{ color: "#13588B" }}>Small TLEF: {formattedAmount(payload[0].payload["Small TLEF"])}</span>
+                        <span style={{ color: "#FB812D" }}>Small TLEF: {formattedAmount(payload[0].payload["Small TLEF"])}</span>
                         <br />
                         <span style={{ fontWeight: 600 }}> Total: {payload[0].payload.label}</span>
                     </div>

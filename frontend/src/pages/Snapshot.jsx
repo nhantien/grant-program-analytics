@@ -12,7 +12,7 @@ import styles from "./Snapshot.module.css";
 import { FiltersContext } from "../App";
 // components
 import { SnapshotHeader, SnapshotBox } from "../components/snapshot";
-import { FundingChart, NumGrantsChart, NumProjectsChart, StudentReachChart, TeamMemberChart, SuccessRateChart } from "../components/charts";
+import { FundingChart, NumProjectsChart, StudentReachChart, FacultyEngagementChart, SuccessRateChart } from "../components/charts";
 // constants
 import { Project } from "../constants";
 import { FormatColorResetRounded } from "@mui/icons-material";
@@ -24,7 +24,7 @@ Amplify.configure(config);
 function Snapshot() {
 
     const { appliedFilters } = useContext(FiltersContext);
-    
+
     const location = useLocation();
     const { projects, range } = location.state;
     const [selectedProjects, setSelectedProjects] = useState(projects);
@@ -39,6 +39,7 @@ function Snapshot() {
 
     // loading states 
     const [loading, setLoading] = useState(true);
+    const [fundingLoading, setFundingLoading] = useState(true);
     const [reachLoading, setReachLoading] = useState(true);
     const [countLoading, setCountLoading] = useState(true);
 
@@ -139,8 +140,8 @@ function Snapshot() {
     // Funding Chart
     const generateQueryString = (filters) => {
 
-        const str = `query testGetFilteredProjects {
-            getFilteredProjects(method: "getFilteredProjects", filter: {
+        const str = `query homepage {
+            getFilteredProposals(method: "getFilteredProposals", filter: {
                 funding_year: ${JSON.stringify(filters["funding_year"])},
                 project_faculty: ${JSON.stringify(filters["project_faculty"])},
                 project_type: ${JSON.stringify(filters["project_type"])},
@@ -153,12 +154,11 @@ function Snapshot() {
                 project_type
                 pi_name
                 project_faculty
-                department
                 funding_amount
+                title
+                project_year
             }
         }`;
-
-        console.log(str);
 
         return str;
     }
@@ -172,7 +172,7 @@ function Snapshot() {
                     query: query_string,
                 });
 
-                const proposals = results.data.getFilteredProjects;
+                const proposals = results.data.getFilteredProposals;
                 const newProjects = proposals.map((proj) => {
                     return new Project(
                         proj.grant_id,
@@ -180,22 +180,23 @@ function Snapshot() {
                         proj.project_type,
                         proj.pi_name,
                         proj.project_faculty,
-                        "sample title",
-                        "1",
-                        // proj.project_year,
+                        proj.title,
+                        proj.project_year,
                         proj.funding_amount,
                         "Active"
                     );
                 });
 
-                 // Filter projects based on project_type
-            const largeProjects = proposals.filter(proj => proj.project_type === 'Large');
-            const smallProjects = proposals.filter(proj => proj.project_type === 'Small');
+                // Filter projects based on project_type
+                const largeProjects = proposals.filter(proj => proj.project_type === 'Large');
+                const smallProjects = proposals.filter(proj => proj.project_type === 'Small');
 
-            setSelectedProjects(newProjects);
-            setSelectedLargeProjects(largeProjects);
-            setSelectedSmallProjects(smallProjects);
-            console.log(smallProjects);
+                setSelectedProjects(newProjects);
+                setSelectedLargeProjects(largeProjects);
+                setSelectedSmallProjects(smallProjects);
+                console.log(smallProjects);
+
+                setFundingLoading(false);
 
             } catch (e) {
                 console.log(e);
@@ -367,11 +368,11 @@ function Snapshot() {
     };
 
     const charts = {
-        successRate: (<SuccessRateChart projects={selectedSuccessProjects} totalprojects={selectedProjects} largeprojects={selectedLargeProjects} smallprojects={selectedSmallProjects}/> ),
+        successRate: (<SuccessRateChart projects={selectedSuccessProjects} totalprojects={selectedProjects} largeprojects={selectedLargeProjects} smallprojects={selectedSmallProjects} />),
         numProjects: (<NumProjectsChart projects={selectedCountProjects} />),
         funding: (<FundingChart projects={selectedProjects} />),
-        studentReach: (<StudentReachChart projects={selectedReachProjects} reachdata={selectedReachInfoProjects}/>),
-        teamMember: (<TeamMemberChart projects={selectedFacultyProjects} amount={selectedProjects}/>)
+        studentReach: (<StudentReachChart projects={selectedReachProjects} reachdata={selectedReachInfoProjects} />),
+        teamMember: (<FacultyEngagementChart projects={selectedFacultyProjects} amount={selectedProjects} />)
     };
 
     return (
@@ -381,40 +382,48 @@ function Snapshot() {
 
             <div className={styles.navbar}>
                 <button onClick={() => handleClick("success-rate")}>Success Rate</button>
-                {/* <button onClick={() => handleClick("num-grants")}>Number of Grants</button> */}
                 <button onClick={() => handleClick("num-projects")}>Number of Grants and Projects</button>
                 <button onClick={() => handleClick("funding")}>Funding Awarded</button>
                 <button onClick={() => handleClick("student-reach")}>Student Reach</button>
                 <button onClick={() => handleClick("faculty-engagement")}>Faculty Engagement</button>
             </div>
 
-            
+
             <section id="success-rate"> <SnapshotBox chart={charts.successRate} type={0} title="Success Rate" /></section>
             {countLoading ? (
-            <div>Loading...</div>
-            ) : selectedCountProjects.project   ? (
-             <section id="num-projects"> <SnapshotBox chart={charts.numProjects} type={1} title="Number of Grants and Projects" /> </section>
+                <div>Loading...</div>
+            ) : selectedCountProjects.project ? (
+                <section id="num-projects"> <SnapshotBox chart={charts.numProjects} type={1} title="Number of Grants and Projects" /> </section>
             ) : (
                 <div>No data available</div>
             )}
-            <section id="funding"> <SnapshotBox chart={charts.funding} type={0} title="Funding Awarded" /> </section>
+
+            {fundingLoading ? (
+                <div>Loading...</div>
+            ) : selectedProjects ? (
+                <section id="funding"> <SnapshotBox chart={charts.funding} type={0} title="Funding Awarded" /> </section>
+            ) : (
+                <div>No data available</div>
+            )}
+
             {reachLoading ? (
-         <div>Loading...</div>
-        ) : selectedReachProjects.Large   ? (
-            <section id="student-reach"> <SnapshotBox chart={charts.studentReach} type={1} title="Student Reach" /> </section>
-        ) : (
-            <div>No data available</div>
-        )}
-        {loading ? (
-        // Display a loading circle or spinner while data is being fetched
-            <div>Loading...</div>
-            ) : selectedFacultyProjects.Large   ? (
-        // render graph if data is available 
-            <section id="faculty-engagement"> <SnapshotBox chart={charts.teamMember} type={0} title="Faculty Engagement" /> </section>
-        ) : (
-        // if data empty 
-            <div>No data available</div>
-      )}
+                <div>Loading...</div>
+            ) : selectedReachProjects.Large ? (
+                <section id="student-reach"> <SnapshotBox chart={charts.studentReach} type={1} title="Student Reach" /> </section>
+            ) : (
+                <div>No data available</div>
+            )}
+
+            {loading ? (
+                // Display a loading circle or spinner while data is being fetched
+                <div>Loading...</div>
+            ) : selectedFacultyProjects.Large ? (
+                // render graph if data is available 
+                <section id="faculty-engagement"> <SnapshotBox chart={charts.teamMember} type={0} title="Faculty Engagement" /> </section>
+            ) : (
+                // if data empty 
+                <div>No data available</div>
+            )}
         </div>
     );
 };
