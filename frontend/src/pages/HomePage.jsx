@@ -50,8 +50,8 @@ function HomePage() {
 
     const generateQueryString = (filters) => {
 
-        const str = `query testGetFilteredProjects {
-            getFilteredProjects(method: "getFilteredProjects", filter: {
+        const str = `query homePage {
+            getFilteredProposals(method: "getFilteredProposals", filter: {
                 funding_year: ${JSON.stringify(filters["funding_year"])},
                 project_faculty: ${JSON.stringify(filters["project_faculty"])},
                 project_type: ${JSON.stringify(filters["project_type"])},
@@ -64,13 +64,12 @@ function HomePage() {
                 project_type
                 pi_name
                 project_faculty
-                department
                 funding_amount
+                title
+                project_year
             }
         }`;
-
-        console.log(str);
-
+        
         return str;
     }
 
@@ -84,7 +83,7 @@ function HomePage() {
                     query: queryString,
                 });
 
-                const proposals = results.data.getFilteredProjects;
+                const proposals = results.data.getFilteredProposals;
                 const newProjects = proposals.map((proj) => {
                     return new Project(
                         proj.grant_id,
@@ -92,9 +91,8 @@ function HomePage() {
                         proj.project_type,
                         proj.pi_name,
                         proj.project_faculty,
-                        "sample title",
-                        "1",
-                        // proj.project_year,
+                        proj.title,
+                        proj.project_year,
                         proj.funding_amount,
                         "Active"
                     );

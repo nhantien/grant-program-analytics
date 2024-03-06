@@ -35,10 +35,10 @@ function SimilarProjects({ project, type }) {
                         {itemsToDisplay.map((proj) =>
                             <TableRow>
                                 <TableCell className={styles.TableCell}><Link to="#">{proj.title}</Link></TableCell>
-                                <TableCell className={styles.TableCell}>{proj.type}</TableCell>
-                                <TableCell className={styles.TableCell}>{proj.investigator}</TableCell>
-                                <TableCell className={styles.TableCell}>{proj.faculty}</TableCell>
-                                <TableCell className={styles.TableCell}>{proj.fundingYear}</TableCell>
+                                <TableCell className={styles.TableCell}>{proj.project_type}</TableCell>
+                                <TableCell className={styles.TableCell}>{proj.pi_name}</TableCell>
+                                <TableCell className={styles.TableCell}>{proj.project_faculty}</TableCell>
+                                <TableCell className={styles.TableCell}>{proj.funding_year}</TableCell>
                             </TableRow>
                         )}
                     </TableBody>
