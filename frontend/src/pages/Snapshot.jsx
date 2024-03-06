@@ -385,7 +385,7 @@ function Snapshot() {
                 <button onClick={() => handleClick("num-projects")}>Number of Grants and Projects</button>
                 <button onClick={() => handleClick("funding")}>Funding Awarded</button>
                 <button onClick={() => handleClick("student-reach")}>Student Reach</button>
-                <button onClick={() => handleClick("faculty-engagement")}>Faculty Engagement</button>
+                <button onClick={() => handleClick("faculty-engagement")}>Faculty and Student Engagement</button>
             </div>
 
 
@@ -407,12 +407,30 @@ function Snapshot() {
             )}
 
             {reachLoading ? (
+         <div>Loading...</div>
+        ) : selectedReachProjects.Large   ? (
+            <section id="student-reach"> <SnapshotBox chart={charts.studentReach} type={1} title="Student Reach" /> </section>
+        ) : (
+            <div>No data available</div>
+        )}
+        {loading ? (
+        // Display a loading circle or spinner while data is being fetched
+            <div>Loading...</div>
+            ) : selectedFacultyProjects.Large   ? (
+        // render graph if data is available 
+            <section id="faculty-engagement"> <SnapshotBox chart={charts.teamMember} type={0} title="Faculty and Student Engagement" /> </section>
+        ) : (
+        // if data empty 
+            <div>No data available</div>
+      )}
+            {reachLoading ? (
                 <div>Loading...</div>
             ) : selectedReachProjects.Large ? (
                 <section id="student-reach"> <SnapshotBox chart={charts.studentReach} type={1} title="Student Reach" /> </section>
             ) : (
                 <div>No data available</div>
-            )}
+            )
+}
 
             {loading ? (
                 // Display a loading circle or spinner while data is being fetched
