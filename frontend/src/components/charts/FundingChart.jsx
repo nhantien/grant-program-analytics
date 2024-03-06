@@ -1,4 +1,4 @@
-import { Bar, BarChart, LabelList, Legend, Rectangle, Tooltip, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, LabelList, Legend, Rectangle, Tooltip, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import React from 'react';
 import styles from "./charts.module.css";
 
@@ -115,6 +115,7 @@ function FundingChart({ projects }) {
             </div>
             <div className={styles.space}></div>
             <div className={styles.chart}>
+            <ResponsiveContainer width='100%' height={500}>
                 <BarChart width={width} height={height} layout={layout} data={res}>
                     {xAxis}
                     {yAxis}
@@ -125,6 +126,7 @@ function FundingChart({ projects }) {
                     <Bar dataKey="Large TLEF" stackId="a" fill="#13588B">{label}</Bar>
                     
                 </BarChart>
+                </ResponsiveContainer>
             </div>
             
         </React.Fragment>
