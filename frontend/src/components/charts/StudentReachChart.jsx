@@ -38,7 +38,7 @@ function StudentReachChart( {projects, reachdata}) {
     const customLabel = (props) => {
         const { x, y, width, height, value } = props;
         return (
-            <text x={820} y={y + height / 3 * 2} textAnchor="end" fill="#081252" fontStyle="italic">
+            <text x={width} y={y + height / 3 * 2} textAnchor="end" fill="#081252" fontStyle="italic">
                 {value.toLocaleString()} Students
             </text>
         )
@@ -75,20 +75,23 @@ function StudentReachChart( {projects, reachdata}) {
         });
     });
     
-    // console.log(STUDENT_REACH)
-    // console.log(reachdata)
+    console.log(STUDENT_REACH)
+    console.log(reachdata)
 
     return (
         <React.Fragment>
             <div className={styles.chart}>
                 <ResponsiveContainer width='100%' height={500}>
-                <BarChart width={850} height={500} layout='vertical' data={STUDENT_REACH}>
+                <BarChart width={800} height={500} layout='vertical' data={STUDENT_REACH}>
                     <XAxis type='number' padding={{ right: 150}} />
                     <YAxis type='category' dataKey="name" width={120} />
                     <Legend verticalAlign='top' iconType='square' height={36} />
-                    <Bar dataKey="Small TLEF" stackId="a" background={{ fill: "#EEEE" }} fill="#FB812D" />
-                    <Bar dataKey="Large TLEF" stackId="a" fill="#13588B">
-                    <LabelList width={500} content={customLabel} position="right" dataKey="total" fill="#081252" style={{ fontStyle: "italic" }} />
+                    <Bar dataKey="Small TLEF" stackId="a" maxBarSize={120} background={{ fill: "#EEEE" }} fill="#FB812D" />
+                    <Bar dataKey="Large TLEF" stackId="a" maxBarSize={120} fill="#13588B">
+                    <LabelList  
+                    dataKey="total" fill="#081252" style={{ fontStyle: "italic" }} width='98%' position='right' content={customLabel}
+                
+                    />
                     </Bar>
                 </BarChart>
                 </ResponsiveContainer>
