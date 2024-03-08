@@ -75,13 +75,11 @@ function Snapshot() {
 
                 const num = results.data.countDeclinedProjects;
                 console.log(num)
-                setCountLoading(false);
 
                 setSelectedSuccessProjects(num);
 
             } catch (e) {
                 console.log(e);
-                setCountLoading(false);
             }
         };
 
@@ -128,9 +126,11 @@ function Snapshot() {
                 console.log(num)
 
                 setSelectedCountProjects(num);
+                setCountLoading(false);
 
             } catch (e) {
                 console.log(e);
+                setCountLoading(false);
             }
         };
 
@@ -189,17 +189,19 @@ function Snapshot() {
 
                 // Filter projects based on project_type
                 const largeProjects = proposals.filter(proj => proj.project_type === 'Large');
-                const smallProjects = proposals.filter(proj => proj.project_type === 'Small');
+                const smallProjects = proposals.filter(proj => proj.project_type === 'Small' || proj.project_type === 'Inter');
+        
 
                 setSelectedProjects(newProjects);
                 setSelectedLargeProjects(largeProjects);
                 setSelectedSmallProjects(smallProjects);
                 console.log(smallProjects);
-
+    
                 setFundingLoading(false);
 
             } catch (e) {
                 console.log(e);
+                setFundingLoading(false);
             }
         };
 
@@ -389,7 +391,9 @@ function Snapshot() {
             </div>
 
 
+
             <section id="success-rate"> <SnapshotBox chart={charts.successRate} type={0} title="Success Rate" /></section>
+
             {countLoading ? (
                 <div>Loading...</div>
             ) : selectedCountProjects.project ? (
@@ -423,25 +427,7 @@ function Snapshot() {
         // if data empty 
             <div>No data available</div>
       )}
-            {reachLoading ? (
-                <div>Loading...</div>
-            ) : selectedReachProjects.Large ? (
-                <section id="student-reach"> <SnapshotBox chart={charts.studentReach} type={1} title="Student Reach" /> </section>
-            ) : (
-                <div>No data available</div>
-            )
-}
 
-            {loading ? (
-                // Display a loading circle or spinner while data is being fetched
-                <div>Loading...</div>
-            ) : selectedFacultyProjects.Large ? (
-                // render graph if data is available 
-                <section id="faculty-engagement"> <SnapshotBox chart={charts.teamMember} type={0} title="Faculty Engagement" /> </section>
-            ) : (
-                // if data empty 
-                <div>No data available</div>
-            )}
         </div>
     );
 };

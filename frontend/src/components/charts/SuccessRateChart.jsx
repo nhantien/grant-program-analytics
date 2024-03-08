@@ -7,6 +7,9 @@ import styles from "./charts.module.css";
 
 function SuccessRateChart({ projects, totalprojects, largeprojects, smallprojects }) {
 
+    const largeprog = totalprojects.filter(proj => proj.project_type === 'Large');
+    console.log('FILTER RESULT', largeprog)
+
     const small = [
         {
             "name": "Rejected Small TLEF Projects",
@@ -22,9 +25,10 @@ function SuccessRateChart({ projects, totalprojects, largeprojects, smallproject
     ];
     console.log(projects)
     console.log('small value:', small[0].value)
-    console.log('small value:', small[0].label)
+    console.log('small percentage:', small[0].label)
     console.log('large projects:', largeprojects)
     console.log('small projects:', smallprojects)
+    console.log('funded small', smallprojects.length)
 
     const large = [
         {

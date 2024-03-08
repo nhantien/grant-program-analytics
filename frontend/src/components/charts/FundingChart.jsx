@@ -64,6 +64,7 @@ function FundingChart({ projects }) {
     }
 
     const CustomToolTip = ({ active, payload, label }) => {
+        console.log('PAYLOAD', payload)
 
         if (active && payload && label) {
             return (
@@ -88,7 +89,7 @@ function FundingChart({ projects }) {
     const customLabel = (props) => {
         const { x, y, width, height, value } = props;
         return (
-            <text x={840} y={y + height / 3 * 2} textAnchor="end" fill="#081252" fontStyle="italic">
+            <text x={width} y={y + height / 3 * 2} textAnchor="end" fill="#081252" fontStyle="italic">
                 {value}
             </text>
         )
@@ -105,7 +106,7 @@ function FundingChart({ projects }) {
         ? (<YAxis type="number" padding={{ top: 150 }} hide />) : (<YAxis type="category" dataKey="name" width={120} />);
 
     const label = (isMobile())
-        ? null : <LabelList width={500} content={customLabel} position="right" dataKey="label" fill="#081252" style={{ fontStyle: "italic" }} />;
+        ? null : <LabelList width='98%' content={customLabel} position="right" dataKey="label" fill="#081252" style={{ fontStyle: "italic" }} />;
 
     return (
         <React.Fragment>
@@ -122,9 +123,8 @@ function FundingChart({ projects }) {
                     {isMobile() && <Tooltip content={<CustomToolTip />} cursor={{ fill: "transparent" }} position={{ x: 100, y: 25 }} />}
                     <Tooltip content={CustomToolTip} />
                     <Legend verticalAlign='top' iconType='square' height={36} />
-                    <Bar dataKey="Small TLEF" stackId="a" background={{ fill: "#EEEE" }} fill="#FB812D" />
-                    <Bar dataKey="Large TLEF" stackId="a" fill="#13588B">{label}</Bar>
-                    
+                    <Bar dataKey="Small TLEF" stackId="a" maxBarSize={120} background={{ fill: "#EEEE" }} fill="#FB812D" />
+                    <Bar dataKey="Large TLEF" stackId="a"maxBarSize={120} fill="#13588B">{label}</Bar>
                 </BarChart>
                 </ResponsiveContainer>
             </div>
