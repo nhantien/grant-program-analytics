@@ -1,13 +1,11 @@
 // react
 import React, { useContext } from 'react';
 // recharts
-import { Bar, BarChart, LabelList, Legend, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, LabelList, Legend, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 // css style
 import styles from "./charts.module.css";
 // context
 import { FiltersContext } from '../../App';
-// constants
-import { SAMPLE_STUDENT_REACH } from '.';
 
 function StudentReachChart( {projects, reachdata}) {
 
@@ -15,6 +13,7 @@ function StudentReachChart( {projects, reachdata}) {
 
     //const appliedscience = projects.filter(proj => projects.project_faculty === 'APSC');
     //console.log(appliedscience)
+    // console.log('FILTERS', appliedFilters)
 
     let isDataComplete = true;
 
@@ -39,7 +38,7 @@ function StudentReachChart( {projects, reachdata}) {
     const customLabel = (props) => {
         const { x, y, width, height, value } = props;
         return (
-            <text x={820} y={y + height / 3 * 2} textAnchor="end" fill="#081252" fontStyle="italic">
+            <text x={width} y={y + height / 3 * 2} textAnchor="end" fill="#081252" fontStyle="italic">
                 {value.toLocaleString()} Students
             </text>
         )
@@ -82,15 +81,20 @@ function StudentReachChart( {projects, reachdata}) {
     return (
         <React.Fragment>
             <div className={styles.chart}>
-                <BarChart width={850} height={500} layout='vertical' data={STUDENT_REACH}>
+                <ResponsiveContainer width='100%' height={500}>
+                <BarChart width={800} height={500} layout='vertical' data={STUDENT_REACH}>
                     <XAxis type='number' padding={{ right: 150}} />
                     <YAxis type='category' dataKey="name" width={120} />
                     <Legend verticalAlign='top' iconType='square' height={36} />
-                    <Bar dataKey="Small TLEF" stackId="a" background={{ fill: "#EEEE" }} fill="#FB812D" />
-                    <Bar dataKey="Large TLEF" stackId="a" fill="#13588B">
-                    <LabelList width={500} content={customLabel} position="right" dataKey="total" fill="#081252" style={{ fontStyle: "italic" }} />
+                    <Bar dataKey="Small TLEF" stackId="a" maxBarSize={120} background={{ fill: "#EEEE" }} fill="#FB812D" />
+                    <Bar dataKey="Large TLEF" stackId="a" maxBarSize={120} fill="#13588B">
+                    <LabelList  
+                    dataKey="total" fill="#081252" style={{ fontStyle: "italic" }} width='98%' position='right' content={customLabel}
+                
+                    />
                     </Bar>
                 </BarChart>
+                </ResponsiveContainer>
             </div>
             <div className={styles.space}></div>
             <div className={styles.description}>
@@ -100,8 +104,16 @@ function StudentReachChart( {projects, reachdata}) {
                 <p>TLEF projects funded in the selected year(s) reached <b>{totalSmallReach}</b> students in Small TLEF innovation projects and
                  <b> {totalLargeReach}</b> students in Large TLEF Transformation projects.</p>
                 <p>Overall, the projects reached <b>{reachdata.course}</b> courses (undergraduate and graduate) and <b>{reachdata.section}</b> sections
-                 across <b>{reachdata.faculty}</b> Faculties at the UBCV campus, impacting <b>{totalSmallReach + totalLargeReach}</b> enrolments and <b>1000</b> unique students.*</p>
+                 across <b>{reachdata.faculty}</b> Faculties at the UBCV campus, impacting <b>{totalSmallReach + totalLargeReach}</b> enrolment. </p>
 
+                 {appliedFilters && appliedFilters["funding_year"].length > 0 
+                 && (appliedFilters.project_faculty).length === 0 &&
+                 (appliedFilters.project_type).length === 0 &&
+                 (appliedFilters.focus_area).length === 0 &&
+                 (appliedFilters.search_text).length === 0 &&
+                 // conditional rendering of the unique students when no filter is applied
+                 <p> Overall for the year <b>{appliedFilters.funding_year}</b>, the projects have reached <b>1000</b> unique students.*</p>
+            }
                  <p className={styles["reach-annotation"]}>
                     *Students enrolled in more than one TLEF-supported course are only counted once.
                  </p>

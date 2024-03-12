@@ -75,6 +75,7 @@ function Snapshot() {
                 Small
             }
 
+
             countProjectsAndGrants(method: "countProjectsAndGrants", filter: {
                 funding_year: ${JSON.stringify(filters["funding_year"])},
                 project_faculty: ${JSON.stringify(filters["project_faculty"])},
@@ -91,6 +92,7 @@ function Snapshot() {
                     Small
                 }
             }
+
 
             getFilteredProposals(method: "getFilteredProposals", filter: {
                 funding_year: ${JSON.stringify(filters["funding_year"])},
@@ -109,6 +111,7 @@ function Snapshot() {
                 title
                 project_year
             }
+
 
             countTotalReachByFaculty(method: "countTotalReachByFaculty", filter: {
                 funding_year: ${JSON.stringify(filters["funding_year"])},
@@ -547,7 +550,7 @@ function Snapshot() {
                 <button onClick={() => handleClick("num-projects")}>Number of Grants and Projects</button>
                 <button onClick={() => handleClick("funding")}>Funding Awarded</button>
                 <button onClick={() => handleClick("student-reach")}>Student Reach</button>
-                <button onClick={() => handleClick("faculty-engagement")}>Faculty Engagement</button>
+                <button onClick={() => handleClick("faculty-engagement")}>Faculty and Student Engagement</button>
             </div>
 
             {loading ? (
@@ -566,6 +569,9 @@ function Snapshot() {
 
 
             {/* <section id="success-rate"> <SnapshotBox chart={charts.successRate} type={0} title="Success Rate" /></section>
+
+            <section id="success-rate"> <SnapshotBox chart={charts.successRate} type={0} title="Success Rate" /></section>
+
             {countLoading ? (
                 <div>Loading...</div>
             ) : numProjectsAndGrants.project ? (
@@ -583,6 +589,7 @@ function Snapshot() {
             )}
 
             {reachLoading ? (
+
                 <div>Loading...</div>
             ) : reachCount.Large ? (
                 <section id="student-reach"> <SnapshotBox chart={charts.studentReach} type={1} title="Student Reach" /> </section>
@@ -600,6 +607,24 @@ function Snapshot() {
                 // if data empty 
                 <div>No data available</div>
             )} */}
+
+//          <div>Loading...</div>
+//         ) : selectedReachProjects.Large   ? (
+//             <section id="student-reach"> <SnapshotBox chart={charts.studentReach} type={1} title="Student Reach" /> </section>
+//         ) : (
+//             <div>No data available</div>
+//         )}
+//         {loading ? (
+//         // Display a loading circle or spinner while data is being fetched
+//             <div>Loading...</div>
+//             ) : selectedFacultyProjects.Large   ? (
+//         // render graph if data is available 
+//             <section id="faculty-engagement"> <SnapshotBox chart={charts.teamMember} type={0} title="Faculty and Student Engagement" /> </section>
+//         ) : (
+//         // if data empty 
+//             <div>No data available</div>
+//       )}
+
         </div>
     );
 };
