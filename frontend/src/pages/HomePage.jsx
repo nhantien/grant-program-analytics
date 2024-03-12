@@ -20,7 +20,24 @@ import { Filter, FilterList, FundingYearFilter } from "../components/util";
 import { Project, PROJECT_TYPE, FACULTY, MARKS } from '../constants';
 
 
-Amplify.configure(config);
+// Amplify.configure(config);
+
+Amplify.configure({
+    API: {
+        GraphQL: {
+            endpoint: 'https://3gxzh6hlrnebblrm2dqzxhn2fi.appsync-api.ca-central-1.amazonaws.com/graphql',
+            region: 'ca-central-1',
+            defaultAuthMode: 'iam',
+        }
+    },
+    Auth: {
+        Cognito: {
+            identityPoolId: 'ca-central-1:f4415d83-459f-4bdf-9981-c065dd3cdd53',
+            region: 'ca-central-1',
+            allowGuestAccess: true
+        }
+    }
+});
 
 const options = [
     {
@@ -69,7 +86,7 @@ function HomePage() {
                 project_year
             }
         }`;
-        
+
         return str;
     }
 
@@ -78,9 +95,9 @@ function HomePage() {
             try {
                 setLoading(true);
                 const queryString = generateQueryString(appliedFilters);
-                const client = generateClient()
+                const client = generateClient();
                 const results = await client.graphql({
-                    query: queryString,
+                    query: queryString
                 });
 
                 const proposals = results.data.getFilteredProposals;
