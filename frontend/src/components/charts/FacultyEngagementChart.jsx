@@ -11,7 +11,7 @@ import styles from "./charts.module.css";
 import { FiltersContext } from '../../App';
 
 
-function FacultyEngagementChart({projects, amount}) {
+function FacultyEngagementChart({projects, amount, unique}) {
 
     const { appliedFilters } = useContext(FiltersContext);
 
@@ -33,6 +33,7 @@ function FacultyEngagementChart({projects, amount}) {
         }
     });
 
+
     console.log(projects)
 
     //calculate total funding amount 
@@ -49,12 +50,12 @@ function FacultyEngagementChart({projects, amount}) {
                     <p className={styles.warning}>Please note, this particular TLEF metric is not available prior to the 2017/18 academic year.</p>
                 }
                 <p>The TLEF actively engages with teaching and research faculty across the university as well as support staff who provide consultation and development support throughout the life of TLEF projects.</p>
-                {appliedFilters && appliedFilters["funding_year"].length > 0 
+                {isDataComplete && appliedFilters && appliedFilters["funding_year"].length === 1  
                  && (appliedFilters.project_faculty).length === 0 &&
                  (appliedFilters.project_type).length === 0 &&
                  (appliedFilters.focus_area).length === 0 &&
                  (appliedFilters.search_text).length === 0 &&
-                <p>Approximately <b>$1.18mil</b> in TLEF-awarded funding will employ over <b>{projects.Small.Student + projects.Large.Student}</b> UBC students to support the development, implementation and evaluation of TLEF projects.</p>
+                <p>Approximately <b>${unique.funding_amount}</b> in TLEF-awarded funding will employ over <b>{projects.Small.Student + projects.Large.Student}</b> UBC students to support the development, implementation and evaluation of TLEF projects.</p>
             }
             </div>
             <div className={styles.space}></div>
