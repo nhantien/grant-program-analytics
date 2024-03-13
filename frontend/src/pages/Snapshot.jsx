@@ -51,6 +51,7 @@ function Snapshot() {
     const [reachCount, setReachCount] = useState({});
     const [reachInfo, setReachInfo] = useState({});
     const [numProjectsAndGrants, setNumProjectsAndGrants] = useState({});
+    const [uniqueStudent, setUniqueStudent] = useState({});
     const [selectedRange, setSelectedRange] = useState(range);
     const [selectedLargeProjects, setSelectedLargeProjects] = useState({});
     const [selectedSmallProjects, setSelectedSmallProjects] = useState({});
@@ -141,6 +142,12 @@ function Snapshot() {
                 section
             }
 
+            getUniqueStudent(method: "getUniqueStudent", fundingYear: "${appliedFilters["funding_year"][0]}") {
+                  funding_year
+                  unique_student
+                  funding_amount
+              }
+
             countFacultyMembersByStream(method: "countFacultyMembersByStream", filter: {
                 funding_year: ${JSON.stringify(filters["funding_year"])},
                 project_faculty: ${JSON.stringify(filters["project_faculty"])},
@@ -168,6 +175,8 @@ function Snapshot() {
         return str;
     }
 
+    console.log(appliedFilters["funding_year"][0])
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -187,6 +196,7 @@ function Snapshot() {
                 const reach = results.data.countTotalReachByFaculty;
                 const reachInfo = results.data.getStudentReachInfo;
                 const facultyEngagement = results.data.countFacultyMembersByStream;
+                const uniqueStudent = results.data.getUniqueStudent;
 
                 setDeclinedProjects(declinedProjects);
                 setNumProjectsAndGrants(projectsAndGrants);
@@ -196,6 +206,8 @@ function Snapshot() {
                 setReachCount(reach);
                 setReachInfo(reachInfo);
                 setFacultyEngagement(facultyEngagement);
+                setUniqueStudent(uniqueStudent);
+                console.log("unique student", uniqueStudent)
 
                 setLoading(false);
             } catch (e) {
@@ -535,8 +547,8 @@ function Snapshot() {
         successRate: (<SuccessRateChart projects={declinedProjects} totalprojects={selectedProjects} largeprojects={selectedLargeProjects} smallprojects={selectedSmallProjects} />),
         numProjects: (<NumProjectsChart projects={numProjectsAndGrants} />),
         funding: (<FundingChart projects={selectedProjects} />),
-        studentReach: (<StudentReachChart projects={reachCount} reachdata={reachInfo} />),
-        teamMember: (<FacultyEngagementChart projects={facultyEngagement} amount={selectedProjects} />)
+        studentReach: (<StudentReachChart projects={reachCount} reachdata={reachInfo} unique={uniqueStudent} />),
+        teamMember: (<FacultyEngagementChart projects={facultyEngagement} amount={selectedProjects} unique={uniqueStudent}/>)
     };
 
     return (
@@ -562,7 +574,7 @@ function Snapshot() {
                     <section id="num-projects"> <SnapshotBox chart={charts.numProjects} type={1} title="Number of Grants and Projects" /> </section>
                     <section id="funding"> <SnapshotBox chart={charts.funding} type={0} title="Funding Awarded" /> </section>
                     <section id="student-reach"> <SnapshotBox chart={charts.studentReach} type={1} title="Student Reach" /> </section>
-                    <section id="faculty-engagement"> <SnapshotBox chart={charts.teamMember} type={0} title="Faculty Engagement" /> </section>
+                    <section id="faculty-engagement"> <SnapshotBox chart={charts.teamMember} type={0} title="Faculty and Student Engagement" /> </section>
                 </React.Fragment>
             )}
 

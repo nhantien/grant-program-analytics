@@ -7,7 +7,7 @@ import styles from "./charts.module.css";
 // context
 import { FiltersContext } from '../../App';
 
-function StudentReachChart( {projects, reachdata}) {
+function StudentReachChart( {projects, reachdata, unique}) {
 
     const { appliedFilters } = useContext(FiltersContext);
 
@@ -16,13 +16,15 @@ function StudentReachChart( {projects, reachdata}) {
     // console.log('FILTERS', appliedFilters)
 
     let isDataComplete = true;
+    let isUniqueDataComplete = true;
 
     // convert funding_year value from string to int
     // e.g. "2022/2023" -> 2022
     const convertYear = (year) => {
-        const yearStr = year.substring(0, year.indexOf("/"));
-        return parseInt(yearStr);
+        // const yearStr = year.substring(0, year.indexOf("/"));
+        return parseInt(year);
     }
+
 
     // no student reach data prior to 2016: flag if current filters contain years before 2016
     // displays warning message
@@ -30,10 +32,23 @@ function StudentReachChart( {projects, reachdata}) {
     console.log(years);
     years.map((year) => {
         const yearInt = convertYear(year);
+        console.log(yearInt)
         if (yearInt < 2016) {
             isDataComplete = false;
         }
     });
+
+    // no unique student data prior to 2017
+    const uniqueyears = appliedFilters["funding_year"];
+    uniqueyears.map((year) => {
+        const yearInt = convertYear(year);
+        console.log(yearInt)
+        if (yearInt < 2017) {
+            isUniqueDataComplete = false;
+        }
+    });
+
+    console.log(isUniqueDataComplete)
 
     const customLabel = (props) => {
         const { x, y, width, height, value } = props;
@@ -77,6 +92,7 @@ function StudentReachChart( {projects, reachdata}) {
     
     console.log(STUDENT_REACH)
     console.log(reachdata)
+    console.log(isUniqueDataComplete)
 
     return (
         <React.Fragment>
@@ -106,17 +122,18 @@ function StudentReachChart( {projects, reachdata}) {
                 <p>Overall, the projects reached <b>{reachdata.course}</b> courses (undergraduate and graduate) and <b>{reachdata.section}</b> sections
                  across <b>{reachdata.faculty}</b> Faculties at the UBCV campus, impacting <b>{totalSmallReach + totalLargeReach}</b> enrolment. </p>
 
-                 {appliedFilters && appliedFilters["funding_year"].length > 0 
+                 {isUniqueDataComplete && appliedFilters && appliedFilters["funding_year"].length === 1 
                  && (appliedFilters.project_faculty).length === 0 &&
                  (appliedFilters.project_type).length === 0 &&
                  (appliedFilters.focus_area).length === 0 &&
                  (appliedFilters.search_text).length === 0 &&
                  // conditional rendering of the unique students when no filter is applied
-                 <p> Overall for the year <b>{appliedFilters.funding_year}</b>, the projects have reached <b>1000</b> unique students.*</p>
-            }
+                 <p> Overall for the year <b>{unique.funding_year}</b>, the projects have reached <b>{unique.unique_student}</b> unique students.*</p>
+                    &&
                  <p className={styles["reach-annotation"]}>
                     *Students enrolled in more than one TLEF-supported course are only counted once.
                  </p>
+}
             </div>
         </React.Fragment>
     );
