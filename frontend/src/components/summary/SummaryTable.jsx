@@ -40,9 +40,15 @@ function SummaryTable({ data }) {
             <SummaryTableItem field="Primary Investigator" data={data.pi_name} color="#FFF" />
             <SummaryTableItem field="Project Type" data={data.project_type} color="#DFF2FF" />
             <SummaryTableItem field="Funded Amount" data={formattedAmount} color="#FFF" />
-            <SummaryTableItem field="Focus Area(s)" data={focusAreas} color="#DFF2FF" />
+            {
+                data.focus_areas.length > 0 &&
+                <SummaryTableItem field="Focus Area(s)" data={focusAreas} color="#DFF2FF" />
+            }
             <SummaryTableItem field="Team Members" data={teamMembers} color="#FFF" />
-            <SummaryTableItem field="Student Reach" data={reachData} color="#DFF2FF" />
+            {
+                data.student_reach.length > 0 &&
+                <SummaryTableItem field="Student Reach" data={reachData} color="#DFF2FF" />
+            }
             {
                 data.co_curricular_reach.length > 0 &&
                 <SummaryTableItem field="Co-curricular Reach" data={data.co_curricular_reach} color="#FFF" />
