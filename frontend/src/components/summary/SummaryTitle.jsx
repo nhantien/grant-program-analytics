@@ -1,24 +1,24 @@
 import styles from "./SummaryTitle.module.css";
 
-function SummaryTitle({ project }) {
+function SummaryTitle({ data }) {
     return (
 
         <div className={styles.bg}>
             <div className={styles.container}>
                 <div className={styles.title}>
-                    {project.title}
+                    {data.title}
                 </div>
                 <div className={styles.status}>
-                    {project.status}
+                    {data.status}
                 </div>
             </div>
 
             <div className={styles.container}>
                 <div className={styles.faculty}>
-                    {project.faculty}
+                    {data.project_faculty}
                 </div>
                 <div className={styles.years}>
-                    3 Years (April 2020 - April 2023)
+                    {data.years} years
                 </div>
             </div>
         </div>

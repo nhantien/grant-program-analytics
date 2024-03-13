@@ -1,5 +1,4 @@
 import styles from "./SummaryTableItem.module.css";
-import { SAMPLE_TEAM_MEMBERS } from "../../constants";
 
 function SummaryTableItem({ field, data, color }) {
 
@@ -8,20 +7,19 @@ function SummaryTableItem({ field, data, color }) {
     if (field === "Team Members") {
         dataHTML = (
             <div className={styles.data} style={{ backgroundColor: color }}>
-                {data.map((name) =>
+                {data.map((member) =>
                     <div className={styles.member}>
                         <div className={styles.name}>
-                            {name}
+                            {member.member_name}
                         </div>
                         <div className={styles.job}>
-                            {SAMPLE_TEAM_MEMBERS[name]}
+                            {member.member_title}, {member.member_faculty}
                         </div>
                     </div>
                 )}
             </div>
         );
     } else if (field === "Student Reach") {
-        console.log(data);
         dataHTML = (
             <div className={styles.data} style={{ backgroundColor: color }}>
                 <div className={styles.courses}>
