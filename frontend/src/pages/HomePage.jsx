@@ -7,8 +7,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { IconButton, CircularProgress, Collapse, Slider } from '@mui/material';
 // amplify
 import { Amplify } from 'aws-amplify';
-import { generateClient } from 'aws-amplify/api'
-import config from '../aws-exports';
+import { generateClient } from 'aws-amplify/api';
 // css styles
 import styles from './HomePage.module.css';
 // context
