@@ -2,9 +2,11 @@ import { Stack, StackProps, Duration } from "aws-cdk-lib";
 import * as appsync from 'aws-cdk-lib/aws-appsync';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as iam from 'aws-cdk-lib/aws-iam';
+import { IdentityPool } from "@aws-cdk/aws-cognito-identitypool-alpha";
+import { DatabaseStack } from "./database-stack";
 
 export class ApiStack extends Stack {
-    constructor(scope: Stack, id: string, props?: StackProps) {
+    constructor(scope: Stack, databaseStack: DatabaseStack, id: string, props?: StackProps) {
         super(scope, id, props);
 
         const api = new appsync.GraphqlApi(this, 'TlefAnalyticsApi', {
@@ -12,9 +14,32 @@ export class ApiStack extends Stack {
             definition: appsync.Definition.fromFile('./graphql/schema.graphql'),
             authorizationConfig: {
                 defaultAuthorization: {
-                    authorizationType: appsync.AuthorizationType.API_KEY
+                    authorizationType: appsync.AuthorizationType.IAM
                 }
             }
+        });
+
+        const appSyncInvokePolicy = new iam.PolicyDocument({
+            statements: [new iam.PolicyStatement({
+                actions: [
+                    "appsync:GraphQL",
+                ],
+                resources: [`${api.arn}/*`],
+            })],
+        });
+
+        const guestRole = new iam.Role(this, 'TlefGuestAccessRole', {
+            assumedBy: new iam.ServicePrincipal('cognito-identity.amazonaws.com'),
+            roleName: 'tlef-analytics-guest-role',
+            inlinePolicies: {
+                "AppSyncInvokePolicy": appSyncInvokePolicy
+            }
+        });
+
+        const identityPool = new IdentityPool(this, 'TlefIdPool', {
+            identityPoolName: 'tlef-identity-pool',
+            allowUnauthenticatedIdentities: true,
+            unauthenticatedRole: guestRole
         });
 
         const resolverRole = new iam.Role(this, 'TlefAnalyticsResolverRole', {
@@ -37,15 +62,19 @@ export class ApiStack extends Stack {
             handler: 'resolver.lambda_handler',
             architecture: lambda.Architecture.X86_64,
             timeout: Duration.minutes(1),
-            role: resolverRole
+            role: resolverRole,
+            environment: {
+                'DB_NAME': databaseStack.getDbName(),
+                'OUTPUT_LOCATION': databaseStack.getS3BucketArn(),
+            }
         });
 
         const appsyncInvokePolicy = new iam.Policy(this, 'appsyncInvokePolicy', {
             policyName: 'appsyncInvokeAccess',
             statements: [
                 new iam.PolicyStatement({
-                    actions: [ 'lambda:invokeFunction' ],
-                    resources: [ resolver.functionArn ]
+                    actions: ['lambda:invokeFunction'],
+                    resources: [resolver.functionArn]
                 })
             ]
         });
@@ -53,7 +82,7 @@ export class ApiStack extends Stack {
         const lambdaDSRole = new iam.Role(this, 'lambdaDSRole', {
             assumedBy: new iam.ServicePrincipal('appsync.amazonaws.com'),
             roleName: 'lambda-data-source-role',
-            
+
         })
 
         const lambdaDataSource = new appsync.LambdaDataSource(this, 'TlefAnalyticsLambdaDataSource', {
@@ -61,6 +90,7 @@ export class ApiStack extends Stack {
             lambdaFunction: resolver,
             name: 'tlef-analytics-lambda-data-source',
             // TODO: add IAM role
+            serviceRole: lambdaDSRole
         });
 
         const queries = [
@@ -89,6 +119,6 @@ export class ApiStack extends Stack {
         queries.forEach((query) => {
             addResolver(query);
         });
-        
+
     }
 }
