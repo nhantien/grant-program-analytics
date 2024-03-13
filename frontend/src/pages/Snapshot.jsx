@@ -5,8 +5,7 @@ import { useState, useEffect, useContext } from "react";
 import { useLocation } from "react-router-dom";
 // amplify
 import { Amplify } from 'aws-amplify';
-import { generateClient } from 'aws-amplify/api'
-import config from '../aws-exports';
+import { generateClient } from 'aws-amplify/api';
 // mui
 import { CircularProgress } from "@mui/material";
 // css style
