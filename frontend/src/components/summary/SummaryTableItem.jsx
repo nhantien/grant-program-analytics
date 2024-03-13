@@ -4,7 +4,21 @@ function SummaryTableItem({ field, data, color }) {
 
     let dataHTML;
 
-    if (field === "Team Members") {
+    if (field == "Focus Area(s)") {
+        dataHTML = (
+            <div className={styles.data} style={{ backgroundColor: color }}>
+                {data.join(", ")}
+            </div>
+        );
+
+        // dataHTML = (
+        //     <div className={styles.data} style={{ backgroundColor: color }}>
+        //         {data.map((area) =>
+        //             <p style={{ marginBottom: "0.25rem"}}>{area}</p>
+        //         )}
+        //     </div>
+        // )
+    } else if (field === "Team Members") {
         dataHTML = (
             <div className={styles.data} style={{ backgroundColor: color }}>
                 {data.map((member) =>
@@ -23,13 +37,13 @@ function SummaryTableItem({ field, data, color }) {
         dataHTML = (
             <div className={styles.data} style={{ backgroundColor: color }}>
                 <div className={styles.courses}>
-                    {data.map((course) => (
-                        <div className={styles.course}>{course}</div>
+                    {data.courses.map((course) => (
+                        <div className={styles.course}>{course.course_name} {course.section}</div>
                     ))}
                 </div>
 
                 <div className={styles.reach}>
-                    n student impact.
+                    {data.count} student impact.
                 </div>
             </div>
         )
