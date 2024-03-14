@@ -16,6 +16,11 @@ function SummaryTable({ data }) {
     });
 
     data.team_members.sort((a, b) => a.member_name.localeCompare(b.member_name));
+
+    const pi = data.team_members.filter(function(member) {
+        return member.member_name === data.pi_name;
+    });
+
     const teamMembers = data.team_members.filter(function(member) {
         return member.member_name !== data.pi_name;
     });
@@ -37,7 +42,7 @@ function SummaryTable({ data }) {
                 Year {data.project_year} ({formattedYear})
             </div>
 
-            <SummaryTableItem field="Primary Investigator" data={data.pi_name} color="#FFF" />
+            <SummaryTableItem field="Primary Investigator" data={pi} color="#FFF" />
             <SummaryTableItem field="Project Type" data={data.project_type} color="#DFF2FF" />
             <SummaryTableItem field="Funded Amount" data={formattedAmount} color="#FFF" />
             {
