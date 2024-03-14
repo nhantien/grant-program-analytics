@@ -11,8 +11,7 @@ import { generateClient } from 'aws-amplify/api';
 import styles from "./Summary.module.css";
 // components
 import { SummaryTitle, SummaryDescription, SummaryTable, Posters, SimilarProjects } from "../components/summary";
-// constants
-import { Project } from "../constants";
+
 
 Amplify.configure({
     API: {
@@ -109,8 +108,8 @@ function Summary() {
                         funding_amount: grant.funding_amount,
                         focus_areas: grant.focus_areas,
                         co_curricular_reach: grant.description,
-                        team_members: teamMembers[index].members,
-                        student_reach: studentReach[index].reach,
+                        team_members: teamMembers.length > index ? teamMembers[index].members : [],
+                        student_reach: studentReach.length > index ? studentReach[index].reach : [],
                     });
                 });
                 console.log(tableInfo);
@@ -127,7 +126,7 @@ function Summary() {
 
     if (isLoading) return (
         <div className={styles.Summary}>
-            <div style={{ display: "flex", justifyContent: "center" }}>
+            <div style={{ height: "100%", display: "flex", justifyContent: "center" }}>
                 <CircularProgress />
             </div>
         </div>
@@ -144,10 +143,6 @@ function Summary() {
             }
         </div>
     );
-
-
-
-    // if (!project) return null;
 
     // return (
 
