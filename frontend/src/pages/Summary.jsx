@@ -5,30 +5,12 @@ import { useParams } from "react-router-dom";
 // mui
 import { CircularProgress } from "@mui/material";
 // amplify
-import { Amplify } from 'aws-amplify';
 import { generateClient } from 'aws-amplify/api';
 // css styles
 import styles from "./Summary.module.css";
 // components
 import { SummaryTitle, SummaryDescription, SummaryTable, Posters, SimilarProjects } from "../components/summary";
 
-
-Amplify.configure({
-    API: {
-        GraphQL: {
-            endpoint: 'https://3gxzh6hlrnebblrm2dqzxhn2fi.appsync-api.ca-central-1.amazonaws.com/graphql',
-            region: 'ca-central-1',
-            defaultAuthMode: 'iam',
-        }
-    },
-    Auth: {
-        Cognito: {
-            identityPoolId: 'ca-central-1:f4415d83-459f-4bdf-9981-c065dd3cdd53',
-            region: 'ca-central-1',
-            allowGuestAccess: true
-        }
-    }
-});
 
 function Summary() {
     const { id } = useParams();
