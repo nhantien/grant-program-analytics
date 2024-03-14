@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import ClearIcon from '@mui/icons-material/Clear';
 import { IconButton, CircularProgress, Collapse, Slider } from '@mui/material';
 // amplify
-import { Amplify } from 'aws-amplify';
 import { generateClient } from 'aws-amplify/api';
 // css styles
 import styles from './HomePage.module.css';
@@ -17,26 +16,6 @@ import { SearchBar, VerticalTableItem, ProjectTable } from '../components/home';
 import { Filter, FilterList, FundingYearFilter } from "../components/util";
 // constants
 import { Project, PROJECT_TYPE, FACULTY, MARKS } from '../constants';
-
-
-// Amplify.configure(config);
-
-Amplify.configure({
-    API: {
-        GraphQL: {
-            endpoint: 'https://3gxzh6hlrnebblrm2dqzxhn2fi.appsync-api.ca-central-1.amazonaws.com/graphql',
-            region: 'ca-central-1',
-            defaultAuthMode: 'iam',
-        }
-    },
-    Auth: {
-        Cognito: {
-            identityPoolId: 'ca-central-1:f4415d83-459f-4bdf-9981-c065dd3cdd53',
-            region: 'ca-central-1',
-            allowGuestAccess: true
-        }
-    }
-});
 
 const options = [
     {

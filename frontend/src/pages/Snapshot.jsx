@@ -4,7 +4,6 @@ import { useState, useEffect, useContext } from "react";
 // react-router
 import { useLocation } from "react-router-dom";
 // amplify
-import { Amplify } from 'aws-amplify';
 import { generateClient } from 'aws-amplify/api';
 // mui
 import { CircularProgress } from "@mui/material";
@@ -15,29 +14,7 @@ import { FiltersContext } from "../App";
 // components
 import { SnapshotHeader, SnapshotBox } from "../components/snapshot";
 import { FundingChart, NumProjectsChart, StudentReachChart, FacultyEngagementChart, SuccessRateChart } from "../components/charts";
-// constants
-import { Project } from "../constants";
 
-
-
-// Amplify.configure(config);
-
-Amplify.configure({
-    API: {
-        GraphQL: {
-            endpoint: 'https://3gxzh6hlrnebblrm2dqzxhn2fi.appsync-api.ca-central-1.amazonaws.com/graphql',
-            region: 'ca-central-1',
-            defaultAuthMode: 'iam',
-        }
-    },
-    Auth: {
-        Cognito: {
-            identityPoolId: 'ca-central-1:f4415d83-459f-4bdf-9981-c065dd3cdd53',
-            region: 'ca-central-1',
-            allowGuestAccess: true
-        }
-    }
-});
 
 function Snapshot() {
 
