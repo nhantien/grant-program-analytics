@@ -1,9 +1,9 @@
 from boto3 import client
 import time
+import os
 
 # parameters for connecting to athena
 ATHENA = client('athena')
-DB = "tleftest"
 
 def generate_filtered_query(filters):
     str = ""
@@ -25,10 +25,10 @@ def execute_query(query_string):
     response = ATHENA.start_query_execution(
         QueryString = query_string,
         QueryExecutionContext = {
-            "Database": DB
+            "Database": os.environ.get("DB")
         },
-        ResultConfiguration={
-            'OutputLocation': 's3://tlef-athena-test/result/',
+        ResultConfiguration= {
+            'OutputLocation': os.environ.get("OUTPUT_LOCATION"),
         }
     )
     executionId = response["QueryExecutionId"]
@@ -36,10 +36,10 @@ def execute_query(query_string):
     status = None
     
     while status == 'QUEUED' or status == 'RUNNING' or status is None:
-    	status = ATHENA.get_query_execution(QueryExecutionId = executionId)['QueryExecution']['Status']['State']
-    	if status == 'FAILED' or status == 'CANCELLED':
-    		raise Exception('Athena query failed or was cancelled')
-    	time.sleep(1)
+        status = ATHENA.get_query_execution(QueryExecutionId = executionId)['QueryExecution']['Status']['State']
+        if status == 'FAILED' or status == 'CANCELLED':
+            raise Exception('Athena query failed or was cancelled')
+        time.sleep(1)
     
     query_results = ATHENA.get_query_results(QueryExecutionId = executionId)
     rows = query_results["ResultSet"]["Rows"]

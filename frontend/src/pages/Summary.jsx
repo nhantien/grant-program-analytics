@@ -2,15 +2,16 @@
 import { useEffect, useState } from "react";
 // react-router
 import { useParams } from "react-router-dom";
+// mui
+import { CircularProgress } from "@mui/material";
 // amplify
 import { Amplify } from 'aws-amplify';
-import { generateClient } from 'aws-amplify/api'
+import { generateClient } from 'aws-amplify/api';
 // css styles
 import styles from "./Summary.module.css";
 // components
 import { SummaryTitle, SummaryDescription, SummaryTable, Posters, SimilarProjects } from "../components/summary";
-// constants
-import { Project } from "../constants";
+
 
 Amplify.configure({
     API: {
@@ -63,6 +64,15 @@ function Summary() {
                         member_unit
                     }
                 }
+
+                getStudentReachByGrantId(method: "getStudentReachByGrantId", grantId: "${id}") {
+                    grant_id
+                    reach {
+                        course_name
+                        section
+                        reach
+                    }
+                }
             }`;
 
             try {
@@ -74,6 +84,7 @@ function Summary() {
 
                 const summaryInfo = results.data.getIndividualSummaryInfo;
                 const teamMembers = results.data.getTeamMembersByGrantId;
+                const studentReach = results.data.getStudentReachByGrantId;
 
                 setTitleData({
                     title: summaryInfo[0].title,
@@ -88,15 +99,17 @@ function Summary() {
                 });
 
                 let tableInfo = [];
-                summaryInfo.map((grant) => {
+                summaryInfo.map((grant, index) => {
                     tableInfo.push({
+                        funding_year: grant.funding_year,
                         project_year: grant.project_year,
                         pi_name: grant.pi_name,
                         project_type: grant.project_type,
                         funding_amount: grant.funding_amount,
                         focus_areas: grant.focus_areas,
                         co_curricular_reach: grant.description,
-                        team_members: teamMembers[0].members,
+                        team_members: teamMembers.length > index ? teamMembers[index].members : [],
+                        student_reach: studentReach.length > index ? studentReach[index].reach : [],
                     });
                 });
                 console.log(tableInfo);
@@ -111,7 +124,13 @@ function Summary() {
         fetchData();
     }, []);
 
-    if (isLoading) return null;
+    if (isLoading) return (
+        <div className={styles.Summary}>
+            <div style={{ height: "100%", display: "flex", justifyContent: "center" }}>
+                <CircularProgress />
+            </div>
+        </div>
+    );
 
     return (
         <div className={styles.Summary}>
@@ -123,11 +142,7 @@ function Summary() {
                 ))
             }
         </div>
-    )
-
-
-
-    // if (!project) return null;
+    );
 
     // return (
 

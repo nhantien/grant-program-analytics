@@ -1,9 +1,21 @@
 import { Stack, StackProps } from "aws-cdk-lib";
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as glue from '@aws-cdk/aws-glue-alpha';
+import * as athena from 'aws-cdk-lib/aws-athena';
 
 
 export class DatabaseStack extends Stack {
+
+    private readonly s3Bucket: s3.Bucket;
+    private readonly db: glue.Database;
+
+    getS3BucketArn() {
+        return this.s3Bucket.bucketArn;
+    }
+
+    getDbName() {
+        return this.db.databaseName;
+    }
 
     constructor(scope: Stack, id: string, props?: StackProps) {
         super(scope, id, props);
@@ -18,6 +30,9 @@ export class DatabaseStack extends Stack {
         const db = new glue.Database(this, 'TlefAnalyticsDatabase', {
             databaseName: 'tlef_analytics'
         });
+
+        this.s3Bucket = s3Bucket;
+        this.db = db;
 
         /* ---- TABLES ---- */
         const projectDetailsTable = new glue.S3Table(this, 'projectDetailsTable', {
@@ -317,5 +332,6 @@ export class DatabaseStack extends Stack {
             bucket: s3Bucket,
             s3Prefix: '/src/co-curricular-reach'
         });
+
     }
 }
