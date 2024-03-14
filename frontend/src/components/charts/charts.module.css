@@ -2,6 +2,46 @@ b {
     color: #081252;
 }
 
+/* funding display data box  */
+.container {
+    display: flex;
+}
+
+.chart {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.dataBox {
+    border: 1px solid #286593;
+    padding: 5px;
+    margin-top: 50px;
+    border-radius: 10px;
+}
+
+.valueColumn {
+    display: flex;
+    flex-direction: row;
+    margin-left: 8px;
+}
+
+.valueSmall, .valueLarge {
+    flex-basis: 35%;
+}
+
+.valueSmall {
+    color: #FB812D;
+}
+
+.valueLarge {
+    color: #13588B;
+}
+
+.valueFaculty {
+    flex-basis: 25%;
+    color: black
+}
+
 /* num grants and projects chart */
 .num-box {
     width: 60%;

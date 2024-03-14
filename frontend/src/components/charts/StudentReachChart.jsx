@@ -129,11 +129,21 @@ function StudentReachChart( {projects, reachdata, unique}) {
                  (appliedFilters.search_text).length === 0 &&
                  // conditional rendering of the unique students when no filter is applied
                  <p> Overall for the year <b>{unique.funding_year}</b>, the projects have reached <b>{unique.unique_student}</b> unique students.*</p>
-                    &&
+                }
                  <p className={styles["reach-annotation"]}>
                     *Students enrolled in more than one TLEF-supported course are only counted once.
                  </p>
-}
+
+                 <div className={styles.dataBox}>
+                    <h3>Chart Data</h3>
+                    {STUDENT_REACH.map((item, index) => (
+                        <div key={index} className={styles.valueColumn}>
+                            <span className={styles.valueFaculty}><b>{item.name}: </b></span>
+                            <span className={styles.valueSmall}>Small: {(item['Small TLEF'])}</span>
+                            <span className={styles.valueLarge}> Large: {(item['Large TLEF'])}</span>
+                        </div>
+                    ))}
+                </div>
             </div>
         </React.Fragment>
     );
