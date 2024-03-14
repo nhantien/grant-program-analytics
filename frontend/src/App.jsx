@@ -2,12 +2,31 @@
 import React, { createContext, useState } from "react";
 // react-router
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+// amplify
+import { Amplify } from 'aws-amplify';
 // components
 import HomePage from "./pages/HomePage";
 import Summary from "./pages/Summary";
 import Snapshot from "./pages/Snapshot";
 
 export const FiltersContext = createContext("filters");
+
+Amplify.configure({
+  API: {
+      GraphQL: {
+          endpoint: process.env.REACT_APP_APPSYNC_ENDPOINT,
+          region: process.env.REACT_APP_AWS_REGION,
+          defaultAuthMode: 'iam',
+      }
+  },
+  Auth: {
+      Cognito: {
+          identityPoolId: process.env.REACT_APP_COGNITO_IDENTITY_POOL_ID,
+          region: process.env.REACT_APP_AWS_REGION,
+          allowGuestAccess: true
+      }
+  }
+});
 
 function App() {
 
