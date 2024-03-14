@@ -6,6 +6,18 @@ import { IdentityPool } from "@aws-cdk/aws-cognito-identitypool-alpha";
 import { DatabaseStack } from "./database-stack";
 
 export class ApiStack extends Stack {
+
+    private readonly idPool: IdentityPool;
+    private readonly api: appsync.GraphqlApi;
+
+    getEndpointUrl() {
+        return this.api.graphqlUrl;
+    }
+
+    getIdentityPoolId() {
+        return this.idPool.identityPoolId;
+    }
+
     constructor(scope: Stack, databaseStack: DatabaseStack, id: string, props?: StackProps) {
         super(scope, id, props);
 
@@ -18,6 +30,8 @@ export class ApiStack extends Stack {
                 }
             }
         });
+
+        this.api = api;
 
         const appSyncInvokePolicy = new iam.PolicyDocument({
             statements: [new iam.PolicyStatement({
@@ -41,6 +55,8 @@ export class ApiStack extends Stack {
             allowUnauthenticatedIdentities: true,
             unauthenticatedRole: guestRole
         });
+
+        this.idPool = identityPool;
 
         const resolverRole = new iam.Role(this, 'TlefAnalyticsResolverRole', {
             assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
