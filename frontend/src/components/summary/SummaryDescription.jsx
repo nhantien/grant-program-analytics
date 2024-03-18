@@ -4,7 +4,7 @@ function SummaryDescription({ data }) {
     return (
         <div className={styles.bg}>
             <div className={styles.container}>
-                    <div className={styles.title}>Latest Summary</div>
+                    <div className={styles.title}>Summary</div>
                     <div className={styles["description-body"]}>
                         {data.summary}
                     </div>
