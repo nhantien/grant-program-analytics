@@ -4,9 +4,10 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { IdentityPool } from "@aws-cdk/aws-cognito-identitypool-alpha";
 import { DatabaseStack } from "./database-stack";
+import { Construct } from "constructs";
 
 export class ApiStack extends Stack {
-    constructor(scope: Stack, databaseStack: DatabaseStack, id: string, props?: StackProps) {
+    constructor(scope: Construct, databaseStack: DatabaseStack, id: string, props?: StackProps) {
         super(scope, id, props);
 
         const api = new appsync.GraphqlApi(this, 'TlefAnalyticsApi', {
@@ -29,7 +30,7 @@ export class ApiStack extends Stack {
         });
 
         const guestRole = new iam.Role(this, 'TlefGuestAccessRole', {
-            assumedBy: new iam.ServicePrincipal('cognito-identity.amazonaws.com'),
+            assumedBy: new iam.FederatedPrincipal('cognito-identity.amazonaws.com'),
             roleName: 'tlef-analytics-guest-role',
             inlinePolicies: {
                 "AppSyncInvokePolicy": appSyncInvokePolicy
