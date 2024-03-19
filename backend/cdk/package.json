@@ -20,7 +20,7 @@
     "typescript": "~5.2.2"
   },
   "dependencies": {
-    "@aws-cdk/aws-amplify-alpha": "^2.132.1-alpha.0",
+    "@aws-cdk/aws-amplify-alpha": "^2.133.0-alpha.0",
     "@aws-cdk/aws-cognito-identitypool-alpha": "^2.132.1-alpha.0",
     "@aws-cdk/aws-glue-alpha": "2.130.0-alpha.0",
     "aws-cdk-lib": "^2.130.0",

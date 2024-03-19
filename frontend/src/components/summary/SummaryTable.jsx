@@ -1,11 +1,9 @@
 import styles from "./SummaryTable.module.css";
 import SummaryTableItem from "./SummaryTableItem";
-import { SAMPLE_STUDENT_REACH } from "../../constants";
 
 function SummaryTable({ data }) {
 
     const focusAreas = data.focus_areas.map((area) => area.replaceAll("_", " "));
-
 
     const formattedYear = `${data.funding_year}/${+data.funding_year + 1}`;
 
@@ -16,6 +14,17 @@ function SummaryTable({ data }) {
     });
 
     data.team_members.sort((a, b) => a.member_name.localeCompare(b.member_name));
+
+    const pi_as_member = data.team_members.filter(function(member) {
+        return member.member_name === data.pi_name;
+    });
+
+    const pi = pi_as_member.length > 0 ? pi_as_member : [{
+        member_name: data.pi_name,
+        member_position: "",
+        member_faculty: "",
+    }];
+
     const teamMembers = data.team_members.filter(function(member) {
         return member.member_name !== data.pi_name;
     });
@@ -37,14 +46,16 @@ function SummaryTable({ data }) {
                 Year {data.project_year} ({formattedYear})
             </div>
 
-            <SummaryTableItem field="Primary Investigator" data={data.pi_name} color="#FFF" />
+            <SummaryTableItem field="Primary Investigator" data={pi} color="#FFF" />
             <SummaryTableItem field="Project Type" data={data.project_type} color="#DFF2FF" />
             <SummaryTableItem field="Funded Amount" data={formattedAmount} color="#FFF" />
             {
                 data.focus_areas.length > 0 &&
                 <SummaryTableItem field="Focus Area(s)" data={focusAreas} color="#DFF2FF" />
+            }{
+                teamMembers.length > 0 &&
+                <SummaryTableItem field="Team Members" data={teamMembers} color="#FFF" />
             }
-            <SummaryTableItem field="Team Members" data={teamMembers} color="#FFF" />
             {
                 data.student_reach.length > 0 &&
                 <SummaryTableItem field="Student Reach" data={reachData} color="#DFF2FF" />

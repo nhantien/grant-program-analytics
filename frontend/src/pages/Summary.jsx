@@ -21,6 +21,17 @@ function Summary() {
     const [descriptionData, setDescriptionData] = useState({});
     const [tableData, setTableData] = useState([]);
 
+    const countTotalReach = (reachData) => {
+        let total = 0;
+        reachData.forEach((yearlyReach) => {
+            const courses = yearlyReach.reach;
+            const yearlyCount = courses.reduce((partialSum, a) => partialSum + a.reach, 0);
+            total += yearlyCount;
+        });
+
+        return total;
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             const query = `query MyQuery {
@@ -55,6 +66,11 @@ function Summary() {
                         reach
                     }
                 }
+
+                loadFocusArea(method: "loadFocusArea") {
+                    label
+                    value
+                }
             }`;
 
             try {
@@ -67,17 +83,24 @@ function Summary() {
                 const summaryInfo = results.data.getIndividualSummaryInfo;
                 const teamMembers = results.data.getTeamMembersByGrantId;
                 const studentReach = results.data.getStudentReachByGrantId;
+                const focusAreas = results.data.loadFocusArea;
 
                 setTitleData({
-                    title: summaryInfo[0].title,
+                    title: summaryInfo[summaryInfo.length - 1].title,
                     project_faculty: summaryInfo[0].project_faculty,
                     years: summaryInfo.length,
-                    status: "Active"
+                    status: "Active",
+                    reach: countTotalReach(studentReach)
                 });
 
                 setDescriptionData({
                     summary: summaryInfo[0].summary,
                     status: "Active"
+                });
+
+                let focusAreasJSON = {};
+                focusAreas.map((area) => {
+                    focusAreasJSON[area.value] = area.label;
                 });
 
                 let tableInfo = [];
@@ -88,18 +111,18 @@ function Summary() {
                         pi_name: grant.pi_name,
                         project_type: grant.project_type,
                         funding_amount: grant.funding_amount,
-                        focus_areas: grant.focus_areas,
+                        focus_areas: grant.focus_areas.map((area) => focusAreasJSON[area]),
                         co_curricular_reach: grant.description,
                         team_members: teamMembers.length > index ? teamMembers[index].members : [],
                         student_reach: studentReach.length > index ? studentReach[index].reach : [],
                     });
                 });
-                console.log(tableInfo);
+                
                 setTableData(tableInfo);
 
                 setIsLoading(false);
             } catch (e) {
-            console.log(e);
+                console.log(e);
             }
         };
 

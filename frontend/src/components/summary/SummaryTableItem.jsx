@@ -3,21 +3,28 @@ import styles from "./SummaryTableItem.module.css";
 function SummaryTableItem({ field, data, color }) {
 
     let dataHTML;
-
-    if (field == "Focus Area(s)") {
+    if (field === "Primary Investigator") {
+        dataHTML = (
+            <div className={styles.data} style={{ backgroundColor: color }}>
+                {data.map((member) =>
+                    <div className={styles.pi}>
+                        <div className={styles.name}>
+                            {member.member_name}
+                        </div>
+                        <div className={styles.job}>
+                            {member.member_title}, {member.member_faculty}
+                        </div>
+                    </div>
+                )}
+            </div>
+        )
+    }
+    else if (field === "Focus Area(s)") {
         dataHTML = (
             <div className={styles.data} style={{ backgroundColor: color }}>
                 {data.join(", ")}
             </div>
         );
-
-        // dataHTML = (
-        //     <div className={styles.data} style={{ backgroundColor: color }}>
-        //         {data.map((area) =>
-        //             <p style={{ marginBottom: "0.25rem"}}>{area}</p>
-        //         )}
-        //     </div>
-        // )
     } else if (field === "Team Members") {
         dataHTML = (
             <div className={styles.data} style={{ backgroundColor: color }}>
@@ -43,7 +50,7 @@ function SummaryTableItem({ field, data, color }) {
                 </div>
 
                 <div className={styles.reach}>
-                    {data.count} student impact.
+                    {data.count} students impacted.
                 </div>
             </div>
         )
@@ -62,7 +69,6 @@ function SummaryTableItem({ field, data, color }) {
             </div>
 
             {dataHTML}
-
         </div>
     );
 }
