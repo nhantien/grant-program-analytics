@@ -21,6 +21,12 @@ function SummaryTitle({ data }) {
                     {data.years} years
                 </div>
             </div>
+
+            <div className={styles.container}>
+                <div className={styles["normal-text"]}>
+                    Total Student Reach: {data.reach}
+                </div>
+            </div>
         </div>
     );
 }

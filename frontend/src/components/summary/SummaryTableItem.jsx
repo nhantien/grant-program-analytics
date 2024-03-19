@@ -3,7 +3,7 @@ import styles from "./SummaryTableItem.module.css";
 function SummaryTableItem({ field, data, color }) {
 
     let dataHTML;
-    if (field == "Primary Investigator") {
+    if (field === "Primary Investigator") {
         dataHTML = (
             <div className={styles.data} style={{ backgroundColor: color }}>
                 {data.map((member) =>
@@ -19,20 +19,12 @@ function SummaryTableItem({ field, data, color }) {
             </div>
         )
     }
-    else if (field == "Focus Area(s)") {
+    else if (field === "Focus Area(s)") {
         dataHTML = (
             <div className={styles.data} style={{ backgroundColor: color }}>
                 {data.join(", ")}
             </div>
         );
-
-        // dataHTML = (
-        //     <div className={styles.data} style={{ backgroundColor: color }}>
-        //         {data.map((area) =>
-        //             <p style={{ marginBottom: "0.25rem"}}>{area}</p>
-        //         )}
-        //     </div>
-        // )
     } else if (field === "Team Members") {
         dataHTML = (
             <div className={styles.data} style={{ backgroundColor: color }}>
@@ -77,7 +69,6 @@ function SummaryTableItem({ field, data, color }) {
             </div>
 
             {dataHTML}
-
         </div>
     );
 }

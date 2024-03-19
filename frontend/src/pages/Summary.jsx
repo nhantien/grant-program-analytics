@@ -21,6 +21,17 @@ function Summary() {
     const [descriptionData, setDescriptionData] = useState({});
     const [tableData, setTableData] = useState([]);
 
+    const countTotalReach = (reachData) => {
+        let total = 0;
+        reachData.forEach((yearlyReach) => {
+            const courses = yearlyReach.reach;
+            const yearlyCount = courses.reduce((partialSum, a) => partialSum + a.reach, 0);
+            total += yearlyCount;
+        });
+        
+        return total;
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             const query = `query MyQuery {
@@ -69,10 +80,11 @@ function Summary() {
                 const studentReach = results.data.getStudentReachByGrantId;
 
                 setTitleData({
-                    title: summaryInfo[0].title,
+                    title: summaryInfo[summaryInfo.length - 1].title,
                     project_faculty: summaryInfo[0].project_faculty,
                     years: summaryInfo.length,
-                    status: "Active"
+                    status: "Active",
+                    reach: countTotalReach(studentReach)
                 });
 
                 setDescriptionData({
