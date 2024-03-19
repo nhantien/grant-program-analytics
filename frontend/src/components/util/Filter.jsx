@@ -10,7 +10,6 @@ function Filter({ options, defaultValue, type, snapshot }) {
 
   const handleChange = (event) => {
     const value = event.target.value;
-
     // if "clear" is selected, clear all
     if (value.indexOf("clear") > -1) {
       setAppliedFilters((prevFilters) => ({
@@ -63,12 +62,14 @@ function Filter({ options, defaultValue, type, snapshot }) {
           >
             <Typography>Clear All</Typography>
           </MenuItem>
-          {options.map((option) => (
-            <MenuItem key={option.label} value={option.value}>
-              <Checkbox checked={appliedFilters[type].indexOf(option.value) > -1} />
-              <Typography noWrap>{option.label}</Typography>
-            </MenuItem>
-          ))}
+          {
+            Object.entries(options).map(([key, value]) => (
+              <MenuItem key={value} value={key}>
+                <Checkbox checked={appliedFilters[type].indexOf(key) > -1} />
+                <Typography noWrap>{value}</Typography>
+              </MenuItem>
+            ))
+          }
         </Select>
       </FormControl>
 
