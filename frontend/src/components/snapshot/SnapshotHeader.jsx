@@ -10,17 +10,15 @@ import { FiltersContext } from "../../App";
 // components
 import { Filter, FilterList, FundingYearFilter } from "../util";
 // constants
-import { FACULTY, PROJECT_TYPE, MARKS } from "../../constants";
+import { MARKS } from "../../constants";
 
 
-function SnapshotHeader({ range, setRange }) {
+function SnapshotHeader({ options, optionsLoading, range, setRange }) {
 
     const { appliedFilters, setAppliedFilters } = useContext(FiltersContext);
 
     const [showSlider, setShowSlider] = useState(appliedFilters["funding_year"].length > 1);
     const [rangeString, setRangeString] = useState(range[0] + "/" + (range[0]+1) + " - " + range[1] + "/" + (range[1]+1));
-
-    const options = ["Option 1", "Option 2", "Option 3"];
 
     const convertYear = (year) => {
         const yearStr = year.substring(0, year.indexOf("/"));
@@ -73,10 +71,10 @@ function SnapshotHeader({ range, setRange }) {
                 <div className={styles.dropdowns}>
 
                     <div className={styles["dropdown-filters"]}>
-                        <FundingYearFilter setShowSlider={setShowSlider} snapshot={true} />
-                        <Filter options={PROJECT_TYPE} defaultValue="Project Type" type="project_type" snapshot={true} />
-                        <Filter options={FACULTY} defaultValue="Faculty/Unit" type="project_faculty" snapshot={true} />
-                        <Filter options={options} defaultValue="Focus Area" type="focus_area" snapshot={true} />
+                        <FundingYearFilter options={optionsLoading ? {} : options.funding_year} setShowSlider={setShowSlider} snapshot={true} />
+                        <Filter options={optionsLoading ? {} : options.project_type} defaultValue="Project Type" type="project_type" snapshot={true} />
+                        <Filter options={optionsLoading ? {} : options.project_faculty} defaultValue="Faculty/Unit" type="project_faculty" snapshot={true} />
+                        <Filter options={optionsLoading ? {} : options.focus_area} defaultValue="Focus Area" type="focus_area" snapshot={true} />
                     </div>
 
                     <Collapse
@@ -101,7 +99,7 @@ function SnapshotHeader({ range, setRange }) {
                     <div className={styles["applied-filters"]}>
                         <span style={{ marginTop: "1rem", marginBottom: "0.5rem" }}>Applied Filters</span>
                         <div className={styles["filters-box"]}>
-                            <FilterList rangeString={rangeString} setRangeString={setRangeString} />
+                            <FilterList options={optionsLoading ? {'funding_year': { '2022': '2022/2023' }} : options} rangeString={rangeString} setRangeString={setRangeString} />
                             <div className={styles["clear-filters-div"]}>
                                 <p className={styles.text}>Clear All</p>
                                 <IconButton onClick={handleClearAll} size="small">
