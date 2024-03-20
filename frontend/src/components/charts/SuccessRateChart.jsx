@@ -1,7 +1,7 @@
 // react
 import React from 'react';
 // recharts
-import { PieChart, Pie, Cell, Label } from 'recharts';
+import { PieChart, Pie, Cell, Label, ResponsiveContainer } from 'recharts';
 // css style
 import styles from "./charts.module.css";
 
@@ -48,10 +48,13 @@ function SuccessRateChart({ projects, totalprojects, largeprojects, smallproject
         <React.Fragment>
             <div className={styles.chart}>
                 <div className={styles.sr}>
+                <ResponsiveContainer height={300} width='100%'>
                     <div className={styles["sr-pie"]}>
                         <p className={styles["sr-title"]}>Small TLEF Innovation Projects</p>
                         <p className={styles["sr-info"]}>Proposals: {smallprojects.length + projects.Small } | Funded: {smallprojects.length} </p>
+                        
                         <PieChart width={300} height={300}>
+                       
                             <Pie
                                 data={small}
                                 dataKey={"value"}
@@ -79,9 +82,13 @@ function SuccessRateChart({ projects, totalprojects, largeprojects, smallproject
                                     }}
                                 />
                             </Pie>
+                            
                         </PieChart>
-                    </div>
 
+                    </div>
+                    </ResponsiveContainer>
+                    
+                    <ResponsiveContainer height={300} width='100%'>
                     <div className={styles["sr-pie"]}>
                         <p className={styles["sr-title"]}>Large TLEF Innovation Projects</p>
                         <p className={styles["sr-info"]}>Proposals: {largeprojects.length + projects.Large } | Funded: {largeprojects.length} </p>
@@ -115,6 +122,7 @@ function SuccessRateChart({ projects, totalprojects, largeprojects, smallproject
                             </Pie>
                         </PieChart>
                     </div>
+                    </ResponsiveContainer>
 
 
                 </div>

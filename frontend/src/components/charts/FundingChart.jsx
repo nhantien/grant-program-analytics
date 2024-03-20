@@ -64,7 +64,7 @@ function FundingChart({ projects }) {
     }
 
     const CustomToolTip = ({ active, payload, label }) => {
-        console.log('PAYLOAD', payload)
+        //console.log('PAYLOAD', payload)
 
         if (active && payload && label) {
             return (
@@ -113,7 +113,7 @@ function FundingChart({ projects }) {
         <React.Fragment>
 
             <div className={styles.description}>
-                The TLEF awarded the total of <b>{formattedAmount(total)}</b> funding for selected {len} projects.
+                The TLEF awarded the total of <b>{formattedAmount(total)}</b> funding for {len}selected projects.
                 <div className={styles.dataBox}>
                     <h3>Chart Data</h3>
                     {res.map((item, index) => (
