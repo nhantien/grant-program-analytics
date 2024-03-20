@@ -5,6 +5,7 @@ b {
 /* funding display data box  */
 .container {
     display: flex;
+
 }
 
 .chart {
@@ -17,6 +18,7 @@ b {
     padding: 5px;
     margin-top: 50px;
     border-radius: 10px;
+    padding-bottom: 5px;
 }
 
 .valueColumn {
@@ -197,6 +199,12 @@ b {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+}
+
+@media (max-width: 768px) {
+    .sr-pie {
+        width: 45%;
+    }
 }
 
 .sr-bar {
