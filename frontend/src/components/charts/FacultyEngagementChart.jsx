@@ -74,7 +74,7 @@ function FacultyEngagementChart({projects, amount, unique}) {
                             <HistoryEduIcon 
                                 sx={{ color: "#119FD5", fontSize: "3.25rem" }}
                             />
-                             <span>{projects.Small.Teaching} Teaching Faculty</span> 
+                             <span>{projects.Small.Teaching} Educational Leadership Faculty</span> 
                         </div>
                         <div className={styles["fe-category"]}>
                             <GroupsIcon 
@@ -101,7 +101,7 @@ function FacultyEngagementChart({projects, amount, unique}) {
                             <HistoryEduIcon 
                                 sx={{ color: "#119FD5", fontSize: "3.25rem" }}
                             />
-                            <span>{projects.Large.Teaching} Teaching Faculty</span>
+                            <span>{projects.Large.Teaching} Educational Leadership Faculty</span>
                         </div>
                         <div className={styles["fe-category"]}>
                             <GroupsIcon 
