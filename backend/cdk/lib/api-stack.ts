@@ -43,11 +43,22 @@ export class ApiStack extends Stack {
             })],
         });
 
+        const unauthenticatedPolicy = new iam.PolicyDocument({
+            statements: [new iam.PolicyStatement({
+                effect: iam.Effect.ALLOW,
+                actions: [
+                    "cognito-identity:GetCredentialsForIdentity"
+                ],
+                resources: ["*"]
+            })]
+        });
+
         const guestRole = new iam.Role(this, 'TlefGuestAccessRole', {
             assumedBy: new iam.FederatedPrincipal('cognito-identity.amazonaws.com'),
             roleName: 'tlef-analytics-guest-role',
             inlinePolicies: {
-                "AppSyncInvokePolicy": appSyncInvokePolicy
+                "AppSyncInvokePolicy": appSyncInvokePolicy,
+                "UnauthenticatedPolicy": unauthenticatedPolicy
             }
         });
 
