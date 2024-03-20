@@ -19,7 +19,7 @@ export class ApiStack extends Stack {
         return this.idPool.identityPoolId;
     }
 
-    constructor(scope: Stack, databaseStack: DatabaseStack, id: string, props?: StackProps) {
+    constructor(scope: Construct, databaseStack: DatabaseStack, id: string, props?: StackProps) {
         super(scope, id, props);
 
         const api = new appsync.GraphqlApi(this, 'TlefAnalyticsApi', {
