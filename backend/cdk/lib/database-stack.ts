@@ -2,6 +2,7 @@ import { Stack, StackProps } from "aws-cdk-lib";
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as glue from '@aws-cdk/aws-glue-alpha';
 import * as athena from 'aws-cdk-lib/aws-athena';
+import { Construct } from "constructs";
 
 
 export class DatabaseStack extends Stack {
@@ -17,7 +18,7 @@ export class DatabaseStack extends Stack {
         return this.db.databaseName;
     }
 
-    constructor(scope: Stack, id: string, props?: StackProps) {
+    constructor(scope: Construct, id: string, props?: StackProps) {
         super(scope, id, props);
 
         // s3 bucket
@@ -33,6 +34,15 @@ export class DatabaseStack extends Stack {
 
         this.s3Bucket = s3Bucket;
         this.db = db;
+
+        const athenaWorkGroup = new athena.CfnWorkGroup(this, 'TlefAnalyticsWorkGroup', {
+            name: 'tlef-wg',
+            workGroupConfiguration: {
+                resultConfiguration: {
+                    outputLocation: `s3://${this.s3Bucket.bucketName}/result`
+                }
+            }
+        });
 
         /* ---- TABLES ---- */
         const projectDetailsTable = new glue.S3Table(this, 'projectDetailsTable', {
@@ -90,7 +100,7 @@ export class DatabaseStack extends Stack {
             ],
             dataFormat: glue.DataFormat.PARQUET,
             bucket: s3Bucket,
-            s3Prefix: '/src/project-details'
+            s3Prefix: 'src/project-details'
         });
 
         const facultyEngagementTable = new glue.S3Table(this, 'facultyEngagementTable', {
@@ -148,7 +158,7 @@ export class DatabaseStack extends Stack {
             ],
             dataFormat: glue.DataFormat.PARQUET,
             bucket: s3Bucket,
-            s3Prefix: '/src/faculty-engagement'
+            s3Prefix: 'src/faculty-engagement'
         });
 
         const studentReachTable = new glue.S3Table(this, 'studentReachTable', {
@@ -214,7 +224,7 @@ export class DatabaseStack extends Stack {
             ],
             dataFormat: glue.DataFormat.PARQUET,
             bucket: s3Bucket,
-            s3Prefix: '/src/student-reach'
+            s3Prefix: 'src/student-reach'
         });
 
         const focusAreaTable = new glue.S3Table(this, 'focusAreaTable', {
@@ -304,7 +314,7 @@ export class DatabaseStack extends Stack {
             ],
             dataFormat: glue.DataFormat.PARQUET,
             bucket: s3Bucket,
-            s3Prefix: '/src/focus-area'
+            s3Prefix: 'src/focus-area'
         });
 
         const coCurricularReachTable = new glue.S3Table(this, 'coCurricularReachTable', {
@@ -330,7 +340,7 @@ export class DatabaseStack extends Stack {
             ],
             dataFormat: glue.DataFormat.PARQUET,
             bucket: s3Bucket,
-            s3Prefix: '/src/co-curricular-reach'
+            s3Prefix: 'src/co-curricular-reach'
         });
 
     }

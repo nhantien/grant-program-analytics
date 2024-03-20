@@ -6,7 +6,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 // context
 import { FiltersContext } from '../../App';
 
-function FilterList({ rangeString, setRangeString }) {
+function FilterList({ options, rangeString, setRangeString }) {
 
   const { appliedFilters, setAppliedFilters } = useContext(FiltersContext);
 
@@ -70,7 +70,7 @@ function FilterList({ rangeString, setRangeString }) {
           filterValues.map((filter, index) => (
             <Chip
               key={index}
-              label={filter}
+              label={options[filterType][filter]}
               onDelete={() => handleClearFilter(filter, filterType)}
               deleteIcon={<ClearIcon />}
               style={{

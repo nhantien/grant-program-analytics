@@ -15,27 +15,16 @@ import { FiltersContext } from '../App';
 import { SearchBar, VerticalTableItem, ProjectTable } from '../components/home';
 import { Filter, FilterList, FundingYearFilter } from "../components/util";
 // constants
-import { Project, PROJECT_TYPE, FACULTY, MARKS } from '../constants';
-
-const options = [
-    {
-        "label": "Option 1",
-        "value": 1
-    },
-    {
-        "label": "Option 2",
-        "value": 2
-    },
-    {
-        "label": "Option 3",
-        "value": 3
-    },
-];
-
+import { Project, PROJECT_TYPE, MARKS } from '../constants';
 
 function HomePage() {
 
+    const client = generateClient();
+
     const { appliedFilters, setAppliedFilters } = useContext(FiltersContext);
+
+    const [options, setOptions] = useState({});
+    const [optionsLoading, setOptionsLoading] = useState(true);
 
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -63,22 +52,93 @@ function HomePage() {
                 title
                 project_year
             }
+
+            loadFaculty(method: "loadFaculty") {
+                faculty_name
+                faculty_code
+            }
+
+            loadFocusArea(method: "loadFocusArea") {
+                label
+                value
+            }
         }`;
 
         return str;
     }
+
+    const setDropdownOptions = (faculties, focusAreas) => {
+        let facultiesJSON = {};
+        faculties.map((faculty) => {
+            facultiesJSON[faculty.faculty_code] = faculty.faculty_name;
+        });
+
+        let focusAreasJSON = {};
+        focusAreas.map((area) => {
+            focusAreasJSON[area.value] = area.label;
+        });
+
+        const currentYear = new Date().getFullYear();
+        let yearsJSON = {};
+        for (let i = 1999; i <= currentYear; i++) {
+            const yearString = `${i}/${i+1}`;
+            const iString = i.toString();
+            yearsJSON[iString] = yearString;
+        }
+ 
+        setOptions({
+            funding_year: yearsJSON,
+            project_type: PROJECT_TYPE,
+            project_faculty: facultiesJSON,
+            focus_area: focusAreasJSON
+        });
+    }
+
+    useEffect(() => {
+        const fetchOptions = async () => {
+            try {
+                const queryString = `query load {
+                    loadFaculty(method: "loadFaculty") {
+                        faculty_name
+                        faculty_code
+                    }
+
+                    loadFocusArea(method: "loadFocusArea") {
+                        label
+                        value
+                    }
+                }`;
+
+                const results = await client.graphql({
+                    query: queryString
+                });
+
+                const faculties = results.data.loadFaculty;
+                const focusAreas = results.data.loadFocusArea;
+
+                setDropdownOptions(faculties, focusAreas);
+                setOptionsLoading(false);
+
+            } catch (e) {
+                console.log(e);
+            }
+        };
+
+        fetchOptions();
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoading(true);
                 const queryString = generateQueryString(appliedFilters);
-                const client = generateClient();
+
                 const results = await client.graphql({
                     query: queryString
                 });
 
                 const proposals = results.data.getFilteredProposals;
+
                 const newProjects = proposals.map((proj) => {
                     return new Project(
                         proj.grant_id,
@@ -165,10 +225,10 @@ function HomePage() {
                     <div className={styles["project-filters"]}>
                         <span className={styles["filter-text"]}>Filter by</span>
                         <div className={styles.filters}>
-                            <FundingYearFilter setShowSlider={setShowSlider} snapshot={false} />
-                            <Filter options={PROJECT_TYPE} defaultValue="Project Type" type="project_type" snapshot={false} />
-                            <Filter options={FACULTY} defaultValue="Faculty/Unit" type="project_faculty" snapshot={false} />
-                            <Filter options={options} defaultValue="Focus Area" type="focus_area" snapshot={false} />
+                            <FundingYearFilter options={optionsLoading ? {} : options.funding_year} setShowSlider={setShowSlider} snapshot={false} />
+                            <Filter options={optionsLoading ? {} : options.project_type} defaultValue="Project Type" type="project_type" snapshot={false} />
+                            <Filter options={optionsLoading ? {} : options.project_faculty} defaultValue="Faculty/Unit" type="project_faculty" snapshot={false} />
+                            <Filter options={optionsLoading ? {} : options.focus_area} defaultValue="Focus Area" type="focus_area" snapshot={false} />
                         </div>
                     </div>
                 </div>
@@ -199,7 +259,7 @@ function HomePage() {
                     <div className={styles["applied-filters"]}>
                         <span style={{ marginTop: "1rem", marginBottom: "0.5rem" }}>Applied Filters</span>
                         <div className={styles["filters-box"]}>
-                            <FilterList rangeString={rangeString} setRangeString={setRangeString} />
+                            <FilterList options={optionsLoading ? {'funding_year': { '2022': '2022/2023' }} : options} rangeString={rangeString} setRangeString={setRangeString} />
                             <div className={styles["clear-filters-div"]}>
                                 <p className={styles.text}>Clear All</p>
                                 <IconButton onClick={handleClearAllFilters} size="small">
