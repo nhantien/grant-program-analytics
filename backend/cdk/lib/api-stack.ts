@@ -93,32 +93,36 @@ export class ApiStack extends Stack {
             role: resolverRole,
             environment: {
                 'DB_NAME': databaseStack.getDbName(),
-                'OUTPUT_LOCATION': databaseStack.getS3BucketArn(),
+                'OUTPUT_LOCATION': `s3://${databaseStack.getS3BucketName()}/result/`,
             }
         });
 
-        const appsyncInvokePolicy = new iam.Policy(this, 'appsyncInvokePolicy', {
-            policyName: 'appsyncInvokeAccess',
-            statements: [
-                new iam.PolicyStatement({
-                    actions: ['lambda:invokeFunction'],
-                    resources: [resolver.functionArn]
-                })
-            ]
+        const lambdaDSPolicy = new iam.PolicyDocument({
+            statements: [new iam.PolicyStatement({
+                effect: iam.Effect.ALLOW,
+                actions: [
+                    "lambda:invokeFunction"
+                ],
+                resources: [
+                    resolver.functionArn,
+                    `${resolver.functionArn}:*`
+                ]
+            })]
         });
 
         const lambdaDSRole = new iam.Role(this, 'lambdaDSRole', {
             assumedBy: new iam.ServicePrincipal('appsync.amazonaws.com'),
             roleName: 'lambda-data-source-role',
-
-        })
+            inlinePolicies: {
+                "AppSyncDSLambdaPolicy": lambdaDSPolicy
+            }
+        });
 
         const lambdaDataSource = new appsync.LambdaDataSource(this, 'TlefAnalyticsLambdaDataSource', {
             api: api,
             lambdaFunction: resolver,
             name: 'tlef-analytics-lambda-data-source',
-            // TODO: add IAM role
-            serviceRole: lambdaDSRole
+            // serviceRole: lambdaDSRole
         });
 
         const queries = [
@@ -129,6 +133,7 @@ export class ApiStack extends Stack {
             'getStudentReachInfo',
             'getCoCurricularReachById',
             'countProjectsAndGrants'
+            // TODO: add more queries
         ];
 
         const addResolver = (query: string) => {

@@ -55,7 +55,7 @@ function FundingYearFilter({ options, setShowSlider, snapshot }) {
                     {
                         Object.entries(options).map(([key, value]) => (
                             <MenuItem key={value} value={key}>
-                                <Typography noWrap>{key}</Typography>
+                                <Typography noWrap>{value}</Typography>
                             </MenuItem>
                         ))
                     }

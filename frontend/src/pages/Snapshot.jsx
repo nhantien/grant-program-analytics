@@ -126,7 +126,7 @@ function Snapshot() {
                   funding_year
                   unique_student
                   funding_amount
-              }
+            }
 
             countFacultyMembersByStream(method: "countFacultyMembersByStream", filter: {
                 funding_year: ${JSON.stringify(filters["funding_year"])},
