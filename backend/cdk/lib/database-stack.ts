@@ -1,7 +1,9 @@
-import { Stack, StackProps } from "aws-cdk-lib";
+import { RemovalPolicy, Stack, StackProps } from "aws-cdk-lib";
 import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as s3Deploy from 'aws-cdk-lib/aws-s3-deployment';
 import * as glue from '@aws-cdk/aws-glue-alpha';
-import * as athena from 'aws-cdk-lib/aws-athena';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import { CfnCrawler } from "aws-cdk-lib/aws-glue";
 import { Construct } from "constructs";
 
 
@@ -10,12 +12,69 @@ export class DatabaseStack extends Stack {
     private readonly s3Bucket: s3.Bucket;
     private readonly db: glue.Database;
 
-    getS3BucketArn() {
-        return this.s3Bucket.bucketArn;
+    getS3BucketName() {
+        return this.s3Bucket.bucketName;
     }
 
     getDbName() {
         return this.db.databaseName;
+    }
+
+    private createCrawler(table: glue.S3Table, id: string, name: string) {
+
+        const crawlerPolicy = new iam.PolicyDocument({
+            statements: [new iam.PolicyStatement({
+                effect: iam.Effect.ALLOW,
+                actions: [
+                    "s3:GetObject",
+                    "s3:PutObject"
+                ],
+                resources: [
+                    `${this.s3Bucket.bucketArn}/${table.s3Prefix}/*`
+                ]
+            })]
+        });
+
+        const crawlerRole = new iam.Role(this, `${id}CrawlerRole`, {
+            assumedBy: new iam.ServicePrincipal("glue.amazonaws.com"),
+            roleName: `${name}_crawler_role`,
+            managedPolicies: [
+                iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSGlueServiceRole')
+            ],
+            inlinePolicies: {
+                "projectDetailsPolicy": crawlerPolicy
+            }
+        });
+
+        const crawlerConfiguration = {
+            "Version": 1.0,
+            "CrawlerOutput": {
+                "Partitions": {
+                    "AddOrUpdateBehavior": "InheritFromTable"
+                },
+                "Tables": {
+                    "AddOrUpdateBehavior": "MergeNewColumns"
+                }
+            }
+        };
+
+        const crawler = new CfnCrawler(this, `${id}Crawler`, {
+            role: crawlerRole.roleArn,
+            name: `${name}_crawler`,
+            databaseName: this.db.databaseName,
+            targets:{
+                s3Targets: [{
+                    path: `s3://${this.getS3BucketName()}/${table.s3Prefix}/`
+                  }],
+            },
+            schemaChangePolicy: {
+                deleteBehavior: 'LOG',
+                updateBehavior: 'LOG'
+            },
+            configuration: JSON.stringify(crawlerConfiguration)
+        });
+
+        return;
     }
 
     constructor(scope: Construct, id: string, props?: StackProps) {
@@ -26,7 +85,33 @@ export class DatabaseStack extends Stack {
             bucketName: 'tlef-analytics',
             blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
             encryption: s3.BucketEncryption.S3_MANAGED,
+            removalPolicy: RemovalPolicy.DESTROY
         });
+
+        const ProductionFolder = new s3Deploy.BucketDeployment(this, 'ProductionFolderDeployment', {
+            sources: [s3Deploy.Source.asset("./bucket_config")],
+            destinationBucket: s3Bucket,
+            destinationKeyPrefix: 'production/'
+        });
+
+        const StagingCSVFolderDeployment = new s3Deploy.BucketDeployment(this, 'StagingCSVFolderDeployment', {
+            sources: [s3Deploy.Source.asset("./bucket_config")],
+            destinationBucket: s3Bucket,
+            destinationKeyPrefix: 'staging/csv/'
+        });
+
+        const StagingParquetFolderDeployment = new s3Deploy.BucketDeployment(this, 'StagingParquetFolderDeployment', {
+            sources: [s3Deploy.Source.asset("./bucket_config")],
+            destinationBucket: s3Bucket,
+            destinationKeyPrefix: 'staging/parquet/'
+        });
+
+        const RawFolderDeployment = new s3Deploy.BucketDeployment(this, 'RawFolderDeployment', {
+            sources: [s3Deploy.Source.asset("./bucket_config")],
+            destinationBucket: s3Bucket,
+            destinationKeyPrefix: 'raw/'
+        });
+
 
         const db = new glue.Database(this, 'TlefAnalyticsDatabase', {
             databaseName: 'tlef_analytics'
@@ -34,15 +119,6 @@ export class DatabaseStack extends Stack {
 
         this.s3Bucket = s3Bucket;
         this.db = db;
-
-        const athenaWorkGroup = new athena.CfnWorkGroup(this, 'TlefAnalyticsWorkGroup', {
-            name: 'tlef-wg',
-            workGroupConfiguration: {
-                resultConfiguration: {
-                    outputLocation: `s3://${this.s3Bucket.bucketName}/result`
-                }
-            }
-        });
 
         /* ---- TABLES ---- */
         const projectDetailsTable = new glue.S3Table(this, 'projectDetailsTable', {
@@ -55,10 +131,6 @@ export class DatabaseStack extends Stack {
                 },
                 {
                     name: 'project_type',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'grant_id',
                     type: glue.Schema.STRING
                 },
                 {
@@ -95,13 +167,18 @@ export class DatabaseStack extends Stack {
                 },
                 {
                     name: 'project_year',
+                    type: glue.Schema.BIG_INT
+                },
+                {
+                    name: 'grant_id',
                     type: glue.Schema.STRING
                 }
             ],
             dataFormat: glue.DataFormat.PARQUET,
             bucket: s3Bucket,
-            s3Prefix: 'src/project-details'
+            s3Prefix: 'production/project_details'
         });
+        // this.createCrawler(projectDetailsTable, 'ProjectDetails', 'project_details');
 
         const facultyEngagementTable = new glue.S3Table(this, 'facultyEngagementTable', {
             database: db,
@@ -158,8 +235,9 @@ export class DatabaseStack extends Stack {
             ],
             dataFormat: glue.DataFormat.PARQUET,
             bucket: s3Bucket,
-            s3Prefix: 'src/faculty-engagement'
+            s3Prefix: 'production/faculty_engagement'
         });
+        // this.createCrawler(facultyEngagementTable, 'FacultyEngagement', 'faculty_engagement');
 
         const studentReachTable = new glue.S3Table(this, 'studentReachTable', {
             database: db,
@@ -224,8 +302,9 @@ export class DatabaseStack extends Stack {
             ],
             dataFormat: glue.DataFormat.PARQUET,
             bucket: s3Bucket,
-            s3Prefix: 'src/student-reach'
+            s3Prefix: 'production/student_reach'
         });
+        // this.createCrawler(studentReachTable, 'StudentReach', 'student_reach');
 
         const focusAreaTable = new glue.S3Table(this, 'focusAreaTable', {
             database: db,
@@ -314,8 +393,9 @@ export class DatabaseStack extends Stack {
             ],
             dataFormat: glue.DataFormat.PARQUET,
             bucket: s3Bucket,
-            s3Prefix: 'src/focus-area'
+            s3Prefix: 'production/focus_area'
         });
+        // this.createCrawler(focusAreaTable, 'FocusArea', 'focus_area');
 
         const coCurricularReachTable = new glue.S3Table(this, 'coCurricularReachTable', {
             database: db,
@@ -340,8 +420,67 @@ export class DatabaseStack extends Stack {
             ],
             dataFormat: glue.DataFormat.PARQUET,
             bucket: s3Bucket,
-            s3Prefix: 'src/co-curricular-reach'
+            s3Prefix: 'production/co_curricular_reach'
+        });
+        // this.createCrawler(coCurricularReachTable, 'CoCurricularReach', 'co_curricular_reach');
+
+        const uniqueStudentTable = new glue.S3Table(this, 'UniqueStudentTable', {
+            database: db,
+            tableName: 'unique_student',
+            columns: [
+                {
+                    name: 'funding_year',
+                    type: glue.Schema.BIG_INT
+                },
+                {
+                    name: 'unique_student',
+                    type: glue.Schema.DOUBLE
+                },
+                {
+                    name: 'funding_amount',
+                    type: glue.Schema.DOUBLE
+                }
+            ],
+            dataFormat: glue.DataFormat.PARQUET,
+            bucket: s3Bucket,
+            s3Prefix: 'production/unique_student'
         });
 
+        const facultyOptionTable = new glue.S3Table(this, 'FacultyOptionTable', {
+            database: db,
+            tableName: 'faculty_options',
+            columns: [
+                {
+                    name: 'faculty_name',
+                    type: glue.Schema.STRING
+                },
+                {
+                    name: 'faculty_code',
+                    type: glue.Schema.STRING
+                }
+            ],
+            dataFormat: glue.DataFormat.PARQUET,
+            bucket: s3Bucket,
+            s3Prefix: 'production/options/faculties'
+        });
+        // this.createCrawler(facultyOptionTable, 'FacultyOption', 'faculty_option');
+
+        const focusAreaOptionTable = new glue.S3Table(this, 'FocusAreaTable', {
+            database: db,
+            tableName: 'focus_area_options',
+            columns: [
+                {
+                    name: 'label',
+                    type: glue.Schema.STRING
+                },
+                {
+                    name: 'value',
+                    type: glue.Schema.STRING
+                }
+            ],
+            dataFormat: glue.DataFormat.PARQUET,
+            bucket: s3Bucket,
+            s3Prefix: 'production/options/focus_area'
+        });
     }
 }
