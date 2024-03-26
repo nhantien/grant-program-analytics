@@ -64,7 +64,7 @@ function FundingChart({ projects }) {
     }
 
     const CustomToolTip = ({ active, payload, label }) => {
-        console.log('PAYLOAD', payload)
+        //console.log('PAYLOAD', payload)
 
         if (active && payload && label) {
             return (
@@ -94,6 +94,7 @@ function FundingChart({ projects }) {
             </text>
         )
     }
+    //y + height / 3 * 2
 
     const { width, height, layout } = (isMobile())
         ? { width: 350, height: 500, layout: "horizontal" }
@@ -112,12 +113,22 @@ function FundingChart({ projects }) {
         <React.Fragment>
 
             <div className={styles.description}>
-                The TLEF awarded the total of <b>{formattedAmount(total)}</b> funding for selected {len} projects.
+                The TLEF awarded the total of <b>{formattedAmount(total)}</b> funding for {len}selected projects.
+                <div className={styles.dataBox}>
+                    <h3>Chart Data</h3>
+                    {res.map((item, index) => (
+                        <div key={index} className={styles.valueColumn}>
+                            <span className={styles.valueFaculty}><b>{item.name}: </b></span>
+                            <span className={styles.valueSmall}>Small: {formattedAmount(item['Small TLEF'])}</span>
+                            <span className={styles.valueLarge}> Large: {formattedAmount(item['Large TLEF'])}</span>
+                        </div>
+                    ))}
+                </div>
             </div>
             <div className={styles.space}></div>
             <div className={styles.chart}>
             <ResponsiveContainer width='100%' height={500}>
-                <BarChart width={width} height={height} layout={layout} data={res}>
+                <BarChart width={width} height={height} layout={layout} data={res} alt="hello">
                     {xAxis}
                     {yAxis}
                     {isMobile() && <Tooltip content={<CustomToolTip />} cursor={{ fill: "transparent" }} position={{ x: 100, y: 25 }} />}

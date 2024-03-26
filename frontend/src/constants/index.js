@@ -133,16 +133,10 @@ const YEARS = [
     }
 ];
 
-const PROJECT_TYPE = [
-    {
-        "label": "Large TLEF",
-        "value": "Large"
-    },
-    {
-        "label": "Small TLEF",
-        "value": "Small"
-    }
-];
+const PROJECT_TYPE = {
+    "Large": "Large TLEF",
+    "Small": "Small TLEF"
+};
 
 const FACULTY = [
     {

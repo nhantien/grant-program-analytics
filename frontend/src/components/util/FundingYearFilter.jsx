@@ -5,7 +5,7 @@ import { FiltersContext } from '../../App';
 
 import styles from "./Filter.module.css";
 
-function FundingYearFilter({ setShowSlider, snapshot }) {
+function FundingYearFilter({ options, setShowSlider, snapshot }) {
 
     const { appliedFilters, setAppliedFilters } = useContext(FiltersContext);
 
@@ -52,11 +52,13 @@ function FundingYearFilter({ setShowSlider, snapshot }) {
                     MenuProps={MenuProps}
                 >
                     <MenuItem value="select range of years">Select range of years</MenuItem>
-                    {YEARS.map((year) => (
-                        <MenuItem key={year.label} value={year.value}>
-                            <Typography>{year.label}</Typography>
-                        </MenuItem>
-                    ))}
+                    {
+                        Object.entries(options).map(([key, value]) => (
+                            <MenuItem key={value} value={key}>
+                                <Typography noWrap>{value}</Typography>
+                            </MenuItem>
+                        ))
+                    }
                 </Select>
             </FormControl>
 
