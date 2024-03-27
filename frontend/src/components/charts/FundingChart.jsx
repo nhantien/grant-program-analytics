@@ -96,9 +96,9 @@ function FundingChart({ projects }) {
     }
     //y + height / 3 * 2
 
-    const { width, height, layout } = (isMobile())
-        ? { width: 350, height: 500, layout: "horizontal" }
-        : { width: 850, height: 500, layout: "vertical" };
+    // const { width, height, layout } = (isMobile())
+    //     ? { width: 350, height: 500, layout: "horizontal" }
+    //     : { width: 850, height: 500, layout: "horizontal" };
 
     const xAxis = (isMobile())
         ? (<XAxis type="category" />) : (<XAxis type="number" padding={{ right: 150 }} />);
@@ -111,57 +111,61 @@ function FundingChart({ projects }) {
 
     return (
         <React.Fragment>
-
-            <div className={styles.description}>
-                The TLEF awarded the total of <b>{formattedAmount(total)}</b> funding for {len}selected projects.
-                <div className={styles.dataBox}>
-                    <h3>Chart Data</h3>
-                    {res.map((item, index) => (
-                        <div key={index} className={styles.valueColumn}>
-                            <span className={styles.valueFaculty}><b>{item.name}: </b></span>
-                            <span className={styles.valueSmall}>Small: {formattedAmount(item['Small TLEF'])}</span>
-                            <span className={styles.valueLarge}> Large: {formattedAmount(item['Large TLEF'])}</span>
-                        </div>
-                    ))}
-                </div>
-            </div>
-            <div className={styles.space}></div>
             <div className={styles.chart}>
             <ResponsiveContainer width='100%' height={500}>
-                <BarChart width={width} height={height} layout={layout} data={res} alt="hello">
-                    {xAxis}
-                    {yAxis}
+                <BarChart width={800} height={500} layout='vertical' data={res} alt="Funding Amount Chart">
+                <XAxis type="number" padding={{ right: 150 }} />
+                <YAxis type="category" dataKey="name" width={120} />
                     {isMobile() && <Tooltip content={<CustomToolTip />} cursor={{ fill: "transparent" }} position={{ x: 100, y: 25 }} />}
                     <Tooltip content={CustomToolTip} />
                     <Legend verticalAlign='top' iconType='square' height={36} />
                     <Bar dataKey="Small TLEF" stackId="a" maxBarSize={120} background={{ fill: "#EEEE" }} fill="#FB812D" />
-                    <Bar dataKey="Large TLEF" stackId="a"maxBarSize={120} fill="#13588B">{label}</Bar>
+                    <Bar dataKey="Large TLEF" stackId="a"maxBarSize={120} fill="#2F5D7C">{label}</Bar>
                 </BarChart>
                 </ResponsiveContainer>
             </div>
+            <div className={styles.space}></div>
+            <div className={styles.description}>
+                The TLEF awarded the total of <b>{formattedAmount(total)}</b> funding for {len} selected projects.
+                <div className={styles.dataBox}>
+                    <h3 className={styles['hidden']}>Chart Data</h3>
+                    {res.map((item, index) => (
+                        <div key={index} className={styles.valueColumn}>
+                            <span className={styles.valueFaculty}><b>{item.name}: </b></span>
+                            {(item['Small TLEF'] !== 0) && (
+                            <span className={styles.valueSmall}>Small: {formattedAmount(item['Small TLEF'])}</span>
+                            )}
+                            {(item['Large TLEF'] !== 0) && (
+                            <span className={styles.valueLarge}>Large: {formattedAmount(item['Large TLEF'])}</span>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            </div>
+        
             
         </React.Fragment>
     );
 
     // different version: bar graph with one color
-    return (
-        <React.Fragment>
-            <div className={styles.chart}>
-                <BarChart width={width} height={height} layout={layout} data={res} >
-                    {xAxis}
-                    {yAxis}
-                    {isMobile() && <Tooltip content={<CustomToolTip />} cursor={{ fill: "transparent" }} position={{ x: 100, y: 25 }} />}
-                    <Bar dataKey="value" fill="#081252" background={{ fill: "#EEE" }} activeBar={<Rectangle fill="lightblue" />}>
-                        {label}
-                    </Bar>
-                </BarChart>
-            </div>
-            <div className={styles.space}></div>
-            <div className={styles.description}>
-                The TLEF awarded the total of {formattedAmount(total)} funding for selected {len} projects.
-            </div>
-        </React.Fragment>
-    );
+    // return (
+    //     <React.Fragment>
+    //         <div className={styles.chart}>
+    //             <BarChart width={width} height={height} layout={layout} data={res} >
+    //                 {xAxis}
+    //                 {yAxis}
+    //                 {isMobile() && <Tooltip content={<CustomToolTip />} cursor={{ fill: "transparent" }} position={{ x: 100, y: 25 }} />}
+    //                 <Bar dataKey="value" fill="#081252" background={{ fill: "#EEE" }} activeBar={<Rectangle fill="lightblue" />}>
+    //                     {label}
+    //                 </Bar>
+    //             </BarChart>
+    //         </div>
+    //         <div className={styles.space}></div>
+    //         <div className={styles.description}>
+    //             The TLEF awarded the total of {formattedAmount(total)} funding for selected {len} projects.
+    //         </div>
+    //     </React.Fragment>
+    // );
 };
 
 export default FundingChart;

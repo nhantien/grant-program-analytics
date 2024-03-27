@@ -4,6 +4,7 @@ import React from 'react';
 import { PieChart, Pie, Cell, Label, ResponsiveContainer } from 'recharts';
 // css style
 import styles from "./charts.module.css";
+import { Grid } from "@mui/material";
 
 function SuccessRateChart({ projects, totalprojects, largeprojects, smallprojects }) {
 
@@ -46,23 +47,21 @@ function SuccessRateChart({ projects, totalprojects, largeprojects, smallproject
 
     return (
         <React.Fragment>
-            <div className={styles.chart}>
-                <div className={styles.sr}>
-                <ResponsiveContainer height={300} width='100%'>
-                    <div className={styles["sr-pie"]}>
-                        <p className={styles["sr-title"]}>Small TLEF Innovation Projects</p>
-                        <p className={styles["sr-info"]}>Proposals: {smallprojects.length + projects.Small } | Funded: {smallprojects.length} </p>
-                        
-                        <PieChart width={300} height={300}>
-                       
-                            <Pie
+        <div className={styles.sr}>
+        <Grid container spacing={1} justifyContent='flex-start'>
+                <Grid item xs={6}>
+    <ResponsiveContainer height={300} width='99%'>
+    <p className={styles["sr-title"]}>Small TLEF Innovation Projects</p>
+    <p className={styles["sr-info"]}>Proposals: {smallprojects.length + projects.Small } | Funded: {smallprojects.length} </p>
+      <PieChart>
+        <Pie
                                 data={small}
                                 dataKey={"value"}
                                 nameKey={"name"}
                                 cx={"50%"}
                                 cy={"50%"}
-                                innerRadius={80}
-                                outerRadius={120}
+                                innerRadius={60}
+                                outerRadius={90}
                                 startAngle={-270}
                                 endAngle={90}
                             >
@@ -80,57 +79,52 @@ function SuccessRateChart({ projects, totalprojects, largeprojects, smallproject
                                         fontSize: "1.5rem",
                                         fontWeight: 600
                                     }}
-                                />
-                            </Pie>
-                            
-                        </PieChart>
+                                 />
+                                 </Pie>
+      </PieChart>
+    </ResponsiveContainer>
+    </Grid>
+    <Grid item xs={6}>
+    <ResponsiveContainer height={300} width='99%'>
+    <p className={styles["sr-title"]}>Large TLEF Innovation Projects</p>
+    <p className={styles["sr-info"]}>Proposals: {largeprojects.length + projects.Large } | Funded: {largeprojects.length} </p>
+    <PieChart>
+        <Pie
+                 data={large}
+                 dataKey={"value"}
+                 nameKey={"name"}
+                 cx={"50%"}
+                 cy={"50%"}
+                 innerRadius={60}
+                 outerRadius={90}
+                 startAngle={-270}
+                 endAngle={90}
+             >
+                 {small.map((entry, index) => {
+                     if (index === 0) {
+                         return <Cell key={`cell-${index}`} fill="#EEE" />
+                     }
+                     return <Cell key={`cell-${index}`} fill="#2F5D7C" />
+                 })}
 
-                    </div>
-                    </ResponsiveContainer>
-                    
-                    <ResponsiveContainer height={300} width='100%'>
-                    <div className={styles["sr-pie"]}>
-                        <p className={styles["sr-title"]}>Large TLEF Innovation Projects</p>
-                        <p className={styles["sr-info"]}>Proposals: {largeprojects.length + projects.Large } | Funded: {largeprojects.length} </p>
-                        <PieChart width={300} height={300}>
-                            <Pie
-                                data={large}
-                                dataKey={"value"}
-                                nameKey={"name"}
-                                cx={"50%"}
-                                cy={"50%"}
-                                innerRadius={80}
-                                outerRadius={120}
-                                startAngle={-270}
-                                endAngle={90}
-                            >
-                                {small.map((entry, index) => {
-                                    if (index === 0) {
-                                        return <Cell key={`cell-${index}`} fill="#EEE" />
-                                    }
-                                    return <Cell key={`cell-${index}`} fill="#13588B" />
-                                })}
-
-                                <Label
-                                    value={large[1].label}
-                                    position={"center"}
-                                    style={{
-                                        fontSize: "1.5rem",
-                                        fontWeight: 600
-                                    }}
-                                />
-                            </Pie>
-                        </PieChart>
-                    </div>
-                    </ResponsiveContainer>
-
-
-                </div>
-            </div>
-            <div className={styles.space}></div>
-            <div className={styles.description}>
-                <p><b>{totalprojects.length}</b> projects received funding during selected TLEF rounds.</p>
-            </div>
+                 <Label
+                     value={large[1].label}
+                     position={"center"}
+                     style={{
+                         fontSize: "1.5rem",
+                         fontWeight: 600
+                     }}
+                 />
+            </Pie>
+      </PieChart>
+    </ResponsiveContainer>
+    </Grid>
+    </Grid>
+    </div>
+    <div className={styles.space}></div>
+    <div className={styles.description}>
+            <p><b>{totalprojects.length}</b> projects received funding during selected TLEF rounds.</p>
+        </div>
         </React.Fragment>
     );
 };

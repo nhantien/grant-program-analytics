@@ -36,7 +36,7 @@ function Filter({ options, defaultValue, type, snapshot }) {
   };
 
   return (
-    <div style={{ width: snapshot ? "25%" : "" }} className={styles.container}>
+    <div style={{ width: snapshot ? "20%" : "" }} className={styles.container}>
       <FormControl sx={{ width: "100%" }}>
         <Select
           label={defaultValue}
