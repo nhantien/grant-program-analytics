@@ -96,17 +96,16 @@ function StudentReachChart( {projects, reachdata, unique}) {
 
     return (
         <React.Fragment>
-            <div className={styles.chart}>
+                <div className={styles.chart}>
                 <ResponsiveContainer width='100%' height={500}>
                 <BarChart width={800} height={500} layout='vertical' data={STUDENT_REACH}>
                     <XAxis type='number' padding={{ right: 150}} />
                     <YAxis type='category' dataKey="name" width={120} />
                     <Legend verticalAlign='top' iconType='square' height={36} />
                     <Bar dataKey="Small TLEF" stackId="a" maxBarSize={120} background={{ fill: "#EEEE" }} fill="#FB812D" />
-                    <Bar dataKey="Large TLEF" stackId="a" maxBarSize={120} fill="#13588B">
+                    <Bar dataKey="Large TLEF" stackId="a" maxBarSize={120} fill="#2F5D7C">
                     <LabelList  
                     dataKey="total" fill="#081252" style={{ fontStyle: "italic" }} width='98%' position='right' content={customLabel}
-                
                     />
                     </Bar>
                 </BarChart>
@@ -135,16 +134,20 @@ function StudentReachChart( {projects, reachdata, unique}) {
                  </p>
 
                  <div className={styles.dataBox}>
-                    <h3>Chart Data</h3>
+                    <h3 className={styles['hidden']}>Chart Data</h3>
                     {STUDENT_REACH.map((item, index) => (
                         <div key={index} className={styles.valueColumn}>
                             <span className={styles.valueFaculty}><b>{item.name}: </b></span>
+                            {(item['Small TLEF'] !== 0) && (
                             <span className={styles.valueSmall}>Small: {(item['Small TLEF'])}</span>
-                            <span className={styles.valueLarge}> Large: {(item['Large TLEF'])}</span>
+                            )}
+                            {(item['Large TLEF'] !== 0) && (
+                             <span className={styles.valueLarge}>Large: {(item['Large TLEF'])}</span>
+                            )}
                         </div>
                     ))}
                 </div>
-            </div>
+                </div>
         </React.Fragment>
     );
 };

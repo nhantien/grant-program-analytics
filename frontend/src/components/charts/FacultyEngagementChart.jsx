@@ -45,20 +45,6 @@ function FacultyEngagementChart({projects, amount, unique}) {
 
     return (
         <React.Fragment>
-            <div className={styles.description}>
-                {!isDataComplete &&
-                    <p className={styles.warning}>Please note, this particular TLEF metric is not available prior to the 2017/18 academic year.</p>
-                }
-                <p>The TLEF actively engages with teaching and research faculty across the university as well as support staff who provide consultation and development support throughout the life of TLEF projects.</p>
-                {isDataComplete && appliedFilters && appliedFilters["funding_year"].length === 1  
-                 && (appliedFilters.project_faculty).length === 0 &&
-                 (appliedFilters.project_type).length === 0 &&
-                 (appliedFilters.focus_area).length === 0 &&
-                 (appliedFilters.search_text).length === 0 &&
-                <p>Approximately <b>${unique.funding_amount}</b> in TLEF-awarded funding will employ over <b>{projects.Small.Student + projects.Large.Student}</b> UBC students to support the development, implementation and evaluation of TLEF projects.</p>
-            }
-            </div>
-            <div className={styles.space}></div>
             <div className={styles.chart}>
                 <div className={styles.fe}>
 
@@ -101,7 +87,7 @@ function FacultyEngagementChart({projects, amount, unique}) {
                             <HistoryEduIcon 
                                 sx={{ color: "#119FD5", fontSize: "3.25rem" }}
                             />
-                            <span>{projects.Large.Teaching} Educational Leadership Faculty</span>
+                            <span>{projects.Large.Teaching} Educational Leadership Faculty </span>
                         </div>
                         <div className={styles["fe-category"]}>
                             <GroupsIcon 
@@ -118,6 +104,21 @@ function FacultyEngagementChart({projects, amount, unique}) {
                         </div>
                     </div>
                 </div>
+                <div className={styles.space}></div>
+                <div className={styles.description}>
+                {!isDataComplete &&
+                    <p className={styles.warning}>Please note, this particular TLEF metric is not available prior to the 2017/18 academic year.</p>
+                }
+                <p>The TLEF actively engages with teaching and research faculty across the university as well as support staff who provide consultation and development support throughout the life of TLEF projects.</p>
+                {isDataComplete && appliedFilters && appliedFilters["funding_year"].length === 1  
+                 && (appliedFilters.project_faculty).length === 0 &&
+                 (appliedFilters.project_type).length === 0 &&
+                 (appliedFilters.focus_area).length === 0 &&
+                 (appliedFilters.search_text).length === 0 &&
+                <p>Approximately <b>${unique.funding_amount}</b> in TLEF-awarded funding will employ over <b>{projects.Small.Student + projects.Large.Student}</b> UBC students to support the development, implementation and evaluation of TLEF projects.</p>
+            }
+            </div>
+           
         </React.Fragment>
     );
 };

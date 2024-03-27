@@ -1,5 +1,37 @@
 b {
-    color: #081252;
+    color: #002145;
+}
+
+.hidden {
+    height: 0.5px;
+    position: absolute;
+    color: rgba(0, 0, 0, 0);
+
+}
+
+.chart {
+    width: 61%;
+    min-height: 20rem;
+    height: 100%;
+    /* margin-left: -2rem; */
+}
+
+.space {
+    width: 5%;
+}
+
+.description {
+    width: 25%;
+    color: #000;
+    font-family: Inter;
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 400;
+}
+
+.warning {
+    color: red;
+    font-style: italic;
 }
 
 /* funding display data box  */
@@ -8,7 +40,7 @@ b {
 
 }
 
-.chart {
+.datachart {
     flex: 1;
     margin-right: 20px;
 }
@@ -36,7 +68,7 @@ b {
 }
 
 .valueLarge {
-    color: #13588B;
+    color: #2F5D7C;
 }
 
 .valueFaculty {
@@ -64,6 +96,39 @@ b {
     text-align: center;
 }
 
+.np-circle {
+    width: 6rem;
+    height: 6rem;
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background-color: #002145;
+}
+
+.np-circle p {
+    color: #97d4e9;
+    font-size: 2.5rem;
+    margin-bottom: 50%;
+    line-height: 1rem;
+}
+
+.np-circle2 {
+    width: 6rem;
+    height: 6rem;
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background-color: darkorange;
+}
+
+.np-circle2 p {
+    color: #002145;
+    font-size: 2.5rem;
+    line-height: 1rem;
+}
+
 .section {
     display: grid;
     grid-template-columns: 2fr 2fr;
@@ -73,41 +138,18 @@ b {
     row-gap: 20px;
     justify-content: center;
     margin-left: 80px;
+    margin-right: 40%;
+
 }
 
 .circletitle {
     margin: 1.5rem 0 1.5rem 0;
     font-size: 1.25rem;
     font-weight: 700;
-    color: #081252;
+    color: #002145;
     text-align: center;
     display: block;
 }
-
-.chart {
-    width: 61%;
-    min-height: 20rem;
-    height: 100%;
-}
-
-.space {
-    width: 5%;
-}
-
-.description {
-    width: 25%;
-    color: #000;
-    font-family: Inter;
-    font-size: 0.9375rem;
-    font-style: normal;
-    font-weight: 400;
-}
-
-.warning {
-    color: red;
-    font-style: italic;
-}
-
 
 /* FundingChart.jsx */
 .funding-tooltip {
@@ -123,10 +165,11 @@ b {
     padding-top: 0.4rem;
 }
 
-/* TeamMemberChart (FacultyEngagementChart) */
+/* Faculty Engagement Chart */
 .fe {
     width: 90%;
     margin-left: 10%;
+    /* margin-right: 10%; */
     display: flex;
     justify-content: space-between;
 }
@@ -141,41 +184,11 @@ b {
     border: solid 0.5px gray;
 }
 
-.fe-circle {
-    width: 6rem;
-    height: 6rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    background-color: #081252;
-}
-
-.fe-circle p {
-    color: #119FD5;
-    font-size: 2.5rem;
-}
-
-.fe-circle2 {
-    width: 6rem;
-    height: 6rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    background-color: darkorange;
-}
-
-.fe-circle2 p {
-    color: #081252;
-    font-size: 2.5rem;
-}
-
 .fe-title {
     margin: 1.5rem 0 1.5rem 0;
     font-size: 1.25rem;
     font-weight: 700;
-    color: #081252;
+    color: #002145;
 }
 
 .fe-category {
@@ -183,29 +196,29 @@ b {
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
 }
 
 /* Success Rate Chart */
 .sr {
-    width: 95%;
-    margin-left: 5%;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-right: 40px; 
+    padding-bottom: 45px;
+
 }
 
 .sr-pie {
-    width: 45%;
+    width: 30%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    justify-content: flex-start;
 }
 
-@media (max-width: 768px) {
-    .sr-pie {
-        width: 45%;
-    }
-}
 
 .sr-bar {
     width: 100%;
@@ -215,15 +228,42 @@ b {
     align-items: flex-start;
 }
 
+.sr-info {
+    margin-bottom: 0;
+    font-size: 1rem;
+}
+
 .sr-title {
     margin: 0 0 0.5rem 0;
     font-size: 1.5rem;
     font-weight: 700;
 }
 
-.sr-info {
-    margin-bottom: 0;
-    font-size: 1rem;
+@media (max-width: 768px) {
+    .sr-pie {
+        width: 50%;
+    }
+
+    .sr-title {
+        font-size: 1.2rem;
+    }
+}
+
+
+
+.piechart {
+    min-height: 5rem;
+    height: 100%;
+    display: flex;
+}
+
+.pie-sr {
+    width: 95%;
+    margin-left: 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%
 }
 
 /* Student Reach Chart */
@@ -253,7 +293,7 @@ b {
     }
 
     .funding-tooltip p {
-        color: #081252;
+        color: #002145;
         margin: 0.25rem;
         font-style: italic;
         font-weight: 700;
