@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { FiltersContext } from '../../App';
-import { FormControl, Select, OutlinedInput, MenuItem, Checkbox, Typography } from '@mui/material';
+import { Grid, FormControl, Select, OutlinedInput, MenuItem, Checkbox, Typography } from '@mui/material';
 
 import styles from "./Filter.module.css";
 
@@ -36,44 +36,46 @@ function Filter({ options, defaultValue, type, snapshot }) {
   };
 
   return (
-    <div style={{ width: snapshot ? "25%" : "" }} className={styles.container}>
-      <FormControl sx={{ width: "100%" }}>
-        <Select
-          label={defaultValue}
-          className={styles.filter}
-          onChange={handleChange}
-          displayEmpty
-          fullWidth
-          multiple
-          value={appliedFilters[type]}
-          input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-          renderValue={(selected) => {
-            if (selected.length === 0) { return <em>{defaultValue} (All)</em>; }
-            return (
-              <em>{defaultValue} ({selected.length})</em>
-            )
-          }}
-          MenuProps={MenuProps}
-        >
-          <MenuItem
-            selected={false}
-            value="clear"
-            sx={{ backgroundColor: "#EBECEE", borderRadius: "5px", padding: "0.5rem 0 0.5rem 0", display: "flex", justifyContent: "center" }}
+    <Grid container>
+      <Grid item xs={12}>
+        <FormControl sx={{ width: "100%" }}>
+          <Select
+            label={defaultValue}
+            className={styles.filter}
+            onChange={handleChange}
+            displayEmpty
+            autoWidth
+            multiple
+            value={appliedFilters[type]}
+            input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+            renderValue={(selected) => {
+              if (selected.length === 0) { return <em>{defaultValue} (All)</em>; }
+              return (
+                <em>{defaultValue} ({selected.length})</em>
+              )
+            }}
+            MenuProps={MenuProps}
           >
-            <Typography>Clear All</Typography>
-          </MenuItem>
-          {
-            Object.entries(options).map(([key, value]) => (
-              <MenuItem key={value} value={key}>
-                <Checkbox checked={appliedFilters[type].indexOf(key) > -1} />
-                <Typography noWrap>{value}</Typography>
-              </MenuItem>
-            ))
-          }
-        </Select>
-      </FormControl>
-
-    </div>
+            <MenuItem
+              selected={false}
+              value="clear"
+              disableGutters
+              sx={{ width: "100%", backgroundColor: "#EBECEE", borderRadius: "5px", padding: "0.5rem 0 0 0", display: "flex", justifyContent: "center" }}
+            >
+              <Typography>Clear All</Typography>
+            </MenuItem>
+            {
+              Object.entries(options).map(([key, value]) => (
+                <MenuItem key={value} value={key} style={{ width: "100%", whiteSpace: "normal" }}>
+                  <Checkbox checked={appliedFilters[type].indexOf(key) > -1} />
+                  <Typography >{value}</Typography>
+                </MenuItem>
+              ))
+            }
+          </Select>
+        </FormControl>
+      </Grid>
+    </Grid>
   );
 };
 
