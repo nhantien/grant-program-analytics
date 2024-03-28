@@ -3,9 +3,9 @@ import styles from "./SnapshotBox.module.css";
 
 function SnapshotBox({ chart, type, title }) {
 
-    const bgColor = type === 0 ? "#FFF" : "#DFF2FF";
-    const flexDir = type === 0 ? "row" : "row-reverse";
-    const justifyContent = type === 0 ? "flex-start" : "flex-end";
+    const bgColor = type === 0 ? "#FFF" : "#e1f3f9";
+    const flexDir = type === 0 ? "row-reverse" : "row-reverse";
+    const justifyContent = type === 0 ? "flex-end" : "flex-end";
 
     return (
         <div className={styles.bg} style={{ backgroundColor: bgColor }}>

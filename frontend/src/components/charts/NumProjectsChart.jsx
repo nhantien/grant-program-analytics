@@ -9,25 +9,25 @@ function NumProjectsChart({ projects }) {
         <React.Fragment>
             <div className={styles['section']}> 
             <div className={styles['circle']}>
-                <div className={styles["fe-circle"]}>
+                <div className={styles["np-circle"]}>
                             <p>{projects.project.Small}</p>
                         </div>
                         <p className={styles["circletitle"]}>SMALL PROJECTS FUNDED</p>
             </div>
             <div className={styles['circle']}>
-                <div className={styles["fe-circle"]}>
+                <div className={styles["np-circle"]}>
                         <p>{projects.project.Large}</p>
                     </div>
                     <p className={styles["circletitle"]}>LARGE PROJECTS FUNDED</p>
             </div>
             <div className={styles['circle']}>
-                <div className={styles["fe-circle2"]}>
+                <div className={styles["np-circle2"]}>
                             <p>{projects.grant.Small}</p>
                     </div>
                     <p className={styles["circletitle"]}>SMALL GRANTS AWARDED </p>
             </div>
             <div className={styles['circle']}>
-                <div className={styles["fe-circle2"]}>
+                <div className={styles["np-circle2"]}>
                         <p>{projects.grant.Large}</p>
                     </div>  
                     <p className={styles["circletitle"]}>LARGE GRANTS AWARDED</p>
