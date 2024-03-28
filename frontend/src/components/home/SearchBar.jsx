@@ -1,17 +1,14 @@
 // react
 import React, { useContext, useState } from 'react';
 // mui
-import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
+import { Grid, TextField, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
-// css styles
-import styles from "./SearchBar.module.css";
 // context
 import { FiltersContext } from '../../App';
 
 
-function SearchBar () {
+function SearchBar() {
 
   const { setAppliedFilters } = useContext(FiltersContext);
 
@@ -37,33 +34,35 @@ function SearchBar () {
   }
 
   return (
-    <div className={styles.container}>
-      <TextField
-        style={{backgroundColor: "white"}}
-        fullWidth
-        value={inputValue}
-        onInput={(e) => setInputValue(e.target.value)}
-        onKeyDown={handleKeyPress}
-        onChange={(e) => setInputValue(e.target.value)}
-        label="Search by Title/Investigator"
-        variant="outlined"
-        size="small"
-        InputProps={{
-          endAdornment: (
-            <>
-              {inputValue && (
-                <IconButton onClick={handleClear} size="small">
-                  <ClearIcon />
+    <Grid container>
+      <Grid item xs={12}>
+        <TextField
+          style={{ backgroundColor: "white" }}
+          fullWidth
+          value={inputValue}
+          onInput={(e) => setInputValue(e.target.value)}
+          onKeyDown={handleKeyPress}
+          onChange={(e) => setInputValue(e.target.value)}
+          label="Search by Title/Investigator"
+          variant="outlined"
+          size="small"
+          InputProps={{
+            endAdornment: (
+              <>
+                {inputValue && (
+                  <IconButton onClick={handleClear} size="small">
+                    <ClearIcon />
+                  </IconButton>
+                )}
+                <IconButton onClick={handleSearch} size="small">
+                  <SearchIcon />
                 </IconButton>
-              )}
-              <IconButton onClick={ handleSearch } size="small">
-                <SearchIcon />
-              </IconButton>
-            </>
-          ),
-        }}
-      />
-    </div>
+              </>
+            ),
+          }}
+        />
+      </Grid>
+    </Grid>
   );
 };
 

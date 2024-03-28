@@ -1,3 +1,4 @@
+import { Grid } from "@mui/material";
 import styles from "./SummaryTable.module.css";
 import SummaryTableItem from "./SummaryTableItem";
 
@@ -15,7 +16,7 @@ function SummaryTable({ data }) {
 
     data.team_members.sort((a, b) => a.member_name.localeCompare(b.member_name));
 
-    const pi_as_member = data.team_members.filter(function(member) {
+    const pi_as_member = data.team_members.filter(function (member) {
         return member.member_name === data.pi_name;
     });
 
@@ -25,7 +26,7 @@ function SummaryTable({ data }) {
         member_faculty: "",
     }];
 
-    const teamMembers = data.team_members.filter(function(member) {
+    const teamMembers = data.team_members.filter(function (member) {
         return member.member_name !== data.pi_name;
     });
 
@@ -42,28 +43,33 @@ function SummaryTable({ data }) {
 
     return (
         <div className={styles.bg}>
-            <div className={styles.title}>
-                Year {data.project_year} ({formattedYear})
-            </div>
-
-            <SummaryTableItem field="Primary Investigator" data={pi} color="#FFF" />
-            <SummaryTableItem field="Project Type" data={data.project_type} color="#DFF2FF" />
-            <SummaryTableItem field="Funded Amount" data={formattedAmount} color="#FFF" />
-            {
-                data.focus_areas.length > 0 &&
-                <SummaryTableItem field="Focus Area(s)" data={focusAreas} color="#DFF2FF" />
-            }{
-                teamMembers.length > 0 &&
-                <SummaryTableItem field="Team Members" data={teamMembers} color="#FFF" />
-            }
-            {
-                data.student_reach.length > 0 &&
-                <SummaryTableItem field="Student Reach" data={reachData} color="#DFF2FF" />
-            }
-            {
-                data.co_curricular_reach.length > 0 &&
-                <SummaryTableItem field="Co-curricular Reach" data={data.co_curricular_reach} color="#FFF" />
-            }
+            <Grid container>
+                <Grid item xs={12}>
+                    <div className={styles.title}>
+                        Year {data.project_year} ({formattedYear})
+                    </div>
+                </Grid>
+                <Grid item xs={12}>
+                    <SummaryTableItem field="Primary Investigator" data={pi} color="#FFF" />
+                    <SummaryTableItem field="Project Type" data={data.project_type} color="#DFF2FF" />
+                    <SummaryTableItem field="Funded Amount" data={formattedAmount} color="#FFF" />
+                    {
+                        data.focus_areas.length > 0 &&
+                        <SummaryTableItem field="Focus Area(s)" data={focusAreas} color="#DFF2FF" />
+                    }{
+                        teamMembers.length > 0 &&
+                        <SummaryTableItem field="Team Members" data={teamMembers} color="#FFF" />
+                    }
+                    {
+                        data.student_reach.length > 0 &&
+                        <SummaryTableItem field="Student Reach" data={reachData} color="#DFF2FF" />
+                    }
+                    {
+                        data.co_curricular_reach.length > 0 &&
+                        <SummaryTableItem field="Co-curricular Reach" data={data.co_curricular_reach} color="#FFF" />
+                    }
+                </Grid>
+            </Grid>
         </div>
     );
 }

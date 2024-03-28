@@ -4,7 +4,7 @@ import { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 // mui
 import ClearIcon from '@mui/icons-material/Clear';
-import { IconButton, CircularProgress, Collapse, Slider } from '@mui/material';
+import { IconButton, CircularProgress, Collapse, Slider, Grid, Pagination } from '@mui/material';
 // amplify
 import { generateClient } from 'aws-amplify/api';
 // css styles
@@ -31,6 +31,8 @@ function HomePage() {
     const [showSlider, setShowSlider] = useState(false);
     const [range, setRange] = useState([1999, 2023]);
     const [rangeString, setRangeString] = useState("");
+
+    const [page, setPage] = useState(0);
 
     const generateQueryString = (filters) => {
 
@@ -81,11 +83,11 @@ function HomePage() {
         const currentYear = new Date().getFullYear();
         let yearsJSON = {};
         for (let i = 1999; i <= currentYear; i++) {
-            const yearString = `${i}/${i+1}`;
+            const yearString = `${i}/${i + 1}`;
             const iString = i.toString();
             yearsJSON[iString] = yearString;
         }
- 
+
         setOptions({
             funding_year: yearsJSON,
             project_type: PROJECT_TYPE,
@@ -209,27 +211,46 @@ function HomePage() {
         setRangeString(min + "/" + (min + 1) + " - " + max + "/" + (max + 1));
     }
 
+    const handlePaginationChange = (page) => {
+        setPage(page);
+        document.getElementById("top").scrollIntoView({ behavior: "auto" });
+    };
+
     return (
         <div className={styles.bg}>
             <header className={styles["app-header"]}>
                 <div className={styles.container}>
-                    <h2 className={styles.title}>TLEF Funded Proposals</h2>
-                    <SearchBar />
+                    <Grid container spacing={1} style={{ alignItems: 'center' }}>
+                        <Grid item xs={12} md={5}>
+                            <h2 className={styles.title}>TLEF Funded Proposals</h2>
+                        </Grid>
+                        <Grid item xs={12} md={7}>
+                            <SearchBar />
+                        </Grid>
+                    </Grid>
                 </div>
 
-                <div className={styles["open-search"]}>
+                {/* <div className={styles["open-search"]}>
                     <button onClick={(e) => handleOpenSearch(e)}>Open Advanced Search</button>
-                </div>
+                </div> */}
 
                 <div id="filters" className={styles["filters-div"]}>
                     <div className={styles["project-filters"]}>
                         <span className={styles["filter-text"]}>Filter by</span>
-                        <div className={styles.filters}>
-                            <FundingYearFilter options={optionsLoading ? {} : options.funding_year} setShowSlider={setShowSlider} snapshot={false} />
-                            <Filter options={optionsLoading ? {} : options.project_type} defaultValue="Project Type" type="project_type" snapshot={false} />
-                            <Filter options={optionsLoading ? {} : options.project_faculty} defaultValue="Faculty/Unit" type="project_faculty" snapshot={false} />
-                            <Filter options={optionsLoading ? {} : options.focus_area} defaultValue="Focus Area" type="focus_area" snapshot={false} />
-                        </div>
+                        <Grid container spacing={1} className={styles.filters}>
+                            <Grid item xs={12} md={3}>
+                                <FundingYearFilter options={optionsLoading ? {} : options.funding_year} setShowSlider={setShowSlider} snapshot={false} />
+                            </Grid>
+                            <Grid item xs={12} md={3}>
+                                <Filter options={optionsLoading ? {} : options.project_type} defaultValue="Project Type" type="project_type" snapshot={false} />
+                            </Grid>
+                            <Grid item xs={12} md={3}>
+                                <Filter options={optionsLoading ? {} : options.project_faculty} defaultValue="Faculty/Unit" type="project_faculty" snapshot={false} />
+                            </Grid>
+                            <Grid item xs={12} md={3}>
+                                <Filter options={optionsLoading ? {} : options.focus_area} defaultValue="Focus Area" type="focus_area" snapshot={false} />
+                            </Grid>
+                        </Grid>
                     </div>
                 </div>
 
@@ -259,7 +280,7 @@ function HomePage() {
                     <div className={styles["applied-filters"]}>
                         <span style={{ marginTop: "1rem", marginBottom: "0.5rem" }}>Applied Filters</span>
                         <div className={styles["filters-box"]}>
-                            <FilterList options={optionsLoading ? {'funding_year': { '2022': '2022/2023' }} : options} rangeString={rangeString} setRangeString={setRangeString} />
+                            <FilterList options={optionsLoading ? { 'funding_year': { '2022': '2022/2023' } } : options} rangeString={rangeString} setRangeString={setRangeString} />
                             <div className={styles["clear-filters-div"]}>
                                 <p className={styles.text}>Clear All</p>
                                 <IconButton onClick={handleClearAllFilters} size="small">
@@ -268,6 +289,8 @@ function HomePage() {
                             </div>
                         </div>
                     </div>
+
+                    <section id="top"></section>
 
                     <div className={styles["generate-summary"]}>
                         <p className={styles["generate-summary-txt"]}>View a detailed summary of the currently displayed projects</p>
@@ -299,7 +322,24 @@ function HomePage() {
                             </div>
                         ) :
                         (
-                            <ProjectTable projects={projects} />
+                            <Grid container>
+                                <Grid item sm={12}>
+                                    {
+                                        window.screen.width <= 576 ?
+                                            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                                                {
+                                                    projects.slice(10 * page, (Math.min(10 * (page + 1), projects.length))).map((project) =>
+                                                        <VerticalTableItem key={project.id} project={project} />
+                                                    )
+                                                }
+                                                <Pagination count={Math.floor(projects.length / 10)} shape='rounded' showFirstButton showLastButton
+                                                    onChange={(event, page) => handlePaginationChange(page)} />
+                                            </div>
+                                            :
+                                            <ProjectTable projects={projects} />
+                                    }
+                                </Grid>
+                            </Grid>
                         )
                 }
 
@@ -307,15 +347,6 @@ function HomePage() {
                     (projects.length === 0 && loading === false) &&
                     <h2 style={{ width: "100%", textAlign: "center", marginTop: 0 }}>No projects found.</h2>
                 }
-
-                <div className={styles["mobile-table"]}>
-                    {
-                        window.screen.width <= 576 &&
-                        projects.map((project) => (
-                            <VerticalTableItem key={project.id} project={project} />
-                        ))
-                    }
-                </div>
             </div>
         </div>
     );

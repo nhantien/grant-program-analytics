@@ -5,6 +5,7 @@ import Chip from '@mui/material/Chip';
 import ClearIcon from '@mui/icons-material/Clear';
 // context
 import { FiltersContext } from '../../App';
+import { Grid } from '@mui/material';
 
 function FilterList({ options, rangeString, setRangeString }) {
 
@@ -32,57 +33,59 @@ function FilterList({ options, rangeString, setRangeString }) {
   // for now 2022 is selected by default
   // TODO: update default year to the most recent year
   const handleClearFundingYearRangeFilter = () => {
-    setAppliedFilters((prevFilters) =>({
+    setAppliedFilters((prevFilters) => ({
       ...prevFilters,
       "funding_year": ["2022"],
     }));
     setRangeString("");
   }
 
-  
+
 
   return (
-    <div style={{ with: '45rem' }}>
-      {Object.entries(appliedFilters).map(([filterType, filterValues]) => {
-        return filterType === 'search_text' && filterValues.length > 0 ? (
-          <Chip
-            key={filterType}
-            label={searchText}
-            onDelete={() => handleClearFilter(filterValues, filterType)}
-            deleteIcon={<ClearIcon />}
-            style={{
-              margin: '4px',
-              backgroundColor: '#77AEED',
-            }}
-          />
-        ) : filterType === 'funding_year' && filterValues.length > 1 ? (
-          <Chip
-            key={filterType}
-            label={rangeString}
-            onDelete={handleClearFundingYearRangeFilter}
-            deleteIcon={<ClearIcon />}
-            style={{
-              margin: '4px',
-              backgroundColor: '#77AEED',
-            }}
-          />
-        ) : (
-          filterValues.map((filter, index) => (
+    <Grid container>
+      <Grid item xs={12}>
+        {Object.entries(appliedFilters).map(([filterType, filterValues]) => {
+          return filterType === 'search_text' && filterValues.length > 0 ? (
             <Chip
-              key={index}
-              label={options[filterType][filter]}
-              onDelete={() => handleClearFilter(filter, filterType)}
+              key={filterType}
+              label={searchText}
+              onDelete={() => handleClearFilter(filterValues, filterType)}
               deleteIcon={<ClearIcon />}
               style={{
                 margin: '4px',
                 backgroundColor: '#77AEED',
               }}
             />
-          ))
-        )
-      }
-      )}
-    </div>
+          ) : filterType === 'funding_year' && filterValues.length > 1 ? (
+            <Chip
+              key={filterType}
+              label={rangeString}
+              onDelete={handleClearFundingYearRangeFilter}
+              deleteIcon={<ClearIcon />}
+              style={{
+                margin: '4px',
+                backgroundColor: '#77AEED',
+              }}
+            />
+          ) : (
+            filterValues.map((filter, index) => (
+              <Chip
+                key={index}
+                label={options[filterType][filter]}
+                onDelete={() => handleClearFilter(filter, filterType)}
+                deleteIcon={<ClearIcon />}
+                style={{
+                  margin: '4px',
+                  backgroundColor: '#77AEED',
+                }}
+              />
+            ))
+          )
+        }
+        )}
+      </Grid>
+    </Grid>
   );
 };
 
