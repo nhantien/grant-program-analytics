@@ -2,7 +2,7 @@
 import { useContext, useEffect, useState } from "react";
 // mui
 import ClearIcon from '@mui/icons-material/Clear';
-import { Slider, IconButton, Collapse } from "@mui/material";
+import { Slider, IconButton, Collapse, Grid } from "@mui/material";
 // css style
 import styles from "./SnapshotHeader.module.css";
 // context
@@ -18,7 +18,7 @@ function SnapshotHeader({ options, optionsLoading, range, setRange }) {
     const { appliedFilters, setAppliedFilters } = useContext(FiltersContext);
 
     const [showSlider, setShowSlider] = useState(appliedFilters["funding_year"].length > 1);
-    const [rangeString, setRangeString] = useState(range[0] + "/" + (range[0]+1) + " - " + range[1] + "/" + (range[1]+1));
+    const [rangeString, setRangeString] = useState(range[0] + "/" + (range[0] + 1) + " - " + range[1] + "/" + (range[1] + 1));
 
     const convertYear = (year) => {
         const yearStr = year.substring(0, year.indexOf("/"));
@@ -57,7 +57,7 @@ function SnapshotHeader({ options, optionsLoading, range, setRange }) {
             "funding_year": years,
         }));
 
-        setRangeString(min + "/" + (min+1) + " - " + max + "/" + (max+1));
+        setRangeString(min + "/" + (min + 1) + " - " + max + "/" + (max + 1));
     }
 
     return (
@@ -68,7 +68,66 @@ function SnapshotHeader({ options, optionsLoading, range, setRange }) {
 
             <div className={styles.filters}>
 
-                <div className={styles.dropdowns}>
+                <Grid container className={styles.dropdowns}>
+                    <Grid xs={12} className={styles["dropdown-filters"]}>
+                        <Grid container spacing={1}>
+                            <Grid item xs={12} md={3}>
+                                <FundingYearFilter options={optionsLoading ? {} : options.funding_year} setShowSlider={setShowSlider} snapshot={false} />
+                            </Grid>
+                            <Grid item xs={12} md={3}>
+                                <Filter options={optionsLoading ? {} : options.project_type} defaultValue="Project Type" type="project_type" snapshot={false} />
+                            </Grid>
+                            <Grid item xs={12} md={3}>
+                                <Filter options={optionsLoading ? {} : options.project_faculty} defaultValue="Faculty/Unit" type="project_faculty" snapshot={false} />
+                            </Grid>
+                            <Grid item xs={12} md={3}>
+                                <Filter options={optionsLoading ? {} : options.focus_area} defaultValue="Focus Area" type="focus_area" snapshot={false} />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Collapse
+                            in={showSlider}
+                            timeout="auto"
+                            unmountOnExit
+                        >
+                            <Grid container className={styles.slider}>
+                                <Grid xs={12} md={2}>
+                                    <span>Year Range:</span>
+                                </Grid>
+                                <Grid xs={12} md={10}>
+                                    <Slider
+                                        max={2023}
+                                        min={1999}
+                                        value={range}
+                                        onChange={handleSliderChange}
+                                        onChangeCommitted={() => applyRangeFilter(range)}
+                                        marks={MARKS}
+                                        valueLabelDisplay="on"
+                                    />
+                                </Grid>
+                            </Grid>
+                        </Collapse>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <div className={styles["applied-filters"]}>
+                            <span style={{ marginTop: "1rem", marginBottom: "0.5rem" }}>Applied Filters</span>
+                            <div className={styles["filters-box"]}>
+                                <FilterList options={optionsLoading ? { 'funding_year': { '2022': '2022/2023' } } : options} rangeString={rangeString} setRangeString={setRangeString} />
+                                <div className={styles["clear-filters-div"]}>
+                                    <p className={styles.text}>Clear All</p>
+                                    <IconButton onClick={handleClearAll} size="small">
+                                        <ClearIcon />
+                                    </IconButton>
+                                </div>
+                            </div>
+                        </div>
+                    </Grid>
+                </Grid>
+                
+                {/* <div className={styles.dropdowns}>
 
                     <div className={styles["dropdown-filters"]}>
                         <FundingYearFilter options={optionsLoading ? {} : options.funding_year} setShowSlider={setShowSlider} snapshot={true} />
@@ -77,29 +136,12 @@ function SnapshotHeader({ options, optionsLoading, range, setRange }) {
                         <Filter options={optionsLoading ? {} : options.focus_area} defaultValue="Focus Area" type="focus_area" snapshot={true} />
                     </div>
 
-                    <Collapse
-                        in={showSlider}
-                        timeout="auto"
-                        unmountOnExit
-                    >
-                        <div className={styles.slider}>
-                            <span style={{ width: "15%" }}>Year Range:</span>
-                            <Slider
-                                max={2023}
-                                min={1999}
-                                value={range}
-                                onChange={handleSliderChange}
-                                onChangeCommitted={() => applyRangeFilter(range)}
-                                marks={MARKS}
-                                valueLabelDisplay="on"
-                            />
-                        </div>
-                    </Collapse>
+
 
                     <div className={styles["applied-filters"]}>
                         <span style={{ marginTop: "1rem", marginBottom: "0.5rem" }}>Applied Filters</span>
                         <div className={styles["filters-box"]}>
-                            <FilterList options={optionsLoading ? {'funding_year': { '2022': '2022/2023' }} : options} rangeString={rangeString} setRangeString={setRangeString} />
+                            <FilterList options={optionsLoading ? { 'funding_year': { '2022': '2022/2023' } } : options} rangeString={rangeString} setRangeString={setRangeString} />
                             <div className={styles["clear-filters-div"]}>
                                 <p className={styles.text}>Clear All</p>
                                 <IconButton onClick={handleClearAll} size="small">
@@ -109,7 +151,7 @@ function SnapshotHeader({ options, optionsLoading, range, setRange }) {
                         </div>
                     </div>
 
-                </div>
+                </div> */}
 
             </div>
         </div>
