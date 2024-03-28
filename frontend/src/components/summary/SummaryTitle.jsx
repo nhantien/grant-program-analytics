@@ -6,15 +6,27 @@ function SummaryTitle({ data }) {
 
         <div className={styles.bg}>
             <div className={styles.container}>
-                <Grid container style={{ alignItems: 'flex-end' }}>
-                    <Grid item xs={12} sm={8}>
+                <Grid container>
+                    <Grid item xs={12}>
                         <div className={styles.title}>
                             {data.title}
                         </div>
                     </Grid>
-                    <Grid item xs={12} sm={4}>
+                </Grid>
+            </div>
+
+            <div className={styles.container}>
+                <Grid container>
+                    <Grid item xs={10} md={5} lg={4}>
                         <div className={styles.status}>
-                            {data.status}
+                            <Grid container>
+                                <Grid item xs={7}>
+                                    Project Status:
+                                </Grid>
+                                <Grid item xs={5}>
+                                    {data.status}
+                                </Grid>
+                            </Grid>
                         </div>
                     </Grid>
                 </Grid>
@@ -22,14 +34,16 @@ function SummaryTitle({ data }) {
 
             <div className={styles.container}>
                 <Grid container>
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={10} md={5} lg={4}>
                         <div className={styles.faculty}>
-                            {data.project_faculty}
-                        </div>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <div className={styles.years}>
-                            {data.years} years
+                            <Grid container>
+                                <Grid item xs={7}>
+                                    Project Faculty:
+                                </Grid>
+                                <Grid item xs={5}>
+                                    {data.project_faculty}
+                                </Grid>
+                            </Grid>
                         </div>
                     </Grid>
                 </Grid>
@@ -37,10 +51,35 @@ function SummaryTitle({ data }) {
 
             <div className={styles.container}>
                 <Grid container>
-                    <Grid item xs={12} sm={6}>
-                        <div className={styles["normal-text"]}>
-                            Total Student Reach: {data.reach}
+                    <Grid item xs={10} md={5} lg={4}>
+                        <div className={styles.years}>
+                            <Grid container>
+                                <Grid item xs={7}>
+                                    Project Years:
+                                </Grid>
+                                <Grid item xs={5}>
+                                    {data.years} Years
+                                </Grid>
+                            </Grid>
                         </div>
+                    </Grid>
+                </Grid>
+            </div>
+
+            <div className={styles.container}>
+                <Grid container>
+                    <Grid item xs={10} md={5} lg={4}>
+                        {
+                            data.reach > 0 &&
+                            <Grid container className={styles["normal-text"]}>
+                                <Grid item xs={7}>
+                                    Student Reach:
+                                </Grid>
+                                <Grid item xs={4}>
+                                    {data.reach}
+                                </Grid>
+                            </Grid>
+                        }
                     </Grid>
                 </Grid>
             </div>

@@ -18,12 +18,13 @@
     composes: normal-text;
     text-align: start;
     font-weight: 700;
+    margin-bottom: 1rem;
 }
 
 .status {
     composes: normal-text;
     height: 2.25rem;
-    text-align: end;
+    text-align: start;
     font-weight: 400;
 }
 
@@ -35,7 +36,7 @@
 
 .years {
     composes: normal-text;
-    text-align: end;
+    text-align: start;
     height: 2.25rem;
 }
 

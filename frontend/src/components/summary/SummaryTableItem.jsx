@@ -9,7 +9,7 @@ function SummaryTableItem({ field, data, color }) {
             <div className={styles.data} style={{ backgroundColor: color }}>
                 {data.map((member) =>
                     <Grid key={`summary-table-item-pi`} container spacing={1} style={{ alignItems: "center" }}>
-                        <Grid item xs={4} sm={3}>
+                        <Grid item xs={5} sm={3}>
                             {member.member_name}
                         </Grid>
                         <Grid item xs={7} sm={9}>

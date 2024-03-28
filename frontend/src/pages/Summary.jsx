@@ -158,7 +158,7 @@ function Summary() {
                     <SummaryTable key={grant.project_year} data={grant} />
                 ))
             }
-            <SimilarProjects projects={similarProjects} />
+            {/* <SimilarProjects projects={similarProjects} /> */}
         </div>
     );
 
