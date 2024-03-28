@@ -44,7 +44,6 @@ function Filter({ options, defaultValue, type, snapshot }) {
             className={styles.filter}
             onChange={handleChange}
             displayEmpty
-            autoWidth
             multiple
             value={appliedFilters[type]}
             input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
@@ -54,7 +53,7 @@ function Filter({ options, defaultValue, type, snapshot }) {
                 <em>{defaultValue} ({selected.length})</em>
               )
             }}
-            MenuProps={MenuProps}
+            MenuProps={MenuProps} 
           >
             <MenuItem
               selected={false}

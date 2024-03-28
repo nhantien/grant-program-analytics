@@ -213,7 +213,7 @@ function HomePage() {
 
     const handlePaginationChange = (page) => {
         setPage(page);
-        document.getElementById("top").scrollIntoView({ behavior: "smooth" });
+        document.getElementById("top").scrollIntoView({ behavior: "auto" });
     };
 
     return (
@@ -238,16 +238,16 @@ function HomePage() {
                     <div className={styles["project-filters"]}>
                         <span className={styles["filter-text"]}>Filter by</span>
                         <Grid container spacing={1} className={styles.filters}>
-                            <Grid item xs={10} md={3}>
+                            <Grid item xs={12} md={3}>
                                 <FundingYearFilter options={optionsLoading ? {} : options.funding_year} setShowSlider={setShowSlider} snapshot={false} />
                             </Grid>
-                            <Grid item xs={10} md={3}>
+                            <Grid item xs={12} md={3}>
                                 <Filter options={optionsLoading ? {} : options.project_type} defaultValue="Project Type" type="project_type" snapshot={false} />
                             </Grid>
-                            <Grid item xs={10} md={3}>
+                            <Grid item xs={12} md={3}>
                                 <Filter options={optionsLoading ? {} : options.project_faculty} defaultValue="Faculty/Unit" type="project_faculty" snapshot={false} />
                             </Grid>
-                            <Grid item xs={10} md={3}>
+                            <Grid item xs={12} md={3}>
                                 <Filter options={optionsLoading ? {} : options.focus_area} defaultValue="Focus Area" type="focus_area" snapshot={false} />
                             </Grid>
                         </Grid>
@@ -290,6 +290,8 @@ function HomePage() {
                         </div>
                     </div>
 
+                    <section id="top"></section>
+
                     <div className={styles["generate-summary"]}>
                         <p className={styles["generate-summary-txt"]}>View a detailed summary of the currently displayed projects</p>
                         <div>
@@ -310,8 +312,6 @@ function HomePage() {
 
                 </div>
             </header>
-
-            <section id="top"></section>
 
             <div>
                 {

@@ -20,6 +20,7 @@ function Summary() {
     const [titleData, setTitleData] = useState({});
     const [descriptionData, setDescriptionData] = useState({});
     const [tableData, setTableData] = useState([]);
+    const [similarProjects, setSimilarProjects] = useState([]);
 
     const countTotalReach = (reachData) => {
         let total = 0;
@@ -65,6 +66,15 @@ function Summary() {
                         section
                         reach
                     }
+                }
+
+                getSimilarProjects(method: "getSimilarProjects", grantId: "${id}") {
+                    grant_id
+                    project_type
+                    pi_name
+                    title
+                    project_faculty
+                    funding_year
                 }
 
                 loadFocusArea(method: "loadFocusArea") {
@@ -120,6 +130,8 @@ function Summary() {
                 
                 setTableData(tableInfo);
 
+                setSimilarProjects(results.data.getSimilarProjects);
+
                 setIsLoading(false);
             } catch (e) {
                 console.log(e);
@@ -146,6 +158,7 @@ function Summary() {
                     <SummaryTable key={grant.project_year} data={grant} />
                 ))
             }
+            <SimilarProjects projects={similarProjects} />
         </div>
     );
 
