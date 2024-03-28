@@ -51,18 +51,18 @@ function SummaryTable({ data }) {
                 </Grid>
                 <Grid item xs={12}>
                     <SummaryTableItem field="Primary Investigator" data={pi} color="#FFF" />
-                    <SummaryTableItem field="Project Type" data={data.project_type} color="#DFF2FF" />
+                    <SummaryTableItem field="Project Type" data={data.project_type} color="#FFF" />
                     <SummaryTableItem field="Funded Amount" data={formattedAmount} color="#FFF" />
                     {
                         data.focus_areas.length > 0 &&
-                        <SummaryTableItem field="Focus Area(s)" data={focusAreas} color="#DFF2FF" />
+                        <SummaryTableItem field="Focus Area(s)" data={focusAreas} color="#FFF" />
                     }{
                         teamMembers.length > 0 &&
                         <SummaryTableItem field="Team Members" data={teamMembers} color="#FFF" />
                     }
                     {
                         data.student_reach.length > 0 &&
-                        <SummaryTableItem field="Student Reach" data={reachData} color="#DFF2FF" />
+                        <SummaryTableItem field="Student Reach" data={reachData} color="#FFF" />
                     }
                     {
                         data.co_curricular_reach.length > 0 &&
