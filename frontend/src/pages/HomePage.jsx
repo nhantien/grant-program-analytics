@@ -53,6 +53,7 @@ function HomePage() {
                 funding_amount
                 title
                 project_year
+                project_status
             }
 
             loadFaculty(method: "loadFaculty") {
@@ -151,7 +152,7 @@ function HomePage() {
                         proj.title,
                         proj.project_year,
                         proj.funding_amount,
-                        "Active"
+                        proj.project_status
                     );
                 });
 

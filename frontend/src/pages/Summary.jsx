@@ -33,6 +33,7 @@ function Summary() {
         return total;
     }
 
+    // TODO: add similar projects query
     useEffect(() => {
         const fetchData = async () => {
             const query = `query MyQuery {
@@ -47,6 +48,7 @@ function Summary() {
                     funding_amount
                     description
                     focus_areas
+                    project_status
                 }
 
                 getTeamMembersByGrantId(method: "getTeamMembersByGrantId", grantId: "${id}") {
@@ -68,14 +70,7 @@ function Summary() {
                     }
                 }
 
-                getSimilarProjects(method: "getSimilarProjects", grantId: "${id}") {
-                    grant_id
-                    project_type
-                    pi_name
-                    title
-                    project_faculty
-                    funding_year
-                }
+                
 
                 loadFocusArea(method: "loadFocusArea") {
                     label
@@ -99,13 +94,13 @@ function Summary() {
                     title: summaryInfo[summaryInfo.length - 1].title,
                     project_faculty: summaryInfo[0].project_faculty,
                     years: summaryInfo.length,
-                    status: "Active",
+                    status: summaryInfo[summaryInfo.length - 1].project_status,
                     reach: countTotalReach(studentReach)
                 });
 
                 setDescriptionData({
-                    summary: summaryInfo[0].summary,
-                    status: "Active"
+                    summary: summaryInfo[summaryInfo.length - 1].summary,
+                    status: summaryInfo[summaryInfo.length - 1].project_status
                 });
 
                 let focusAreasJSON = {};
