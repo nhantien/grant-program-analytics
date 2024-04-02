@@ -14,13 +14,13 @@ function FilterList({ options, rangeString, setRangeString }) {
   const searchText = appliedFilters["search_text"].join(" OR ");
 
   const handleClearFilter = (filterValue, filterType) => {
-    if (filterType === "search_text") {
-      setAppliedFilters((prevFilters) => ({
-        ...prevFilters,
-        "search_text": [],
-      }));
-      return;
-    }
+    // if (filterType === "search_text") {
+    //   setAppliedFilters((prevFilters) => ({
+    //     ...prevFilters,
+    //     "search_text": [],
+    //   }));
+    //   return;
+    // }
 
     // remove the selected item from the list of filters
     const updatedFilters = appliedFilters[filterType].filter((filter) => filter !== filterValue);
@@ -46,18 +46,7 @@ function FilterList({ options, rangeString, setRangeString }) {
     <Grid container>
       <Grid item xs={12}>
         {Object.entries(appliedFilters).map(([filterType, filterValues]) => {
-          return filterType === 'search_text' && filterValues.length > 0 ? (
-            <Chip
-              key={filterType}
-              label={searchText}
-              onDelete={() => handleClearFilter(filterValues, filterType)}
-              deleteIcon={<ClearIcon />}
-              style={{
-                margin: '4px',
-                backgroundColor: '#77AEED',
-              }}
-            />
-          ) : filterType === 'funding_year' && filterValues.length > 1 ? (
+          return filterType === 'funding_year' && filterValues.length > 1 ? (
             <Chip
               key={filterType}
               label={rangeString}
@@ -72,7 +61,7 @@ function FilterList({ options, rangeString, setRangeString }) {
             filterValues.map((filter, index) => (
               <Chip
                 key={index}
-                label={options[filterType][filter]}
+                label={filterType === 'search_text' ? filter : options[filterType][filter]}
                 onDelete={() => handleClearFilter(filter, filterType)}
                 deleteIcon={<ClearIcon />}
                 style={{
@@ -90,3 +79,16 @@ function FilterList({ options, rangeString, setRangeString }) {
 };
 
 export default FilterList;
+
+// filterType === 'search_text' && filterValues.length > 0 ? (
+//   <Chip
+//     key={filterType}
+//     label={searchText}
+//     onDelete={() => handleClearFilter(filterValues, filterType)}
+//     deleteIcon={<ClearIcon />}
+//     style={{
+//       margin: '4px',
+//       backgroundColor: '#77AEED',
+//     }}
+//   />
+// ) : 
