@@ -11,13 +11,18 @@ export class DatabaseStack extends Stack {
 
     private readonly s3Bucket: s3.Bucket;
     private readonly db: glue.Database;
+    private readonly tables: { [id: string] : glue.S3Table; };
 
-    getS3BucketName() {
+    public getS3BucketName() {
         return this.s3Bucket.bucketName;
     }
 
-    getDbName() {
+    public getDbName() {
         return this.db.databaseName;
+    }
+
+    public getTableName(key: string) {
+        return this.tables[key].tableName;
     }
 
     private createCrawler(table: glue.S3Table, id: string, name: string) {
@@ -88,7 +93,7 @@ export class DatabaseStack extends Stack {
             removalPolicy: RemovalPolicy.DESTROY
         });
 
-        const ProductionFolder = new s3Deploy.BucketDeployment(this, 'ProductionFolderDeployment', {
+        const ProductionFolderDeployment = new s3Deploy.BucketDeployment(this, 'ProductionFolderDeployment', {
             sources: [s3Deploy.Source.asset("./bucket_config")],
             destinationBucket: s3Bucket,
             destinationKeyPrefix: 'production/'
@@ -119,6 +124,7 @@ export class DatabaseStack extends Stack {
 
         this.s3Bucket = s3Bucket;
         this.db = db;
+        this.tables = {};
 
         /* ---- TABLES ---- */
         const projectDetailsTable = new glue.S3Table(this, 'projectDetailsTable', {
@@ -178,7 +184,7 @@ export class DatabaseStack extends Stack {
             bucket: s3Bucket,
             s3Prefix: 'production/project_details'
         });
-        // this.createCrawler(projectDetailsTable, 'ProjectDetails', 'project_details');
+        this.tables['project_details'] = projectDetailsTable;
 
         const facultyEngagementTable = new glue.S3Table(this, 'facultyEngagementTable', {
             database: db,
@@ -237,7 +243,7 @@ export class DatabaseStack extends Stack {
             bucket: s3Bucket,
             s3Prefix: 'production/faculty_engagement'
         });
-        // this.createCrawler(facultyEngagementTable, 'FacultyEngagement', 'faculty_engagement');
+        this.tables['faculty_engagement'] = facultyEngagementTable;
 
         const studentReachTable = new glue.S3Table(this, 'studentReachTable', {
             database: db,
@@ -304,8 +310,8 @@ export class DatabaseStack extends Stack {
             bucket: s3Bucket,
             s3Prefix: 'production/student_reach'
         });
-        // this.createCrawler(studentReachTable, 'StudentReach', 'student_reach');
-
+        this.tables['student_reach'] = studentReachTable;
+        
         const focusAreaTable = new glue.S3Table(this, 'focusAreaTable', {
             database: db,
             tableName: 'focus_area',
@@ -395,7 +401,7 @@ export class DatabaseStack extends Stack {
             bucket: s3Bucket,
             s3Prefix: 'production/focus_area'
         });
-        // this.createCrawler(focusAreaTable, 'FocusArea', 'focus_area');
+        this.tables['focus_area'] = focusAreaTable;
 
         const coCurricularReachTable = new glue.S3Table(this, 'coCurricularReachTable', {
             database: db,
@@ -422,7 +428,7 @@ export class DatabaseStack extends Stack {
             bucket: s3Bucket,
             s3Prefix: 'production/co_curricular_reach'
         });
-        // this.createCrawler(coCurricularReachTable, 'CoCurricularReach', 'co_curricular_reach');
+        this.tables['co_curricular_reach'] = coCurricularReachTable;
 
         const uniqueStudentTable = new glue.S3Table(this, 'UniqueStudentTable', {
             database: db,
@@ -445,6 +451,7 @@ export class DatabaseStack extends Stack {
             bucket: s3Bucket,
             s3Prefix: 'production/unique_student'
         });
+        this.tables['unique_student'] = uniqueStudentTable;
 
         const facultyOptionTable = new glue.S3Table(this, 'FacultyOptionTable', {
             database: db,
@@ -463,8 +470,8 @@ export class DatabaseStack extends Stack {
             bucket: s3Bucket,
             s3Prefix: 'production/options/faculties'
         });
-        // this.createCrawler(facultyOptionTable, 'FacultyOption', 'faculty_option');
-
+        this.tables['faculty_option'] = facultyOptionTable;
+        
         const focusAreaOptionTable = new glue.S3Table(this, 'FocusAreaTable', {
             database: db,
             tableName: 'focus_area_options',
@@ -482,5 +489,64 @@ export class DatabaseStack extends Stack {
             bucket: s3Bucket,
             s3Prefix: 'production/options/focus_area'
         });
+        this.tables['focus_area_option'] = focusAreaOptionTable;
+
+        const unsuccessfulProjectsTable = new glue.S3Table(this, 'UnsuccessfulProjectsTable', {
+            database: db,
+            tableName: 'unsuccessful_projects',
+            columns: [
+                {
+                    name: 'funding_year',
+                    type: glue.Schema.BIG_INT
+                },
+                {
+                    name: 'project_type',
+                    type: glue.Schema.STRING
+                },
+                {
+                    name: 'grant_id',
+                    type: glue.Schema.STRING
+                },
+                {
+                    name: 'title',
+                    type: glue.Schema.STRING
+                },
+                {
+                    name: 'project_faculty',
+                    type: glue.Schema.STRING
+                },
+                {
+                    name: 'pi_name',
+                    type: glue.Schema.STRING
+                },
+                {
+                    name: 'project_department',
+                    type: glue.Schema.STRING
+                }
+            ],
+            dataFormat: glue.DataFormat.PARQUET,
+            bucket: s3Bucket,
+            s3Prefix: 'production/unsuccessful_projects'
+        });
+        this.tables['unsuccessful_projects'] = unsuccessfulProjectsTable;
+
+        const similarProjectsTable = new glue.S3Table(this, 'SimilarProjectsTable', {
+            database: db,
+            tableName: 'similar_projects',
+            columns: [
+                {
+                    name: 'project_key',
+                    type: glue.Schema.STRING
+                },
+                {
+                    name: 'similar_projects',
+                    type: glue.Schema.STRING
+                }
+            ],
+            dataFormat: glue.DataFormat.PARQUET,
+            bucket: s3Bucket,
+            s3Prefix: 'production/similar_projects'
+        });
+        this.tables['similar_projects'] = similarProjectsTable;
     }
 }

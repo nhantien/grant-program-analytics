@@ -23,13 +23,13 @@
 .data {
     composes: text;
     border: 1px solid #000;
-    width: 98%;
+    width: 93%;
     min-height: 3rem;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
     justify-content: center;
-    padding: 0.75rem 0rem 0.75rem 1%;
+    padding: 0.75rem 2% 0.75rem 3%;
     /* margin-top: -1px;
     margin-bottom: -1px; */
     margin: 0.5rem 0 0.5rem 0;

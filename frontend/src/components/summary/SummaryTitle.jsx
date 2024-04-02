@@ -20,10 +20,10 @@ function SummaryTitle({ data }) {
                     <Grid item xs={10} md={5} lg={4}>
                         <div className={styles.status}>
                             <Grid container>
-                                <Grid item xs={7}>
-                                    Project Status:
+                                <Grid item xs={9} sm={7}>
+                                    Status:
                                 </Grid>
-                                <Grid item xs={5}>
+                                <Grid item xs={3} sm={5}>
                                     {data.status}
                                 </Grid>
                             </Grid>
@@ -37,10 +37,10 @@ function SummaryTitle({ data }) {
                     <Grid item xs={10} md={5} lg={4}>
                         <div className={styles.faculty}>
                             <Grid container>
-                                <Grid item xs={7}>
-                                    Project Faculty:
+                                <Grid item xs={9} sm={7}>
+                                    Faculty/College/Unit:
                                 </Grid>
-                                <Grid item xs={5}>
+                                <Grid item xs={3} sm={5}>
                                     {data.project_faculty}
                                 </Grid>
                             </Grid>
@@ -54,10 +54,10 @@ function SummaryTitle({ data }) {
                     <Grid item xs={10} md={5} lg={4}>
                         <div className={styles.years}>
                             <Grid container>
-                                <Grid item xs={7}>
-                                    Project Years:
+                                <Grid item xs={9} sm={7}>
+                                    Duration:
                                 </Grid>
-                                <Grid item xs={5}>
+                                <Grid item xs={3} sm={5}>
                                     {data.years} Years
                                 </Grid>
                             </Grid>
@@ -72,10 +72,10 @@ function SummaryTitle({ data }) {
                         {
                             data.reach > 0 &&
                             <Grid container className={styles["normal-text"]}>
-                                <Grid item xs={7}>
+                                <Grid item xs={9} sm={7}>
                                     Student Reach:
                                 </Grid>
-                                <Grid item xs={4}>
+                                <Grid item xs={3} sm={5}>
                                     {data.reach}
                                 </Grid>
                             </Grid>

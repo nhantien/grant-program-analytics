@@ -1,4 +1,5 @@
 // react
+import React from "react";
 import { useContext, useEffect, useState } from "react";
 // mui
 import ClearIcon from '@mui/icons-material/Clear';
@@ -115,18 +116,24 @@ function SnapshotHeader({ options, optionsLoading, range, setRange }) {
                         <div className={styles["applied-filters"]}>
                             <span style={{ marginTop: "1rem", marginBottom: "0.5rem" }}>Applied Filters</span>
                             <div className={styles["filters-box"]}>
-                                <FilterList options={optionsLoading ? { 'funding_year': { '2022': '2022/2023' } } : options} rangeString={rangeString} setRangeString={setRangeString} />
-                                <div className={styles["clear-filters-div"]}>
-                                    <p className={styles.text}>Clear All</p>
-                                    <IconButton onClick={handleClearAll} size="small">
-                                        <ClearIcon />
-                                    </IconButton>
-                                </div>
+                                {
+                                    !optionsLoading && (
+                                        <React.Fragment>
+                                            <FilterList options={optionsLoading ? { 'funding_year': { '2022': '2022/2023' } } : options} rangeString={rangeString} setRangeString={setRangeString} />
+                                            <div className={styles["clear-filters-div"]}>
+                                                <p className={styles.text}>Clear All</p>
+                                                <IconButton onClick={handleClearAll} size="small">
+                                                    <ClearIcon />
+                                                </IconButton>
+                                            </div>
+                                        </React.Fragment>
+                                    )
+                                }
                             </div>
                         </div>
                     </Grid>
                 </Grid>
-                
+
                 {/* <div className={styles.dropdowns}>
 
                     <div className={styles["dropdown-filters"]}>

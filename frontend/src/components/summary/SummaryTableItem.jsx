@@ -4,7 +4,7 @@ import styles from "./SummaryTableItem.module.css";
 function SummaryTableItem({ field, data, color }) {
 
     let dataHTML;
-    if (field === "Primary Investigator") {
+    if (field === "Primary Investigator(s)") {
         dataHTML = (
             <div className={styles.data} style={{ backgroundColor: color }}>
                 {data.map((member) =>
@@ -12,7 +12,7 @@ function SummaryTableItem({ field, data, color }) {
                         <Grid item xs={5} sm={3}>
                             {member.member_name}
                         </Grid>
-                        <Grid item xs={7} sm={9}>
+                        <Grid item xs={7} sm={9} style={{ flexWrap: "wrap" }}>
                             {member.member_title}, {member.member_faculty}
                         </Grid>
                     </Grid>
@@ -39,7 +39,7 @@ function SummaryTableItem({ field, data, color }) {
                             <Grid item xs={4} sm={3}>
                                 {member.member_name}
                             </Grid>
-                            <Grid item xs={7} sm={9}>
+                            <Grid item xs={7} sm={9} style={{ flexWrap: "wrap" }}>
                                 {member.member_title}, {member.member_faculty}
                             </Grid>
                         </Grid>
