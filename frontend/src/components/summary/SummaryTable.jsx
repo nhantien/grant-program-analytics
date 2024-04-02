@@ -50,7 +50,7 @@ function SummaryTable({ data }) {
                     </div>
                 </Grid>
                 <Grid item xs={12}>
-                    <SummaryTableItem field="Primary Investigator" data={pi} color="#FFF" />
+                    <SummaryTableItem field="Primary Investigator(s)" data={pi} color="#FFF" />
                     <SummaryTableItem field="Project Type" data={data.project_type} color="#FFF" />
                     <SummaryTableItem field="Funded Amount" data={formattedAmount} color="#FFF" />
                     {

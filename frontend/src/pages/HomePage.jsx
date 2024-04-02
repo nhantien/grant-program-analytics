@@ -1,4 +1,5 @@
 // react
+import React from 'react';
 import { useState, useEffect, useContext } from 'react';
 // react-router
 import { Link } from 'react-router-dom';
@@ -281,13 +282,19 @@ function HomePage() {
                     <div className={styles["applied-filters"]}>
                         <span style={{ marginTop: "1rem", marginBottom: "0.5rem" }}>Applied Filters</span>
                         <div className={styles["filters-box"]}>
-                            <FilterList options={optionsLoading ? { 'funding_year': { '2022': '2022/2023' } } : options} rangeString={rangeString} setRangeString={setRangeString} />
-                            <div className={styles["clear-filters-div"]}>
-                                <p className={styles.text}>Clear All</p>
-                                <IconButton onClick={handleClearAllFilters} size="small">
-                                    <ClearIcon />
-                                </IconButton>
-                            </div>
+                            {
+                                !optionsLoading && (
+                                    <React.Fragment>
+                                        <FilterList options={optionsLoading ? { 'funding_year': { '2022': '2022/2023' } } : options} rangeString={rangeString} setRangeString={setRangeString} />
+                                        <div className={styles["clear-filters-div"]}>
+                                            <p className={styles.text}>Clear All</p>
+                                            <IconButton onClick={handleClearAllFilters} size="small">
+                                                <ClearIcon />
+                                            </IconButton>
+                                        </div>
+                                    </React.Fragment>
+                                )
+                            }
                         </div>
                     </div>
 

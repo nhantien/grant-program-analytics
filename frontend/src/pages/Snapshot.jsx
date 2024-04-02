@@ -281,7 +281,7 @@ function Snapshot() {
                 <button onClick={() => handleClick("faculty-engagement")}>Faculty and Student Engagement</button>
             </div>
 
-            {loading ? (
+            {(loading) ? (
                 <div style={{ width: '100%', display: "flex", justifyContent: "center", marginTop: "5rem" }}>
                     <CircularProgress />
                 </div>
