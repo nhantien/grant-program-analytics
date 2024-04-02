@@ -27,6 +27,7 @@ function SearchBar() {
       ...prevFilters,
       "search_text": inputValue.split(", "),
     }));
+    setInputValue("");
   }
 
   const handleKeyPress = (e) => {
