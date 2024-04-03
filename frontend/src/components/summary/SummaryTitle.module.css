@@ -10,45 +10,39 @@
 }
 
 .container {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
     width: 85%;
     margin: 0.75rem 7.5% 0 7.5%;
 }
 
 .title {
     composes: normal-text;
-    width: 65%;
     text-align: start;
     font-weight: 700;
+    margin-bottom: 1rem;
 }
 
 .status {
     composes: normal-text;
-    width: 15%;
     height: 2.25rem;
-    text-align: end;
+    text-align: start;
     font-weight: 400;
 }
 
 .faculty {
     composes: normal-text;
     text-align: start;
-    width: 40%;
     height: 2.25rem;
 }
 
 .years {
     composes: normal-text;
-    text-align: end;
-    width: 40%;
+    text-align: start;
     height: 2.25rem;
 }
 
 @media screen and (max-width: 576px) {
     .container {
-        margin-top: 0;
+        margin-top: 0.5rem;
         display: block;
     }
 

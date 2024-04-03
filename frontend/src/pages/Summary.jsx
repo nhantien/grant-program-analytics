@@ -20,6 +20,7 @@ function Summary() {
     const [titleData, setTitleData] = useState({});
     const [descriptionData, setDescriptionData] = useState({});
     const [tableData, setTableData] = useState([]);
+    const [similarProjects, setSimilarProjects] = useState([]);
 
     const countTotalReach = (reachData) => {
         let total = 0;
@@ -32,6 +33,7 @@ function Summary() {
         return total;
     }
 
+    // TODO: add similar projects query
     useEffect(() => {
         const fetchData = async () => {
             const query = `query MyQuery {
@@ -46,6 +48,7 @@ function Summary() {
                     funding_amount
                     description
                     focus_areas
+                    project_status
                 }
 
                 getTeamMembersByGrantId(method: "getTeamMembersByGrantId", grantId: "${id}") {
@@ -65,6 +68,15 @@ function Summary() {
                         section
                         reach
                     }
+                }
+
+                getSimilarProjects(method: "getSimilarProjects", grantId: "${id}") {
+                    grant_id
+                    project_type
+                    pi_name
+                    title
+                    project_faculty
+                    funding_year
                 }
 
                 loadFocusArea(method: "loadFocusArea") {
@@ -89,13 +101,13 @@ function Summary() {
                     title: summaryInfo[summaryInfo.length - 1].title,
                     project_faculty: summaryInfo[0].project_faculty,
                     years: summaryInfo.length,
-                    status: "Active",
+                    status: summaryInfo[summaryInfo.length - 1].project_status,
                     reach: countTotalReach(studentReach)
                 });
 
                 setDescriptionData({
-                    summary: summaryInfo[0].summary,
-                    status: "Active"
+                    summary: summaryInfo[summaryInfo.length - 1].summary,
+                    status: summaryInfo[summaryInfo.length - 1].project_status
                 });
 
                 let focusAreasJSON = {};
@@ -119,6 +131,8 @@ function Summary() {
                 });
                 
                 setTableData(tableInfo);
+
+                setSimilarProjects(results.data.getSimilarProjects);
 
                 setIsLoading(false);
             } catch (e) {
@@ -146,6 +160,7 @@ function Summary() {
                     <SummaryTable key={grant.project_year} data={grant} />
                 ))
             }
+            <SimilarProjects projects={similarProjects} />
         </div>
     );
 

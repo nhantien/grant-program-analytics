@@ -1,3 +1,4 @@
+import { Grid } from "@mui/material";
 import styles from "./SummaryTitle.module.css";
 
 function SummaryTitle({ data }) {
@@ -5,27 +6,82 @@ function SummaryTitle({ data }) {
 
         <div className={styles.bg}>
             <div className={styles.container}>
-                <div className={styles.title}>
-                    {data.title}
-                </div>
-                <div className={styles.status}>
-                    {data.status}
-                </div>
+                <Grid container>
+                    <Grid item xs={12}>
+                        <div className={styles.title}>
+                            {data.title}
+                        </div>
+                    </Grid>
+                </Grid>
             </div>
 
             <div className={styles.container}>
-                <div className={styles.faculty}>
-                    {data.project_faculty}
-                </div>
-                <div className={styles.years}>
-                    {data.years} years
-                </div>
+                <Grid container>
+                    <Grid item xs={10} md={5} lg={4}>
+                        <div className={styles.status}>
+                            <Grid container>
+                                <Grid item xs={9} sm={7}>
+                                    Status:
+                                </Grid>
+                                <Grid item xs={3} sm={5}>
+                                    {data.status}
+                                </Grid>
+                            </Grid>
+                        </div>
+                    </Grid>
+                </Grid>
             </div>
 
             <div className={styles.container}>
-                <div className={styles["normal-text"]}>
-                    Total Student Reach: {data.reach}
-                </div>
+                <Grid container>
+                    <Grid item xs={10} md={5} lg={4}>
+                        <div className={styles.faculty}>
+                            <Grid container>
+                                <Grid item xs={9} sm={7}>
+                                    Faculty/College/Unit:
+                                </Grid>
+                                <Grid item xs={3} sm={5}>
+                                    {data.project_faculty}
+                                </Grid>
+                            </Grid>
+                        </div>
+                    </Grid>
+                </Grid>
+            </div>
+
+            <div className={styles.container}>
+                <Grid container>
+                    <Grid item xs={10} md={5} lg={4}>
+                        <div className={styles.years}>
+                            <Grid container>
+                                <Grid item xs={9} sm={7}>
+                                    Duration:
+                                </Grid>
+                                <Grid item xs={3} sm={5}>
+                                    {data.years} Year{data.years !== 1 && 's'}
+                                </Grid>
+                            </Grid>
+                        </div>
+                    </Grid>
+                </Grid>
+            </div>
+
+            <div className={styles.container}>
+                <Grid container>
+                    <Grid item xs={10} md={5} lg={4}>
+                        {
+                            data.reach > 0 &&
+                            <Grid container className={styles["normal-text"]}>
+                                <Grid item xs={9} sm={7}>
+                                    Student Reach:
+                                </Grid>
+                                <Grid item xs={3} sm={5}>
+                                    {data.reach}
+                                </Grid>
+                            </Grid>
+                        }
+                    </Grid>
+                </Grid>
             </div>
         </div>
     );
