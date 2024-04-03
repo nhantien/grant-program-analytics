@@ -117,18 +117,15 @@ function SnapshotHeader({ options, optionsLoading, range, setRange }) {
                             <span style={{ marginTop: "1rem", marginBottom: "0.5rem" }}>Applied Filters</span>
                             <div className={styles["filters-box"]}>
                                 {
-                                    !optionsLoading && (
-                                        <React.Fragment>
-                                            <FilterList options={optionsLoading ? { 'funding_year': { '2022': '2022/2023' } } : options} rangeString={rangeString} setRangeString={setRangeString} />
-                                            <div className={styles["clear-filters-div"]}>
-                                                <p className={styles.text}>Clear All</p>
-                                                <IconButton onClick={handleClearAll} size="small">
-                                                    <ClearIcon />
-                                                </IconButton>
-                                            </div>
-                                        </React.Fragment>
-                                    )
+                                    !optionsLoading &&
+                                    <FilterList options={optionsLoading ? { 'funding_year': { '2022': '2022/2023' } } : options} rangeString={rangeString} setRangeString={setRangeString} />
                                 }
+                                <div className={styles["clear-filters-div"]}>
+                                    <p className={styles.text}>Clear All</p>
+                                    <IconButton onClick={handleClearAll} size="small">
+                                        <ClearIcon />
+                                    </IconButton>
+                                </div>
                             </div>
                         </div>
                     </Grid>

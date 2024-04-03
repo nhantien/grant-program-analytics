@@ -1,6 +1,6 @@
 .bg {
-    width: 95%;
-    margin: 3.75rem 2.5% 0 2.5%;
+    width: 85%;
+    margin: 2rem 7.5% 5rem 7.5%;
 }
 
 .title {
@@ -12,6 +12,12 @@
     margin-bottom: 2rem;
 }
 
+.wrapper {
+    max-width: 100%;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+}
+
 .TableHeader {
     width: 20% !important;
     height: 4rem !important;
@@ -19,9 +25,27 @@
     font-size: 1.125rem !important;
 }
 
+.StickyHeader {
+    composes: TableHeader;
+    position: sticky;
+    left: 0;
+    background-color: white;
+    border-right: 1px solid lightgray;
+    box-shadow: 1px 1px 2px lightgray;
+}
+
 .TableCell {
     height: 4rem !important;
     font-size: 0.9735rem !important;
+}
+
+.StickyCell {
+    composes: TableCell;
+    position: sticky;
+    left: 0;
+    background-color: white;
+    border-right: 1px solid lightgray;
+    box-shadow: 1px 1px 2px lightgray;
 }
 
 .btn {
@@ -37,10 +61,6 @@
 
     .title-snapshot {
         font-size: 1.375rem;
-    }
-
-    .wrapper {
-        width: 70rem !important;
     }
 
     .TableHeader {

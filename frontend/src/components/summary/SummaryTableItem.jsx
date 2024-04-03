@@ -12,9 +12,12 @@ function SummaryTableItem({ field, data, color }) {
                         <Grid item xs={5} sm={3}>
                             {member.member_name}
                         </Grid>
-                        <Grid item xs={7} sm={9} style={{ flexWrap: "wrap" }}>
-                            {member.member_title}, {member.member_faculty}
-                        </Grid>
+                        {
+                            (member.member_title && member.member_faculty) &&
+                            <Grid item xs={7} sm={9} style={{ flexWrap: "wrap" }}>
+                                {member.member_title}, {member.member_faculty}
+                            </Grid>
+                        }
                     </Grid>
                 )}
             </div>
@@ -57,7 +60,7 @@ function SummaryTableItem({ field, data, color }) {
                 </div>
 
                 <div className={styles.reach}>
-                    {data.count} students impacted.
+                    {data.count} student enrolments.
                 </div>
             </div>
         )

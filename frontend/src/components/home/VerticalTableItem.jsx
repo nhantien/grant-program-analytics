@@ -5,7 +5,7 @@ import styles from "./VerticalTableItem.module.css";
 
 function VerticalTableItem({ project }) {
 
-    const statusColor = project.status === "Active\r" ? "#d4734c" : "#64b53c";
+    const statusColor = project.status === "Active" ? "#64b53c" : "#d4734c";
 
     const formattedAmount = parseInt(project.funding_amount).toLocaleString("en-CA", {
         style: "currency",
