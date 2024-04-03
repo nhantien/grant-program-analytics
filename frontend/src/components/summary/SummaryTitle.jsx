@@ -58,7 +58,7 @@ function SummaryTitle({ data }) {
                                     Duration:
                                 </Grid>
                                 <Grid item xs={3} sm={5}>
-                                    {data.years} Years
+                                    {data.years} Year{data.years !== 1 && 's'}
                                 </Grid>
                             </Grid>
                         </div>

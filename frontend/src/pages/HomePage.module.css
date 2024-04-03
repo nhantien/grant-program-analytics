@@ -230,4 +230,8 @@ TODO: animaion when search filters are shown/hidden
   .generate-summary-btn {
     height: 2.5rem;
   }
+
+  .slider {
+    width: 100%;
+  }
 }

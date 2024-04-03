@@ -179,18 +179,6 @@ function HomePage() {
         setAppliedFilters(newFilters);
     };
 
-    // for mobile UI
-    const handleOpenSearch = (e) => {
-        let filters = document.getElementById("filters");
-        if (filters.style.display === "none") {
-            filters.style.display = "flex";
-            e.target.innerHTML = "Close Advanced Search";
-        } else {
-            filters.style.display = "none";
-            e.target.innerHTML = "Open Advanced Search";
-        }
-    };
-
     // when the slider changes but it is still on focus
     const handleSliderChange = (event, newRange) => {
         setRange(newRange);
@@ -221,6 +209,7 @@ function HomePage() {
     return (
         <div className={styles.bg}>
             <header className={styles["app-header"]}>
+
                 <div className={styles.container}>
                     <Grid container spacing={1} style={{ alignItems: 'center' }}>
                         <Grid item xs={12} md={5}>
@@ -231,10 +220,6 @@ function HomePage() {
                         </Grid>
                     </Grid>
                 </div>
-
-                {/* <div className={styles["open-search"]}>
-                    <button onClick={(e) => handleOpenSearch(e)}>Open Advanced Search</button>
-                </div> */}
 
                 <div id="filters" className={styles["filters-div"]}>
                     <div className={styles["project-filters"]}>
@@ -263,16 +248,23 @@ function HomePage() {
                         unmountOnExit
                     >
                         <div className={styles.slider}>
-                            <span style={{ width: "15%" }}>Year Range:</span>
-                            <Slider
-                                max={2023}
-                                min={1999}
-                                value={range}
-                                onChange={handleSliderChange}
-                                onChangeCommitted={() => applyRangeFilter(range)}
-                                marks={MARKS}
-                                valueLabelDisplay="on"
-                            />
+                            <Grid container style={{ justifyContent: "space-around", alignItems: "center" }}>
+                                <Grid item xs={3}>
+                                    <span>Year Range:</span>
+                                </Grid>
+                                <Grid item xs={7}>
+                                    <Slider
+                                        max={2023}
+                                        min={1999}
+                                        value={range}
+                                        onChange={handleSliderChange}
+                                        onChangeCommitted={() => applyRangeFilter(range)}
+                                        marks={MARKS}
+                                        valueLabelDisplay="on"
+                                        sx={{ margin: "auto" }}
+                                    />
+                                </Grid>
+                            </Grid>
                         </div>
                     </Collapse>
                 </div>
@@ -283,18 +275,15 @@ function HomePage() {
                         <span style={{ marginTop: "1rem", marginBottom: "0.5rem" }}>Applied Filters</span>
                         <div className={styles["filters-box"]}>
                             {
-                                !optionsLoading && (
-                                    <React.Fragment>
-                                        <FilterList options={optionsLoading ? { 'funding_year': { '2022': '2022/2023' } } : options} rangeString={rangeString} setRangeString={setRangeString} />
-                                        <div className={styles["clear-filters-div"]}>
-                                            <p className={styles.text}>Clear All</p>
-                                            <IconButton onClick={handleClearAllFilters} size="small">
-                                                <ClearIcon />
-                                            </IconButton>
-                                        </div>
-                                    </React.Fragment>
-                                )
+                                !optionsLoading &&
+                                <FilterList options={optionsLoading ? { 'funding_year': { '2022': '2022/2023' } } : options} rangeString={rangeString} setRangeString={setRangeString} />
                             }
+                            <div className={styles["clear-filters-div"]}>
+                                <p className={styles.text}>Clear All</p>
+                                <IconButton onClick={handleClearAllFilters} size="small">
+                                    <ClearIcon />
+                                </IconButton>
+                            </div>
                         </div>
                     </div>
 
@@ -331,7 +320,7 @@ function HomePage() {
                         ) :
                         (
                             <Grid container>
-                                <Grid item sm={12}>
+                                <Grid item sm={12} style={{ justifyContent: "center" }}>
                                     {
                                         window.screen.width <= 576 ?
                                             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -340,8 +329,8 @@ function HomePage() {
                                                         <VerticalTableItem key={project.id} project={project} />
                                                     )
                                                 }
-                                                <Pagination count={Math.floor(projects.length / 10)} shape='rounded' showFirstButton showLastButton
-                                                    onChange={(event, page) => handlePaginationChange(page)} />
+                                                <Pagination count={Math.floor(projects.length / 10)} shape='rounded' showFirstButton
+                                                    onChange={(event, page) => handlePaginationChange(page)} sx={{ margin: "auto" }} />
                                             </div>
                                             :
                                             <ProjectTable projects={projects} />

@@ -70,7 +70,14 @@ function Summary() {
                     }
                 }
 
-                
+                getSimilarProjects(method: "getSimilarProjects", grantId: "${id}") {
+                    grant_id
+                    project_type
+                    pi_name
+                    title
+                    project_faculty
+                    funding_year
+                }
 
                 loadFocusArea(method: "loadFocusArea") {
                     label
@@ -153,7 +160,7 @@ function Summary() {
                     <SummaryTable key={grant.project_year} data={grant} />
                 ))
             }
-            {/* <SimilarProjects projects={similarProjects} /> */}
+            <SimilarProjects projects={similarProjects} />
         </div>
     );
 

@@ -8,8 +8,8 @@ function SummaryDescription({ data }) {
                 <Grid container>
                     <Grid item xs={12}>
                         <div className={styles.title}>Summary</div>
-                        <div className={styles["description-body"]}>
-                            {data.summary}
+                        <div className={styles["description-body"]} style={{ whiteSpace: "pre-line" }}>
+                            {`${data.summary}`}
                         </div>
                     </Grid>
                 </Grid>

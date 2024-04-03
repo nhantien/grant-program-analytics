@@ -16,17 +16,17 @@ function SimilarProjects({ projects }) {
     return (
         <div className={styles.bg}>
             <Grid container>
-                <Grid item sm={12}>
+                <Grid item sm={12} zeroMinWidth={true} >
                     <div className={styles.title}>
                         Similar Projects
                     </div>
 
-                    <TableContainer component={Paper}>
-                        <Table className={styles.wrapper} aria-label="customized-table">
+                    <TableContainer component={Paper} sx={{ maxWidth: "100%" }}>
+                        <Table className={styles.wrapper} stickyHeader >
 
                             <TableBody>
                                 <TableRow>
-                                    <TableCell className={styles.TableHeader}>Title</TableCell>
+                                    <TableCell className={styles.StickyHeader}>Title</TableCell>
                                     <TableCell className={styles.TableHeader}>Project Type</TableCell>
                                     <TableCell className={styles.TableHeader}>Primary Investigator</TableCell>
                                     <TableCell className={styles.TableHeader}>Faculty</TableCell>
@@ -34,8 +34,8 @@ function SimilarProjects({ projects }) {
                                 </TableRow>
 
                                 {projects.map((proj) =>
-                                    <TableRow>
-                                        <TableCell className={styles.TableCell}><Link to="#">{proj.title}</Link></TableCell>
+                                    <TableRow key={proj.grant_id}>
+                                        <TableCell className={styles.StickyCell}><Link to="#">{proj.title}</Link></TableCell>
                                         <TableCell className={styles.TableCell}>{proj.project_type}</TableCell>
                                         <TableCell className={styles.TableCell}>{proj.pi_name}</TableCell>
                                         <TableCell className={styles.TableCell}>{proj.project_faculty}</TableCell>
