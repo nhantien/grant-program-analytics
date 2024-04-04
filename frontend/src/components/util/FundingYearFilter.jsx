@@ -1,11 +1,10 @@
 import React, { useContext } from 'react';
-import { FormControl, Select, OutlinedInput, MenuItem, Typography } from '@mui/material';
-import { YEARS } from '../../constants';
+import { Grid, FormControl, Select, OutlinedInput, MenuItem, Typography } from '@mui/material';
 import { FiltersContext } from '../../App';
 
 import styles from "./Filter.module.css";
 
-function FundingYearFilter({ setShowSlider, snapshot }) {
+function FundingYearFilter({ options, setShowSlider, snapshot }) {
 
     const { appliedFilters, setAppliedFilters } = useContext(FiltersContext);
 
@@ -39,32 +38,34 @@ function FundingYearFilter({ setShowSlider, snapshot }) {
     }
 
     return (
-        <div style={{ width: (snapshot && isMobile) ? "100%" : (snapshot ? "25%" : "")}} className={styles.container}>
-
-            <FormControl sx={{ width: "100%" }}>
-                <Select
-                    label="Funding Year"
-                    className={styles.filter}
-                    onChange={handleChange}
-                    displayEmpty
-                    fullWidth
-                    value={appliedFilters["funding_year"]}
-                    input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-                    renderValue={(selected) => (
-                        <em>Funding Year</em>
-                    )}
-                    MenuProps={MenuProps}
-                >
-                    <MenuItem value="select range of years">Select range of years</MenuItem>
-                    {YEARS.map((year) => (
-                        <MenuItem key={year.label} value={year.value}>
-                            <Typography>{year.label}</Typography>
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
-
-        </div>
+        <Grid container>
+            <Grid item xs={12}>
+                <FormControl sx={{ width: "100%" }}>
+                    <Select
+                        label="Funding Year"
+                        className={styles.filter}
+                        onChange={handleChange}
+                        displayEmpty
+                        fullWidth
+                        value={appliedFilters["funding_year"]}
+                        input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+                        renderValue={(selected) => (
+                            <em>Funding Year</em>
+                        )}
+                        MenuProps={MenuProps}
+                    >
+                        <MenuItem value="select range of years">Select range of years</MenuItem>
+                        {
+                            Object.entries(options).map(([key, value]) => (
+                                <MenuItem key={value} value={key}>
+                                    <Typography noWrap>{value}</Typography>
+                                </MenuItem>
+                            ))
+                        }
+                    </Select>
+                </FormControl>
+            </Grid>
+        </Grid>
     );
 };
 

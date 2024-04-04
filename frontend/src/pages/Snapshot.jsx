@@ -14,9 +14,13 @@ import { FiltersContext } from "../App";
 // components
 import { SnapshotHeader, SnapshotBox } from "../components/snapshot";
 import { FundingChart, NumProjectsChart, StudentReachChart, FacultyEngagementChart, SuccessRateChart } from "../components/charts";
+// constants
+import { PROJECT_TYPE } from "../constants";
 
 
 function Snapshot() {
+
+    const client = generateClient();
 
     const { appliedFilters } = useContext(FiltersContext);
 
@@ -32,12 +36,11 @@ function Snapshot() {
     const [selectedRange, setSelectedRange] = useState(range);
     const [selectedLargeProjects, setSelectedLargeProjects] = useState({});
     const [selectedSmallProjects, setSelectedSmallProjects] = useState({});
+    const [options, setOptions] = useState({});
 
     // loading states 
     const [loading, setLoading] = useState(true);
-    const [fundingLoading, setFundingLoading] = useState(true);
-    const [reachLoading, setReachLoading] = useState(true);
-    const [countLoading, setCountLoading] = useState(true);
+    const [optionsLoading, setOptionsLoading] = useState(true);
 
     const generateQuery = (filters) => {
         const str = `query test {
@@ -123,7 +126,7 @@ function Snapshot() {
                   funding_year
                   unique_student
                   funding_amount
-              }
+            }
 
             countFacultyMembersByStream(method: "countFacultyMembersByStream", filter: {
                 funding_year: ${JSON.stringify(filters["funding_year"])},
@@ -152,7 +155,65 @@ function Snapshot() {
         return str;
     }
 
-    console.log(appliedFilters["funding_year"][0])
+    const setDropdownOptions = (faculties, focusAreas) => {
+        let facultiesJSON = {};
+        faculties.map((faculty) => {
+            facultiesJSON[faculty.faculty_code] = faculty.faculty_name;
+        });
+
+        let focusAreasJSON = {};
+        focusAreas.map((area) => {
+            focusAreasJSON[area.value] = area.label;
+        });
+
+        const currentYear = new Date().getFullYear();
+        let yearsJSON = {};
+        for (let i = 1999; i <= currentYear; i++) {
+            const yearString = `${i}/${i+1}`;
+            const iString = i.toString();
+            yearsJSON[iString] = yearString;
+        }
+ 
+        setOptions({
+            funding_year: yearsJSON,
+            project_type: PROJECT_TYPE,
+            project_faculty: facultiesJSON,
+            focus_area: focusAreasJSON
+        });
+    }
+
+    useEffect(() => {
+        const fetchOptions = async () => {
+            try {
+                const queryString = `query load {
+                    loadFaculty(method: "loadFaculty") {
+                        faculty_name
+                        faculty_code
+                    }
+
+                    loadFocusArea(method: "loadFocusArea") {
+                        label
+                        value
+                    }
+                }`;
+
+                const results = await client.graphql({
+                    query: queryString
+                });
+
+                const faculties = results.data.loadFaculty;
+                const focusAreas = results.data.loadFocusArea;
+
+                setDropdownOptions(faculties, focusAreas);
+                setOptionsLoading(false);
+
+            } catch (e) {
+                console.log(e);
+            }
+        };
+
+        fetchOptions();
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -160,7 +221,6 @@ function Snapshot() {
                 setLoading(true);
                 const query_string = generateQuery(appliedFilters);
                 console.log(query_string);
-                const client = generateClient()
                 const results = await client.graphql({
                     query: query_string,
                 });
@@ -195,8 +255,7 @@ function Snapshot() {
 
         fetchData();
     }, [appliedFilters]);
-
-
+  
     const handleClick = (section) => {
         document.getElementById(section).scrollIntoView({ behavior: "smooth" });
     };
@@ -212,7 +271,7 @@ function Snapshot() {
     return (
         <div className={styles.Snapshot}>
 
-            <SnapshotHeader range={selectedRange} setRange={setSelectedRange} />
+            <SnapshotHeader options={options} optionsLoading={optionsLoading} range={selectedRange} setRange={setSelectedRange} />
 
             <div className={styles.navbar}>
                 <button onClick={() => handleClick("success-rate")}>Success Rate</button>
@@ -222,7 +281,7 @@ function Snapshot() {
                 <button onClick={() => handleClick("faculty-engagement")}>Faculty and Student Engagement</button>
             </div>
 
-            {loading ? (
+            {(loading) ? (
                 <div style={{ width: '100%', display: "flex", justifyContent: "center", marginTop: "5rem" }}>
                     <CircularProgress />
                 </div>

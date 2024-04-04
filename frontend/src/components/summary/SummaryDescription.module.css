@@ -1,14 +1,13 @@
 .bg {
-    width: 90%;
-    margin-top: 3.75rem;
-    margin-left: 5%;
-    margin-right: 5%;
+    width: 85%;
+    margin: 2rem 7.5% 5rem 7.5%;
 }
 
 .container {
     background-color: white;
     height: 100%;
     width: 95%;
+    border: 1px solid #000;
     padding-left: 2.5%;
     padding-right: 2.5%;
     padding-top: 1.75rem;

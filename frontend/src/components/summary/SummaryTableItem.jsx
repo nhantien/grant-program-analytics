@@ -1,34 +1,51 @@
+import { Grid } from "@mui/material";
 import styles from "./SummaryTableItem.module.css";
 
 function SummaryTableItem({ field, data, color }) {
 
     let dataHTML;
-
-    if (field == "Focus Area(s)") {
-        dataHTML = (
-            <div className={styles.data} style={{ backgroundColor: color }}>
-                {data.join(", ")}
-            </div>
-        );
-
-        // dataHTML = (
-        //     <div className={styles.data} style={{ backgroundColor: color }}>
-        //         {data.map((area) =>
-        //             <p style={{ marginBottom: "0.25rem"}}>{area}</p>
-        //         )}
-        //     </div>
-        // )
-    } else if (field === "Team Members") {
+    if (field === "Primary Investigator(s)") {
         dataHTML = (
             <div className={styles.data} style={{ backgroundColor: color }}>
                 {data.map((member) =>
-                    <div className={styles.member}>
-                        <div className={styles.name}>
+                    <Grid key={`summary-table-item-pi`} container spacing={1} style={{ alignItems: "center" }}>
+                        <Grid item xs={5} sm={3}>
                             {member.member_name}
-                        </div>
-                        <div className={styles.job}>
-                            {member.member_title}, {member.member_faculty}
-                        </div>
+                        </Grid>
+                        {
+                            (member.member_title && member.member_faculty) &&
+                            <Grid item xs={7} sm={9} style={{ flexWrap: "wrap" }}>
+                                {member.member_title}, {member.member_faculty}
+                            </Grid>
+                        }
+                    </Grid>
+                )}
+            </div>
+        )
+    }
+    else if (field === "Focus Area(s)") {
+        dataHTML = (
+            <div className={styles.data} style={{ backgroundColor: color }}>
+                <Grid container>
+                    <Grid item xs={12}>
+                        {data.join(", ")}
+                    </Grid>
+                </Grid>
+            </div>
+        );
+    } else if (field === "Team Members") {
+        dataHTML = (
+            <div className={styles.data} style={{ backgroundColor: color }}>
+                {data.map((member, i) =>
+                    <div key={`summary-table-item-member-${i}`} className={styles.member}>
+                        <Grid container spacing={1}>
+                            <Grid item xs={4} sm={3}>
+                                {member.member_name}
+                            </Grid>
+                            <Grid item xs={7} sm={9} style={{ flexWrap: "wrap" }}>
+                                {member.member_title}, {member.member_faculty}
+                            </Grid>
+                        </Grid>
                     </div>
                 )}
             </div>
@@ -37,32 +54,40 @@ function SummaryTableItem({ field, data, color }) {
         dataHTML = (
             <div className={styles.data} style={{ backgroundColor: color }}>
                 <div className={styles.courses}>
-                    {data.courses.map((course) => (
-                        <div className={styles.course}>{course.course_name} {course.section}</div>
+                    {data.courses.map((course, i) => (
+                        <div key={`course-${i}`} className={styles.course}>{course.course_name} {course.section}</div>
                     ))}
                 </div>
 
                 <div className={styles.reach}>
-                    {data.count} student impact.
+                    {data.count} student enrolments.
                 </div>
             </div>
         )
     } else {
         dataHTML = (
-            <div className={styles.data} style={{ backgroundColor: color }}>
-                {data}
-            </div>
+            <Grid container>
+                <Grid item xs={12}>
+                    <div className={styles.data} style={{ backgroundColor: color }}>
+                        {data}
+                    </div>
+                </Grid>
+            </Grid>
         );
     }
 
     return (
         <div className={styles.container}>
-            <div className={styles.field}>
-                {field}
-            </div>
-
-            {dataHTML}
-
+            <Grid container>
+                <Grid item xs={12} sm={3}>
+                    <div className={styles.field}>
+                        {field}
+                    </div>
+                </Grid>
+                <Grid item xs={12} sm={9}>
+                    {dataHTML}
+                </Grid>
+            </Grid>
         </div>
     );
 }

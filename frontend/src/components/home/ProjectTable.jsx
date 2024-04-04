@@ -3,16 +3,10 @@ import * as React from 'react';
 // react-router
 import { Link } from 'react-router-dom';
 // mui
-import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import Paper from '@mui/material/Paper';
+import {
+    Box, Table, TableBody, TableCell, TableContainer,
+    TableHead, TablePagination, TableRow, TableSortLabel, Paper, Grid
+} from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 // prop-types
 import PropTypes from 'prop-types';
@@ -174,7 +168,7 @@ export default function ProjectTable({ projects }) {
     const [orderBy, setOrderBy] = React.useState('funding_year');
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(-1);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -237,13 +231,14 @@ export default function ProjectTable({ projects }) {
     );
 
     return (
-        <Box sx={{ width: '100%' }}>
-            <Paper sx={{ width: '100%', mb: 2 }}>
-                <TableContainer>
+        <Box sx={{ maxWidth: '100%' }}>
+            <Paper sx={{ maxWidth: '100%', mb: 2 }}>
+                <TableContainer sx={{ width: "100%" }}>
                     <Table
-                        sx={{ minWidth: 750 }}
+                        sx={{ width: "100%" }}
                         aria-labelledby="tableTitle"
                         size='small'
+                        padding='normal'
                     >
                         <EnhancedTableHead
                             order={order}
@@ -274,19 +269,19 @@ export default function ProjectTable({ projects }) {
                                             id={labelId}
                                             scope="row"
                                             padding="normal"
-                                            sx={{ height: "3rem" }}
+                                            sx={{ height: "5rem", maxWidth: "10%" }}
                                         >
                                             {project.funding_year}
                                         </TableCell>
-                                        <TableCell align="left" sx={{ height: "3rem" }}>{project.project_type}</TableCell>
-                                        <TableCell align="left" sx={{ height: "3rem" }}>{project.pi_name}</TableCell>
-                                        <TableCell align="left" sx={{ height: "3rem" }}>{project.project_faculty}</TableCell>
-                                        <TableCell align="left" sx={{ height: "3rem" }}><Link to={`/summary/${project.id}`}>{project.title}</Link></TableCell>
-                                        <TableCell align="right" sx={{ height: "3rem" }}>{project.project_year}</TableCell>
-                                        <TableCell align="right" sx={{ height: "3rem" }}>{formattedAmount(project.funding_amount)}</TableCell>
-                                        <TableCell align="left" sx={{ height: "3rem", color: project.status === "Active\r" ? "#d4734c" : "#64b53c" }}>{project.status}</TableCell>
-                                        <TableCell align="left" sx={{ height: "3rem" }}> <a href="#">report</a> </TableCell>
-                                        <TableCell align="left" sx={{ height: "3rem" }}> <a href="#">poster</a></TableCell>
+                                        <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%" }}>{project.project_type}</TableCell>
+                                        <TableCell align="left" sx={{ height: "5rem", maxWidth: "10%" }}>{project.pi_name}</TableCell>
+                                        <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%" }}>{project.project_faculty}</TableCell>
+                                        <TableCell align="left" sx={{ height: "5rem", maxWidth: "35%" }}><Link to={`/summary/${project.id}`}>{project.title}</Link></TableCell>
+                                        <TableCell align="right" sx={{ height: "5rem", maxWidth: "10%" }}>{project.project_year}</TableCell>
+                                        <TableCell align="right" sx={{ height: "5rem", maxWidth: "10%" }}>{formattedAmount(project.funding_amount)}</TableCell>
+                                        <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%", color: project.status === "Active" ? "#64b53c" : "#d4734c" }}>{project.status}</TableCell>
+                                        <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%" }}> <a href="#">report</a> </TableCell>
+                                        <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%" }}> <a href="#">poster</a></TableCell>
                                     </TableRow>
                                 );
                             })}
@@ -301,6 +296,7 @@ export default function ProjectTable({ projects }) {
                             )}
                         </TableBody>
                     </Table>
+
                 </TableContainer>
                 <TablePagination
                     rowsPerPageOptions={[
@@ -316,6 +312,12 @@ export default function ProjectTable({ projects }) {
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
                     labelRowsPerPage="Displayed per page"
+                    sx={{
+                        height: "4rem",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-end"
+                    }}
                 />
             </Paper>
         </Box>

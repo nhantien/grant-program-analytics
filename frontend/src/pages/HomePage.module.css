@@ -30,6 +30,7 @@
 .container {
   composes: box;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
 }
@@ -71,7 +72,7 @@
 }
 
 .project-filters {
-  width: 70%;
+  width: 80%;
 }
 
 .filter-text {
@@ -125,7 +126,7 @@
 }
 
 .clear-filters-div {
-  width: 15%;
+  width: 25%;
   position: absolute;
   bottom: 0;
   right: 0;
@@ -170,24 +171,20 @@ TODO: animaion when search filters are shown/hidden
     margin-bottom: 2.5rem;
   }
 
-  .title {
-    font-size: 1.25rem;
+  .container {
+    margin-bottom: 1rem
   }
 
-  .container {
-    display: block;
+  .title {
+    font-size: 1.25rem;
   }
 
   .open-search {
     display: block;
   }
 
-  .filters-div {
-    display: none;
-  }
-
   .project-filters {
-    width: 60%;
+    width: 100%;
   }
 
   .filter-text {
@@ -226,7 +223,15 @@ TODO: animaion when search filters are shown/hidden
     align-items: flex-end;
   }
 
+  .generate-summary-txt {
+    width: 70%;
+  }
+
   .generate-summary-btn {
-    height: 100%;
+    height: 2.5rem;
+  }
+
+  .slider {
+    width: 100%;
   }
 }

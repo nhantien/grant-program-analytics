@@ -1,151 +1,169 @@
-﻿schema {
-  query: Query
-}
-
-type CoCurricularReach {
-  description: String
-  estimated_reach: String
-  funding_year: String
-  grant_id: String
+﻿type CoCurricularReach {
+	funding_year: String
+	grant_id: String
+	estimated_reach: String
+	description: String
 }
 
 type CountByProjectType {
-  Large: Int!
-  Small: Int!
+	Large: Int
+	Small: Int
+}
+
+type Faculty {
+	faculty_name: String
+	faculty_code: String
 }
 
 type FacultyEngagement {
-  funding_year: String
-  grant_id: String
-  member_campus: String
-  member_faculty: String
-  member_name: String
-  member_other: String
-  member_stream: String
-  member_title: String
-  member_unit: String
-  project_faculty: String
-  project_id: String
-  project_type: String
+	funding_year: String
+	project_type: String
+	project_id: String
+	grant_id: String
+	project_faculty: String
+	member_name: String
+	member_title: String
+	member_stream: String
+	member_campus: String
+	member_faculty: String
+	member_unit: String
+	member_other: String
 }
 
 type FacultyEngagementCount {
-  Large: StreamCount
-  Small: StreamCount
-}
-
-type FocusArea {
-  curriculum: Boolean
-  diversity_and_inclusion: Boolean
-  funding_amount: String
-  funding_status: String
-  funding_year: String
-  grant_id: String
-  indiginous_focused_curricula: Boolean
-  infrastructure_development: Boolean
-  innovative_assessment: Boolean
-  pi_name: String
-  project_faculty: String
-  project_id: String
-  project_type: String
-  resourve_development: Boolean
-  student_engagement: Boolean
-  student_experience: Boolean
-  teaching_roles_and_training: Boolean
-  title: String
-  work_integrated_learning: Boolean
-}
-
-type NumProjectsAndGrants {
-  grant: CountByProjectType
-  project: CountByProjectType
-}
-
-type Project {
-  department: String
-  funding_amount: String
-  funding_year: String
-  grant_id: String
-  pi_name: String
-  project_faculty: String
-  project_id: String
-  project_type: String
-}
-
-type Proposal {
-  amount: String
-  co_applicants: String
-  focus_area: String
-  grant_id: String
-  pi_email: String
-  pi_name: String
-  pi_role: String
-  pi_title: String
-  project_faculty: String
-  project_year: String
-  summary: String
-  title: String
-}
-
-type Query {
-  countDeclinedProjects(filter: Filter, method: String): CountByProjectType
-  countFacultyMembersByStream(filter: Filter, method: String): FacultyEngagementCount
-  countProjectsAndGrants(filter: Filter, method: String): NumProjectsAndGrants
-  countTotalReachByFaculty(filter: Filter, method: String): StudentReachCount
-  getAllProjects(method: String): [Project]
-  getCoCurricularReachById(grantId: String, method: String): CoCurricularReach
-  getFilteredProjects(filter: Filter, method: String): [Project]
-  getFilteredProposals(filter: Filter, method: String): [Proposal]
-  getStudentReachInfo(filter: Filter, method: String): StudentReachInfo
-  proposals(method: String): [Proposal]
-}
-
-type Reach {
-  project_faculty: String
-  reach: Int
-}
-
-type StreamCount {
-  Admin: Int
-  External: Int
-  PDF: Int
-  Research: Int
-  Student: Int
-  Teaching: Int
-}
-
-type StudentReach {
-  course_faculty: String
-  course_name: String
-  course_type: String
-  credits: String
-  fte: String
-  funding_year: String
-  grant_id: String
-  project_faculty: String
-  project_id: String
-  project_type: String
-  reach: String
-  section: String
-  session: String
-  term: String
-}
-
-type StudentReachCount {
-  Large: [Reach]
-  Small: [Reach]
-}
-
-type StudentReachInfo {
-  course: Int!
-  faculty: Int!
-  section: Int!
+	Large: StreamCount
+	Small: StreamCount
 }
 
 input Filter {
-  focus_area: [String]
-  funding_year: [String]
-  project_faculty: [String]
-  project_type: [String]
-  search_text: [String]
+	funding_year: [String]
+	project_type: [String]
+	project_faculty: [String]
+	focus_area: [String]
+	search_text: [String]
+}
+
+type FocusArea {
+	label: String
+	value: String
+}
+
+type IndividualSummary {
+	funding_year: String
+	project_type: String
+	project_faculty: String
+	pi_name: String
+	funding_amount: String
+	title: String
+	summary: String
+	project_year: String
+	description: String
+	focus_areas: [String]
+	project_status: String
+}
+
+type NumProjectsAndGrants {
+	project: CountByProjectType
+	grant: CountByProjectType
+}
+
+type Project {
+	funding_year: String
+	project_type: String
+	grant_id: String
+	project_id: String
+	project_faculty: String
+	department: String
+	pi_name: String
+	funding_amount: String
+}
+
+type Proposal {
+	funding_year: Float
+	project_type: String
+	project_id: String
+	project_faculty: String
+	pi_name: String
+	pi_unit: String
+	funding_amount: Float
+	title: String
+	summary: String
+	co_applicants: String
+	project_year: Float
+	grant_id: String
+	project_status: String
+}
+
+type Reach {
+	project_faculty: String
+	reach: Int
+}
+
+type StreamCount {
+	Admin: Int
+	Student: Int
+	External: Int
+	PDF: Int
+	Research: Int
+	Teaching: Int
+}
+
+type StudentReach {
+	funding_year: String
+	project_type: String
+	project_id: String
+	grant_id: String
+	project_faculty: String
+	course_type: String
+	session: String
+	term: String
+	course_faculty: String
+	course_name: String
+	section: String
+	credits: String
+	reach: Float
+	fte: String
+}
+
+type StudentReachByGrant {
+	grant_id: String
+	reach: [StudentReach]
+}
+
+type StudentReachCount {
+	Large: [Reach]
+	Small: [Reach]
+}
+
+type StudentReachInfo {
+	faculty: Int
+	course: Int
+	section: Int
+}
+
+type TeamMembers {
+	grant_id: String
+	members: [FacultyEngagement]
+}
+
+type UniqueStudent {
+	funding_year: Float
+	unique_student: Float
+	funding_amount: Float
+}
+
+type Query {
+	getIndividualSummaryInfo(method: String, grantId: String): [IndividualSummary]
+	getSimilarProjects(method: String, grantId: String): [Proposal]
+	getFilteredProposals(method: String, filter: Filter): [Proposal]
+	countDeclinedProjects(method: String, filter: Filter): CountByProjectType
+	countFacultyMembersByStream(method: String, filter: Filter): FacultyEngagementCount
+	countTotalReachByFaculty(method: String, filter: Filter): StudentReachCount
+	getStudentReachInfo(method: String, filter: Filter): StudentReachInfo
+	countProjectsAndGrants(method: String, filter: Filter): NumProjectsAndGrants
+	getUniqueStudent(method: String, fundingYear: String): UniqueStudent
+	getTeamMembersByGrantId(method: String, grantId: String): [TeamMembers]
+	getStudentReachByGrantId(method: String, grantId: String): [StudentReachByGrant]
+	loadFaculty(method: String): [Faculty]
+	loadFocusArea(method: String): [FocusArea]
 }
