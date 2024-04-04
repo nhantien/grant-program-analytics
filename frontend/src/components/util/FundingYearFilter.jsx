@@ -34,8 +34,12 @@ function FundingYearFilter({ setShowSlider, snapshot }) {
         },
     };
 
+    const isMobile = () => {
+        return window.screen.width <= 576;
+    }
+
     return (
-        <div style={{ width: snapshot ? "25%" : "" }} className={styles.container}>
+        <div style={{ width: (snapshot && isMobile) ? "100%" : (snapshot ? "25%" : "")}} className={styles.container}>
 
             <FormControl sx={{ width: "100%" }}>
                 <Select

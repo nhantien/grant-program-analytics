@@ -42,10 +42,14 @@ function FacultyEngagementChart({projects, amount, unique}) {
         return totalamount;
       };
 
+    const formattedAmount = (amount) => {
+        return parseInt(amount).toLocaleString("en-CA");
+    };
+
 
     return (
         <React.Fragment>
-            <div className={styles.chart}>
+            <div className={styles["fe-chart"]}>
                 <div className={styles.fe}>
 
                     <div className={styles["fe-box"]}>
@@ -115,7 +119,7 @@ function FacultyEngagementChart({projects, amount, unique}) {
                  (appliedFilters.project_type).length === 0 &&
                  (appliedFilters.focus_area).length === 0 &&
                  (appliedFilters.search_text).length === 0 &&
-                <p>Approximately <b>${unique.funding_amount}</b> in TLEF-awarded funding will employ over <b>{projects.Small.Student + projects.Large.Student}</b> UBC students to support the development, implementation and evaluation of TLEF projects.</p>
+                <p>Approximately <b>${formattedAmount(unique.funding_amount)}</b> in TLEF-awarded funding will employ over <b>{projects.Small.Student + projects.Large.Student}</b> UBC students to support the development, implementation and evaluation of TLEF projects.</p>
             }
             </div>
            

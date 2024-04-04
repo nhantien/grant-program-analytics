@@ -36,8 +36,16 @@ function Filter({ options, defaultValue, type, snapshot }) {
     },
   };
 
+  const isMobile = () => {
+    return window.screen.width <= 576;
+}
+
+const filterWidth = (isMobile())
+?  { pad: "2rem 0 2rem 0" }
+ : {pad: "0.5rem 0 0.5rem 0" };
+
   return (
-    <div style={{ width: snapshot ? "20%" : "" }} className={styles.container}>
+    <div style={{ width: (snapshot && isMobile) ? "100%" : (snapshot ? "20%" : "")}} className={styles.container}>
       <FormControl sx={{ width: "100%" }}>
         <Select
           label={defaultValue}

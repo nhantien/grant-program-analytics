@@ -2,6 +2,7 @@
 import React, { createContext, useState } from "react";
 // react-router
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
 // amplify
 import { Amplify } from 'aws-amplify';
 // components
@@ -43,7 +44,11 @@ function App() {
     <FiltersContext.Provider value={{ appliedFilters, setAppliedFilters }}>
       <Router>
         <Routes>
-          <Route path="/" exact element={<HomePage />} />
+          <Route path="/" exact element={<HomePage />}>
+          const location = useLocation();
+          const myParam = new URLSearchParams(location.search).get('myParam');
+          console.log("PARAMETER", myParam);
+          </Route>
           <Route path="/summary/:id" element={<Summary />} />
           <Route path="/snapshot" element={<Snapshot />} />
         </Routes>
