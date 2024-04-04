@@ -53,6 +53,7 @@
     position: relative;
     border: solid lightgray;
     border-radius: 0.5rem;
+    display: flex;
 }
 
 .clear-filters-div p {
@@ -94,9 +95,14 @@
         font-size: 1.5rem;
     }
 
-    .filters {
-        display: block;
-        margin-top: 1.5rem;
+    .dropdown-filters {
+        align-items: flex-start; 
+        flex-direction: column;
+        max-width: 100%;
+    }
+
+    .filters-box {
+        width: 100%;
     }
 
     .slider {
