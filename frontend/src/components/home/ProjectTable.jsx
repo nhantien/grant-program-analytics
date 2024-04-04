@@ -76,13 +76,13 @@ const headCells = [
     },
     {
         id: 'project_year',
-        numeric: true,
+        numeric: false,
         disablePadding: false,
         label: 'Project Year',
     },
     {
         id: 'funding_amount',
-        numeric: true,
+        numeric: false,
         disablePadding: false,
         label: 'Amount',
     },
@@ -277,8 +277,8 @@ export default function ProjectTable({ projects }) {
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "10%" }}>{project.pi_name}</TableCell>
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%" }}>{project.project_faculty}</TableCell>
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "35%" }}><Link to={`/summary/${project.id}`}>{project.title}</Link></TableCell>
-                                        <TableCell align="right" sx={{ height: "5rem", maxWidth: "10%" }}>{project.project_year}</TableCell>
-                                        <TableCell align="right" sx={{ height: "5rem", maxWidth: "10%" }}>{formattedAmount(project.funding_amount)}</TableCell>
+                                        <TableCell align="left" sx={{ height: "5rem", maxWidth: "10%" }}>{project.project_year}</TableCell>
+                                        <TableCell align="left" sx={{ height: "5rem", maxWidth: "10%" }}>{formattedAmount(project.funding_amount)}</TableCell>
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%", color: project.status === "Active" ? "#64b53c" : "#d4734c" }}>{project.status}</TableCell>
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%" }}> <a href="#">report</a> </TableCell>
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%" }}> <a href="#">poster</a></TableCell>

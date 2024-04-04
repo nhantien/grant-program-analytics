@@ -1,0 +1,62 @@
+.bg {
+    width: 85%;
+    margin: 2rem 7.5% 5rem 7.5%;
+}
+
+.title {
+    color: #000;
+    font-family: Inter;
+    font-style: normal;
+    text-align: start;
+    font-size: 1.375rem;
+    margin-bottom: 2rem;
+}
+
+.container {
+    background-color: white;
+    height: 100%;
+    width: 95%;
+    border: 1px solid #000;
+    padding-left: 2.5%;
+    padding-right: 2.5%;
+    padding-top: 1.75rem;
+    padding-bottom: 1.75rem;
+}
+
+.description-text {
+    color: black;
+    font-family: Inter;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.description-body {
+    composes: description-text;
+    width: 100%;
+    font-size: 0.9375rem;
+}
+
+
+@media screen and (max-width: 576px) {
+    
+    .bg {
+        margin-top: 2rem;
+        height: auto;
+    }
+
+    .container {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+
+    .title {
+        height: 1.125rem;
+        margin-bottom: 1rem;
+        font-size: 1.125rem;
+    }
+
+    .description-body {
+        height: auto;
+        font-size: 0.875rem;
+    }
+}

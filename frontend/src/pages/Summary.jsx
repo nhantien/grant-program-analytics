@@ -9,7 +9,7 @@ import { generateClient } from 'aws-amplify/api';
 // css styles
 import styles from "./Summary.module.css";
 // components
-import { SummaryTitle, SummaryDescription, SummaryTable, Posters, SimilarProjects } from "../components/summary";
+import { SummaryTitle, SummaryDescription, SummaryTable, Posters, SimilarProjects, ProjectOutcome } from "../components/summary";
 
 
 function Summary() {
@@ -21,6 +21,7 @@ function Summary() {
     const [descriptionData, setDescriptionData] = useState({});
     const [tableData, setTableData] = useState([]);
     const [similarProjects, setSimilarProjects] = useState([]);
+    const [projectOutcome, setProjectOutcome] = useState("");
 
     const countTotalReach = (reachData) => {
         let total = 0;
@@ -49,6 +50,7 @@ function Summary() {
                     description
                     focus_areas
                     project_status
+                    project_outcome
                 }
 
                 getTeamMembersByGrantId(method: "getTeamMembersByGrantId", grantId: "${id}") {
@@ -131,8 +133,8 @@ function Summary() {
                 });
                 
                 setTableData(tableInfo);
-
                 setSimilarProjects(results.data.getSimilarProjects);
+                setProjectOutcome(summaryInfo[summaryInfo.length - 1].project_outcome);
 
                 setIsLoading(false);
             } catch (e) {
@@ -161,6 +163,7 @@ function Summary() {
                 ))
             }
             <SimilarProjects projects={similarProjects} />
+            <ProjectOutcome data={projectOutcome} />
         </div>
     );
 
