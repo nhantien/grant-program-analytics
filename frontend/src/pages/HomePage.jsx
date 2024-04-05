@@ -55,6 +55,7 @@ function HomePage() {
                 title
                 project_year
                 project_status
+                report
             }
 
             loadFaculty(method: "loadFaculty") {
@@ -84,11 +85,12 @@ function HomePage() {
 
         const currentYear = new Date().getFullYear();
         let yearsJSON = {};
-        for (let i = 1999; i <= currentYear; i++) {
+        for (let i = currentYear; i >= 1999; i--) {
             const yearString = `${i}/${i + 1}`;
             const iString = i.toString();
             yearsJSON[iString] = yearString;
         }
+
 
         setOptions({
             funding_year: yearsJSON,
@@ -153,7 +155,8 @@ function HomePage() {
                         proj.title,
                         proj.project_year,
                         proj.funding_amount,
-                        proj.project_status
+                        proj.project_status,
+                        proj.report
                     );
                 });
 

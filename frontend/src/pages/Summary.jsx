@@ -51,6 +51,7 @@ function Summary() {
                     focus_areas
                     project_status
                     project_outcome
+                    report
                 }
 
                 getTeamMembersByGrantId(method: "getTeamMembersByGrantId", grantId: "${id}") {
@@ -109,7 +110,8 @@ function Summary() {
 
                 setDescriptionData({
                     summary: summaryInfo[summaryInfo.length - 1].summary,
-                    status: summaryInfo[summaryInfo.length - 1].project_status
+                    status: summaryInfo[summaryInfo.length - 1].project_status,
+                    report: summaryInfo[0].report
                 });
 
                 let focusAreasJSON = {};

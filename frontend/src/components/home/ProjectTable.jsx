@@ -280,7 +280,9 @@ export default function ProjectTable({ projects }) {
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "10%" }}>{project.project_year}</TableCell>
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "10%" }}>{formattedAmount(project.funding_amount)}</TableCell>
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%", color: project.status === "Active" ? "#64b53c" : "#d4734c" }}>{project.status}</TableCell>
-                                        <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%" }}> <a href="#">report</a> </TableCell>
+                                        <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%" }}>
+                                            { project.report ? <a href={project.report} target='_blank'>report</a> : 'N/A' }
+                                        </TableCell>
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%" }}> <a href="#">poster</a></TableCell>
                                     </TableRow>
                                 );

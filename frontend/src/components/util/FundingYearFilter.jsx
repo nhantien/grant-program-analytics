@@ -22,6 +22,9 @@ function FundingYearFilter({ options, setShowSlider, snapshot }) {
         }
     };
 
+    const keys = Object.keys(options);
+    keys.sort().reverse();
+
     const ITEM_HEIGHT = 48;
     const ITEM_PADDING_TOP = 8;
     const MenuProps = {
@@ -52,12 +55,19 @@ function FundingYearFilter({ options, setShowSlider, snapshot }) {
                     >
                         <MenuItem value="select range of years">Select range of years</MenuItem>
                         {
+                            keys.map((key) => (
+                                <MenuItem key={options[key]} value={key}>
+                                    <Typography noWrap>{options[key]}</Typography>
+                                </MenuItem>
+                            ))
+                        }
+                        {/* {
                             Object.entries(options).map(([key, value]) => (
                                 <MenuItem key={value} value={key}>
                                     <Typography noWrap>{value}</Typography>
                                 </MenuItem>
                             ))
-                        }
+                        } */}
                     </Select>
                 </FormControl>
             </Grid>
