@@ -103,7 +103,7 @@ function StudentReachChart( {projects, reachdata, unique}) {
                 <div className={styles.chart}>
                 <ResponsiveContainer width='100%' height={500}>
                 <BarChart width={800} height={500} layout='vertical' data={STUDENT_REACH}>
-                    <XAxis type='number' padding={{ right: 150}} />
+                    <XAxis type='number' padding={{ right: 150}} hide="true"/>
                     <YAxis type='category' dataKey="name" width={120} />
                     <Legend verticalAlign='top' iconType='square' height={36} />
                     <Bar dataKey="Small TLEF" stackId="a" maxBarSize={120} background={{ fill: "#EEEE" }} fill="#FB812D" />
@@ -141,7 +141,7 @@ function StudentReachChart( {projects, reachdata, unique}) {
                     <h3 className={styles['hidden']}>Chart Data</h3>
                     {STUDENT_REACH.map((item, index) => (
                         <div key={index} className={styles.valueColumn}>
-                            <span className={styles.valueFaculty}><b>{item.name}: </b></span>
+                            <span className={styles.valueFaculty}><b className={styles['hidden']}>{item.name}: </b></span>
                             {(item['Small TLEF'] !== 0) && (
                             <span className={styles.valueSmall}>Small: {(item['Small TLEF'])}</span>
                             )}

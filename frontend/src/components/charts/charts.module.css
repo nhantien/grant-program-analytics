@@ -20,7 +20,7 @@ b {
 }
 
 .chart {
-    width: 61%;
+    width: 80%;
     min-height: 20rem;
     height: 100%;
     margin-left: -2rem;
@@ -56,7 +56,7 @@ b {
 }
 
 .dataBox {
-    border: 1px solid #286593;
+    border: none;
     padding: 5px;
     margin-top: 50px;
     border-radius: 10px;
@@ -74,16 +74,25 @@ b {
 }
 
 .valueSmall {
-    color: #FB812D;
+    /* color: #FB812D; */
+    height: 0.5px;
+    position: absolute;
+    color: rgba(0, 0, 0, 0);
 }
 
 .valueLarge {
-    color: #2F5D7C;
+    /* color: #2F5D7C; */
+    height: 0.5px;
+    position: absolute;
+    color: rgba(0, 0, 0, 0);
 }
 
 .valueFaculty {
     flex-basis: 25%;
-    color: black
+    /* color: black; */
+    /* height: 0.5px;
+    position: absolute; */
+    color: rgba(0, 0, 0, 0);
 }
 
 /* num grants and projects chart */
