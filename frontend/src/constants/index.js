@@ -11,7 +11,7 @@ class Project {
     report;
     poster;
 
-    constructor(id, fundingYear, type, investigator, faculty, title, projectYear, amount, status) {
+    constructor(id, fundingYear, type, investigator, faculty, title, projectYear, amount, status, report) {
         this.id = id;
         this.funding_year = fundingYear;
         this.project_type = type;
@@ -21,7 +21,7 @@ class Project {
         this.project_year = projectYear;
         this.funding_amount = amount;
         this.status = status;
-        this.report = "#";
+        this.report = report;
         this.poster = "#";
     };
 };

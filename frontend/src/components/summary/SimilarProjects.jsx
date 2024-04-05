@@ -13,6 +13,8 @@ function SimilarProjects({ projects }) {
     const [showAll, setShowAll] = useState(false);
     const itemsToDisplay = showAll ? SAMPLE_SIMILAR_PROJECTS : SAMPLE_SIMILAR_PROJECTS.slice(0, 5);
 
+    if (projects.length === 0) return null;
+
     return (
         <div className={styles.bg}>
             <Grid container>
