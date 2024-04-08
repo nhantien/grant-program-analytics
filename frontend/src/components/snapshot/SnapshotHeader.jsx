@@ -11,7 +11,7 @@ import { FiltersContext } from "../../App";
 // components
 import { Filter, FilterList, FundingYearFilter } from "../util";
 // constants
-import { MARKS } from "../../constants";
+import { MARKS, CURRENT_YEAR } from "../../constants";
 
 
 function SnapshotHeader({ options, optionsLoading, range, setRange }) {
@@ -28,7 +28,7 @@ function SnapshotHeader({ options, optionsLoading, range, setRange }) {
 
     const handleClearAll = () => {
         const newFilters = {
-            "funding_year": ["2022"],
+            "funding_year": [CURRENT_YEAR.toString()],
             "project_type": [],
             "project_faculty": [],
             "focus_area": [],
@@ -99,7 +99,7 @@ function SnapshotHeader({ options, optionsLoading, range, setRange }) {
                                 </Grid>
                                 <Grid xs={12} md={10}>
                                     <Slider
-                                        max={2023}
+                                        max={CURRENT_YEAR}
                                         min={1999}
                                         value={range}
                                         onChange={handleSliderChange}
@@ -118,7 +118,7 @@ function SnapshotHeader({ options, optionsLoading, range, setRange }) {
                             <div className={styles["filters-box"]}>
                                 {
                                     !optionsLoading &&
-                                    <FilterList options={optionsLoading ? { 'funding_year': { '2022': '2022/2023' } } : options} rangeString={rangeString} setRangeString={setRangeString} />
+                                    <FilterList options={options} rangeString={rangeString} setRangeString={setRangeString} />
                                 }
                                 <div className={styles["clear-filters-div"]}>
                                     <p className={styles.text}>Clear All</p>
