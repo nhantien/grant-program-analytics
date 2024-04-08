@@ -16,7 +16,7 @@ import { FiltersContext } from '../App';
 import { SearchBar, VerticalTableItem, ProjectTable } from '../components/home';
 import { Filter, FilterList, FundingYearFilter } from "../components/util";
 // constants
-import { Project, PROJECT_TYPE, MARKS } from '../constants';
+import { Project, PROJECT_TYPE, MARKS, CURRENT_YEAR } from '../constants';
 
 function HomePage() {
 
@@ -30,7 +30,7 @@ function HomePage() {
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showSlider, setShowSlider] = useState(false);
-    const [range, setRange] = useState([1999, 2023]);
+    const [range, setRange] = useState([1999, CURRENT_YEAR]);
     const [rangeString, setRangeString] = useState("");
 
     const [page, setPage] = useState(0);
@@ -83,9 +83,8 @@ function HomePage() {
             focusAreasJSON[area.value] = area.label;
         });
 
-        const currentYear = new Date().getFullYear();
         let yearsJSON = {};
-        for (let i = currentYear; i >= 1999; i--) {
+        for (let i = CURRENT_YEAR; i >= 1999; i--) {
             const yearString = `${i}/${i + 1}`;
             const iString = i.toString();
             yearsJSON[iString] = yearString;
@@ -176,7 +175,7 @@ function HomePage() {
 
     const handleClearAllFilters = () => {
         const newFilters = {
-            "funding_year": ["2022"],
+            "funding_year": [CURRENT_YEAR.toString()],
             "project_type": [],
             "project_faculty": [],
             "focus_area": [],
@@ -260,7 +259,7 @@ function HomePage() {
                                 </Grid>
                                 <Grid item xs={7}>
                                     <Slider
-                                        max={2023}
+                                        max={CURRENT_YEAR}
                                         min={1999}
                                         value={range}
                                         onChange={handleSliderChange}

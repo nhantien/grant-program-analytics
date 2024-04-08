@@ -6,6 +6,8 @@ import ClearIcon from '@mui/icons-material/Clear';
 // context
 import { FiltersContext } from '../../App';
 import { Grid } from '@mui/material';
+// constants
+import { CURRENT_YEAR } from '../../constants';
 
 function FilterList({ options, rangeString, setRangeString }) {
 
@@ -30,12 +32,11 @@ function FilterList({ options, rangeString, setRangeString }) {
     }));
   }
 
-  // for now 2022 is selected by default
-  // TODO: update default year to the most recent year
+
   const handleClearFundingYearRangeFilter = () => {
     setAppliedFilters((prevFilters) => ({
       ...prevFilters,
-      "funding_year": ["2022"],
+      "funding_year": [CURRENT_YEAR.toString()],
     }));
     setRangeString("");
   }

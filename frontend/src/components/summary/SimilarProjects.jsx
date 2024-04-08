@@ -3,7 +3,6 @@ import styles from "./SimilarProjects.module.css";
 import { Table, TableBody, TableCell, TableContainer, TableRow, Paper, Button, Grid } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import { SAMPLE_SIMILAR_PROJECTS } from "../../constants";
 import { Link } from "react-router-dom";
 
 
@@ -11,7 +10,7 @@ import { Link } from "react-router-dom";
 function SimilarProjects({ projects }) {
 
     const [showAll, setShowAll] = useState(false);
-    const itemsToDisplay = showAll ? SAMPLE_SIMILAR_PROJECTS : SAMPLE_SIMILAR_PROJECTS.slice(0, 5);
+    // const itemsToDisplay = showAll ? SAMPLE_SIMILAR_PROJECTS : SAMPLE_SIMILAR_PROJECTS.slice(0, 5);
 
     if (projects.length === 0) return null;
 
