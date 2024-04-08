@@ -282,7 +282,7 @@ function HomePage() {
                         <div className={styles["filters-box"]}>
                             {
                                 !optionsLoading &&
-                                <FilterList options={optionsLoading ? { 'funding_year': { '2022': '2022/2023' } } : options} rangeString={rangeString} setRangeString={setRangeString} />
+                                <FilterList options={options} rangeString={rangeString} setRangeString={setRangeString} />
                             }
                             <div className={styles["clear-filters-div"]}>
                                 <p className={styles.text}>Clear All</p>

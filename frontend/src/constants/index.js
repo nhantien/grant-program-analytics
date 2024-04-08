@@ -134,8 +134,11 @@ const YEARS = [
 ];
 
 const PROJECT_TYPE = {
-    "Large": "Large TLEF",
-    "Small": "Small TLEF"
+    "LARGE": "Large TLEF",
+    "SMALL": "Small TLEF",
+    "FLEX": "Flexible Learning",
+    "INTER": "Interdisciplinary Team-Teaching Grant",
+    "UDL": "Universal Design for Learning"
 };
 
 const FACULTY = [
