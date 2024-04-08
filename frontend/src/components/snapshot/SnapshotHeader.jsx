@@ -1,8 +1,10 @@
 // react
 import React from "react";
+import { Link } from 'react-router-dom';
 import { useContext, useEffect, useState } from "react";
 // mui
 import ClearIcon from '@mui/icons-material/Clear';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Slider, IconButton, Collapse, Grid } from "@mui/material";
 // css style
 import styles from "./SnapshotHeader.module.css";
@@ -61,8 +63,19 @@ function SnapshotHeader({ options, optionsLoading, range, setRange }) {
         setRangeString(min + "/" + (min + 1) + " - " + max + "/" + (max + 1));
     }
 
+    const goBack = () => {
+        window.location.href = "/";
+      };
+
     return (
         <div className={styles.bg}>
+             <div className={styles["back"]}>
+                        <div>
+                        <IconButton aria-label="delete"  onClick={goBack}>
+                        <ArrowBackIcon  sx={{ color: "#002145", fontSize: "2.2rem" }}/>
+                            </IconButton>
+                        </div>
+                    </div>
             <div className={styles.title}>
                 TLEF Program Summary
             </div>

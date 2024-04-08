@@ -35,7 +35,7 @@ function SummaryTableItem({ field, data, color }) {
         );
     } else if (field === "Team Members") {
         dataHTML = (
-            <div className={styles.data} style={{ backgroundColor: color }}>
+            <div className={styles.teamdata} style={{ backgroundColor: color }}>
                 {data.map((member, i) =>
                     <div key={`summary-table-item-member-${i}`} className={styles.member}>
                         <Grid container spacing={1}>
