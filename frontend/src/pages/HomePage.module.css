@@ -147,7 +147,7 @@
   font-size: 1rem;
   text-align: right;
   font-weight: 600;
-  font-style: italic;
+  /* font-style: italic; */
   margin-bottom: 0.25rem;
   color: #002145;
 }
@@ -158,13 +158,13 @@
   color: white;
   font-weight: bold;
   font-size: 1rem;
-  font-style: italic;
+  /* font-style: italic; */
   border-radius: 0.5rem;
 }
 
 /* Mobile Version UI */
 /*
-TODO: animaion when search filters are shown/hidden
+TODO: animation when search filters are shown/hidden
 */
 @media screen and (max-width: 576px) {
 
