@@ -3,6 +3,8 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as s3Deploy from 'aws-cdk-lib/aws-s3-deployment';
 import * as glue from '@aws-cdk/aws-glue-alpha';
 import * as iam from 'aws-cdk-lib/aws-iam';
+import * as cf from 'aws-cdk-lib/aws-cloudfront';
+import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import { CfnCrawler } from "aws-cdk-lib/aws-glue";
 import { Construct } from "constructs";
 
@@ -12,6 +14,7 @@ export class DatabaseStack extends Stack {
     private readonly s3Bucket: s3.Bucket;
     private readonly db: glue.Database;
     private readonly tables: { [id: string] : glue.S3Table; };
+    private readonly dist: cf.Distribution;
 
     public getS3BucketName() {
         return this.s3Bucket.bucketName;
@@ -23,6 +26,10 @@ export class DatabaseStack extends Stack {
 
     public getTableName(key: string) {
         return this.tables[key].tableName;
+    }
+
+    public getDomainName() {
+        return this.dist.domainName;
     }
 
     private createCrawler(table: glue.S3Table, id: string, name: string) {
@@ -85,48 +92,82 @@ export class DatabaseStack extends Stack {
     constructor(scope: Construct, id: string, props?: StackProps) {
         super(scope, id, props);
 
-        // s3 bucket
-        const s3Bucket = new s3.Bucket(this, 'TlefAnalyticsS3Bucket', {
+        
+        /**
+         * S3 dataset bucket & deployments
+         */
+        const s3DataBucket = new s3.Bucket(this, 'TlefAnalyticsS3Bucket', {
             bucketName: 'tlef-analytics',
             blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
             encryption: s3.BucketEncryption.S3_MANAGED,
-            removalPolicy: RemovalPolicy.DESTROY
+            removalPolicy: RemovalPolicy.DESTROY,
+            versioned: true
         });
 
         const ProductionFolderDeployment = new s3Deploy.BucketDeployment(this, 'ProductionFolderDeployment', {
             sources: [s3Deploy.Source.asset("./bucket_config")],
-            destinationBucket: s3Bucket,
+            destinationBucket: s3DataBucket,
             destinationKeyPrefix: 'production/'
         });
 
         const StagingCSVFolderDeployment = new s3Deploy.BucketDeployment(this, 'StagingCSVFolderDeployment', {
             sources: [s3Deploy.Source.asset("./bucket_config")],
-            destinationBucket: s3Bucket,
+            destinationBucket: s3DataBucket,
             destinationKeyPrefix: 'staging/csv/'
         });
 
         const StagingParquetFolderDeployment = new s3Deploy.BucketDeployment(this, 'StagingParquetFolderDeployment', {
             sources: [s3Deploy.Source.asset("./bucket_config")],
-            destinationBucket: s3Bucket,
+            destinationBucket: s3DataBucket,
             destinationKeyPrefix: 'staging/parquet/'
         });
 
         const RawFolderDeployment = new s3Deploy.BucketDeployment(this, 'RawFolderDeployment', {
             sources: [s3Deploy.Source.asset("./bucket_config")],
-            destinationBucket: s3Bucket,
+            destinationBucket: s3DataBucket,
             destinationKeyPrefix: 'raw/'
         });
 
+        /**
+         * S3 image bucket & deployment
+         */
+        const s3ImageBucket = new s3.Bucket(this, 'TlefAnalyticsS3ImageBucket', {
+            bucketName: 'tlef-analytics-image',
+            blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+            encryption: s3.BucketEncryption.S3_MANAGED,
+            removalPolicy: RemovalPolicy.DESTROY,
+            versioned: true
+        });
 
+        const ImageBucketDeployment = new s3Deploy.BucketDeployment(this, 'ImageBucketDeployment', {
+            sources: [s3Deploy.Source.asset("./bucket_config_img")],
+            destinationBucket: s3ImageBucket
+        });
+
+        /**
+         * CloudFront distribution to access image contents in the bucket
+         */
+        const distribution = new cf.Distribution(this, 'TlefAnalyticsImageDistribution', {
+            defaultBehavior: {
+                origin: new origins.S3Origin(s3ImageBucket)
+            }
+        });
+
+        /**
+         * Glue Database definition
+         */
         const db = new glue.Database(this, 'TlefAnalyticsDatabase', {
             databaseName: 'tlef_analytics'
         });
 
-        this.s3Bucket = s3Bucket;
+        this.s3Bucket = s3DataBucket;
         this.db = db;
         this.tables = {};
+        this.dist = distribution;
 
-        /* ---- TABLES ---- */
+        /**
+         * Table definitions
+         */
         const projectDetailsTable = new glue.S3Table(this, 'projectDetailsTable', {
             database: db,
             tableName: "project_details",
@@ -181,7 +222,7 @@ export class DatabaseStack extends Stack {
                 }
             ],
             dataFormat: glue.DataFormat.PARQUET,
-            bucket: s3Bucket,
+            bucket: s3DataBucket,
             s3Prefix: 'production/project_details'
         });
         this.tables['project_details'] = projectDetailsTable;
@@ -240,7 +281,7 @@ export class DatabaseStack extends Stack {
                 }
             ],
             dataFormat: glue.DataFormat.PARQUET,
-            bucket: s3Bucket,
+            bucket: s3DataBucket,
             s3Prefix: 'production/faculty_engagement'
         });
         this.tables['faculty_engagement'] = facultyEngagementTable;
@@ -307,7 +348,7 @@ export class DatabaseStack extends Stack {
                 }
             ],
             dataFormat: glue.DataFormat.PARQUET,
-            bucket: s3Bucket,
+            bucket: s3DataBucket,
             s3Prefix: 'production/student_reach'
         });
         this.tables['student_reach'] = studentReachTable;
@@ -398,7 +439,7 @@ export class DatabaseStack extends Stack {
                 }
             ],
             dataFormat: glue.DataFormat.PARQUET,
-            bucket: s3Bucket,
+            bucket: s3DataBucket,
             s3Prefix: 'production/focus_area'
         });
         this.tables['focus_area'] = focusAreaTable;
@@ -425,7 +466,7 @@ export class DatabaseStack extends Stack {
                 }
             ],
             dataFormat: glue.DataFormat.PARQUET,
-            bucket: s3Bucket,
+            bucket: s3DataBucket,
             s3Prefix: 'production/co_curricular_reach'
         });
         this.tables['co_curricular_reach'] = coCurricularReachTable;
@@ -448,7 +489,7 @@ export class DatabaseStack extends Stack {
                 }
             ],
             dataFormat: glue.DataFormat.PARQUET,
-            bucket: s3Bucket,
+            bucket: s3DataBucket,
             s3Prefix: 'production/unique_student'
         });
         this.tables['unique_student'] = uniqueStudentTable;
@@ -467,7 +508,7 @@ export class DatabaseStack extends Stack {
                 }
             ],
             dataFormat: glue.DataFormat.PARQUET,
-            bucket: s3Bucket,
+            bucket: s3DataBucket,
             s3Prefix: 'production/options/faculties'
         });
         this.tables['faculty_option'] = facultyOptionTable;
@@ -486,7 +527,7 @@ export class DatabaseStack extends Stack {
                 }
             ],
             dataFormat: glue.DataFormat.PARQUET,
-            bucket: s3Bucket,
+            bucket: s3DataBucket,
             s3Prefix: 'production/options/focus_area'
         });
         this.tables['focus_area_option'] = focusAreaOptionTable;
@@ -525,7 +566,7 @@ export class DatabaseStack extends Stack {
                 }
             ],
             dataFormat: glue.DataFormat.PARQUET,
-            bucket: s3Bucket,
+            bucket: s3DataBucket,
             s3Prefix: 'production/unsuccessful_projects'
         });
         this.tables['unsuccessful_projects'] = unsuccessfulProjectsTable;
@@ -544,7 +585,7 @@ export class DatabaseStack extends Stack {
                 }
             ],
             dataFormat: glue.DataFormat.PARQUET,
-            bucket: s3Bucket,
+            bucket: s3DataBucket,
             s3Prefix: 'production/similar_projects'
         });
         this.tables['similar_projects'] = similarProjectsTable;

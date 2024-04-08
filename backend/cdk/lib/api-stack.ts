@@ -155,7 +155,8 @@ export class ApiStack extends Stack {
             'FACULTY_ENGAGEMENT': databaseStack.getTableName('faculty_engagement'),
             'STUDENT_REACH': databaseStack.getTableName('student_reach'),
             'SIMILAR_PROJECTS': databaseStack.getTableName('similar_projects'),
-            'UNIQUE_STUDENT': databaseStack.getTableName('unique_student')
+            'UNIQUE_STUDENT': databaseStack.getTableName('unique_student'),
+            'CLOUDFRONT_DOMAIN_NAME': databaseStack.getDomainName()
         };
 
         this.createResolver('homepage', ['getFilteredProposals'], env);
