@@ -94,12 +94,16 @@ function StudentReachChart( {projects, reachdata, unique}) {
     console.log(reachdata)
     console.log(isUniqueDataComplete)
 
+    const formattedAmount = (amount) => {
+        return parseInt(amount).toLocaleString("en-CA");
+    };
+
     return (
         <React.Fragment>
                 <div className={styles.chart}>
                 <ResponsiveContainer width='100%' height={500}>
                 <BarChart width={800} height={500} layout='vertical' data={STUDENT_REACH}>
-                    <XAxis type='number' padding={{ right: 150}} />
+                    <XAxis type='number' padding={{ right: 150}} hide="true"/>
                     <YAxis type='category' dataKey="name" width={120} />
                     <Legend verticalAlign='top' iconType='square' height={36} />
                     <Bar dataKey="Small TLEF" stackId="a" maxBarSize={120} background={{ fill: "#EEEE" }} fill="#FB812D" />
@@ -116,10 +120,10 @@ function StudentReachChart( {projects, reachdata, unique}) {
                 {!isDataComplete &&
                     <p className={styles.warning}>Please note, this particular TLEF metric is not available prior to the 2016/17 academic year.</p>
                 }
-                <p>TLEF projects funded in the selected year(s) reached <b>{totalSmallReach}</b> students in Small TLEF innovation projects and
-                 <b> {totalLargeReach}</b> students in Large TLEF Transformation projects.</p>
-                <p>Overall, the projects reached <b>{reachdata.course}</b> courses (undergraduate and graduate) and <b>{reachdata.section}</b> sections
-                 across <b>{reachdata.faculty}</b> Faculties at the UBCV campus, impacting <b>{totalSmallReach + totalLargeReach}</b> enrolment. </p>
+                <p>TLEF projects funded in the selected year(s) reached <b>{formattedAmount(totalSmallReach)}</b> students in Small TLEF innovation projects and
+                 <b> {formattedAmount(totalLargeReach)}</b> students in Large TLEF Transformation projects.</p>
+                <p>Overall, the projects reached <b>{formattedAmount(reachdata.course)}</b> courses (undergraduate and graduate) and <b>{reachdata.section}</b> sections
+                 across <b>{reachdata.faculty}</b> Faculties at the UBCV campus, impacting <b>{formattedAmount(totalSmallReach + totalLargeReach)}</b> enrolment. </p>
 
                  {isUniqueDataComplete && appliedFilters && appliedFilters["funding_year"].length === 1 
                  && (appliedFilters.project_faculty).length === 0 &&
@@ -127,7 +131,7 @@ function StudentReachChart( {projects, reachdata, unique}) {
                  (appliedFilters.focus_area).length === 0 &&
                  (appliedFilters.search_text).length === 0 &&
                  // conditional rendering of the unique students when no filter is applied
-                 <p> Overall for the year <b>{unique.funding_year}</b>, the projects have reached <b>{unique.unique_student}</b> unique students.*</p>
+                 <p> Overall for the year <b>{unique.funding_year}</b>, the projects have reached <b>{formattedAmount(unique.unique_student)}</b> unique students.*</p>
                 }
                  <p className={styles["reach-annotation"]}>
                     *Students enrolled in more than one TLEF-supported course are only counted once.
@@ -137,7 +141,7 @@ function StudentReachChart( {projects, reachdata, unique}) {
                     <h3 className={styles['hidden']}>Chart Data</h3>
                     {STUDENT_REACH.map((item, index) => (
                         <div key={index} className={styles.valueColumn}>
-                            <span className={styles.valueFaculty}><b>{item.name}: </b></span>
+                            <span className={styles.valueFaculty}><b className={styles['hidden']}>{item.name}: </b></span>
                             {(item['Small TLEF'] !== 0) && (
                             <span className={styles.valueSmall}>Small: {(item['Small TLEF'])}</span>
                             )}

@@ -36,6 +36,10 @@ function FundingYearFilter({ options, setShowSlider, snapshot }) {
         },
     };
 
+    const isMobile = () => {
+        return window.screen.width <= 576;
+    }
+
     return (
         <Grid container>
             <Grid item xs={12}>

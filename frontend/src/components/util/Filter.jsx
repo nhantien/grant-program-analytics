@@ -35,8 +35,18 @@ function Filter({ options, defaultValue, type, snapshot }) {
     },
   };
 
+
   const items = Object.keys(options).map((key) => [key, options[key]]);
   items.sort((a, b) => a[1] - b[1]);
+
+  const isMobile = () => {
+    return window.screen.width <= 576;
+  }
+
+  const filterWidth = (isMobile())
+  ?  { pad: "2rem 0 2rem 0" }
+  : {pad: "0.5rem 0 0.5rem 0" };
+
 
   return (
     <Grid container>

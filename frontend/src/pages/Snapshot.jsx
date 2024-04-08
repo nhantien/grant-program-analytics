@@ -255,7 +255,7 @@ function Snapshot() {
 
         fetchData();
     }, [appliedFilters]);
-
+  
     const handleClick = (section) => {
         document.getElementById(section).scrollIntoView({ behavior: "smooth" });
     };
@@ -295,63 +295,6 @@ function Snapshot() {
                 </React.Fragment>
             )}
 
-
-            {/* <section id="success-rate"> <SnapshotBox chart={charts.successRate} type={0} title="Success Rate" /></section>
-
-            <section id="success-rate"> <SnapshotBox chart={charts.successRate} type={0} title="Success Rate" /></section>
-
-            {countLoading ? (
-                <div>Loading...</div>
-            ) : numProjectsAndGrants.project ? (
-                <section id="num-projects"> <SnapshotBox chart={charts.numProjects} type={1} title="Number of Grants and Projects" /> </section>
-            ) : (
-                <div>No data available</div>
-            )}
-
-            {fundingLoading ? (
-                <div>Loading...</div>
-            ) : selectedProjects ? (
-                <section id="funding"> <SnapshotBox chart={charts.funding} type={0} title="Funding Awarded" /> </section>
-            ) : (
-                <div>No data available</div>
-            )}
-
-            {reachLoading ? (
-
-                <div>Loading...</div>
-            ) : reachCount.Large ? (
-                <section id="student-reach"> <SnapshotBox chart={charts.studentReach} type={1} title="Student Reach" /> </section>
-            ) : (
-                <div>No data available</div>
-            )}
-
-            {loading ? (
-                // Display a loading circle or spinner while data is being fetched
-                <div>Loading...</div>
-            ) : facultyEngagement.Large ? (
-                // render graph if data is available 
-                <section id="faculty-engagement"> <SnapshotBox chart={charts.teamMember} type={0} title="Faculty Engagement" /> </section>
-            ) : (
-                // if data empty 
-                <div>No data available</div>
-            )}
-
-            <div>Loading...</div>
-            ) : selectedReachProjects.Large   ? (
-            <section id="student-reach"> <SnapshotBox chart={charts.studentReach} type={1} title="Student Reach" /> </section>
-            ) : (
-            <div>No data available</div>
-         )}
-            {loading ? (
-                // Display a loading circle or spinner while data is being fetched
-                <div>Loading...</div>
-            ) : selectedFacultyProjects.Large ? (
-                // render graph if data is available 
-                <section id="faculty-engagement"> <SnapshotBox chart={charts.teamMember} type={0} title="Faculty and Student Engagement" /> </section>
-            ) : (
-                // if data empty 
-                <div>No data available</div>
-            )} */}
         </div>
     );
 };

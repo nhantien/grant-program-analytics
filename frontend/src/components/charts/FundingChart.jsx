@@ -114,8 +114,8 @@ function FundingChart({ projects }) {
             <div className={styles.chart}>
             <ResponsiveContainer width='100%' height={500}>
                 <BarChart width={800} height={500} layout='vertical' data={res} alt="Funding Amount Chart">
-                <XAxis type="number" padding={{ right: 150 }} />
-                <YAxis type="category" dataKey="name" width={120} />
+                <XAxis type="number" padding={{ right: 150 }} hide="true" />
+                <YAxis type="category" dataKey="name" width={120}/>
                     {isMobile() && <Tooltip content={<CustomToolTip />} cursor={{ fill: "transparent" }} position={{ x: 100, y: 25 }} />}
                     <Tooltip content={CustomToolTip} />
                     <Legend verticalAlign='top' iconType='square' height={36} />
@@ -131,7 +131,7 @@ function FundingChart({ projects }) {
                     <h3 className={styles['hidden']}>Chart Data</h3>
                     {res.map((item, index) => (
                         <div key={index} className={styles.valueColumn}>
-                            <span className={styles.valueFaculty}><b>{item.name}: </b></span>
+                            <span className={styles.valueFaculty}><b className={styles['hidden']}>{item.name}: </b></span>
                             {(item['Small TLEF'] !== 0) && (
                             <span className={styles.valueSmall}>Small: {formattedAmount(item['Small TLEF'])}</span>
                             )}
