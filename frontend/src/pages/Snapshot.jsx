@@ -228,8 +228,8 @@ function Snapshot() {
                 const declinedProjects = results.data.countDeclinedProjects;
                 const projectsAndGrants = results.data.countProjectsAndGrants;
                 const proposals = results.data.getFilteredProposals;
-                const largeProposals = proposals.filter(proj => proj.project_type === 'Large');
-                const smallProposals = proposals.filter(proj => proj.project_type === 'Small' || proj.project_type === "Inter");
+                const largeProposals = proposals.filter(proj => proj.project_type === 'LARGE');
+                const smallProposals = proposals.filter(proj => proj.project_type === 'SMALL' || proj.project_type === "INTER");
                 const reach = results.data.countTotalReachByFaculty;
                 const reachInfo = results.data.getStudentReachInfo;
                 const facultyEngagement = results.data.countFacultyMembersByStream;
