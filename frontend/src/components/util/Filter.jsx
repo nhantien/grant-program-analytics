@@ -35,13 +35,18 @@ function Filter({ options, defaultValue, type, snapshot }) {
     },
   };
 
+
+  const items = Object.keys(options).map((key) => [key, options[key]]);
+  items.sort((a, b) => a[1] - b[1]);
+
   const isMobile = () => {
     return window.screen.width <= 576;
-}
+  }
 
-const filterWidth = (isMobile())
-?  { pad: "2rem 0 2rem 0" }
- : {pad: "0.5rem 0 0.5rem 0" };
+  const filterWidth = (isMobile())
+  ?  { pad: "2rem 0 2rem 0" }
+  : {pad: "0.5rem 0 0.5rem 0" };
+
 
   return (
     <Grid container>
@@ -61,7 +66,7 @@ const filterWidth = (isMobile())
                 <em>{defaultValue} ({selected.length})</em>
               )
             }}
-            MenuProps={MenuProps} 
+            MenuProps={MenuProps}
           >
             <MenuItem
               selected={false}
@@ -72,10 +77,10 @@ const filterWidth = (isMobile())
               <Typography>Clear All</Typography>
             </MenuItem>
             {
-              Object.entries(options).map(([key, value]) => (
-                <MenuItem key={value} value={key} style={{ width: "100%", whiteSpace: "normal" }}>
-                  <Checkbox checked={appliedFilters[type].indexOf(key) > -1} />
-                  <Typography >{value}</Typography>
+              items.map((item) => (
+                <MenuItem key={item[1]} value={item[0]} style={{ width: "100%", whiteSpace: "normal" }}>
+                  <Checkbox checked={appliedFilters[type].indexOf(item[0]) > -1} />
+                  <Typography noWrap>{item[1]}</Typography>
                 </MenuItem>
               ))
             }

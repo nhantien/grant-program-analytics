@@ -122,6 +122,9 @@ function HomePage() {
                 const faculties = results.data.loadFaculty;
                 const focusAreas = results.data.loadFocusArea;
 
+                console.log(faculties);
+                console.log(focusAreas);
+
                 setDropdownOptions(faculties, focusAreas);
                 setOptionsLoading(false);
 
