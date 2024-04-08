@@ -1,7 +1,7 @@
 // react
 import React, { useContext } from 'react';
 // recharts
-import { Bar, BarChart, LabelList, Legend, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+import { Bar, BarChart, LabelList, Legend, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 // css style
 import styles from "./charts.module.css";
 // context
@@ -98,6 +98,33 @@ function StudentReachChart( {projects, reachdata, unique}) {
         return parseInt(amount).toLocaleString("en-CA");
     };
 
+    const isMobile = () => {
+        return window.screen.width <= 576;
+    }
+
+    // hover tooltip 
+    const CustomToolTip = ({ active, payload, label }) => {
+
+        if (active && payload && label) {
+            return (
+                <div className={styles["funding-tooltip"]}>
+                    <span className={styles["funding-tooltip-title"]}>
+                        {label}
+                    </span>
+                    <div className={styles["funding-tooltip-content"]}>
+                        <span style={{ color: "#FB812D" }}>Small TLEF: {formattedAmount(payload[0].payload["Small TLEF"])} Students</span>
+                        <br />
+                        <span style={{ color: "#13588B" }}>Large TLEF: {formattedAmount(payload[0].payload["Large TLEF"])} Students</span>
+                        <br />
+                        <span style={{ fontWeight: 600 }}> Total: {payload[0].payload.total} Students</span>
+                    </div>
+                </div>
+            );
+        }
+
+        return null;
+    }
+
     return (
         <React.Fragment>
                 <div className={styles.chart}>
@@ -105,6 +132,8 @@ function StudentReachChart( {projects, reachdata, unique}) {
                 <BarChart width={800} height={500} layout='vertical' data={STUDENT_REACH}>
                     <XAxis type='number' padding={{ right: 150}} hide="true"/>
                     <YAxis type='category' dataKey="name" width={120} />
+                    {isMobile() && <Tooltip content={<CustomToolTip />} wrapperStyle={{ backgroundColor: "white"}} position={{ x: 100, y: 25 }} />}
+                    <Tooltip content={CustomToolTip} />
                     <Legend verticalAlign='top' iconType='square' height={36} />
                     <Bar dataKey="Small TLEF" stackId="a" maxBarSize={120} background={{ fill: "#EEEE" }} fill="#FB812D" />
                     <Bar dataKey="Large TLEF" stackId="a" maxBarSize={120} fill="#2F5D7C">
@@ -117,6 +146,9 @@ function StudentReachChart( {projects, reachdata, unique}) {
             </div>
             <div className={styles.space}></div>
             <div className={styles.description}>
+            <p className={styles["chart-annotation"]}>
+                    Hover/click on the bars to display further data 
+                 </p>
                 {!isDataComplete &&
                     <p className={styles.warning}>Please note, this particular TLEF metric is not available prior to the 2016/17 academic year.</p>
                 }

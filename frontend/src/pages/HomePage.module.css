@@ -1,6 +1,6 @@
 .bg {
   min-height: 100vh;
-  background-color: #DFF2FF;
+  background-color: #e1f3f9;
   padding-bottom: 3rem;
 }
 
@@ -36,7 +36,7 @@
 }
 
 .title {
-  color: #081252;
+  color: #002145;
   composes: text;
   text-align: start;
   font-size: 2rem;
@@ -52,7 +52,7 @@
 .open-search button {
   height: 100%;
   text-align: start;
-  color: #081252;
+  color: #002145;
   font-size: 0.625rem;
   font-weight: 700;
   border: none;
@@ -149,12 +149,12 @@
   font-weight: 600;
   font-style: italic;
   margin-bottom: 0.25rem;
-  color: #081252;
+  color: #002145;
 }
 
 .generate-summary-btn {
   height: 3rem;
-  background-color: #081252;
+  background-color: #002145;
   color: white;
   font-weight: bold;
   font-size: 1rem;

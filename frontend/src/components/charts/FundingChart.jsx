@@ -73,9 +73,9 @@ function FundingChart({ projects }) {
                         {label}
                     </span>
                     <div className={styles["funding-tooltip-content"]}>
-                        <span style={{ color: "#13588B" }}>Large TLEF: {formattedAmount(payload[0].payload["Large TLEF"])}</span>
-                        <br />
                         <span style={{ color: "#FB812D" }}>Small TLEF: {formattedAmount(payload[0].payload["Small TLEF"])}</span>
+                        <br />
+                        <span style={{ color: "#13588B" }}>Large TLEF: {formattedAmount(payload[0].payload["Large TLEF"])}</span>
                         <br />
                         <span style={{ fontWeight: 600 }}> Total: {payload[0].payload.label}</span>
                     </div>
@@ -94,11 +94,6 @@ function FundingChart({ projects }) {
             </text>
         )
     }
-    //y + height / 3 * 2
-
-    // const { width, height, layout } = (isMobile())
-    //     ? { width: 350, height: 500, layout: "horizontal" }
-    //     : { width: 850, height: 500, layout: "horizontal" };
 
     const xAxis = (isMobile())
         ? (<XAxis type="category" />) : (<XAxis type="number" padding={{ right: 150 }} />);
@@ -116,8 +111,8 @@ function FundingChart({ projects }) {
                 <BarChart width={800} height={500} layout='vertical' data={res} alt="Funding Amount Chart">
                 <XAxis type="number" padding={{ right: 150 }} hide="true" />
                 <YAxis type="category" dataKey="name" width={120}/>
-                    {isMobile() && <Tooltip content={<CustomToolTip />} cursor={{ fill: "transparent" }} position={{ x: 100, y: 25 }} />}
-                    <Tooltip content={CustomToolTip} />
+                    {isMobile() && <Tooltip content={<CustomToolTip />} wrapperStyle={{ backgroundColor: "white"}}/>}
+                    <Tooltip content={CustomToolTip}/>
                     <Legend verticalAlign='top' iconType='square' height={36} />
                     <Bar dataKey="Small TLEF" stackId="a" maxBarSize={120} background={{ fill: "#EEEE" }} fill="#FB812D" />
                     <Bar dataKey="Large TLEF" stackId="a"maxBarSize={120} fill="#2F5D7C">{label}</Bar>
@@ -126,6 +121,9 @@ function FundingChart({ projects }) {
             </div>
             <div className={styles.space}></div>
             <div className={styles.description}>
+            <p className={styles["chart-annotation"]}>
+                    Hover/click on the bars to display further data 
+                 </p>
                 The TLEF awarded the total of <b>{formattedAmount(total)}</b> funding for {len} selected projects.
                 <div className={styles.dataBox}>
                     <h3 className={styles['hidden']}>Chart Data</h3>
