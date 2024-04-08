@@ -35,6 +35,9 @@ function Filter({ options, defaultValue, type, snapshot }) {
     },
   };
 
+  const items = Object.keys(options).map((key) => [key, options[key]]);
+  items.sort((a, b) => a[1] - b[1]);
+
   return (
     <Grid container>
       <Grid item xs={12}>
@@ -53,7 +56,7 @@ function Filter({ options, defaultValue, type, snapshot }) {
                 <em>{defaultValue} ({selected.length})</em>
               )
             }}
-            MenuProps={MenuProps} 
+            MenuProps={MenuProps}
           >
             <MenuItem
               selected={false}
@@ -64,10 +67,10 @@ function Filter({ options, defaultValue, type, snapshot }) {
               <Typography>Clear All</Typography>
             </MenuItem>
             {
-              Object.entries(options).map(([key, value]) => (
-                <MenuItem key={value} value={key} style={{ width: "100%", whiteSpace: "normal" }}>
-                  <Checkbox checked={appliedFilters[type].indexOf(key) > -1} />
-                  <Typography >{value}</Typography>
+              items.map((item) => (
+                <MenuItem key={item[1]} value={item[0]} style={{ width: "100%", whiteSpace: "normal" }}>
+                  <Checkbox checked={appliedFilters[type].indexOf(item[0]) > -1} />
+                  <Typography noWrap>{item[1]}</Typography>
                 </MenuItem>
               ))
             }

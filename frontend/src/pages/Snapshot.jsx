@@ -122,7 +122,7 @@ function Snapshot() {
                 section
             }
 
-            getUniqueStudent(method: "getUniqueStudent", fundingYear: "${appliedFilters["funding_year"][0]}") {
+            getUniqueStudent(method: "getUniqueStudent", fundingYear: "${appliedFilters["funding_year"][0] ? appliedFilters["funding_year"][0] : 0}") {
                   funding_year
                   unique_student
                   funding_amount
