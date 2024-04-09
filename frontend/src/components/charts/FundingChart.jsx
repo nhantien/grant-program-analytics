@@ -106,6 +106,7 @@ function FundingChart({ projects }) {
 
 
     const hasData = projects && projects.length > 0;
+    console.log(projects)
 
     if (!hasData) {
         return <div> No summaries matching this criteria. </div>;
