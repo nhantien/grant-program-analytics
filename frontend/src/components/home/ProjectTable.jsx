@@ -231,7 +231,7 @@ export default function ProjectTable({ projects }) {
     );
 
     return (
-        <Box sx={{ maxWidth: '100%' }}>
+        <Box sx={{ maxWidth: '100%', m: 2}}>
             <Paper sx={{ maxWidth: '100%', mb: 2 }}>
                 <TableContainer sx={{ width: "100%" }}>
                     <Table

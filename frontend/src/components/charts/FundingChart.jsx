@@ -104,6 +104,12 @@ function FundingChart({ projects }) {
     const label = (isMobile())
         ? null : <LabelList width='98%' content={customLabel} position="right" dataKey="label" fill="#081252" style={{ fontStyle: "italic" }} />;
 
+
+    const hasData = projects && projects.length > 0;
+
+    if (!hasData) {
+        return <div> No summaries matching this criteria. </div>;
+    }
     return (
         <React.Fragment>
             <div className={styles.chart}>

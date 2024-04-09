@@ -13,7 +13,7 @@ import { FiltersContext } from "../../App";
 // components
 import { Filter, FilterList, FundingYearFilter } from "../util";
 // constants
-import { MARKS, CURRENT_YEAR } from "../../constants";
+import { MARKS } from "../../constants";
 
 
 function SnapshotHeader({ options, optionsLoading, range, setRange }) {
@@ -30,7 +30,7 @@ function SnapshotHeader({ options, optionsLoading, range, setRange }) {
 
     const handleClearAll = () => {
         const newFilters = {
-            "funding_year": [CURRENT_YEAR.toString()],
+            "funding_year": ["2022"],
             "project_type": [],
             "project_faculty": [],
             "focus_area": [],
@@ -112,7 +112,7 @@ function SnapshotHeader({ options, optionsLoading, range, setRange }) {
                                 </Grid>
                                 <Grid xs={12} md={10}>
                                     <Slider
-                                        max={CURRENT_YEAR}
+                                        max={2023}
                                         min={1999}
                                         value={range}
                                         onChange={handleSliderChange}
@@ -129,9 +129,8 @@ function SnapshotHeader({ options, optionsLoading, range, setRange }) {
                         <div className={styles["applied-filters"]}>
                             <span style={{ marginTop: "1rem", marginBottom: "0.5rem" }}>Applied Filters</span>
                             <div className={styles["filters-box"]}>
-                                {
-                                    !optionsLoading &&
-                                    <FilterList options={options} rangeString={rangeString} setRangeString={setRangeString} />
+                            { !optionsLoading &&
+                                    <FilterList options={optionsLoading ? { 'funding_year': { '2024': '2024/2025' } } : options} rangeString={rangeString} setRangeString={setRangeString} />
                                 }
                                 <div className={styles["clear-filters-div"]}>
                                     <p className={styles.text}>Clear All</p>
