@@ -9,6 +9,7 @@ import { Amplify } from 'aws-amplify';
 import HomePage from "./pages/HomePage";
 import Summary from "./pages/Summary";
 import Snapshot from "./pages/Snapshot";
+import { CURRENT_YEAR } from "./constants"
 
 export const FiltersContext = createContext("filters");
 
@@ -32,7 +33,7 @@ Amplify.configure({
 function App() {
 
   const [appliedFilters, setAppliedFilters] = useState({
-    "funding_year": ["2022"],
+    "funding_year": [CURRENT_YEAR.toString()],
     "project_type": [],
     "project_faculty": [],
     "focus_area": [],

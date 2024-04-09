@@ -45,6 +45,12 @@ function SuccessRateChart({ projects, totalprojects, largeprojects, smallproject
     ];
     console.log('large value:', large[0].value)
 
+    // returns true if any Large or Small project has data (not 0) 
+    const hasData = Object.values(projects).some(value => value !== 0)
+
+    if (!hasData) {
+        return <div> No summaries matching this criteria. </div>;
+    }
     return (
         <React.Fragment>
         <div className={styles.sr}>
