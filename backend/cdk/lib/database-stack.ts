@@ -181,6 +181,10 @@ export class DatabaseStack extends Stack {
                     type: glue.Schema.STRING
                 },
                 {
+                    name: 'old_grant_id',
+                    type: glue.Schema.STRING
+                },
+                {
                     name: 'project_id',
                     type: glue.Schema.STRING
                 },
@@ -198,7 +202,7 @@ export class DatabaseStack extends Stack {
                 },
                 {
                     name: 'funding_amount',
-                    type: glue.Schema.BIG_INT
+                    type: glue.Schema.DOUBLE
                 },
                 {
                     name: 'title',
@@ -213,11 +217,15 @@ export class DatabaseStack extends Stack {
                     type: glue.Schema.STRING
                 },
                 {
+                    name: 'grant_id',
+                    type: glue.Schema.STRING
+                },
+                {
                     name: 'project_year',
                     type: glue.Schema.BIG_INT
                 },
                 {
-                    name: 'grant_id',
+                    name: 'project_status',
                     type: glue.Schema.STRING
                 }
             ],
