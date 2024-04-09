@@ -125,7 +125,7 @@ function StudentReachChart( {projects, reachdata, unique}) {
         return null;
     }
 
-    const hasData = projects && projects.length > 0;
+    const hasData = Object.values(projects).some(value => value !== 0);
 
     if (!hasData) {
             return <div> No summaries matching this criteria. </div>;
