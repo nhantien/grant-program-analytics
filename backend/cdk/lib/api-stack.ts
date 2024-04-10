@@ -2,7 +2,7 @@ import { Stack, StackProps, Duration } from "aws-cdk-lib";
 import * as appsync from 'aws-cdk-lib/aws-appsync';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as iam from 'aws-cdk-lib/aws-iam';
-import { IdentityPool } from "@aws-cdk/aws-cognito-identitypool-alpha";
+import { IdentityPool, IdentityPoolRoleAttachment } from "@aws-cdk/aws-cognito-identitypool-alpha";
 import { DatabaseStack } from "./database-stack";
 import { Construct } from "constructs";
 
@@ -111,18 +111,31 @@ export class ApiStack extends Stack {
             })]
         });
 
+        const identityPool = new IdentityPool(this, 'TlefIdPool', {
+            identityPoolName: 'tlef-identity-pool',
+            allowUnauthenticatedIdentities: true
+        });
+
         const guestRole = new iam.Role(this, 'TlefGuestAccessRole', {
-            assumedBy: new iam.FederatedPrincipal('cognito-identity.amazonaws.com'),
+            assumedBy: new iam.CompositePrincipal(
+                new iam.FederatedPrincipal('cognito-identity.amazonaws.com').withConditions({
+                    "StringEquals": {
+                        "cognito-identity.amazonaws.com:aud": identityPool.identityPoolId
+                    },
+                    "ForAnyValue:StringLike": {
+                        "cognito-identity.amazonaws.com:amr": "unauthenticated"
+                    }
+                })
+            ),
             roleName: 'tlef-analytics-guest-role',
             inlinePolicies: {
                 "AppSyncInvokePolicy": appSyncInvokePolicy,
                 "UnauthenticatedPolicy": unauthenticatedPolicy
             }
         });
-
-        const identityPool = new IdentityPool(this, 'TlefIdPool', {
-            identityPoolName: 'tlef-identity-pool',
-            allowUnauthenticatedIdentities: true,
+        
+        const idPoolRoleAttachment = new IdentityPoolRoleAttachment(this, 'TlefIdPoolRoleAttachment', {
+            identityPool: identityPool,
             unauthenticatedRole: guestRole
         });
 

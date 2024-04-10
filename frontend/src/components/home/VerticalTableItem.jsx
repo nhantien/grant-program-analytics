@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 // css style
 import styles from "./VerticalTableItem.module.css";
 
-function VerticalTableItem({ project }) {
+function VerticalTableItem({ project, staging }) {
 
     const statusColor = project.status === "Active" ? "#64b53c" : "#d4734c";
 
@@ -17,7 +17,7 @@ function VerticalTableItem({ project }) {
         <div className={styles.wrapper}>
             <div className={styles.field} style={{ backgroundColor: '#081252', color: "white", fontWeight: 700 }}>
                 <div className={styles.key}>Title:</div>
-                <div className={styles.value}><Link className={styles.title} to={`/summary/${project.id}`}>{project.title}</Link></div>
+                <div className={styles.value}><Link className={styles.title} to={`/summary/${project.id}${staging && "?staging=true"}`}>{project.title}</Link></div>
             </div>
 
             <div className={styles.field}>

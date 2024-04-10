@@ -9,7 +9,7 @@ def execute_query(query_string):
     response = ATHENA.start_query_execution(
         QueryString = query_string,
         QueryExecutionContext = {
-            "Database": os.environ.get("DB")
+            "Database": os.environ.get("DB_NAME")
         },
         ResultConfiguration= {
             'OutputLocation': os.environ.get("OUTPUT_LOCATION"),
@@ -46,7 +46,7 @@ def lambda_handler(event, context):
 
     
 def loadFaculty():
-    query_string = f"SELECT * FROM {os.environ.get("FACULTY_OPTION")}"
+    query_string = f"SELECT * FROM {os.environ.get('FACULTY_OPTION')}"
     rows = execute_query(query_string)
     
     res = []
@@ -61,7 +61,7 @@ def loadFaculty():
     return res
     
 def loadFocusArea():
-    query_string = f"SELECT * FROM {os.environ.get("FOCUS_AREA_OPTION")}"
+    query_string = f"SELECT * FROM {os.environ.get('FOCUS_AREA_OPTION')}"
     rows = execute_query(query_string)
     
     res = []
