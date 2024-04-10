@@ -1,5 +1,5 @@
 import styles from "./Posters.module.css";
-import { p1, p2, p3 } from "../../assets";
+// import { p1, p2, p3 } from "../../assets";
 
 function Posters({ posters }) {
 
