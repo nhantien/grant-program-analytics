@@ -12,6 +12,7 @@
 /build
 
 /src/aws-exports.js
+/src/assets
 
 # misc
 .DS_Store

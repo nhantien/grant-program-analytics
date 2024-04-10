@@ -22,6 +22,7 @@ function Summary() {
     const [tableData, setTableData] = useState([]);
     const [similarProjects, setSimilarProjects] = useState([]);
     const [projectOutcome, setProjectOutcome] = useState("");
+    const [posters, setPosters] = useState([]);
 
     const countTotalReach = (reachData) => {
         let total = 0;
@@ -52,6 +53,7 @@ function Summary() {
                     project_status
                     project_outcome
                     report
+                    poster
                 }
 
                 getTeamMembersByGrantId(method: "getTeamMembersByGrantId", grantId: "${id}") {
@@ -120,7 +122,8 @@ function Summary() {
                 });
 
                 let tableInfo = [];
-                summaryInfo.map((grant, index) => {
+                let posterInfo = [];
+                summaryInfo.forEach((grant, index) => {
                     tableInfo.push({
                         funding_year: grant.funding_year,
                         project_year: grant.project_year,
@@ -132,11 +135,14 @@ function Summary() {
                         team_members: teamMembers.length > index ? teamMembers[index].members : [],
                         student_reach: studentReach.length > index ? studentReach[index].reach : [],
                     });
+
+                    if (grant.poster) posterInfo.push({ year: grant.project_year, poster: grant.poster });
                 });
                 
                 setTableData(tableInfo);
                 setSimilarProjects(results.data.getSimilarProjects);
                 setProjectOutcome(summaryInfo[summaryInfo.length - 1].project_outcome);
+                setPosters(posterInfo);
 
                 setIsLoading(false);
             } catch (e) {
@@ -164,6 +170,7 @@ function Summary() {
                     <SummaryTable key={grant.project_year} data={grant} />
                 ))
             }
+            <Posters posters={posters} />
             <SimilarProjects projects={similarProjects} />
             <ProjectOutcome data={projectOutcome} />
         </div>

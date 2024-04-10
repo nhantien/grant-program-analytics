@@ -281,9 +281,11 @@ export default function ProjectTable({ projects }) {
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "10%" }}>{formattedAmount(project.funding_amount)}</TableCell>
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%", color: project.status === "Active" ? "#64b53c" : "#d4734c" }}>{project.status}</TableCell>
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%" }}>
-                                            { project.report ? <a href={project.report} target='_blank'>report</a> : 'N/A' }
+                                            {project.report ? <a href={project.report} target='_blank'>Report</a> : 'N/A'}
                                         </TableCell>
-                                        <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%" }}> <a href="#">poster</a></TableCell>
+                                        <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%" }}>
+                                            {project.poster ? <a href={project.poster} target='_blank'>Poster</a> : 'N/A'}
+                                        </TableCell>
                                     </TableRow>
                                 );
                             })}

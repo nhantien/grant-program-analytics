@@ -1,8 +1,24 @@
 import styles from "./Posters.module.css";
+import { p1, p2, p3 } from "../../assets";
 
-function Posters({ project }) {
-    
-    let slideIndex = 1;
+function Posters({ posters }) {
+
+    // const samplePosters = [
+    //     {
+    //         year: 1,
+    //         poster: p1
+    //     },
+    //     {
+    //         year: 2,
+    //         poster: p2
+    //     },
+    //     {
+    //         year: 3,
+    //         poster: p3
+    //     }
+    // ];
+
+    let slideIndex = 0;
 
     const plusDivs = (n) => {
         showDivs(slideIndex += n);
@@ -11,13 +27,15 @@ function Posters({ project }) {
     const showDivs = (n) => {
         let i;
         let x = document.getElementsByClassName(styles.slideElement);
-        if (n > x.length) slideIndex = 1;
-        if (n < 1) slideIndex = x.length;
+        if (n >= x.length) slideIndex = 0;
+        if (n < 0) slideIndex = x.length - 1;
         for (i = 0; i < x.length; i++) {
             x[i].style.display = "none";
         }
-        x[slideIndex-1].style.display = "flex";
+        x[slideIndex].style.display = "flex";
     };
+
+    if (posters.length === 0) return null;
 
     return (
         <div className={styles.bg}>
@@ -28,24 +46,18 @@ function Posters({ project }) {
             <div className={styles.container}>
                 <button className={styles.btn} onClick={() => plusDivs(-1)}>&lt;</button>
 
-                <div className={styles.slideElement}>
-                    <div>Year 1</div>
-                    <div className={styles.poster}></div>
-                </div>
+                {
+                    posters.map((p, i) => (
+                        <div className={styles.slideElement} style={{ display: (i !== slideIndex) && 'none' }} >
+                            <div>Year {p.year}</div>
+                            <img src={p.poster} className={styles.poster} />
+                        </div>
+                    ))
+                }
 
-                <div className={styles.slideElement} style={{ display: "none"}}>
-                    <div>Year 2</div>
-                    <div className={styles.poster}></div>
-                </div>
-
-                <div className={styles.slideElement} style={{ display: "none"}}>
-                    <div>Year 3</div>
-                    <div className={styles.poster}></div>
-                </div>
-
-                <button className={styles.btn} onClick={() => {plusDivs(1)}}>&gt;</button>
+                <button className={styles.btn} onClick={() => { plusDivs(1) }}>&gt;</button>
             </div>
-        </div>
+        </div >
     );
 }
 

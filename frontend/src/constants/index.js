@@ -11,7 +11,7 @@ class Project {
     report;
     poster;
 
-    constructor(id, fundingYear, type, investigator, faculty, title, projectYear, amount, status, report) {
+    constructor(id, fundingYear, type, investigator, faculty, title, projectYear, amount, status, report, poster) {
         this.id = id;
         this.funding_year = fundingYear;
         this.project_type = type;
@@ -22,16 +22,16 @@ class Project {
         this.funding_amount = amount;
         this.status = status;
         this.report = report;
-        this.poster = "#";
+        this.poster = poster;
     };
 };
 
 const PROJECT_TYPE = {
-    "LARGE": "Large TLEF",
-    "SMALL": "Small TLEF",
-    "FLEX": "Flexible Learning",
-    "INTER": "Interdisciplinary Team-Teaching Grant",
-    "UDL": "Universal Design for Learning"
+    "Large": "Large TLEF",
+    "Small": "Small TLEF",
+    "Flexible Learning": "Flexible Learning",
+    "Interdisciplinary Team-Teaching Grant": "Interdisciplinary Team-Teaching Grant",
+    "Universal Design for Learning": "Universal Design for Learning"
 };
 
 const PROJECTS_PER_PAGE = [10, 20, 30, 40, 50];
@@ -54,5 +54,5 @@ export {
     PROJECT_TYPE,
     PROJECTS_PER_PAGE,
     CURRENT_YEAR,
-    MARKS,
+    MARKS
 }
