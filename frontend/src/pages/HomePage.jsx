@@ -56,6 +56,7 @@ function HomePage() {
                 project_year
                 project_status
                 report
+                poster
             }
 
             loadFaculty(method: "loadFaculty") {
@@ -147,6 +148,8 @@ function HomePage() {
 
                 const proposals = results.data.getFilteredProposals;
 
+                console.log(proposals);
+
                 const newProjects = proposals.map((proj) => {
                     return new Project(
                         proj.grant_id,
@@ -158,10 +161,11 @@ function HomePage() {
                         proj.project_year,
                         proj.funding_amount,
                         proj.project_status,
-                        proj.report
+                        proj.report,
+                        proj.poster
                     );
                 });
-
+                
                 setProjects(newProjects);
                 setLoading(false);
 
