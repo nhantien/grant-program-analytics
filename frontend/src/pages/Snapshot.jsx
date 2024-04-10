@@ -23,6 +23,7 @@ function Snapshot() {
     const client = generateClient();
 
     const { appliedFilters } = useContext(FiltersContext);
+    console.log(appliedFilters)
 
     const location = useLocation();
     const { projects, range } = location.state;

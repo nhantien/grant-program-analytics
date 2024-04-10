@@ -114,10 +114,10 @@ function FundingChart({ projects }) {
     return (
         <React.Fragment>
             <div className={styles.chart}>
-            <ResponsiveContainer width='100%' height={500}>
+            <ResponsiveContainer width='100%' height={600} maxHeight={800}>
                 <BarChart width={800} height={500} layout='vertical' data={res} alt="Funding Amount Chart">
                 <XAxis type="number" padding={{ right: 150 }} hide="true" />
-                <YAxis type="category" dataKey="name" width={120}/>
+                <YAxis type="category" dataKey="name" width={120} interval={0} padding={{left: 200}}/>
                     {isMobile() && <Tooltip content={<CustomToolTip />} wrapperStyle={{ backgroundColor: "white"}}/>}
                     <Tooltip content={CustomToolTip}/>
                     <Legend verticalAlign='top' iconType='square' height={36} />

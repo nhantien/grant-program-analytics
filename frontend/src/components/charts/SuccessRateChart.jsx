@@ -2,14 +2,26 @@
 import React from 'react';
 // recharts
 import { PieChart, Pie, Cell, Label, ResponsiveContainer } from 'recharts';
+import { useState, useEffect, useContext } from "react";
 // css style
 import styles from "./charts.module.css";
 import { Grid } from "@mui/material";
+import { FiltersContext } from "../../App";
 
 function SuccessRateChart({ projects, totalprojects, largeprojects, smallprojects }) {
 
     const largeprog = totalprojects.filter(proj => proj.project_type === 'Large');
     console.log('FILTER RESULT', largeprog)
+
+    // checking if filter by Small or Large 
+    const { appliedFilters } = useContext(FiltersContext);
+    const project_type = appliedFilters.project_type;
+    console.log('project_type', project_type)
+
+    const filterLarge = (project_type.includes("Large"))
+    console.log('filter large', filterLarge)
+    const filterSmall = (project_type.includes("Small"))
+    console.log('filter small', filterSmall)
 
     const small = [
         {
@@ -57,8 +69,8 @@ function SuccessRateChart({ projects, totalprojects, largeprojects, smallproject
         <Grid container spacing={1} justifyContent='flex-start'>
                 <Grid item xs={6}>
     <ResponsiveContainer height={300} width='99%'>
-    <p className={styles["sr-title"]}>Small TLEF Innovation Projects</p>
-    <p className={styles["sr-info"]}>Proposals: {smallprojects.length + projects.Small } | Funded: {smallprojects.length} </p>
+    {!filterLarge &&  <p className={styles["sr-title"]}>Small TLEF Innovation Projects</p> }
+    {!filterLarge && <p className={styles["sr-info"]}>Proposals: {smallprojects.length + projects.Small } | Funded: {smallprojects.length} </p> }
       <PieChart>
         <Pie
                                 data={small}
@@ -92,8 +104,8 @@ function SuccessRateChart({ projects, totalprojects, largeprojects, smallproject
     </Grid>
     <Grid item xs={6}>
     <ResponsiveContainer height={300} width='99%'>
-    <p className={styles["sr-title"]}>Large TLEF Innovation Projects</p>
-    <p className={styles["sr-info"]}>Proposals: {largeprojects.length + projects.Large } | Funded: {largeprojects.length} </p>
+    {!filterSmall && <p className={styles["sr-title"]}>Large TLEF Innovation Projects</p> }
+    {!filterSmall && <p className={styles["sr-info"]}>Proposals: {largeprojects.length + projects.Large } | Funded: {largeprojects.length} </p> }
     <PieChart>
         <Pie
                  data={large}
