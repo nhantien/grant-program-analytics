@@ -92,7 +92,7 @@ function SnapshotHeader({ options, optionsLoading, range, setRange }) {
                                 <Filter options={optionsLoading ? {} : options.project_type} defaultValue="Project Type" type="project_type" snapshot={false} />
                             </Grid>
                             <Grid item xs={12} md={3}>
-                                <Filter options={optionsLoading ? {} : options.project_faculty} defaultValue="Faculty/Unit" type="project_faculty" snapshot={false} />
+                                <Filter options={optionsLoading ? {} : options.project_faculty} defaultValue="Faculty/College/Unit" type="project_faculty" snapshot={false} />
                             </Grid>
                             <Grid item xs={12} md={3}>
                                 <Filter options={optionsLoading ? {} : options.focus_area} defaultValue="Focus Area" type="focus_area" snapshot={false} />

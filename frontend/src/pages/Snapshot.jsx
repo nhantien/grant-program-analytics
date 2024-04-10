@@ -23,6 +23,7 @@ function Snapshot() {
     const client = generateClient();
 
     const { appliedFilters } = useContext(FiltersContext);
+    console.log(appliedFilters)
 
     const location = useLocation();
     const { projects, range } = location.state;
@@ -44,7 +45,7 @@ function Snapshot() {
 
     const generateQuery = (filters) => {
         const str = `query test {
-            countDeclinedProjects(method: "countDeclinedProjects", filter: {
+            countDeclinedProjects(server: "production", method: "countDeclinedProjects", filter: {
                 funding_year: ${JSON.stringify(filters["funding_year"])},
                 project_faculty: ${JSON.stringify(filters["project_faculty"])},
                 project_type: ${JSON.stringify(filters["project_type"])},
@@ -56,7 +57,7 @@ function Snapshot() {
             }
 
 
-            countProjectsAndGrants(method: "countProjectsAndGrants", filter: {
+            countProjectsAndGrants(server: "production", method: "countProjectsAndGrants", filter: {
                 funding_year: ${JSON.stringify(filters["funding_year"])},
                 project_faculty: ${JSON.stringify(filters["project_faculty"])},
                 project_type: ${JSON.stringify(filters["project_type"])},
@@ -74,7 +75,7 @@ function Snapshot() {
             }
 
 
-            getFilteredProposals(method: "getFilteredProposals", filter: {
+            getFilteredProposals(server: "production", method: "getFilteredProposals", filter: {
                 funding_year: ${JSON.stringify(filters["funding_year"])},
                 project_faculty: ${JSON.stringify(filters["project_faculty"])},
                 project_type: ${JSON.stringify(filters["project_type"])},
@@ -93,7 +94,7 @@ function Snapshot() {
             }
 
 
-            countTotalReachByFaculty(method: "countTotalReachByFaculty", filter: {
+            countTotalReachByFaculty(server: "production", method: "countTotalReachByFaculty", filter: {
                 funding_year: ${JSON.stringify(filters["funding_year"])},
                 project_faculty: ${JSON.stringify(filters["project_faculty"])},
                 project_type: ${JSON.stringify(filters["project_type"])},
@@ -110,7 +111,7 @@ function Snapshot() {
                 }
             }
 
-            getStudentReachInfo(method: "getStudentReachInfo", filter: {
+            getStudentReachInfo(server: "production", method: "getStudentReachInfo", filter: {
                 funding_year: ${JSON.stringify(filters["funding_year"])},
                 project_faculty: ${JSON.stringify(filters["project_faculty"])},
                 project_type: ${JSON.stringify(filters["project_type"])},
@@ -122,13 +123,13 @@ function Snapshot() {
                 section
             }
 
-            getUniqueStudent(method: "getUniqueStudent", fundingYear: "${appliedFilters["funding_year"][0] ? appliedFilters["funding_year"][0] : 0}") {
+            getUniqueStudent(server: "production", method: "getUniqueStudent", fundingYear: "${appliedFilters["funding_year"][0] ? appliedFilters["funding_year"][0] : 0}") {
                   funding_year
                   unique_student
                   funding_amount
             }
 
-            countFacultyMembersByStream(method: "countFacultyMembersByStream", filter: {
+            countFacultyMembersByStream(server: "production", method: "countFacultyMembersByStream", filter: {
                 funding_year: ${JSON.stringify(filters["funding_year"])},
                 project_faculty: ${JSON.stringify(filters["project_faculty"])},
                 project_type: ${JSON.stringify(filters["project_type"])},
@@ -186,12 +187,12 @@ function Snapshot() {
         const fetchOptions = async () => {
             try {
                 const queryString = `query load {
-                    loadFaculty(method: "loadFaculty") {
+                    loadFaculty(server: "production", method: "loadFaculty") {
                         faculty_name
                         faculty_code
                     }
 
-                    loadFocusArea(method: "loadFocusArea") {
+                    loadFocusArea(server: "production", method: "loadFocusArea") {
                         label
                         value
                     }

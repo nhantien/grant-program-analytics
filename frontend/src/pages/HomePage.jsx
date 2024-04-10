@@ -38,7 +38,7 @@ function HomePage() {
     const generateQueryString = (filters) => {
 
         const str = `query homePage {
-            getFilteredProposals(method: "getFilteredProposals", filter: {
+            getFilteredProposals(server: "production", method: "getFilteredProposals", filter: {
                 funding_year: ${JSON.stringify(filters["funding_year"])},
                 project_faculty: ${JSON.stringify(filters["project_faculty"])},
                 project_type: ${JSON.stringify(filters["project_type"])},
@@ -57,16 +57,6 @@ function HomePage() {
                 project_status
                 report
                 poster
-            }
-
-            loadFaculty(method: "loadFaculty") {
-                faculty_name
-                faculty_code
-            }
-
-            loadFocusArea(method: "loadFocusArea") {
-                label
-                value
             }
         }`;
 
@@ -104,12 +94,12 @@ function HomePage() {
         const fetchOptions = async () => {
             try {
                 const queryString = `query load {
-                    loadFaculty(method: "loadFaculty") {
+                    loadFaculty(server: "production", method: "loadFaculty") {
                         faculty_name
                         faculty_code
                     }
 
-                    loadFocusArea(method: "loadFocusArea") {
+                    loadFocusArea(server: "production", method: "loadFocusArea") {
                         label
                         value
                     }
