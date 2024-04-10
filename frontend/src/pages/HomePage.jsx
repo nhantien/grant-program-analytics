@@ -2,7 +2,7 @@
 import React from 'react';
 import { useState, useEffect, useContext } from 'react';
 // react-router
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 // mui
 import ClearIcon from '@mui/icons-material/Clear';
 import { IconButton, CircularProgress, Collapse, Slider, Grid, Pagination } from '@mui/material';
@@ -19,6 +19,10 @@ import { Filter, FilterList, FundingYearFilter } from "../components/util";
 import { Project, PROJECT_TYPE, MARKS, CURRENT_YEAR } from '../constants';
 
 function HomePage() {
+
+    const [params, setParams] = useSearchParams();
+    const staging = params.get("staging");
+
 
     const client = generateClient();
 
@@ -38,7 +42,7 @@ function HomePage() {
     const generateQueryString = (filters) => {
 
         const str = `query homePage {
-            getFilteredProposals(method: "getFilteredProposals", filter: {
+            getFilteredProposals(server: "production", method: "getFilteredProposals", filter: {
                 funding_year: ${JSON.stringify(filters["funding_year"])},
                 project_faculty: ${JSON.stringify(filters["project_faculty"])},
                 project_type: ${JSON.stringify(filters["project_type"])},
@@ -57,16 +61,6 @@ function HomePage() {
                 project_status
                 report
                 poster
-            }
-
-            loadFaculty(method: "loadFaculty") {
-                faculty_name
-                faculty_code
-            }
-
-            loadFocusArea(method: "loadFocusArea") {
-                label
-                value
             }
         }`;
 
@@ -104,12 +98,12 @@ function HomePage() {
         const fetchOptions = async () => {
             try {
                 const queryString = `query load {
-                    loadFaculty(method: "loadFaculty") {
+                    loadFaculty(server: "production", method: "loadFaculty") {
                         faculty_name
                         faculty_code
                     }
 
-                    loadFocusArea(method: "loadFocusArea") {
+                    loadFocusArea(server: "production", method: "loadFocusArea") {
                         label
                         value
                     }
@@ -303,7 +297,7 @@ function HomePage() {
                         <div>
                             <button className={styles["generate-summary-btn"]}>
                                 <Link
-                                    to="/snapshot"
+                                    to={`/snapshot${staging ? "?staging=true" : ""}`}
                                     state={{
                                         projects: projects,
                                         range: range,
@@ -335,14 +329,14 @@ function HomePage() {
                                             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                                                 {
                                                     projects.slice(10 * page, (Math.min(10 * (page + 1), projects.length))).map((project) =>
-                                                        <VerticalTableItem key={project.id} project={project} />
+                                                        <VerticalTableItem key={project.id} project={project} staging={staging} />
                                                     )
                                                 }
                                                 <Pagination count={Math.floor(projects.length / 10)} shape='rounded' showFirstButton
                                                     onChange={(event, page) => handlePaginationChange(page)} sx={{ margin: "auto" }} />
                                             </div>
                                             :
-                                            <ProjectTable projects={projects} />
+                                            <ProjectTable projects={projects} staging={staging} />
                                     }
                                 </Grid>
                             </Grid>

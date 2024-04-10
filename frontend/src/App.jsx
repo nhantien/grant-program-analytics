@@ -51,6 +51,7 @@ function App() {
           </Route>
           <Route path="/summary/:id" element={<Summary />} />
           <Route path="/snapshot" element={<Snapshot />} />
+          <Route path="/staging" element={<HomePage />}  />
         </Routes>
       </Router>
     </FiltersContext.Provider>

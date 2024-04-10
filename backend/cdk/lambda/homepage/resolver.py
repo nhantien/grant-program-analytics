@@ -1,9 +1,21 @@
-from boto3 import client
+from boto3 import client, resource
 import os
-import time
 
 # parameters for connecting to athena
 ATHENA = client('athena')
+S3 = client('s3')
+S3_resource = resource('s3')
+
+def retrieve_images():
+    
+    bucket = S3_resource.Bucket('tlef-test-reports')
+
+    ans = []
+    for obj in bucket.objects.all():
+        ans.append(obj.key)
+    
+    return ans
+    
 
 def generate_filtered_query(filters):
     str = ""
@@ -12,7 +24,13 @@ def generate_filtered_query(filters):
         if key == 'search_text' and len(values) > 0:
             str += " AND ("
             for value in values:
-                str += f"LOWER(p.title) LIKE '%{value.lower()}%' OR LOWER(p.pi_name) LIKE '%{value.lower()}%' OR "
+                str += f"""
+                    LOWER(p.title) LIKE '%{value.lower()}%' OR 
+                    LOWER(p.pi_name) LIKE '%{value.lower()}%' OR 
+                    LOWER(p.summary) LIKE '%{value.lower()}%' OR 
+                """
+                # LOWER(p.project_outcome) LIKE '%{value.lower()}%' OR 
+                # str += f"TITLE LIKE '%{value}%' OR pi_name LIKE '%{value}%' OR "
             str = str[:str.rindex("OR ")] + ")"
         
         elif key == 'funding_year' and len(values) > 0:
@@ -33,9 +51,9 @@ def execute_query(query_string):
     response = ATHENA.start_query_execution(
         QueryString = query_string,
         QueryExecutionContext = {
-            "Database": os.environ.get("DB")
+            "Database": os.environ.get("DB_NAME")
         },
-        ResultConfiguration= {
+        ResultConfiguration={
             'OutputLocation': os.environ.get("OUTPUT_LOCATION"),
         }
     )
@@ -47,7 +65,6 @@ def execute_query(query_string):
         status = ATHENA.get_query_execution(QueryExecutionId = executionId)['QueryExecution']['Status']['State']
         if status == 'FAILED' or status == 'CANCELLED':
             raise Exception('Athena query failed or was cancelled')
-        time.sleep(1)
     
     query_results = ATHENA.get_query_results(QueryExecutionId = executionId)
     rows = query_results["ResultSet"]["Rows"]
@@ -67,26 +84,39 @@ def lambda_handler(event, context):
         return None
 
 def getFilteredProposals(filters):
-    query_string = f"""SELECT 
-        p.* FROM {os.environ.get("PROJECT_DETAILS")} p 
-        LEFT JOIN {os.environ.get("FOCUS_AREA")} f ON p.grant_id = f.grant_id 
-        WHERE 1 = 1"""
+    query_string = f"SELECT p.* FROM {os.environ.get('PROJECT_DETAILS')} p LEFT JOIN {os.environ.get('FOCUS_AREA')} f ON p.grant_id = f.grant_id WHERE 1 = 1"
     query_string += generate_filtered_query(filters)
     print(query_string)
     rows = execute_query(query_string)
     
     headers = rows[0]["Data"]
+    images = retrieve_images()
     
     results = []
     for row in rows[1:]:
         data = row["Data"]
         jsonItem = {}
         for i in range (len(data)):
+            header = headers[i]["VarCharValue"]
+            if len(data[i]) > 0 and header == "project_id":
+                file_name = f'report/{data[i]["VarCharValue"]}-Report.pdf'
+                if file_name in images:
+                    jsonItem["report"] = f"https://d3llvgmk2v8kjf.cloudfront.net/{file_name}"
+                else:
+                    jsonItem["report"] = ""
+            
+            if len(data[i]) > 0 and header == "grant_id":
+                file_name = f'poster/{data[i]["VarCharValue"]}-Poster.pdf'
+                if file_name in images:
+                    jsonItem["poster"] = f"https://d3llvgmk2v8kjf.cloudfront.net/{file_name}"
+                else:
+                    jsonItem["poster"] = ""
+                    
             if len(data[i]) > 0:
-                jsonItem[headers[i]["VarCharValue"]] = data[i]["VarCharValue"]
+                jsonItem[header] = data[i]["VarCharValue"]
             else:
-                print(f'{headers[i]["VarCharValue"]} is null')
-                jsonItem[headers[i]["VarCharValue"]] = ""
+                print(f'{header} is null')
+                jsonItem[header] = ""
             
         results.append(jsonItem)
     
