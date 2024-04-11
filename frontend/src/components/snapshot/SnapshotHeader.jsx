@@ -1,7 +1,7 @@
 // react
 import React from "react";
-import { Link } from 'react-router-dom';
-import { useContext, useEffect, useState } from "react";
+import { Navigate, useNavigate, Link } from 'react-router-dom';
+import { useContext, useState } from "react";
 // mui
 import ClearIcon from '@mui/icons-material/Clear';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -19,6 +19,7 @@ import { MARKS } from "../../constants";
 function SnapshotHeader({ options, optionsLoading, range, setRange }) {
 
     const { appliedFilters, setAppliedFilters } = useContext(FiltersContext);
+    const history = useNavigate()
 
     const [showSlider, setShowSlider] = useState(appliedFilters["funding_year"].length > 1);
     const [rangeString, setRangeString] = useState(range[0] + "/" + (range[0] + 1) + " - " + range[1] + "/" + (range[1] + 1));
@@ -63,17 +64,31 @@ function SnapshotHeader({ options, optionsLoading, range, setRange }) {
         setRangeString(min + "/" + (min + 1) + " - " + max + "/" + (max + 1));
     }
 
-    const goBack = () => {
-        window.location.href = "/";
-      };
+    // go back and preserve filters 
+    // const goBack = () => {
+    //     Navigate({
+    //         pathname: '/',
+    //         state: {
+    //             // projects: projects,
+    //             range: range,
+    //         }
+    //     });
+    // };
 
     return (
         <div className={styles.bg}>
              <div className={styles["back"]}>
                         <div>
-                        <IconButton aria-label="delete"  onClick={goBack}>
+                        <Link
+                                    to="/"
+                                    state={{
+                                        filters: appliedFilters,
+                                        appliedRange: range
+                                    }}
+                                    style={{ textDecoration: "none", color: "white" }}
+                                >
                         <ArrowBackIcon  sx={{ color: "#002145", fontSize: "2.2rem" }}/>
-                            </IconButton>
+                        </Link>
                         </div>
                     </div>
             <div className={styles.title}>

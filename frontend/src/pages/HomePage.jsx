@@ -2,7 +2,7 @@
 import React from 'react';
 import { useState, useEffect, useContext } from 'react';
 // react-router
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 // mui
 import ClearIcon from '@mui/icons-material/Clear';
 import { IconButton, CircularProgress, Collapse, Slider, Grid, Pagination } from '@mui/material';
@@ -21,6 +21,10 @@ import { Project, PROJECT_TYPE, MARKS, CURRENT_YEAR } from '../constants';
 function HomePage() {
 
     const client = generateClient();
+    const location = useLocation();
+    const { filters, appliedRange } = location.state;
+    console.log('pre-applied filters', filters)
+    console.log('pre-applied range', appliedRange)
 
     const { appliedFilters, setAppliedFilters } = useContext(FiltersContext);
 
@@ -35,7 +39,7 @@ function HomePage() {
 
     const [page, setPage] = useState(0);
 
-    const generateQueryString = (filters) => {
+    const generateQueryString = (filters) => {git 
 
         const str = `query homePage {
             getFilteredProposals(server: "production", method: "getFilteredProposals", filter: {
