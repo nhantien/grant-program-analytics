@@ -39,7 +39,7 @@ function HomePage() {
 
     const [page, setPage] = useState(0);
 
-    const generateQueryString = (filters) => {git 
+    const generateQueryString = (filters) => {
 
         const str = `query homePage {
             getFilteredProposals(server: "production", method: "getFilteredProposals", filter: {
