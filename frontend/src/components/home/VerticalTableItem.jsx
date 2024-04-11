@@ -59,12 +59,16 @@ function VerticalTableItem({ project, server }) {
 
             <div className={styles.field}>
                 <div className={styles.key}>Report:</div>
-                <div className={styles.value}><a href={project.report}>Link to Report</a></div>
+                <div className={styles.value}>
+                    {project.report ? <a href={project.report} target='_blank'>Report</a> : 'N/A'}
+                </div>
             </div>
 
             <div className={styles.field}>
                 <div className={styles.key}>Poster:</div>
-                <div className={styles.value}><a href={project.poster}>Link to Poster</a></div>
+                <div className={styles.value}>
+                    {project.poster ? <a href={project.poster} target='_blank'>Poster</a> : 'N/A'}
+                </div>
             </div>
 
         </div>

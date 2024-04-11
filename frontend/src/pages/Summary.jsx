@@ -154,7 +154,7 @@ function Summary() {
         };
 
         fetchData();
-    }, []);
+    }, [id]);
 
     if (isLoading) return (
         <div className={styles.Summary}>
@@ -174,7 +174,7 @@ function Summary() {
                 ))
             }
             <Posters posters={posters} />
-            <SimilarProjects projects={similarProjects} />
+            <SimilarProjects projects={similarProjects} server={server} />
             <ProjectOutcome data={projectOutcome} />
         </div>
     );
