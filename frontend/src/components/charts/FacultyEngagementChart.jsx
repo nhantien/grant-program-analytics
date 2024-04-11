@@ -46,6 +46,10 @@ function FacultyEngagementChart({projects, amount, unique}) {
         return parseInt(amount).toLocaleString("en-CA");
     };
 
+    const project_type = appliedFilters.project_type;
+    const filterLarge = (project_type.includes("Large") && !project_type.includes('Small'))
+    const filterSmall = (project_type.includes("Small") && !project_type.includes('Large'))
+
     // returns true if any Large or Small project has data (not 0) 
     const hasData = Object.values(projects).some(item => Object.values(item).some(value => value !== 0))
 
@@ -54,9 +58,10 @@ function FacultyEngagementChart({projects, amount, unique}) {
     }
     return (
         <React.Fragment>
+
             <div className={styles["fe-chart"]}>
                 <div className={styles.fe}>
-
+                {!filterLarge && (
                     <div className={styles["fe-box"]}>
                         <p className={styles["fe-title"]}>SMALL GRANTS</p>
                         <div className={styles["fe-category"]}>
@@ -84,6 +89,8 @@ function FacultyEngagementChart({projects, amount, unique}) {
                              <span>{projects.Small.Student} Students</span> 
                         </div>
                     </div>
+                )}
+                 {!filterSmall && (
                     <div className={styles["fe-box"]}>
                         <p className={styles["fe-title"]}>LARGE GRANTS</p>
                         <div className={styles["fe-category"]}>
@@ -111,6 +118,7 @@ function FacultyEngagementChart({projects, amount, unique}) {
                              <span>{projects.Large.Student} Students</span>
                         </div>
                         </div>
+                          )}
                     </div>
                 </div>
                 <div className={styles.space}></div>

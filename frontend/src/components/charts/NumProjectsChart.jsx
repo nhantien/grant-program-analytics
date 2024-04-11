@@ -10,8 +10,8 @@ function NumProjectsChart({ projects }) {
 
     const { appliedFilters } = useContext(FiltersContext);
     const project_type = appliedFilters.project_type;
-    const filterLarge = (project_type.includes("Large"))
-    const filterSmall = (project_type.includes("Small"))
+    const filterLarge = (project_type.includes("Large") && !project_type.includes('Small'))
+    const filterSmall = (project_type.includes("Small") && !project_type.includes('Large'))
 
     // returns true if any large or small project/grant has data (not 0) 
     const hasData = Object.values(projects).some(item => Object.values(item).some(value => value !== 0))
