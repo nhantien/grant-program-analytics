@@ -1,7 +1,7 @@
 // react
 import { useEffect, useState } from "react";
 // react-router
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 // mui
 import { CircularProgress } from "@mui/material";
 // amplify
@@ -14,6 +14,9 @@ import { SummaryTitle, SummaryDescription, SummaryTable, Posters, SimilarProject
 
 function Summary() {
     const { id } = useParams();
+
+    const [params, setParams] = useSearchParams();
+    const server = params.get("staging") ? "staging" : "production";
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -39,7 +42,7 @@ function Summary() {
     useEffect(() => {
         const fetchData = async () => {
             const query = `query MyQuery {
-                getIndividualSummaryInfo(method: "getIndividualSummaryInfo", grantId: "${id}") {
+                getIndividualSummaryInfo(server: "${server}", method: "getIndividualSummaryInfo", grantId: "${id}") {
                     title
                     summary
                     project_year
@@ -56,7 +59,7 @@ function Summary() {
                     poster
                 }
 
-                getTeamMembersByGrantId(method: "getTeamMembersByGrantId", grantId: "${id}") {
+                getTeamMembersByGrantId(server: "${server}", method: "getTeamMembersByGrantId", grantId: "${id}") {
                     grant_id
                     members {
                         member_name
@@ -66,7 +69,7 @@ function Summary() {
                     }
                 }
 
-                getStudentReachByGrantId(method: "getStudentReachByGrantId", grantId: "${id}") {
+                getStudentReachByGrantId(server: "${server}", method: "getStudentReachByGrantId", grantId: "${id}") {
                     grant_id
                     reach {
                         course_name
@@ -75,7 +78,7 @@ function Summary() {
                     }
                 }
 
-                getSimilarProjects(method: "getSimilarProjects", grantId: "${id}") {
+                getSimilarProjects(server: "${server}", method: "getSimilarProjects", grantId: "${id}") {
                     grant_id
                     project_type
                     pi_name
@@ -84,7 +87,7 @@ function Summary() {
                     funding_year
                 }
 
-                loadFocusArea(method: "loadFocusArea") {
+                loadFocusArea(server: "${server}", method: "loadFocusArea") {
                     label
                     value
                 }
@@ -151,7 +154,7 @@ function Summary() {
         };
 
         fetchData();
-    }, []);
+    }, [id]);
 
     if (isLoading) return (
         <div className={styles.Summary}>
@@ -171,7 +174,7 @@ function Summary() {
                 ))
             }
             <Posters posters={posters} />
-            <SimilarProjects projects={similarProjects} />
+            <SimilarProjects projects={similarProjects} server={server} />
             <ProjectOutcome data={projectOutcome} />
         </div>
     );

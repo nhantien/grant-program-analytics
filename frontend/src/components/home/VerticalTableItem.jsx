@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 // css style
 import styles from "./VerticalTableItem.module.css";
 
-function VerticalTableItem({ project }) {
+function VerticalTableItem({ project, server }) {
 
     const statusColor = project.status === "Active" ? "#64b53c" : "#d4734c";
 
@@ -17,7 +17,9 @@ function VerticalTableItem({ project }) {
         <div className={styles.wrapper}>
             <div className={styles.field} style={{ backgroundColor: '#081252', color: "white", fontWeight: 700 }}>
                 <div className={styles.key}>Title:</div>
-                <div className={styles.value}><Link className={styles.title} to={`/summary/${project.id}`}>{project.title}</Link></div>
+                <div className={styles.value}>
+                    <Link className={styles.title} to={`/summary/${project.id}${server === "staging" ? "?staging=true" : ""}`}>{project.title}</Link>
+                </div>
             </div>
 
             <div className={styles.field}>
@@ -57,12 +59,16 @@ function VerticalTableItem({ project }) {
 
             <div className={styles.field}>
                 <div className={styles.key}>Report:</div>
-                <div className={styles.value}><a href={project.report}>Link to Report</a></div>
+                <div className={styles.value}>
+                    {project.report ? <a href={project.report} target='_blank'>Report</a> : 'N/A'}
+                </div>
             </div>
 
             <div className={styles.field}>
                 <div className={styles.key}>Poster:</div>
-                <div className={styles.value}><a href={project.poster}>Link to Poster</a></div>
+                <div className={styles.value}>
+                    {project.poster ? <a href={project.poster} target='_blank'>Poster</a> : 'N/A'}
+                </div>
             </div>
 
         </div>

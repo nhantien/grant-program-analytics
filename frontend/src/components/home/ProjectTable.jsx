@@ -163,7 +163,7 @@ EnhancedTableHead.propTypes = {
     orderBy: PropTypes.string.isRequired,
 };
 
-export default function ProjectTable({ projects }) {
+export default function ProjectTable({ projects, server }) {
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('funding_year');
     const [selected, setSelected] = React.useState([]);
@@ -276,7 +276,9 @@ export default function ProjectTable({ projects }) {
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%" }}>{project.project_type}</TableCell>
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "10%" }}>{project.pi_name}</TableCell>
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%" }}>{project.project_faculty}</TableCell>
-                                        <TableCell align="left" sx={{ height: "5rem", maxWidth: "35%" }}><Link to={`/summary/${project.id}`}>{project.title}</Link></TableCell>
+                                        <TableCell align="left" sx={{ height: "5rem", maxWidth: "35%" }}>
+                                            <Link to={`/summary/${project.id}${server === "staging" ? "?staging=true" : ""}`}>{project.title}</Link>
+                                        </TableCell>
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "10%" }}>{project.project_year}</TableCell>
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "10%" }}>{formattedAmount(project.funding_amount)}</TableCell>
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%", color: project.status === "Active" ? "#64b53c" : "#d4734c" }}>{project.status}</TableCell>
