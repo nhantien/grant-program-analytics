@@ -276,7 +276,7 @@ function Snapshot() {
     return (
         <div className={styles.Snapshot}>
 
-            <SnapshotHeader options={options} optionsLoading={optionsLoading} range={selectedRange} setRange={setSelectedRange} />
+            <SnapshotHeader options={options} optionsLoading={optionsLoading} range={selectedRange} setRange={setSelectedRange} server={server} />
 
             <div className={styles.navbar}>
                 <button onClick={() => handleClick("success-rate")}>Success Rate</button>
