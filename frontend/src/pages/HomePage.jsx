@@ -21,7 +21,8 @@ import { Project, PROJECT_TYPE, MARKS, CURRENT_YEAR } from '../constants';
 function HomePage() {
 
     const [params, setParams] = useSearchParams();
-    const staging = params.get("staging");
+    const server = params.get("staging") ? "staging" : "production";
+    console.log(server);
 
 
     const client = generateClient();
@@ -42,7 +43,7 @@ function HomePage() {
     const generateQueryString = (filters) => {
 
         const str = `query homePage {
-            getFilteredProposals(server: "production", method: "getFilteredProposals", filter: {
+            getFilteredProposals(server: "${server}", method: "getFilteredProposals", filter: {
                 funding_year: ${JSON.stringify(filters["funding_year"])},
                 project_faculty: ${JSON.stringify(filters["project_faculty"])},
                 project_type: ${JSON.stringify(filters["project_type"])},
@@ -63,6 +64,10 @@ function HomePage() {
                 poster
             }
         }`;
+
+        console.log(str);
+
+        console.log(process.env.REACT_APP_APPSYNC_ENDPOINT)
 
         return str;
     }
@@ -98,12 +103,12 @@ function HomePage() {
         const fetchOptions = async () => {
             try {
                 const queryString = `query load {
-                    loadFaculty(server: "production", method: "loadFaculty") {
+                    loadFaculty(server: "${server}", method: "loadFaculty") {
                         faculty_name
                         faculty_code
                     }
 
-                    loadFocusArea(server: "production", method: "loadFocusArea") {
+                    loadFocusArea(server: "${server}", method: "loadFocusArea") {
                         label
                         value
                     }
@@ -297,7 +302,7 @@ function HomePage() {
                         <div>
                             <button className={styles["generate-summary-btn"]}>
                                 <Link
-                                    to={`/snapshot${staging ? "?staging=true" : ""}`}
+                                    to={`/snapshot${server === "staging" ? "?staging=true" : ""}`}
                                     state={{
                                         projects: projects,
                                         range: range,
@@ -329,14 +334,14 @@ function HomePage() {
                                             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                                                 {
                                                     projects.slice(10 * page, (Math.min(10 * (page + 1), projects.length))).map((project) =>
-                                                        <VerticalTableItem key={project.id} project={project} staging={staging} />
+                                                        <VerticalTableItem key={project.id} project={project} server={server} />
                                                     )
                                                 }
                                                 <Pagination count={Math.floor(projects.length / 10)} shape='rounded' showFirstButton
                                                     onChange={(event, page) => handlePaginationChange(page)} sx={{ margin: "auto" }} />
                                             </div>
                                             :
-                                            <ProjectTable projects={projects} staging={staging} />
+                                            <ProjectTable projects={projects} server={server} />
                                     }
                                 </Grid>
                             </Grid>
