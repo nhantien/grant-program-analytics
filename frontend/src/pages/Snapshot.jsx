@@ -2,7 +2,7 @@
 import React from "react";
 import { useState, useEffect, useContext } from "react";
 // react-router
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 // amplify
 import { generateClient } from 'aws-amplify/api';
 // mui
@@ -19,6 +19,9 @@ import { PROJECT_TYPE } from "../constants";
 
 
 function Snapshot() {
+
+    const [params, setParams] = useSearchParams();
+    const server = params.get("staging") ? "staging" : "production";
 
     const client = generateClient();
 
@@ -45,7 +48,7 @@ function Snapshot() {
 
     const generateQuery = (filters) => {
         const str = `query test {
-            countDeclinedProjects(server: "production", method: "countDeclinedProjects", filter: {
+            countDeclinedProjects(server: "${server}", method: "countDeclinedProjects", filter: {
                 funding_year: ${JSON.stringify(filters["funding_year"])},
                 project_faculty: ${JSON.stringify(filters["project_faculty"])},
                 project_type: ${JSON.stringify(filters["project_type"])},
@@ -57,7 +60,7 @@ function Snapshot() {
             }
 
 
-            countProjectsAndGrants(server: "production", method: "countProjectsAndGrants", filter: {
+            countProjectsAndGrants(server: "${server}", method: "countProjectsAndGrants", filter: {
                 funding_year: ${JSON.stringify(filters["funding_year"])},
                 project_faculty: ${JSON.stringify(filters["project_faculty"])},
                 project_type: ${JSON.stringify(filters["project_type"])},
@@ -75,7 +78,7 @@ function Snapshot() {
             }
 
 
-            getFilteredProposals(server: "production", method: "getFilteredProposals", filter: {
+            getFilteredProposals(server: "${server}", method: "getFilteredProposals", filter: {
                 funding_year: ${JSON.stringify(filters["funding_year"])},
                 project_faculty: ${JSON.stringify(filters["project_faculty"])},
                 project_type: ${JSON.stringify(filters["project_type"])},
@@ -94,7 +97,7 @@ function Snapshot() {
             }
 
 
-            countTotalReachByFaculty(server: "production", method: "countTotalReachByFaculty", filter: {
+            countTotalReachByFaculty(server: "${server}", method: "countTotalReachByFaculty", filter: {
                 funding_year: ${JSON.stringify(filters["funding_year"])},
                 project_faculty: ${JSON.stringify(filters["project_faculty"])},
                 project_type: ${JSON.stringify(filters["project_type"])},
@@ -111,7 +114,7 @@ function Snapshot() {
                 }
             }
 
-            getStudentReachInfo(server: "production", method: "getStudentReachInfo", filter: {
+            getStudentReachInfo(server: "${server}", method: "getStudentReachInfo", filter: {
                 funding_year: ${JSON.stringify(filters["funding_year"])},
                 project_faculty: ${JSON.stringify(filters["project_faculty"])},
                 project_type: ${JSON.stringify(filters["project_type"])},
@@ -123,13 +126,13 @@ function Snapshot() {
                 section
             }
 
-            getUniqueStudent(server: "production", method: "getUniqueStudent", fundingYear: "${appliedFilters["funding_year"][0] ? appliedFilters["funding_year"][0] : 0}") {
+            getUniqueStudent(server: "${server}", method: "getUniqueStudent", fundingYear: "${appliedFilters["funding_year"][0] ? appliedFilters["funding_year"][0] : 0}") {
                   funding_year
                   unique_student
                   funding_amount
             }
 
-            countFacultyMembersByStream(server: "production", method: "countFacultyMembersByStream", filter: {
+            countFacultyMembersByStream(server: "${server}", method: "countFacultyMembersByStream", filter: {
                 funding_year: ${JSON.stringify(filters["funding_year"])},
                 project_faculty: ${JSON.stringify(filters["project_faculty"])},
                 project_type: ${JSON.stringify(filters["project_type"])},
@@ -187,12 +190,12 @@ function Snapshot() {
         const fetchOptions = async () => {
             try {
                 const queryString = `query load {
-                    loadFaculty(server: "production", method: "loadFaculty") {
+                    loadFaculty(server: "${server}", method: "loadFaculty") {
                         faculty_name
                         faculty_code
                     }
 
-                    loadFocusArea(server: "production", method: "loadFocusArea") {
+                    loadFocusArea(server: "${server}", method: "loadFocusArea") {
                         label
                         value
                     }
