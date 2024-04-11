@@ -18,9 +18,9 @@ function SuccessRateChart({ projects, totalprojects, largeprojects, smallproject
     const project_type = appliedFilters.project_type;
     console.log('project_type', project_type)
 
-    const filterLarge = (project_type.includes("Large"))
+    const filterLarge = (project_type.includes("Large") && !project_type.includes('Small'))
     console.log('filter large', filterLarge)
-    const filterSmall = (project_type.includes("Small"))
+    const filterSmall = (project_type.includes("Small") && !project_type.includes('Large'))
     console.log('filter small', filterSmall)
 
     const small = [
@@ -67,7 +67,8 @@ function SuccessRateChart({ projects, totalprojects, largeprojects, smallproject
         <React.Fragment>
         <div className={styles.sr}>
         <Grid container spacing={1} justifyContent='flex-start'>
-                <Grid item xs={6}>
+                <Grid item xs={filterLarge? 3: 6 }>
+    <div className={`${filterLarge ? styles['filter-hidden'] : ''}`}>
     <ResponsiveContainer height={300} width='99%'>
     {!filterLarge &&  <p className={styles["sr-title"]}>Small TLEF Innovation Projects</p> }
     {!filterLarge && <p className={styles["sr-info"]}>Proposals: {smallprojects.length + projects.Small } | Funded: {smallprojects.length} </p> }
@@ -101,8 +102,9 @@ function SuccessRateChart({ projects, totalprojects, largeprojects, smallproject
                                  </Pie>
       </PieChart>
     </ResponsiveContainer>
+    </div>
     </Grid>
-    <Grid item xs={6}>
+    <Grid item xs={filterSmall? 3 : 6 } container justifyContent='flex-end' >
     <ResponsiveContainer height={300} width='99%'>
     {!filterSmall && <p className={styles["sr-title"]}>Large TLEF Innovation Projects</p> }
     {!filterSmall && <p className={styles["sr-info"]}>Proposals: {largeprojects.length + projects.Large } | Funded: {largeprojects.length} </p> }

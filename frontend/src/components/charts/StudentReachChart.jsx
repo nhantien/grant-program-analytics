@@ -59,7 +59,7 @@ function StudentReachChart( {projects, reachdata, unique}) {
         )
     };
 
-    // Transformation
+    // calculate data 
     const STUDENT_REACH = [];
     console.log(projects)
 
