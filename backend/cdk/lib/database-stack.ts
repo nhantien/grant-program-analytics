@@ -1,10 +1,13 @@
-import { RemovalPolicy, Stack, StackProps } from "aws-cdk-lib";
+import { Duration, RemovalPolicy, Stack, StackProps } from "aws-cdk-lib";
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as s3Deploy from 'aws-cdk-lib/aws-s3-deployment';
 import * as glue from '@aws-cdk/aws-glue-alpha';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as cf from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as logs from 'aws-cdk-lib/aws-logs';
+import { S3EventSourceV2 } from "aws-cdk-lib/aws-lambda-event-sources";
 import { CfnCrawler } from "aws-cdk-lib/aws-glue";
 import { Construct } from "constructs";
 
@@ -14,6 +17,7 @@ import * as schemas from '../glue/schema';
 export class DatabaseStack extends Stack {
 
     private readonly s3Bucket: s3.Bucket;
+    private readonly imageBucket: s3.Bucket;
     private readonly prodDB: glue.Database;
     private readonly stagingDB: glue.Database;
     private readonly tables: { [id: string] : glue.S3Table; };
@@ -21,6 +25,14 @@ export class DatabaseStack extends Stack {
 
     public getS3BucketName() {
         return this.s3Bucket.bucketName;
+    }
+
+    public getS3BucketArn() {
+        return this.s3Bucket.bucketArn;
+    }
+
+    public getImageBucketName() {
+        return this.imageBucket.bucketName;
     }
 
     public getProdDbName() {
@@ -130,6 +142,54 @@ export class DatabaseStack extends Stack {
         });
 
         /**
+         * Lambda function for excel-to-parquet conversion
+         */
+
+        const rawFolderUploadEvent = new S3EventSourceV2(s3DataBucket, {
+            events: [ s3.EventType.OBJECT_CREATED ],
+            filters: [{ prefix: 'raw/' }]
+        });
+
+        const excelToParquetConverter = new lambda.Function(this, 'RawToStagingConverter', {
+            functionName: 'excel-to-parquet-converter',
+            runtime: lambda.Runtime.PYTHON_3_11,
+            memorySize: 512,
+            code: lambda.Code.fromAsset('./lambda/xlsx-to-parquet'),
+            handler: 'lamdda_function.lambda_handler',
+            architecture: lambda.Architecture.X86_64,
+            timeout: Duration.minutes(1),
+            environment: {
+                'S3_BUCKET_NAME': s3DataBucket.bucketName
+            }
+        });
+
+        // const converterLogGroup = new logs.LogGroup(this, 'converterLogGroup', {
+        //     logGroupName: `/aws/lambda/${excelToParquetConverter.functionName}`,
+        // });
+
+        const s3AccessPolicy = new iam.PolicyStatement({
+            actions: [
+                "s3:*",
+                "s3-objcet-lambda:*"
+            ],
+            resources: [`${s3DataBucket.bucketArn}/*`]
+        });
+
+        // const lambdaLogPolicy = new iam.PolicyStatement({
+        //     actions: [
+        //         "logs:CreateLogStream",
+        //         "logs:PutLogEvents"
+        //     ],
+        //     resources: [`${converterLogGroup.logGroupArn}:*`]
+        // });
+
+        excelToParquetConverter.addToRolePolicy(s3AccessPolicy);
+        // excelToParquetConverter.addToRolePolicy(lambdaLogPolicy);
+        excelToParquetConverter.addLayers(lambda.LayerVersion.fromLayerVersionArn(this, 'AwsPandasLayer', 'arn:aws:lambda:ca-central-1:336392948345:layer:AWSSDKPandas-Python311:10'));
+        excelToParquetConverter.addEventSource(rawFolderUploadEvent);
+
+
+        /**
          * S3 image bucket & deployment
          */
         const s3ImageBucket = new s3.Bucket(this, 'TlefAnalyticsS3ImageBucket', {
@@ -166,6 +226,7 @@ export class DatabaseStack extends Stack {
         });
 
         this.s3Bucket = s3DataBucket;
+        this.imageBucket = s3ImageBucket;
         this.prodDB = prodDB;
         this.stagingDB = stagingDB;
         this.tables = {};

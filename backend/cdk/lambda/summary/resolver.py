@@ -1,19 +1,33 @@
 from boto3 import client
 import os
-import time
 import operator
 
 # parameters for connecting to athena
 ATHENA = client('athena')
+S3 = client('s3')
+
+def retrieve_report(project_id):
+    try:
+        S3.head_object(Bucket=str(os.environ.get("IMAGE_BUCKET_NAME")), Key=f'report/{project_id}-Report.pdf')
+        return f'https://{os.environ.get("CLOUDFRONT_DOMAIN_NAME")}/report/{project_id}-Report.pdf'
+    except:
+        return ""
+
+def retrieve_poster(grant_id):
+    try:
+        S3.head_object(Bucket=str(os.environ.get("IMAGE_BUCKET_NAME")), Key=f'poster/{grant_id}-Poster.png')
+        return f'https://{os.environ.get("CLOUDFRONT_DOMAIN_NAME")}/poster/{grant_id}-Poster.png'
+    except:
+        return ""
     
-def execute_query(query_string):
+def execute_query(query_string, server):
     response = ATHENA.start_query_execution(
         QueryString = query_string,
         QueryExecutionContext = {
-            "Database": os.environ.get("DB")
+            "Database": str(os.environ.get("PROD_DB_NAME")) if server == "production" else str(os.environ.get("STAGING_DB_NAME"))
         },
         ResultConfiguration= {
-            'OutputLocation': os.environ.get("OUTPUT_LOCATION"),
+            'OutputLocation': str(os.environ.get("OUTPUT_LOCATION")),
         }
     )
     executionId = response["QueryExecutionId"]
@@ -24,7 +38,6 @@ def execute_query(query_string):
         status = ATHENA.get_query_execution(QueryExecutionId = executionId)['QueryExecution']['Status']['State']
         if status == 'FAILED' or status == 'CANCELLED':
             raise Exception('Athena query failed or was cancelled')
-        time.sleep(1)
     
     query_results = ATHENA.get_query_results(QueryExecutionId = executionId)
     rows = query_results["ResultSet"]["Rows"]
@@ -35,36 +48,37 @@ def lambda_handler(event, context):
     
     # get method name
     method = event["method"]
+    server = event["server"]
     
     # set query_string based on the method name
     if method == "getIndividualSummaryInfo":
-        return getIndividualSummaryInfo(event["grantId"])
+        return getIndividualSummaryInfo(event["grantId"], server)
     elif method == "getTeamMembersByGrantId":
-        return getTeamMembersByGrantId(event["grantId"])
+        return getTeamMembersByGrantId(event["grantId"], server)
     elif method == "getStudentReachByGrantId":
-        return getStudentReachByGrantId(event["grantId"])
+        return getStudentReachByGrantId(event["grantId"], server)
     elif method == "getSimilarProjects":
-        return getSimilarProjects(event["grantId"])
+        return getSimilarProjects(event["grantId"], server)
     else:
         return None
 
-def getIndividualSummaryInfo(grant_id):
+def getIndividualSummaryInfo(grant_id, server):
     query_string = f'''SELECT 
-        p.funding_year, p.project_type, p.project_faculty, p.pi_name, p.funding_amount, p.title, 
+        p.grant_id, p.project_id, p.funding_year, p.project_type, p.project_faculty, p.pi_name, p.funding_amount, p.title, 
         p.summary, p.project_year, p.project_status, 
         c.description,
         f.resource_development, f.infrastructure_development, f.student_engagement, f.innovative_assessments, 
         f.teaching_roles_and_training, f.curriculum, f.student_experience, f.work_integrated_learning, 
         f.indigenous_focused_curricula, f.diversity_and_inclusion, f.open_educational_resources 
-    FROM {os.environ.get("PROJECT_DETAILS")} p 
-    LEFT JOIN {os.environ.get("CO_CURRICULAR_REACH")} c ON p.grant_id = c.grant_id 
-    LEFT JOIN {os.environ.get("FOCUS_AREA")} f ON p.grant_id = f.grant_id 
+    FROM {os.environ.get('PROJECT_DETAILS')} p 
+    LEFT JOIN {os.environ.get('CO_CURRICULAR_REACH')} c ON p.grant_id = c.grant_id 
+    LEFT JOIN {os.environ.get('FOCUS_AREA')} f ON p.grant_id = f.grant_id 
     WHERE p.project_id = (
-        SELECT project_id FROM {os.environ.get("PROJECT_DETAILS")} 
+        SELECT project_id FROM {os.environ.get('PROJECT_DETAILS')} 
         WHERE grant_id = '{grant_id}')
     '''
     
-    rows = execute_query(query_string)
+    rows = execute_query(query_string, server)
     headers = rows[0]["Data"]
     
     res = []
@@ -76,32 +90,38 @@ def getIndividualSummaryInfo(grant_id):
             header = headers[i]["VarCharValue"]
             data_dict = data[i]
             
-            if len(data_dict) > 0:
+            # get reports
+            if len(data_dict) > 0 and header == "project_id":
+                project_id = data_dict["VarCharValue"]
+                jsonItem["report"] = retrieve_report(project_id)
+            elif len(data_dict) > 0 and header == "grant_id":
+                new_grant_id = data_dict["VarCharValue"]
+                jsonItem["poster"] = retrieve_poster(new_grant_id)
+            elif len(data_dict) > 0:
                 value = data_dict["VarCharValue"]
                 if value == "true":
                     focus_areas.append(header)
                 else:
                     jsonItem[header] = value
-            elif header == "description":
+            elif header == "description" or header == "project_outcome":
                 jsonItem[header] = ""
-                
         
         jsonItem["focus_areas"] = focus_areas
         res.append(jsonItem)
     
     return sorted(res, key=operator.itemgetter("funding_year"))
     
-def getTeamMembersByGrantId(grant_id):
+def getTeamMembersByGrantId(grant_id, server):
     query_string = f'''SELECT
         grant_id, member_name, member_title, member_faculty, member_unit
-    FROM {os.environ.get("FACULTY_ENGAGEMENT")}
+    FROM {os.environ.get('FACULTY_ENGAGEMENT')}
     WHERE project_id = (
-        SELECT DISTINCT(project_id) FROM {os.environ.get("FACULTY_ENGAGEMENT")}
+        SELECT DISTINCT(project_id) FROM {os.environ.get('FACULTY_ENGAGEMENT')}
         WHERE grant_id = '{grant_id}'
     )
     '''
     
-    rows = execute_query(query_string)
+    rows = execute_query(query_string, server)
     
     res = {}
     
@@ -137,18 +157,18 @@ def getTeamMembersByGrantId(grant_id):
     
     return sorted(formatted, key=operator.itemgetter("grant_id"))
 
-def getStudentReachByGrantId(grant_id):
+def getStudentReachByGrantId(grant_id, server):
     query_string = f'''SELECT
         grant_id, course_name, section, reach
-    FROM {os.environ.get("STUDENT_REACH")}
+    FROM {os.environ.get('STUDENT_REACH')}
     WHERE project_id = (
         SELECT DISTINCT(project_id)
-        FROM {os.environ.get("STUDENT_REACH")}
+        FROM {os.environ.get('STUDENT_REACH')}
         WHERE grant_id = '{grant_id}'
     )
     '''
     
-    rows = execute_query(query_string)
+    rows = execute_query(query_string, server)
     
     res = {}
     
@@ -184,26 +204,26 @@ def getStudentReachByGrantId(grant_id):
     
     return sorted(formatted, key=operator.itemgetter("grant_id"))
     
-def getSimilarProjects(grant_id):
+def getSimilarProjects(grant_id, server):
     first_query_string = f'''SELECT similar_projects
-    FROM {os.environ.get("SIMILAR_PROJECTS")}
+    FROM {os.environ.get('SIMILAR_PROJECTS')}
     WHERE project_key = (
-        SELECT project_id FROM {os.environ.get("PROJECT_DETAILS")}
+        SELECT project_id FROM {os.environ.get('PROJECT_DETAILS')}
         WHERE grant_id = '{grant_id}'
     )
     '''
     
-    project_ids = execute_query(first_query_string)[1]["Data"][0]["VarCharValue"].split(", ")
+    project_ids = execute_query(first_query_string, server)[1]["Data"][0]["VarCharValue"].split(", ")
     
     second_query_string = f'''SELECT 
         project_id, grant_id, title, project_type, pi_name, project_faculty, funding_year
-    FROM {os.environ.get("PROJECT_DETAILS")}
+    FROM {os.environ.get('PROJECT_DETAILS')}
     WHERE project_id IN (
         '{project_ids[0]}', '{project_ids[1]}', '{project_ids[2]}'
     )
     '''
     
-    similar_projects = execute_query(second_query_string)
+    similar_projects = execute_query(second_query_string, server)
     headers = similar_projects[0]["Data"]
     res = {}
     

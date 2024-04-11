@@ -1,15 +1,14 @@
 from boto3 import client
 import os
-import time
 
 # parameters for connecting to athena
 ATHENA = client('athena')
     
-def execute_query(query_string):
+def execute_query(query_string, server):
     response = ATHENA.start_query_execution(
         QueryString = query_string,
         QueryExecutionContext = {
-            "Database": os.environ.get("DB_NAME")
+            "Database": str(os.environ.get("PROD_DB_NAME")) if server == "production" else str(os.environ.get("STAGING_DB_NAME"))
         },
         ResultConfiguration= {
             'OutputLocation': os.environ.get("OUTPUT_LOCATION"),
@@ -23,7 +22,6 @@ def execute_query(query_string):
         status = ATHENA.get_query_execution(QueryExecutionId = executionId)['QueryExecution']['Status']['State']
         if status == 'FAILED' or status == 'CANCELLED':
             raise Exception('Athena query failed or was cancelled')
-        time.sleep(1)
     
     query_results = ATHENA.get_query_results(QueryExecutionId = executionId)
     rows = query_results["ResultSet"]["Rows"]
@@ -34,20 +32,21 @@ def lambda_handler(event, context):
     
     # get method name
     method = event["method"]
+    server = event["server"]
     
     # set query_string based on the method name
     
     if method == "loadFaculty":
-        return loadFaculty()
+        return loadFaculty(server)
     elif method == "loadFocusArea":
-        return loadFocusArea()
+        return loadFocusArea(server)
     else:
         return None
 
     
-def loadFaculty():
-    query_string = f"SELECT * FROM {os.environ.get('FACULTY_OPTION')}"
-    rows = execute_query(query_string)
+def loadFaculty(server):
+    query_string = f"SELECT * FROM {os.environ.get('FACULTY_OPTION')} ORDER BY faculty_name"
+    rows = execute_query(query_string, server)
     
     res = []
     for row in rows[1:]:
@@ -60,9 +59,9 @@ def loadFaculty():
     
     return res
     
-def loadFocusArea():
-    query_string = f"SELECT * FROM {os.environ.get('FOCUS_AREA_OPTION')}"
-    rows = execute_query(query_string)
+def loadFocusArea(server):
+    query_string = f"SELECT * FROM {os.environ.get('FOCUS_AREA_OPTION')} ORDER BY label"
+    rows = execute_query(query_string, server)
     
     res = []
     for row in rows[1:]:

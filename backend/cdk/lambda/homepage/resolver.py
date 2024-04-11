@@ -6,16 +6,27 @@ ATHENA = client('athena')
 S3 = client('s3')
 S3_resource = resource('s3')
 
+def lambda_handler(event, context):
+    
+    # get method name
+    method = event["method"]
+    
+    # set query_string based on the method name
+    
+    if method == "getFilteredProposals":
+        return getFilteredProposals(event["filter"], event["server"])
+    else:
+        return None
+
 def retrieve_images():
     
-    bucket = S3_resource.Bucket('tlef-test-reports')
+    bucket = S3_resource.Bucket(str(os.environ.get("IMAGE_BUCKET_NAME")))
 
     ans = []
     for obj in bucket.objects.all():
         ans.append(obj.key)
     
     return ans
-    
 
 def generate_filtered_query(filters):
     str = ""
@@ -30,7 +41,6 @@ def generate_filtered_query(filters):
                     LOWER(p.summary) LIKE '%{value.lower()}%' OR 
                 """
                 # LOWER(p.project_outcome) LIKE '%{value.lower()}%' OR 
-                # str += f"TITLE LIKE '%{value}%' OR pi_name LIKE '%{value}%' OR "
             str = str[:str.rindex("OR ")] + ")"
         
         elif key == 'funding_year' and len(values) > 0:
@@ -47,11 +57,12 @@ def generate_filtered_query(filters):
     
     return str
     
-def execute_query(query_string):
+def execute_query(query_string, server):
+    print(server)
     response = ATHENA.start_query_execution(
         QueryString = query_string,
         QueryExecutionContext = {
-            "Database": os.environ.get("DB_NAME")
+            "Database": str(os.environ.get("PROD_DB_NAME")) if server == "production" else str(os.environ.get("STAGING_DB_NAME"))
         },
         ResultConfiguration={
             'OutputLocation': os.environ.get("OUTPUT_LOCATION"),
@@ -70,24 +81,12 @@ def execute_query(query_string):
     rows = query_results["ResultSet"]["Rows"]
     
     return rows
-    
-def lambda_handler(event, context):
-    
-    # get method name
-    method = event["method"]
-    
-    # set query_string based on the method name
-    
-    if method == "getFilteredProposals":
-        return getFilteredProposals(event["filter"])
-    else:
-        return None
 
-def getFilteredProposals(filters):
+def getFilteredProposals(filters, server):
     query_string = f"SELECT p.* FROM {os.environ.get('PROJECT_DETAILS')} p LEFT JOIN {os.environ.get('FOCUS_AREA')} f ON p.grant_id = f.grant_id WHERE 1 = 1"
     query_string += generate_filtered_query(filters)
     print(query_string)
-    rows = execute_query(query_string)
+    rows = execute_query(query_string, server)
     
     headers = rows[0]["Data"]
     images = retrieve_images()
@@ -101,14 +100,14 @@ def getFilteredProposals(filters):
             if len(data[i]) > 0 and header == "project_id":
                 file_name = f'report/{data[i]["VarCharValue"]}-Report.pdf'
                 if file_name in images:
-                    jsonItem["report"] = f"https://d3llvgmk2v8kjf.cloudfront.net/{file_name}"
+                    jsonItem["report"] = f"https://{os.environ.get('CLOUDFRONT_DOMAIN_NAME')}/{file_name}"
                 else:
                     jsonItem["report"] = ""
             
             if len(data[i]) > 0 and header == "grant_id":
-                file_name = f'poster/{data[i]["VarCharValue"]}-Poster.pdf'
+                file_name = f'poster/{data[i]["VarCharValue"]}-Poster.png'
                 if file_name in images:
-                    jsonItem["poster"] = f"https://d3llvgmk2v8kjf.cloudfront.net/{file_name}"
+                    jsonItem["poster"] = f"https://{os.environ.get('CLOUDFRONT_DOMAIN_NAME')}/{file_name}"
                 else:
                     jsonItem["poster"] = ""
                     

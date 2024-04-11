@@ -1,6 +1,5 @@
 from boto3 import client
 import os
-import time
 
 # parameters for connecting to athena
 ATHENA = client('athena')
@@ -12,8 +11,7 @@ def generate_filtered_query(filters):
         if key == 'search_text' and len(values) > 0:
             str += " AND ("
             for value in values:
-                str += f"p.pi_name LIKE '%{value}%' OR "
-                # str += f"TITLE LIKE '%{value}%' OR pi_name LIKE '%{value}%' OR "
+                str += f"LOWER(p.pi_name) LIKE '%{value.lower()}%' OR "
             str = str[:str.rindex("OR ")] + ")"
         
         elif key == 'funding_year' and len(values) > 0:
@@ -30,11 +28,11 @@ def generate_filtered_query(filters):
     
     return str
     
-def execute_query(query_string):
+def execute_query(query_string, server):
     response = ATHENA.start_query_execution(
         QueryString = query_string,
         QueryExecutionContext = {
-            "Database": os.environ.get("DB")
+            "Database": str(os.environ.get("PROD_DB_NAME")) if server == "production" else str(os.environ.get("STAGING_DB_NAME"))
         },
         ResultConfiguration= {
             'OutputLocation': os.environ.get("OUTPUT_LOCATION"),
@@ -48,7 +46,6 @@ def execute_query(query_string):
         status = ATHENA.get_query_execution(QueryExecutionId = executionId)['QueryExecution']['Status']['State']
         if status == 'FAILED' or status == 'CANCELLED':
             raise Exception('Athena query failed or was cancelled')
-        time.sleep(1)
     
     query_results = ATHENA.get_query_results(QueryExecutionId = executionId)
     rows = query_results["ResultSet"]["Rows"]
@@ -59,24 +56,25 @@ def lambda_handler(event, context):
     
     # get method name
     method = event["method"]
+    server = event["server"]
     
     # set query_string based on the method name
     if method == "countFacultyMembersByStream":
-        return countFacultyMembersByStream(event["filter"])
+        return countFacultyMembersByStream(event["filter"], server)
     elif method == "getUniqueStudent":
-        return getUniqueStudent(event["fundingYear"])
+        return getUniqueStudent(event["fundingYear"], server)
     else:
         return None
 
-def countFacultyMembersByStream(filters):
+def countFacultyMembersByStream(filters, server):
     query_string = f"""SELECT 
         p.project_type, p.member_stream, COUNT (p.member_stream) 
-        FROM {os.environ.get("FACULTY_ENGAGEMENT")} p
-        LEFT JOIN {os.environ.get("FOCUS_AREA")} f ON p.grant_id = f.grant_id
+        FROM {os.environ.get('FACULTY_ENGAGEMENT')} p
+        LEFT JOIN {os.environ.get('FOCUS_AREA')} f ON p.grant_id = f.grant_id
         WHERE 1 = 1"""
     query_string += generate_filtered_query(filters) + " GROUP BY p.project_type, p.member_stream"
     print(query_string)
-    rows = execute_query(query_string)
+    rows = execute_query(query_string, server)
     
     jsonItem = {
         "Large": {
@@ -106,9 +104,9 @@ def countFacultyMembersByStream(filters):
     
     return jsonItem
 
-def getUniqueStudent(year):
-    query_string = f"SELECT * FROM {os.environ.get("UNIQUE_STUDENT")} WHERE funding_year = {year}"
-    rows = execute_query(query_string)
+def getUniqueStudent(year, server):
+    query_string = f"SELECT * FROM {os.environ.get('UNIQUE_STUDENT')} WHERE funding_year = {year}"
+    rows = execute_query(query_string, server)
     
     jsonItem = {
         "funding_year": int(year),
