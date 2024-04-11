@@ -26,10 +26,6 @@ function HomePage() {
 
 
     const client = generateClient();
-    const location = useLocation();
-    const { filters, appliedRange } = location.state;
-    console.log('pre-applied filters', filters)
-    console.log('pre-applied range', appliedRange)
 
     const { appliedFilters, setAppliedFilters } = useContext(FiltersContext);
 

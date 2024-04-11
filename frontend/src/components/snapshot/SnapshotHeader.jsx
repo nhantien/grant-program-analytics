@@ -13,13 +13,12 @@ import { FiltersContext } from "../../App";
 // components
 import { Filter, FilterList, FundingYearFilter } from "../util";
 // constants
-import { MARKS } from "../../constants";
+import { CURRENT_YEAR, MARKS } from "../../constants";
 
 
-function SnapshotHeader({ options, optionsLoading, range, setRange }) {
+function SnapshotHeader({ options, optionsLoading, range, setRange, server }) {
 
     const { appliedFilters, setAppliedFilters } = useContext(FiltersContext);
-    const history = useNavigate()
 
     const [showSlider, setShowSlider] = useState(appliedFilters["funding_year"].length > 1);
     const [rangeString, setRangeString] = useState(range[0] + "/" + (range[0] + 1) + " - " + range[1] + "/" + (range[1] + 1));
@@ -31,7 +30,7 @@ function SnapshotHeader({ options, optionsLoading, range, setRange }) {
 
     const handleClearAll = () => {
         const newFilters = {
-            "funding_year": ["2022"],
+            "funding_year": [CURRENT_YEAR.toString()],
             "project_type": [],
             "project_faculty": [],
             "focus_area": [],
@@ -79,14 +78,7 @@ function SnapshotHeader({ options, optionsLoading, range, setRange }) {
         <div className={styles.bg}>
              <div className={styles["back"]}>
                         <div>
-                        <Link
-                                    to="/"
-                                    state={{
-                                        filters: appliedFilters,
-                                        appliedRange: range
-                                    }}
-                                    style={{ textDecoration: "none", color: "white" }}
-                                >
+                        <Link to={`/${server === "staging" ? "?staging=true" : ""}`}>
                         <ArrowBackIcon  sx={{ color: "#002145", fontSize: "2.2rem" }}/>
                         </Link>
                         </div>
