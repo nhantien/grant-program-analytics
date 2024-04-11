@@ -2,7 +2,7 @@
 import React from 'react';
 import { useState, useEffect, useContext } from 'react';
 // react-router
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams, useLocation } from 'react-router-dom';
 // mui
 import ClearIcon from '@mui/icons-material/Clear';
 import { IconButton, CircularProgress, Collapse, Slider, Grid, Pagination } from '@mui/material';
@@ -26,6 +26,10 @@ function HomePage() {
 
 
     const client = generateClient();
+    const location = useLocation();
+    const { filters, appliedRange } = location.state;
+    console.log('pre-applied filters', filters)
+    console.log('pre-applied range', appliedRange)
 
     const { appliedFilters, setAppliedFilters } = useContext(FiltersContext);
 
