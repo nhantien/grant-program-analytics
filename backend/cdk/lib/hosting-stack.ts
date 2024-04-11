@@ -1,5 +1,6 @@
 import { SecretValue, Stack, StackProps } from "aws-cdk-lib";
 import * as amplify from "@aws-cdk/aws-amplify-alpha";
+import * as ssm from 'aws-cdk-lib/aws-ssm';
 import { ApiStack } from "./api-stack";
 import { Construct } from "constructs";
 import { BuildSpec } from "aws-cdk-lib/aws-codebuild";
@@ -11,9 +12,9 @@ export class HostingStack extends Stack {
         super(scope, id, props);
 
         const codeProvider = new amplify.GitHubSourceCodeProvider({
-            owner: 'UBC-CIC',
+            owner: ssm.StringParameter.valueForStringParameter(this, 'tlef-analytics-owner-name'),
             repository: 'tlef-analytics',
-            oauthToken: SecretValue.secretsManager('arn:aws:secretsmanager:ca-central-1:683894903214:secret:github-personal-access-token-gxutqj', {
+            oauthToken: SecretValue.secretsManager(`arn:aws:secretsmanager:${this.region}:${this.account}:secret:github-personal-access-token-gxutqj`, {
                 jsonField: 'my-github-token'
             })
         });

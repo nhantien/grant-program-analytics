@@ -2,6 +2,7 @@ import { Stack, StackProps, Duration } from "aws-cdk-lib";
 import * as appsync from 'aws-cdk-lib/aws-appsync';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as iam from 'aws-cdk-lib/aws-iam';
+import * as logs from 'aws-cdk-lib/aws-logs';
 import { CfnIdentityPool, CfnIdentityPoolRoleAttachment } from "aws-cdk-lib/aws-cognito";
 import { DatabaseStack } from "./database-stack";
 import { Construct } from "constructs";
@@ -38,6 +39,7 @@ export class ApiStack extends Stack {
         const resolver = new lambda.Function(this, `${folderName}-resolver`, {
             functionName: `tlef-analytics-${folderName}-resolver`,
             runtime: lambda.Runtime.PYTHON_3_11,
+            memorySize: 1536,
             code: lambda.Code.fromAsset(`./lambda/${folderName}`),
             handler: 'resolver.lambda_handler',
             architecture: lambda.Architecture.X86_64,
@@ -174,7 +176,8 @@ export class ApiStack extends Stack {
             'STUDENT_REACH': databaseStack.getTableName('student_reach'),
             'SIMILAR_PROJECTS': databaseStack.getTableName('similar_projects'),
             'UNIQUE_STUDENT': databaseStack.getTableName('unique_student'),
-            'CLOUDFRONT_DOMAIN_NAME': databaseStack.getDomainName()
+            'CLOUDFRONT_DOMAIN_NAME': databaseStack.getDomainName(),
+            'IMAGE_BUCKET_NAME': databaseStack.getImageBucketName()
         };
 
         this.createResolver('homepage', ['getFilteredProposals'], env);
@@ -184,6 +187,50 @@ export class ApiStack extends Stack {
         this.createResolver('summary', ['getIndividualSummaryInfo', 'getTeamMembersByGrantId', 'getStudentReachByGrantId', 'getSimilarProjects'], env);
         this.createResolver('faculty-engagement', ['countFacultyMembersByStream', 'getUniqueStudent'], env);
         this.createResolver('student-reach', ['countTotalReachByFaculty', 'getStudentReachInfo'], env);
+
+        const fileTransferFunction = new lambda.Function(this, 'FileTransferFunction', {
+            functionName: 'lambda-file-transfer',
+            runtime: lambda.Runtime.PYTHON_3_11,
+            memorySize: 512,
+            code: lambda.Code.fromAsset('./lambda/file-transfer'),
+            handler: 'lamdda_function.lambda_handler',
+            architecture: lambda.Architecture.X86_64,
+            timeout: Duration.minutes(10),
+            environment: {
+                'S3_BUCKET_NAME': databaseStack.getS3BucketName()
+            }
+        });
+
+        // const transferLogGroup = new logs.LogGroup(this, 'converterLogGroup', {
+        //     logGroupName: `/aws/lambda/${fileTransferFunction.functionName}`,
+        // });
+
+        const s3AccessPolicy = new iam.PolicyStatement({
+            actions: [
+                "s3:*",
+                "s3-objcet-lambda:*"
+            ],
+            resources: [`${databaseStack.getS3BucketArn()}/*`]
+        });
+
+        // const lambdaLogPolicy = new iam.PolicyStatement({
+        //     actions: [
+        //         "logs:CreateLogStream",
+        //         "logs:PutLogEvents"
+        //     ],
+        //     resources: [`${transferLogGroup.logGroupArn}:*`]
+        // });
+
+        fileTransferFunction.addToRolePolicy(s3AccessPolicy);
+        // fileTransferFunction.addToRolePolicy(lambdaLogPolicy);
+
+        const lambdaDataSource = new appsync.LambdaDataSource(this, 'file-transfer-lambda-data-source', {
+            api: this.api,
+            lambdaFunction: fileTransferFunction,
+            name: 'file-transfer-lambda-data-source',
+        });
+
+        this.assignResolver('copyFilesToProduction', lambdaDataSource);
 
     }
 }

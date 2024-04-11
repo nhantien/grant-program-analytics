@@ -97,24 +97,30 @@ type Proposal {
 }
 
 type Query {
-  countDeclinedProjects(filter: Filter, method: String): CountByProjectType
-  countFacultyMembersByStream(filter: Filter, method: String): FacultyEngagementCount
-  countProjectsAndGrants(filter: Filter, method: String): NumProjectsAndGrants
-  countTotalReachByFaculty(filter: Filter, method: String): StudentReachCount
-  getFilteredProposals(filter: Filter, method: String): [Proposal]
-  getIndividualSummaryInfo(grantId: String, method: String): [IndividualSummary]
-  getSimilarProjects(grantId: String, method: String): [Proposal]
-  getStudentReachByGrantId(grantId: String, method: String): [StudentReachByGrant]
-  getStudentReachInfo(filter: Filter, method: String): StudentReachInfo
-  getTeamMembersByGrantId(grantId: String, method: String): [TeamMembers]
-  getUniqueStudent(fundingYear: String, method: String): UniqueStudent
-  loadFaculty(method: String): [Faculty]
-  loadFocusArea(method: String): [FocusArea]
+  copyFilesToProduction: Status
+  countDeclinedProjects(filter: Filter, method: String, server: String): CountByProjectType
+  countFacultyMembersByStream(filter: Filter, method: String, server: String): FacultyEngagementCount
+  countProjectsAndGrants(filter: Filter, method: String, server: String): NumProjectsAndGrants
+  countTotalReachByFaculty(filter: Filter, method: String, server: String): StudentReachCount
+  getFilteredProposals(filter: Filter, method: String, server: String): [Proposal]
+  getIndividualSummaryInfo(grantId: String, method: String, server: String): [IndividualSummary]
+  getSimilarProjects(grantId: String, method: String, server: String): [Proposal]
+  getStudentReachByGrantId(grantId: String, method: String, server: String): [StudentReachByGrant]
+  getStudentReachInfo(filter: Filter, method: String, server: String): StudentReachInfo
+  getTeamMembersByGrantId(grantId: String, method: String, server: String): [TeamMembers]
+  getUniqueStudent(fundingYear: String, method: String, server: String): UniqueStudent
+  loadFaculty(method: String, server: String): [Faculty]
+  loadFocusArea(method: String, server: String): [FocusArea]
 }
 
 type Reach {
   project_faculty: String
   reach: Int
+}
+
+type Status {
+  message: String
+  status: String
 }
 
 type StreamCount {
