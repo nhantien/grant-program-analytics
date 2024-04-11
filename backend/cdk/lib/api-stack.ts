@@ -2,13 +2,13 @@ import { Stack, StackProps, Duration } from "aws-cdk-lib";
 import * as appsync from 'aws-cdk-lib/aws-appsync';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as iam from 'aws-cdk-lib/aws-iam';
-import { IdentityPool, IdentityPoolRoleAttachment } from "@aws-cdk/aws-cognito-identitypool-alpha";
+import { CfnIdentityPool, CfnIdentityPoolRoleAttachment } from "aws-cdk-lib/aws-cognito";
 import { DatabaseStack } from "./database-stack";
 import { Construct } from "constructs";
 
 export class ApiStack extends Stack {
 
-    private readonly idPool: IdentityPool;
+    private readonly idPool: CfnIdentityPool;
     private readonly api: appsync.GraphqlApi;
     private readonly resolverRole: iam.Role;
 
@@ -17,7 +17,7 @@ export class ApiStack extends Stack {
     }
 
     getIdentityPoolId() {
-        return this.idPool.identityPoolId;
+        return this.idPool.ref;
     }
 
     private assignResolver(query: string, ds: appsync.LambdaDataSource) {
@@ -33,7 +33,7 @@ export class ApiStack extends Stack {
         return;
     }
 
-    private createResolver(folderName: string, queries: string[], env: {[key: string] : string} ) {
+    private createResolver(folderName: string, queries: string[], env: { [key: string]: string }) {
 
         const resolver = new lambda.Function(this, `${folderName}-resolver`, {
             functionName: `tlef-analytics-${folderName}-resolver`,
@@ -111,21 +111,23 @@ export class ApiStack extends Stack {
             })]
         });
 
-        const identityPool = new IdentityPool(this, 'TlefIdPool', {
+        const identityPool = new CfnIdentityPool(this, 'TlefIdPool', {
             identityPoolName: 'tlef-identity-pool',
             allowUnauthenticatedIdentities: true
         });
 
         const guestRole = new iam.Role(this, 'TlefGuestAccessRole', {
-            assumedBy: new iam.CompositePrincipal(
-                new iam.FederatedPrincipal('cognito-identity.amazonaws.com').withConditions({
+            assumedBy: new iam.FederatedPrincipal(
+                'cognito-identity.amazonaws.com',
+                {
                     "StringEquals": {
-                        "cognito-identity.amazonaws.com:aud": identityPool.identityPoolId
+                        "cognito-identity.amazonaws.com:aud": identityPool.ref
                     },
                     "ForAnyValue:StringLike": {
                         "cognito-identity.amazonaws.com:amr": "unauthenticated"
                     }
-                })
+                },
+                "sts:AssumeRoleWithWebIdentity"
             ),
             roleName: 'tlef-analytics-guest-role',
             inlinePolicies: {
@@ -133,10 +135,12 @@ export class ApiStack extends Stack {
                 "UnauthenticatedPolicy": unauthenticatedPolicy
             }
         });
-        
-        const idPoolRoleAttachment = new IdentityPoolRoleAttachment(this, 'TlefIdPoolRoleAttachment', {
-            identityPool: identityPool,
-            unauthenticatedRole: guestRole
+
+        const idPoolRoleAttachment = new CfnIdentityPoolRoleAttachment(this, 'TlefIdPoolRoleAttachment', {
+            identityPoolId: identityPool.ref,
+            roles: {
+                unauthenticated: guestRole.roleArn
+            }
         });
 
         this.idPool = identityPool;
@@ -157,7 +161,8 @@ export class ApiStack extends Stack {
         this.resolverRole = resolverRole;
 
         const env = {
-            'DB_NAME': databaseStack.getDbName(),
+            'PROD_DB_NAME': databaseStack.getProdDbName(),
+            'STAGING_DB_NAME': databaseStack.getStagingDbName(),
             'OUTPUT_LOCATION': `s3://${databaseStack.getS3BucketName()}/result/`,
             'PROJECT_DETAILS': databaseStack.getTableName('project_details'),
             'FACULTY_OPTION': databaseStack.getTableName('faculty_option'),

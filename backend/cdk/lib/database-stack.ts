@@ -8,11 +8,14 @@ import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import { CfnCrawler } from "aws-cdk-lib/aws-glue";
 import { Construct } from "constructs";
 
+import * as schemas from '../glue/schema';
+
 
 export class DatabaseStack extends Stack {
 
     private readonly s3Bucket: s3.Bucket;
-    private readonly db: glue.Database;
+    private readonly prodDB: glue.Database;
+    private readonly stagingDB: glue.Database;
     private readonly tables: { [id: string] : glue.S3Table; };
     private readonly dist: cf.Distribution;
 
@@ -20,8 +23,12 @@ export class DatabaseStack extends Stack {
         return this.s3Bucket.bucketName;
     }
 
-    public getDbName() {
-        return this.db.databaseName;
+    public getProdDbName() {
+        return this.prodDB.databaseName;
+    }
+
+    public getStagingDbName() {
+        return this.stagingDB.databaseName;
     }
 
     public getTableName(key: string) {
@@ -73,7 +80,7 @@ export class DatabaseStack extends Stack {
         const crawler = new CfnCrawler(this, `${id}Crawler`, {
             role: crawlerRole.roleArn,
             name: `${name}_crawler`,
-            databaseName: this.db.databaseName,
+            databaseName: this.prodDB.databaseName,
             targets:{
                 s3Targets: [{
                     path: `s3://${this.getS3BucketName()}/${table.s3Prefix}/`
@@ -110,16 +117,10 @@ export class DatabaseStack extends Stack {
             destinationKeyPrefix: 'production/'
         });
 
-        const StagingCSVFolderDeployment = new s3Deploy.BucketDeployment(this, 'StagingCSVFolderDeployment', {
+        const StagingFolderDeployment = new s3Deploy.BucketDeployment(this, 'StagingParquetFolderDeployment', {
             sources: [s3Deploy.Source.asset("./bucket_config")],
             destinationBucket: s3DataBucket,
-            destinationKeyPrefix: 'staging/csv/'
-        });
-
-        const StagingParquetFolderDeployment = new s3Deploy.BucketDeployment(this, 'StagingParquetFolderDeployment', {
-            sources: [s3Deploy.Source.asset("./bucket_config")],
-            destinationBucket: s3DataBucket,
-            destinationKeyPrefix: 'staging/parquet/'
+            destinationKeyPrefix: 'staging/'
         });
 
         const RawFolderDeployment = new s3Deploy.BucketDeployment(this, 'RawFolderDeployment', {
@@ -156,446 +157,212 @@ export class DatabaseStack extends Stack {
         /**
          * Glue Database definition
          */
-        const db = new glue.Database(this, 'TlefAnalyticsDatabase', {
-            databaseName: 'tlef_analytics'
+        const prodDB = new glue.Database(this, 'TlefAnalyticsDatabase', {
+            databaseName: 'tlef_analytics_production'
+        });
+
+        const stagingDB = new glue.Database(this, 'TlefAnalyticsStagingDatabase', {
+            databaseName: 'tlef_analytics_staging'
         });
 
         this.s3Bucket = s3DataBucket;
-        this.db = db;
+        this.prodDB = prodDB;
+        this.stagingDB = stagingDB;
         this.tables = {};
         this.dist = distribution;
 
         /**
          * Table definitions
          */
-        const projectDetailsTable = new glue.S3Table(this, 'projectDetailsTable', {
-            database: db,
+        const projectDetailsProdTable = new glue.S3Table(this, 'projectDetailsProdTable', {
+            database: prodDB,
             tableName: "project_details",
-            columns: [
-                {
-                    name: 'funding_year',
-                    type: glue.Schema.BIG_INT
-                },
-                {
-                    name: 'project_type',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'old_grant_id',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'project_id',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'project_faculty',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'pi_name',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'pi_unit',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'funding_amount',
-                    type: glue.Schema.DOUBLE
-                },
-                {
-                    name: 'title',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'summary',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'co_applicants',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'grant_id',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'project_year',
-                    type: glue.Schema.BIG_INT
-                },
-                {
-                    name: 'project_status',
-                    type: glue.Schema.STRING
-                }
-            ],
+            columns: schemas.PROJECT_DETAILS_SCHEMA,
             dataFormat: glue.DataFormat.PARQUET,
             bucket: s3DataBucket,
             s3Prefix: 'production/project_details'
         });
-        this.tables['project_details'] = projectDetailsTable;
 
-        const facultyEngagementTable = new glue.S3Table(this, 'facultyEngagementTable', {
-            database: db,
+        const projectDetailsStagingTable = new glue.S3Table(this, 'projectDetailsStagingTable', {
+            database: stagingDB,
+            tableName: "project_details",
+            columns: schemas.PROJECT_DETAILS_SCHEMA,
+            dataFormat: glue.DataFormat.PARQUET,
+            bucket: s3DataBucket,
+            s3Prefix: 'staging/project_details'
+        });
+
+        const facultyEngagementProdTable = new glue.S3Table(this, 'facultyEngagementProdTable', {
+            database: prodDB,
             tableName: 'faculty_engagement',
-            columns: [
-                {
-                    name: 'funding_year',
-                    type: glue.Schema.BIG_INT
-                },
-                {
-                    name: 'project_type',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'project_id',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'grant_id',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'project_faculty',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'member_name',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'member_title',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'member_stream',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'member_campus',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'member_faculty',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'member_unit',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'member_other',
-                    type: glue.Schema.STRING
-                }
-            ],
+            columns: schemas.FACULTY_ENGAGEMENT_SCHEMA,
             dataFormat: glue.DataFormat.PARQUET,
             bucket: s3DataBucket,
             s3Prefix: 'production/faculty_engagement'
         });
-        this.tables['faculty_engagement'] = facultyEngagementTable;
 
-        const studentReachTable = new glue.S3Table(this, 'studentReachTable', {
-            database: db,
+        const facultyEngagementStagingTable = new glue.S3Table(this, 'facultyEngagementStagingTable', {
+            database: stagingDB,
+            tableName: 'faculty_engagement',
+            columns: schemas.FACULTY_ENGAGEMENT_SCHEMA,
+            dataFormat: glue.DataFormat.PARQUET,
+            bucket: s3DataBucket,
+            s3Prefix: 'staging/faculty_engagement'
+        });
+
+        const studentReachProdTable = new glue.S3Table(this, 'studentReachProdTable', {
+            database: prodDB,
             tableName: 'student_reach',
-            columns: [
-                {
-                    name: 'funding_year',
-                    type: glue.Schema.BIG_INT
-                },
-                {
-                    name: 'project_type',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'project_id',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'grant_id',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'project_faculty',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'course_type',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'session',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'term',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'course_faculty',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'course_name',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'section',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'credits',
-                    type: glue.Schema.DOUBLE
-                },
-                {
-                    name: 'reach',
-                    type: glue.Schema.BIG_INT
-                },
-                {
-                    name: 'fte',
-                    type: glue.Schema.DOUBLE
-                }
-            ],
+            columns: schemas.STUDENT_REACH_SCHEMA,
             dataFormat: glue.DataFormat.PARQUET,
             bucket: s3DataBucket,
             s3Prefix: 'production/student_reach'
         });
-        this.tables['student_reach'] = studentReachTable;
+
+        const studentReachStagingTable = new glue.S3Table(this, 'studentReachStagingTable', {
+            database: stagingDB,
+            tableName: 'student_reach',
+            columns: schemas.STUDENT_REACH_SCHEMA,
+            dataFormat: glue.DataFormat.PARQUET,
+            bucket: s3DataBucket,
+            s3Prefix: 'staging/student_reach'
+        });
         
-        const focusAreaTable = new glue.S3Table(this, 'focusAreaTable', {
-            database: db,
+        const focusAreaProdTable = new glue.S3Table(this, 'focusAreaProdTable', {
+            database: prodDB,
             tableName: 'focus_area',
-            columns: [
-                {
-                    name: 'funding_year',
-                    type: glue.Schema.BIG_INT
-                },
-                {
-                    name: 'project_type',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'grant_id',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'title',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'pi_name',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'project_faculty',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'funding_amount',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'funding_status',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'project_id',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'resource_development',
-                    type: glue.Schema.BOOLEAN
-                },
-                {
-                    name: 'infrastructure_development',
-                    type: glue.Schema.BOOLEAN
-                },
-                {
-                    name: 'student_engagement',
-                    type: glue.Schema.BOOLEAN
-                },
-                {
-                    name: 'innovative_assessments',
-                    type: glue.Schema.BOOLEAN
-                },
-                {
-                    name: 'teaching_roles_and_training',
-                    type: glue.Schema.BOOLEAN
-                },
-                {
-                    name: 'curriculum',
-                    type: glue.Schema.BOOLEAN
-                },
-                {
-                    name: 'student_experience',
-                    type: glue.Schema.BOOLEAN
-                },
-                {
-                    name: 'work_integrated_learning',
-                    type: glue.Schema.BOOLEAN
-                },
-                {
-                    name: 'indigenous_focused_curricula',
-                    type: glue.Schema.BOOLEAN
-                },
-                {
-                    name: 'diversity_and_inclusion',
-                    type: glue.Schema.BOOLEAN
-                },
-                {
-                    name: 'open_educational_resources',
-                    type: glue.Schema.BOOLEAN
-                }
-            ],
+            columns: schemas.FOCUS_AREA_SCHEMA,
             dataFormat: glue.DataFormat.PARQUET,
             bucket: s3DataBucket,
             s3Prefix: 'production/focus_area'
         });
-        this.tables['focus_area'] = focusAreaTable;
 
-        const coCurricularReachTable = new glue.S3Table(this, 'coCurricularReachTable', {
-            database: db,
+        const focusAreaStagingTable = new glue.S3Table(this, 'focusAreaStagingTable', {
+            database: stagingDB,
+            tableName: 'focus_area',
+            columns: schemas.FOCUS_AREA_SCHEMA,
+            dataFormat: glue.DataFormat.PARQUET,
+            bucket: s3DataBucket,
+            s3Prefix: 'staging/focus_area'
+        });
+
+        const coCurricularReachProdTable = new glue.S3Table(this, 'coCurricularReachProdTable', {
+            database: prodDB,
             tableName: 'co_curricular_reach',
-            columns: [
-                {
-                    name: 'funding_year',
-                    type: glue.Schema.BIG_INT
-                },
-                {
-                    name: 'grant_id',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'estimated_reach',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'description',
-                    type: glue.Schema.STRING
-                }
-            ],
+            columns: schemas.CO_CURRICULAR_REACH_SCHEMA,
             dataFormat: glue.DataFormat.PARQUET,
             bucket: s3DataBucket,
             s3Prefix: 'production/co_curricular_reach'
         });
-        this.tables['co_curricular_reach'] = coCurricularReachTable;
 
-        const uniqueStudentTable = new glue.S3Table(this, 'UniqueStudentTable', {
-            database: db,
+        const coCurricularReachStagingTable = new glue.S3Table(this, 'coCurricularReachStagingTable', {
+            database: stagingDB,
+            tableName: 'co_curricular_reach',
+            columns: schemas.CO_CURRICULAR_REACH_SCHEMA,
+            dataFormat: glue.DataFormat.PARQUET,
+            bucket: s3DataBucket,
+            s3Prefix: 'staging/co_curricular_reach'
+        });
+
+        const uniqueStudentProdTable = new glue.S3Table(this, 'UniqueStudentProdTable', {
+            database: prodDB,
             tableName: 'unique_student',
-            columns: [
-                {
-                    name: 'funding_year',
-                    type: glue.Schema.BIG_INT
-                },
-                {
-                    name: 'unique_student',
-                    type: glue.Schema.DOUBLE
-                },
-                {
-                    name: 'funding_amount',
-                    type: glue.Schema.DOUBLE
-                }
-            ],
+            columns: schemas.UNIQUE_STUDENT_SCHEMA,
             dataFormat: glue.DataFormat.PARQUET,
             bucket: s3DataBucket,
             s3Prefix: 'production/unique_student'
         });
-        this.tables['unique_student'] = uniqueStudentTable;
 
-        const facultyOptionTable = new glue.S3Table(this, 'FacultyOptionTable', {
-            database: db,
+        const uniqueStudentStagingTable = new glue.S3Table(this, 'UniqueStudentStagingTable', {
+            database: stagingDB,
+            tableName: 'unique_student',
+            columns: schemas.UNIQUE_STUDENT_SCHEMA,
+            dataFormat: glue.DataFormat.PARQUET,
+            bucket: s3DataBucket,
+            s3Prefix: 'staging/unique_student'
+        });
+
+        const facultyOptionProdTable = new glue.S3Table(this, 'FacultyOptionProdTable', {
+            database: prodDB,
             tableName: 'faculty_options',
-            columns: [
-                {
-                    name: 'faculty_name',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'faculty_code',
-                    type: glue.Schema.STRING
-                }
-            ],
+            columns: schemas.FACULTY_OPTIONS_SCHEMA,
             dataFormat: glue.DataFormat.PARQUET,
             bucket: s3DataBucket,
             s3Prefix: 'production/options/faculties'
         });
-        this.tables['faculty_option'] = facultyOptionTable;
+
+        const facultyOptionStagingTable = new glue.S3Table(this, 'FacultyOptionStagingTable', {
+            database: stagingDB,
+            tableName: 'faculty_options',
+            columns: schemas.FACULTY_OPTIONS_SCHEMA,
+            dataFormat: glue.DataFormat.PARQUET,
+            bucket: s3DataBucket,
+            s3Prefix: 'staging/options/faculties'
+        });
         
-        const focusAreaOptionTable = new glue.S3Table(this, 'FocusAreaTable', {
-            database: db,
+        const focusAreaOptionProdTable = new glue.S3Table(this, 'FocusAreaOptionsProdTable', {
+            database: prodDB,
             tableName: 'focus_area_options',
-            columns: [
-                {
-                    name: 'label',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'value',
-                    type: glue.Schema.STRING
-                }
-            ],
+            columns: schemas.FOCUS_AREA_OPTIONS_SCHEMA,
             dataFormat: glue.DataFormat.PARQUET,
             bucket: s3DataBucket,
             s3Prefix: 'production/options/focus_area'
         });
-        this.tables['focus_area_option'] = focusAreaOptionTable;
 
-        const unsuccessfulProjectsTable = new glue.S3Table(this, 'UnsuccessfulProjectsTable', {
-            database: db,
+        const focusAreaOptionStagingTable = new glue.S3Table(this, 'FocusAreaOptionsStagingTable', {
+            database: stagingDB,
+            tableName: 'focus_area_options',
+            columns: schemas.FOCUS_AREA_OPTIONS_SCHEMA,
+            dataFormat: glue.DataFormat.PARQUET,
+            bucket: s3DataBucket,
+            s3Prefix: 'staging/options/focus_area'
+        });
+
+        const unsuccessfulProjectsProdTable = new glue.S3Table(this, 'UnsuccessfulProjectsProdTable', {
+            database: prodDB,
             tableName: 'unsuccessful_projects',
-            columns: [
-                {
-                    name: 'funding_year',
-                    type: glue.Schema.BIG_INT
-                },
-                {
-                    name: 'project_type',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'grant_id',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'title',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'project_faculty',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'pi_name',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'project_department',
-                    type: glue.Schema.STRING
-                }
-            ],
+            columns: schemas.UNSUCCESSFUL_PROJECTS_SCHEMA,
             dataFormat: glue.DataFormat.PARQUET,
             bucket: s3DataBucket,
             s3Prefix: 'production/unsuccessful_projects'
         });
-        this.tables['unsuccessful_projects'] = unsuccessfulProjectsTable;
 
-        const similarProjectsTable = new glue.S3Table(this, 'SimilarProjectsTable', {
-            database: db,
+        const unsuccessfulProjectsStagingTable = new glue.S3Table(this, 'UnsuccessfulProjectsStagingTable', {
+            database: stagingDB,
+            tableName: 'unsuccessful_projects',
+            columns: schemas.UNSUCCESSFUL_PROJECTS_SCHEMA,
+            dataFormat: glue.DataFormat.PARQUET,
+            bucket: s3DataBucket,
+            s3Prefix: 'staging/unsuccessful_projects'
+        });
+
+        const similarProjectsProdTable = new glue.S3Table(this, 'SimilarProjectsProdTable', {
+            database: prodDB,
             tableName: 'similar_projects',
-            columns: [
-                {
-                    name: 'project_key',
-                    type: glue.Schema.STRING
-                },
-                {
-                    name: 'similar_projects',
-                    type: glue.Schema.STRING
-                }
-            ],
+            columns: schemas.SIMILAR_PROJECTS_SCHEMA,
             dataFormat: glue.DataFormat.PARQUET,
             bucket: s3DataBucket,
             s3Prefix: 'production/similar_projects'
         });
-        this.tables['similar_projects'] = similarProjectsTable;
+
+        const similarProjectsStagingTable = new glue.S3Table(this, 'SimilarProjectsStagingTable', {
+            database: stagingDB,
+            tableName: 'similar_projects',
+            columns: schemas.SIMILAR_PROJECTS_SCHEMA,
+            dataFormat: glue.DataFormat.PARQUET,
+            bucket: s3DataBucket,
+            s3Prefix: 'staging/similar_projects'
+        });
+
+        this.tables['project_details'] = projectDetailsProdTable;
+        this.tables['faculty_engagement'] = facultyEngagementProdTable;
+        this.tables['student_reach'] = studentReachProdTable;
+        this.tables['focus_area'] = focusAreaProdTable;
+        this.tables['co_curricular_reach'] = coCurricularReachProdTable;
+        this.tables['unique_student'] = uniqueStudentProdTable;
+        this.tables['faculty_option'] = facultyOptionProdTable;
+        this.tables['focus_area_option'] = focusAreaOptionProdTable;
+        this.tables['unsuccessful_projects'] = unsuccessfulProjectsProdTable;
+        this.tables['similar_projects'] = similarProjectsProdTable;
     }
 }
