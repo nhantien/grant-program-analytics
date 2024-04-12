@@ -155,7 +155,7 @@ export class DatabaseStack extends Stack {
             runtime: lambda.Runtime.PYTHON_3_11,
             memorySize: 512,
             code: lambda.Code.fromAsset('./lambda/xlsx-to-parquet'),
-            handler: 'lamdda_function.lambda_handler',
+            handler: 'lambda_function.lambda_handler',
             architecture: lambda.Architecture.X86_64,
             timeout: Duration.minutes(1),
             environment: {
