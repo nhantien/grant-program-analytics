@@ -14,7 +14,7 @@ export class HostingStack extends Stack {
         const codeProvider = new amplify.GitHubSourceCodeProvider({
             owner: ssm.StringParameter.valueForStringParameter(this, 'tlef-analytics-owner-name'),
             repository: 'tlef-analytics',
-            oauthToken: SecretValue.secretsManager(`arn:aws:secretsmanager:${this.region}:${this.account}:secret:github-personal-access-token-gxutqj`, {
+            oauthToken: SecretValue.secretsManager('github-personal-access-token', {
                 jsonField: 'my-github-token'
             })
         });
