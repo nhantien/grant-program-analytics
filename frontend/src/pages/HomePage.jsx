@@ -323,8 +323,8 @@ function HomePage() {
                     <section id="top"></section>
 
                     <div>
-                        <div>
-                            <button className={styles['generate-summary-btn']} onClick={handleFileTransfer}>Confirm new data changes</button>
+                        <div className={styles["generate-summary"]}>
+                            <button className={styles['generate-summary-btn']} onClick={handleFileTransfer}>Confirm New Data Changes</button>
                         </div>
                         <div className={styles["generate-summary"]}>
                             <p className={styles["generate-summary-txt"]}>View a detailed summary of the currently displayed projects</p>
