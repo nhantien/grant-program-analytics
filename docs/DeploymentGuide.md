@@ -2,10 +2,12 @@
 
 ## Table of Contents
 - [Requirements](#requirements)
+- [Pre-Deployment](#pre-deployment)
 - [Deployment](#deployment)
     - [Step 1: Clone The Repository](#step-1-clone-the-repository)
     - [Step 2: Upload Secrets](#step-2-upload-secrets)
     - [Step 3: CDK Deployment](#step-3-cdk-deployment)
+    - [Step 4: Upload Data](#step-4-upload-data)
 
 ## Requirements
 Before you deploy, you must have the following installed on your device.
@@ -16,6 +18,14 @@ Before you deploy, you must have the following installed on your device.
 - [AWS CLI](https://aws.amazon.com/cli/)
 - [AWS CDK](https://docs.aws.amazon.com/cdk/v2/guide/cli.html)
 - [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+
+## Pre-Deployment
+### Create GitHub Personal Access Token
+To deploy this solution, you will need to generate a GitHub personal access token. Please visit [here](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic) for detailed instruction to create a personal access token.
+
+*Note: when selecting the scopes to grant the token (step 8 of the instruction), make sure you select `repo` scope.*
+
+**Once you create a token, please note down its value as you will use it later in the deployment process.**
 
 ## Deployment
 ### Step 1: Clone The Repository
@@ -32,11 +42,21 @@ cd tlef-analytics
 ```
 
 ### Step 2: Upload Secrets
-You would have to supply your GitHub OAuth token when dpeloying the solution. Run the following command and ensure you replace `<YOUR-GITHUB-TOKEN>` and `<YOUR-PROFILE-NAME>` with your actual GitHub token and the appropriate AWS profile name.
+You would have to supply your GitHub personal access token you created eariler when dpeloying the solution. Run the following command and ensure you replace `<YOUR-GITHUB-TOKEN>` and `<YOUR-PROFILE-NAME>` with your actual GitHub token and the appropriate AWS profile name.
 ```
 aws secretsmanager create-secret \
     --name github-personal-access-token \
     --secret-string "{\"my-github-token\":\"<YOUR-GITHUB-TOKEN>\"}"\
+    --profile <YOUR-PROFILE-NAME>
+```
+
+Moreover, you will need to upload your github username to Amazon SSM Parameter Store. You can do so by running the following command. Make sure you replace `<YOUR-GITHUB-USERNAME>` and `<YOUR-PROFILE-NAME>` with your actual username and the appropriate AWS profile name.
+
+```
+aws ssm put-parameter \
+    --name "tlef-analytics-owner-name" \
+    --value "<YOUR-GITHUB-USERNAME>" \
+    --type String \
     --profile <YOUR-PROFILE-NAME>
 ```
 
@@ -60,7 +80,8 @@ You may run the following command to deploy the stacks all at once. Please repla
 ```
 cdk deploy --all --profile <profile-name>
 ```
-
+### Step 4: Upload Data
+After the application is deployed, you will need to upload data to Amazon S3. See [our user guide]() for details.
 
 **Extra: Taking down the deployed stacks**
 To take down the deployed stack for a fresh redeployment in the future, navigate to AWS Cloudformation, click on the stack(s) and hit Delete. Please wait for the stacks in each step to be properly deleted before deleting the stack downstream. The deletion order is as followed:
