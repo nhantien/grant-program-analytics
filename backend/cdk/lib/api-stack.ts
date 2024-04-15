@@ -193,7 +193,7 @@ export class ApiStack extends Stack {
             runtime: lambda.Runtime.PYTHON_3_11,
             memorySize: 512,
             code: lambda.Code.fromAsset('./lambda/file-transfer'),
-            handler: 'lamdda_function.lambda_handler',
+            handler: 'lambda_function.lambda_handler',
             architecture: lambda.Architecture.X86_64,
             timeout: Duration.minutes(10),
             environment: {
@@ -208,22 +208,13 @@ export class ApiStack extends Stack {
         const s3AccessPolicy = new iam.PolicyStatement({
             actions: [
                 "s3:*",
-                "s3-objcet-lambda:*"
+                "s3-object-lambda:*"
             ],
             resources: [`${databaseStack.getS3BucketArn()}/*`]
         });
 
-        // const lambdaLogPolicy = new iam.PolicyStatement({
-        //     actions: [
-        //         "logs:CreateLogStream",
-        //         "logs:PutLogEvents"
-        //     ],
-        //     resources: [`${transferLogGroup.logGroupArn}:*`]
-        // });
-
         fileTransferFunction.addToRolePolicy(s3AccessPolicy);
-        // fileTransferFunction.addToRolePolicy(lambdaLogPolicy);
-
+        
         const lambdaDataSource = new appsync.LambdaDataSource(this, 'file-transfer-lambda-data-source', {
             api: this.api,
             lambdaFunction: fileTransferFunction,
