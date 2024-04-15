@@ -18,7 +18,7 @@ import { Filter, FilterList, FundingYearFilter } from "../components/util";
 // constants
 import { Project, PROJECT_TYPE, MARKS, CURRENT_YEAR } from '../constants';
 
-function HomePage() {
+function HomePage({ signOut }) {
 
     const path = window.location.pathname;
 
@@ -241,6 +241,7 @@ function HomePage() {
 
     return (
         <div className={styles.bg}>
+            <button onClick={signOut}>Sign Out</button>
             <header className={styles["app-header"]}>
 
                 <div className={styles.container}>
