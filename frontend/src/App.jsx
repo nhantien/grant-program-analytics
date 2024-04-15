@@ -5,8 +5,8 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
 // amplify
 import { Amplify } from 'aws-amplify';
-import { Authenticator, withAuthenticator } from '@aws-amplify/ui-react';
-import '@aws-amplify/ui-react/styles.css';
+// import { Authenticator, withAuthenticator } from '@aws-amplify/ui-react';
+// import '@aws-amplify/ui-react/styles.css';
 // components
 import HomePage from "./pages/HomePage";
 import Summary from "./pages/Summary";
@@ -26,24 +26,24 @@ Amplify.configure({
   Auth: {
     Cognito: {
       region: process.env.REACT_APP_AWS_REGION,
-      userPoolClientId: process.env.REACT_APP_COGNITO_USER_POOL_CLIENT_ID,
-      userPoolId: process.env.REACT_APP_COGNITO_USER_POOL_ID,
+      // userPoolClientId: process.env.REACT_APP_COGNITO_USER_POOL_CLIENT_ID,
+      // userPoolId: process.env.REACT_APP_COGNITO_USER_POOL_ID,
       identityPoolId: process.env.REACT_APP_COGNITO_IDENTITY_POOL_ID,
       allowGuestAccess: true,
     }
   }
 });
 
-function HomePageWithAuth() {
-  return (
-    <div style={{ width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Authenticator loginMechanisms={['username']}>
-        <HomePage />
-      </Authenticator>
-    </div>
+// function HomePageWithAuth() {
+//   return (
+//     <div style={{ width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+//       <Authenticator loginMechanisms={['username']}>
+//         <HomePage />
+//       </Authenticator>
+//     </div>
 
-  )
-};
+//   )
+// };
 
 function App() {
 
