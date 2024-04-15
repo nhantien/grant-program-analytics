@@ -65,10 +65,6 @@ function HomePage({ signOut }) {
             }
         }`;
 
-        console.log(str);
-
-        console.log(process.env.REACT_APP_APPSYNC_ENDPOINT)
-
         return str;
     }
 
