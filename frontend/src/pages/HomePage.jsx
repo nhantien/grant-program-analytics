@@ -20,10 +20,10 @@ import { Project, PROJECT_TYPE, MARKS, CURRENT_YEAR } from '../constants';
 
 function HomePage() {
 
+    const path = window.location.pathname;
+
     const [params, setParams] = useSearchParams();
     const server = params.get("staging") ? "staging" : "production";
-    console.log(server);
-
 
     const client = generateClient();
 
@@ -164,7 +164,7 @@ function HomePage() {
                         proj.poster
                     );
                 });
-                
+
                 setProjects(newProjects);
                 setLoading(false);
 
@@ -213,6 +213,31 @@ function HomePage() {
         setPage(page);
         document.getElementById("top").scrollIntoView({ behavior: "auto" });
     };
+
+    const handleFileTransfer = async () => {
+
+        if (!window.confirm('Do you want to tranfer file?')) return;
+
+        try {
+            const queryString = `query file {
+                copyFilesToProduction {
+                    status
+                    message
+                }
+            }`;
+
+            const results = await client.graphql({
+                query: queryString
+            });
+
+            const status = results.data.copyFilesToProduction;
+
+            window.alert(`${status.status}: ${status.message}`);
+
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
     return (
         <div className={styles.bg}>
@@ -297,21 +322,26 @@ function HomePage() {
 
                     <section id="top"></section>
 
-                    <div className={styles["generate-summary"]}>
-                        <p className={styles["generate-summary-txt"]}>View a detailed summary of the currently displayed projects</p>
+                    <div>
                         <div>
-                            <button className={styles["generate-summary-btn"]}>
-                                <Link
-                                    to={`/snapshot${server === "staging" ? "?staging=true" : ""}`}
-                                    state={{
-                                        projects: projects,
-                                        range: range,
-                                    }}
-                                    style={{ textDecoration: "none", color: "white" }}
-                                >
-                                    Generate Program Summary
-                                </Link>
-                            </button>
+                            <button className={styles['generate-summary-btn']} onClick={handleFileTransfer}>Confirm new data changes</button>
+                        </div>
+                        <div className={styles["generate-summary"]}>
+                            <p className={styles["generate-summary-txt"]}>View a detailed summary of the currently displayed projects</p>
+                            <div>
+                                <button className={styles["generate-summary-btn"]}>
+                                    <Link
+                                        to={path.includes('staging') ? '/staging/snapshot' : 'snapshot'}
+                                        state={{
+                                            projects: projects,
+                                            range: range,
+                                        }}
+                                        style={{ textDecoration: "none", color: "white" }}
+                                    >
+                                        Generate Program Summary
+                                    </Link>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -334,14 +364,14 @@ function HomePage() {
                                             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                                                 {
                                                     projects.slice(10 * page, (Math.min(10 * (page + 1), projects.length))).map((project) =>
-                                                        <VerticalTableItem key={project.id} project={project} server={server} />
+                                                        <VerticalTableItem key={project.id} project={project} />
                                                     )
                                                 }
                                                 <Pagination count={Math.floor(projects.length / 10)} shape='rounded' showFirstButton
                                                     onChange={(event, page) => handlePaginationChange(page)} sx={{ margin: "auto" }} />
                                             </div>
                                             :
-                                            <ProjectTable projects={projects} server={server} />
+                                            <ProjectTable projects={projects} />
                                     }
                                 </Grid>
                             </Grid>
