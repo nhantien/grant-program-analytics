@@ -9,6 +9,8 @@ import { Construct } from "constructs";
 export class ApiStack extends Stack {
 
     private readonly idPool: cognito.CfnIdentityPool;
+    private readonly userPool: cognito.UserPool;
+    private readonly userPoolClient: cognito.UserPoolClient;
     private readonly api: appsync.GraphqlApi;
     private readonly resolverRole: iam.Role;
 
@@ -18,6 +20,14 @@ export class ApiStack extends Stack {
 
     getIdentityPoolId() {
         return this.idPool.ref;
+    }
+    
+    getUserPoolId() {
+        return this.userPool.userPoolId;
+    }
+
+    getUserPoolClientId() {
+        return this.userPoolClient.userPoolClientId;
     }
 
     private assignResolver(query: string, ds: appsync.LambdaDataSource) {
@@ -124,23 +134,22 @@ export class ApiStack extends Stack {
             accountRecovery: cognito.AccountRecovery.NONE,
         });
 
-        const domain = new cognito.UserPoolDomain(this, 'TlefUserPoolDomain', {
-            userPool: userPool,
-            cognitoDomain: {
-                domainPrefix: 'tlef-analytics-admin'
-            }
-        });
-
         const userPoolClient = new cognito.UserPoolClient(this, 'TlefUserPoolClient', {
             userPool: userPool,
             userPoolClientName: 'tlef-admin-client',
             supportedIdentityProviders: [ cognito.UserPoolClientIdentityProvider.COGNITO ],
-            
-        })     
+            authFlows: {
+                userSrp: true
+            }
+        });
 
         const identityPool = new cognito.CfnIdentityPool(this, 'TlefIdPool', {
             identityPoolName: 'tlef-identity-pool',
-            allowUnauthenticatedIdentities: true
+            allowUnauthenticatedIdentities: true,
+            cognitoIdentityProviders: [{
+                clientId: userPoolClient.userPoolClientId,
+                providerName: userPool.userPoolProviderName
+            }]
         });
 
         const authenticatedRole = new iam.Role(this, 'TlefAuthenticatedRole', {
@@ -191,6 +200,8 @@ export class ApiStack extends Stack {
             }
         });
 
+        this.userPool = userPool;
+        this.userPoolClient = userPoolClient;
         this.idPool = identityPool;
 
         const resolverRole = new iam.Role(this, 'TlefAnalyticsResolverRole', {

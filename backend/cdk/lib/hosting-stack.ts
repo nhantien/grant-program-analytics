@@ -49,7 +49,9 @@ export class HostingStack extends Stack {
             environmentVariables: {
                 'REACT_APP_APPSYNC_ENDPOINT': apiStack.getEndpointUrl(),
                 'REACT_APP_AWS_REGION': this.region,
-                'REACT_APP_COGNITO_IDENTITY_POOL_ID': apiStack.getIdentityPoolId()
+                'REACT_APP_COGNITO_IDENTITY_POOL_ID': apiStack.getIdentityPoolId(),
+                'REACT_APP_COGNITO_USER_POOL_ID': apiStack.getUserPoolId(),
+                'REACT_APP_COGNITO_USER_POOL_CLIENT_ID': apiStack.getUserPoolClientId()
             },
             buildSpec: buildSpec
         });
