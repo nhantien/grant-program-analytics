@@ -37,7 +37,7 @@ Amplify.configure({
 function HomePageWithAuth() {
   return (
     <div style={{ minWidth: '100vw', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Authenticator loginMechanisms={['username']}>
+      <Authenticator loginMechanisms={['username']} hideSignUp={true}>
         {({ signOut, user }) => (
           <HomePage signOut={signOut} />
         )}
