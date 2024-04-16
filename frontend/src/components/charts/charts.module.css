@@ -10,7 +10,7 @@ b {
     margin-top: -20px;
     margin-bottom: 30px;
     text-align: left;
-    font-size: 0.75rem;
+    font-size: 0.91rem;
     font-weight: 300;
     font-style: italic;
     color: #002145;
@@ -24,7 +24,7 @@ b {
 
 .filter-hidden {
     width: 20px;
-    height: 20px;
+    height: 100%
 }
 
 .fe-chart {

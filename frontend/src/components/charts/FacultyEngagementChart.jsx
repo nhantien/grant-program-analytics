@@ -54,7 +54,9 @@ function FacultyEngagementChart({projects, amount, unique}) {
     const hasData = Object.values(projects).some(item => Object.values(item).some(value => value !== 0))
 
     if (!hasData) {
-        return <div> No summaries matching this criteria. </div>;
+        return <div> No summaries matching this criteria. 
+            <p className={styles.warning}>Please note, this particular TLEF metric is not available prior to the 2017/18 academic year.</p>
+        </div>;
     }
     return (
         <React.Fragment>
@@ -123,9 +125,7 @@ function FacultyEngagementChart({projects, amount, unique}) {
                 </div>
                 <div className={styles.space}></div>
                 <div className={styles.description}>
-                {!isDataComplete &&
-                    <p className={styles.warning}>Please note, this particular TLEF metric is not available prior to the 2017/18 academic year.</p>
-                }
+                    
                 <p>The TLEF actively engages with teaching and research faculty across the university as well as support staff who provide consultation and development support throughout the life of TLEF projects.</p>
                 {isDataComplete && appliedFilters && appliedFilters["funding_year"].length === 1  
                  && (appliedFilters.project_faculty).length === 0 &&
@@ -134,6 +134,7 @@ function FacultyEngagementChart({projects, amount, unique}) {
                  (appliedFilters.search_text).length === 0 &&
                 <p>Approximately <b>${formattedAmount(unique.funding_amount)}</b> in TLEF-awarded funding will employ over <b>{projects.Small.Student + projects.Large.Student}</b> UBC students to support the development, implementation and evaluation of TLEF projects.</p>
             }
+            <p className={styles.warning}>Please note, this particular TLEF metric is not available prior to the 2017/18 academic year.</p>
             </div>
            
         </React.Fragment>
