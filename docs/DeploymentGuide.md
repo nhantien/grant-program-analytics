@@ -2,10 +2,12 @@
 
 ## Table of Contents
 - [Requirements](#requirements)
+- [Pre-Deployment](#pre-deployment)
 - [Deployment](#deployment)
     - [Step 1: Clone The Repository](#step-1-clone-the-repository)
     - [Step 2: Upload Secrets](#step-2-upload-secrets)
     - [Step 3: CDK Deployment](#step-3-cdk-deployment)
+    - [Step 4: Upload Data](#step-4-upload-data)
 
 ## Requirements
 Before you deploy, you must have the following installed on your device.
@@ -17,14 +19,28 @@ Before you deploy, you must have the following installed on your device.
 - [AWS CDK](https://docs.aws.amazon.com/cdk/v2/guide/cli.html)
 - [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
+## Pre-Deployment
+### Create GitHub Personal Access Token
+To deploy this solution, you will need to generate a GitHub personal access token. Please visit [here](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic) for detailed instruction to create a personal access token.
+
+*Note: when selecting the scopes to grant the token (step 8 of the instruction), make sure you select `repo` scope.*
+
+**Once you create a token, please note down its value as you will use it later in the deployment process.**
+
 ## Deployment
-### Step 1: Clone The Repository
-First, clone the GitHub repository onto your machine. To do this:
+### Step 1: Fork & Clone The Repository
+First, you need to fork the repository. A fork is a new repository that shares code and visibility settings with the original “upstream” repository. To create a fork, navigate to the [main branch]() of this repository. Then, in the top-right corner, click Fork.
+
+![](./images/fork-repo.jpeg)
+
+You will be directed to the page where you can customize owner, repository name, etc, but you do not have to change any option. Simply click `Create fork` in the bottom right corner.
+
+Now let's clone the GitHub repository onto your machine. To do this:
 1. Create a folder on your computer to contain the project code.
 2. For an Apple computer, open Terminal. If on a Windows machine, open Command Prompt or Windows Terminal. Enter into the folder you made using the command `cd path/to/folder`. To find the path to a folder on a Mac, right click on the folder and press `Get Info`, then select the whole text found under `Where:` and copy with ⌘C. On Windows (not WSL), enter into the folder on File Explorer and click on the path box (located to the left of the search bar), then copy the whole text that shows up.
-3. Clone the GitHub repository by entering the following:
+3. Clone the GitHub repository by entering the following command. Be sure to replace `<YOUR-GITHUB-USERNAME>` with your own username.
 ```
-git clone https://github.com/UBC-CIC/tlef-analytics
+git clone https://github.com/<YOUR-GITHUB-USERNAME>/tlef-analytics
 ```
 The code should now be in the folder you created. Navigate into the root folder containing the entire codebase by running the command:
 ```
@@ -32,11 +48,21 @@ cd tlef-analytics
 ```
 
 ### Step 2: Upload Secrets
-You would have to supply your GitHub OAuth token when dpeloying the solution. Run the following command and ensure you replace `<YOUR-GITHUB-TOKEN>` and `<YOUR-PROFILE-NAME>` with your actual GitHub token and the appropriate AWS profile name.
+You would have to supply your GitHub personal access token you created eariler when dpeloying the solution. Run the following command and ensure you replace `<YOUR-GITHUB-TOKEN>` and `<YOUR-PROFILE-NAME>` with your actual GitHub token and the appropriate AWS profile name.
 ```
 aws secretsmanager create-secret \
     --name github-personal-access-token \
     --secret-string "{\"my-github-token\":\"<YOUR-GITHUB-TOKEN>\"}"\
+    --profile <YOUR-PROFILE-NAME>
+```
+
+Moreover, you will need to upload your github username to Amazon SSM Parameter Store. You can do so by running the following command. Make sure you replace `<YOUR-GITHUB-USERNAME>` and `<YOUR-PROFILE-NAME>` with your actual username and the appropriate AWS profile name.
+
+```
+aws ssm put-parameter \
+    --name "tlef-analytics-owner-name" \
+    --value "<YOUR-GITHUB-USERNAME>" \
+    --type String \
     --profile <YOUR-PROFILE-NAME>
 ```
 
@@ -60,7 +86,8 @@ You may run the following command to deploy the stacks all at once. Please repla
 ```
 cdk deploy --all --profile <profile-name>
 ```
-
+### Step 4: Upload Data
+After the application is deployed, you will need to upload data to Amazon S3. See [our user guide]() for details.
 
 **Extra: Taking down the deployed stacks**
 To take down the deployed stack for a fresh redeployment in the future, navigate to AWS Cloudformation, click on the stack(s) and hit Delete. Please wait for the stacks in each step to be properly deleted before deleting the stack downstream. The deletion order is as followed:

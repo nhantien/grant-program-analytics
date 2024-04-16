@@ -49,7 +49,9 @@ export class HostingStack extends Stack {
             environmentVariables: {
                 'REACT_APP_APPSYNC_ENDPOINT': apiStack.getEndpointUrl(),
                 'REACT_APP_AWS_REGION': this.region,
-                'REACT_APP_COGNITO_IDENTITY_POOL_ID': apiStack.getIdentityPoolId()
+                'REACT_APP_COGNITO_IDENTITY_POOL_ID': apiStack.getIdentityPoolId(),
+                'REACT_APP_COGNITO_USER_POOL_ID': apiStack.getUserPoolId(),
+                'REACT_APP_COGNITO_USER_POOL_CLIENT_ID': apiStack.getUserPoolClientId()
             },
             buildSpec: buildSpec
         });
@@ -58,6 +60,18 @@ export class HostingStack extends Stack {
             branchName: 'main',
             autoBuild: true,
             buildSpec: buildSpec
+        });
+
+        amplifyApp.addCustomRule({
+          source: `</^[^.]+$|\\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|ttf|map|json)$)([^.]+$)/>`,
+          target: '/index.html',
+          status: amplify.RedirectStatus.REWRITE
+        });
+
+        amplifyApp.addCustomRule({
+          source: '/<*>',
+          target: '/index.html',
+          status: amplify.RedirectStatus.NOT_FOUND_REWRITE
         });
 
     }
