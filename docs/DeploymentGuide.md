@@ -28,13 +28,19 @@ To deploy this solution, you will need to generate a GitHub personal access toke
 **Once you create a token, please note down its value as you will use it later in the deployment process.**
 
 ## Deployment
-### Step 1: Clone The Repository
-First, clone the GitHub repository onto your machine. To do this:
+### Step 1: Fork & Clone The Repository
+First, you need to fork the repository. A fork is a new repository that shares code and visibility settings with the original “upstream” repository. To create a fork, navigate to the [main branch]() of this repository. Then, in the top-right corner, click Fork.
+
+![](./images/fork-repo.jpeg)
+
+You will be directed to the page where you can customize owner, repository name, etc, but you do not have to change any option. Simply click `Create fork` in the bottom right corner.
+
+Now let's clone the GitHub repository onto your machine. To do this:
 1. Create a folder on your computer to contain the project code.
 2. For an Apple computer, open Terminal. If on a Windows machine, open Command Prompt or Windows Terminal. Enter into the folder you made using the command `cd path/to/folder`. To find the path to a folder on a Mac, right click on the folder and press `Get Info`, then select the whole text found under `Where:` and copy with ⌘C. On Windows (not WSL), enter into the folder on File Explorer and click on the path box (located to the left of the search bar), then copy the whole text that shows up.
-3. Clone the GitHub repository by entering the following:
+3. Clone the GitHub repository by entering the following command. Be sure to replace `<YOUR-GITHUB-USERNAME>` with your own username.
 ```
-git clone https://github.com/UBC-CIC/tlef-analytics
+git clone https://github.com/<YOUR-GITHUB-USERNAME>/tlef-analytics
 ```
 The code should now be in the folder you created. Navigate into the root folder containing the entire codebase by running the command:
 ```
