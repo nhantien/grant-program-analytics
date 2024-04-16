@@ -21,9 +21,7 @@ import { Project, PROJECT_TYPE, MARKS, CURRENT_YEAR } from '../constants';
 function HomePage({ signOut }) {
 
     const path = window.location.pathname;
-
-    const [params, setParams] = useSearchParams();
-    const server = params.get("staging") ? "staging" : "production";
+    const server = path.includes("staging") ? "staging" : "production";
 
     const client = generateClient();
 
@@ -142,8 +140,6 @@ function HomePage({ signOut }) {
                 });
 
                 const proposals = results.data.getFilteredProposals;
-
-                console.log(proposals);
 
                 const newProjects = proposals.map((proj) => {
                     return new Project(

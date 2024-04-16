@@ -20,8 +20,8 @@ import { PROJECT_TYPE } from "../constants";
 
 function Snapshot() {
 
-    const [params, setParams] = useSearchParams();
-    const server = params.get("staging") ? "staging" : "production";
+    const path = window.location.pathname;
+    const server = path.includes("staging") ? "staging" : "production";
 
     const client = generateClient();
 
