@@ -62,5 +62,17 @@ export class HostingStack extends Stack {
             buildSpec: buildSpec
         });
 
+        amplifyApp.addCustomRule({
+          source: `</^[^.]+$|\\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|ttf|map|json)$)([^.]+$)/>`,
+          target: '/index.html',
+          status: amplify.RedirectStatus.REWRITE
+        });
+
+        amplifyApp.addCustomRule({
+          source: '/<*>',
+          target: '/index.html',
+          status: amplify.RedirectStatus.NOT_FOUND_REWRITE
+        });
+
     }
 }
