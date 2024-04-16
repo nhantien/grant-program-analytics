@@ -18,6 +18,8 @@ import { CURRENT_YEAR, MARKS } from "../../constants";
 
 function SnapshotHeader({ options, optionsLoading, range, setRange, server }) {
 
+    const path = window.location.pathname;
+
     const { appliedFilters, setAppliedFilters } = useContext(FiltersContext);
 
     const [showSlider, setShowSlider] = useState(appliedFilters["funding_year"].length > 1);
@@ -78,7 +80,7 @@ function SnapshotHeader({ options, optionsLoading, range, setRange, server }) {
         <div className={styles.bg}>
              <div className={styles["back"]}>
                         <div>
-                        <Link to={`/${server === "staging" ? "?staging=true" : ""}`}>
+                        <Link to={path.includes('staging') ? '/staging' : '/'}>
                         <ArrowBackIcon  sx={{ color: "#002145", fontSize: "2.2rem" }}/>
                         </Link>
                         </div>
