@@ -126,9 +126,10 @@ function StudentReachChart( {projects, reachdata, unique}) {
     }
 
     const hasData = projects.Large.length > 0 || projects.Small.length > 0;
-
     if (!hasData) {
-            return <div> No summaries matching this criteria. </div>;
+            return <div> No summaries matching this criteria. 
+            <p className={styles.warning}>Please note, this particular TLEF metric is not available prior to the 2016/17 academic year.</p>
+            </div>;
         }
     return (
         <React.Fragment>
@@ -154,9 +155,6 @@ function StudentReachChart( {projects, reachdata, unique}) {
             <p className={styles["chart-annotation"]}>
                     Hover/click on the bars to display further data 
                  </p>
-                {!isDataComplete &&
-                    <p className={styles.warning}>Please note, this particular TLEF metric is not available prior to the 2016/17 academic year.</p>
-                }
                 <p>TLEF projects funded in the selected year(s) reached <b>{formattedAmount(totalSmallReach)}</b> students in Small TLEF innovation projects and
                  <b> {formattedAmount(totalLargeReach)}</b> students in Large TLEF Transformation projects.</p>
                 <p>Overall, the projects reached <b>{formattedAmount(reachdata.course)}</b> courses (undergraduate and graduate) and <b>{reachdata.section}</b> sections
@@ -173,7 +171,7 @@ function StudentReachChart( {projects, reachdata, unique}) {
                  <p className={styles["reach-annotation"]}>
                     *Students enrolled in more than one TLEF-supported course are only counted once.
                  </p>
-
+                 <p className={styles.warning}>Please note, this particular TLEF metric is not available prior to the 2016/17 academic year.</p>
                  <div className={styles.dataBox}>
                     <h3 className={styles['hidden']}>Chart Data</h3>
                     {STUDENT_REACH.map((item, index) => (
