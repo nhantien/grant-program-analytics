@@ -16,15 +16,20 @@ function SummaryTable({ data }) {
 
     data.team_members.sort((a, b) => a.member_name.localeCompare(b.member_name));
 
+    const pi_names = data.pi_name.split('; ');
+    console.log(pi_names);
+
     const pi_as_member = data.team_members.filter(function (member) {
-        return member.member_name === data.pi_name;
+        return pi_names.includes(member.member_name);
     });
 
-    const pi = pi_as_member.length > 0 ? pi_as_member : [{
-        member_name: data.pi_name,
-        member_position: "",
-        member_faculty: "",
-    }];
+    const pi = pi_as_member.length > 0 ? pi_as_member : pi_names.map((pi) => (
+        {
+            member_name: pi,
+            member_position: "",
+            member_faculty: ""
+        }
+    ));
 
     const teamMembers = data.team_members.filter(function (member) {
         return member.member_name !== data.pi_name;

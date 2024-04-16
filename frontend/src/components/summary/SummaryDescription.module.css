@@ -38,7 +38,8 @@
 
 .report {
     margin-top: 1.5rem;
-    width: 100%;
+    width: 95%;
+    padding: 0 2.5% 0 2.5%;
     color: black;
     text-align: end;
     font-size: 0.9375rem;

@@ -7,18 +7,20 @@ function SummaryTableItem({ field, data, color }) {
     if (field === "Primary Investigator(s)") {
         dataHTML = (
             <div className={styles.data} style={{ backgroundColor: color }}>
-                {data.map((member) =>
-                    <Grid key={`summary-table-item-pi`} container spacing={1} style={{ alignItems: "center" }}>
-                        <Grid item xs={5} sm={3}>
-                            {member.member_name}
-                        </Grid>
-                        {
-                            (member.member_title && member.member_faculty) &&
-                            <Grid item xs={7} sm={9} style={{ flexWrap: "wrap" }}>
-                                {member.member_title}, {member.member_faculty}
+                {data.map((member, i) =>
+                    <div key={`summary-table-item-pi-${i}`} className={styles.member}>
+                        <Grid container spacing={1}>
+                            <Grid item xs={4} sm={3}>
+                                {member.member_name}
                             </Grid>
-                        }
-                    </Grid>
+                            {
+                                (member.member_title && member.member_faculty) &&
+                                <Grid item xs={7} sm={9} style={{ flexWrap: "wrap" }}>
+                                    {member.member_title}, {member.member_faculty}
+                                </Grid>
+                            }
+                        </Grid>
+                    </div>
                 )}
             </div>
         )

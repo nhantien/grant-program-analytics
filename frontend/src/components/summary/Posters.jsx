@@ -1,22 +1,6 @@
 import styles from "./Posters.module.css";
-// import { p1, p2, p3 } from "../../assets";
 
 function Posters({ posters }) {
-
-    // const samplePosters = [
-    //     {
-    //         year: 1,
-    //         poster: p1
-    //     },
-    //     {
-    //         year: 2,
-    //         poster: p2
-    //     },
-    //     {
-    //         year: 3,
-    //         poster: p3
-    //     }
-    // ];
 
     let slideIndex = 0;
 
@@ -50,7 +34,9 @@ function Posters({ posters }) {
                     posters.map((p, i) => (
                         <div className={styles.slideElement} style={{ display: (i !== slideIndex) && 'none' }} >
                             <div>Year {p.year}</div>
-                            <img src={p.poster} className={styles.poster} />
+                            <a href={p.poster} target="_blank" style={{ cursor: "pointer" }}>
+                                <img src={p.poster} className={styles.poster} />
+                            </a>
                         </div>
                     ))
                 }
