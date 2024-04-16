@@ -232,7 +232,7 @@ export default function ProjectTable({ projects }) {
     );
 
     return (
-        <Box sx={{ maxWidth: '100%', m: 2}}>
+        <Box sx={{ maxWidth: '100%', m: 2 }}>
             <Paper sx={{ maxWidth: '100%', mb: 2 }}>
                 <TableContainer sx={{ width: "100%" }}>
                     <Table
@@ -287,7 +287,13 @@ export default function ProjectTable({ projects }) {
                                             {project.report ? <a href={project.report} target='_blank'>Report</a> : 'N/A'}
                                         </TableCell>
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%" }}>
-                                            {project.poster ? <a href={project.poster} target='_blank'>Poster</a> : 'N/A'}
+                                            {
+                                                project.poster ?
+                                                    <a href={project.poster} target='_blank' style={{ cursor: 'pointer' }}>
+                                                        <img src={project.poster} style={{ width: "100%", height: "auto" }} />
+                                                    </a>
+                                                    : "N/A"
+                                            }
                                         </TableCell>
                                     </TableRow>
                                 );
