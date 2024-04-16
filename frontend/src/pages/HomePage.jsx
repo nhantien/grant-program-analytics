@@ -237,7 +237,12 @@ function HomePage({ signOut }) {
 
     return (
         <div className={styles.bg}>
-            <button onClick={signOut}>Sign Out</button>
+            {
+                path.includes('staging') &&
+                <div className={styles['sign-out-div']}>
+                    <button onClick={signOut} className={styles['sign-out-btn']}>Sign Out</button>
+                </div>
+            }
             <header className={styles["app-header"]}>
 
                 <div className={styles.container}>
@@ -320,9 +325,12 @@ function HomePage({ signOut }) {
                     <section id="top"></section>
 
                     <div>
-                        <div className={styles["generate-summary"]}>
-                            <button className={styles['generate-summary-btn']} onClick={handleFileTransfer}>Confirm New Data Changes</button>
-                        </div>
+                        {
+                            path.includes('staging') &&
+                            <div className={styles["generate-summary"]}>
+                                <button className={styles['generate-summary-btn']} onClick={handleFileTransfer}>Confirm New Data Changes</button>
+                            </div>
+                        }
                         <div className={styles["generate-summary"]}>
                             <p className={styles["generate-summary-txt"]}>View a detailed summary of the currently displayed projects</p>
                             <div>
