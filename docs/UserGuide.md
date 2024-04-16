@@ -43,8 +43,12 @@ The individual summary page displays further data on each TLEF funded proposal. 
 
 The page provides an overview of the selected project. It includes details such as the project's status, the faculty/college/unit involved, and its duration. The summary outlines the project's objectives and overarching information. 
 
+For each year of the project, there are details about the primary investigator(s), project types, funded amounts, focus areas, team members involved, and potentially the reach or impact of the projects. 
+<img width="1159" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/f13db8dc-0725-4bf0-a042-33874b3ef08f">
+
 Similar projects and project outcomes are displayed at the bottom. 
 <img width="1080" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/f45c9149-ee0d-4c58-8297-e514c96d9709">
 <img width="1053" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/25d4f1e0-01b7-414e-bf13-d27b45f476cf">
 
 ## Snapshot
+
