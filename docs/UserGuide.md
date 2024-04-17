@@ -85,8 +85,6 @@ Information displayed includes:
   <img width="1176" alt="Screenshot 2024-04-16 at 1 24 11 PM" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/4b2c01e4-8939-498e-ba81-b07a242a13e8">
 
 - Student Reach - bar chart view of student reach for selected projects
-
-  <img width="1185" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/d8944a74-a0ed-4f7f-a187-80dd21ba2d52">
   
   Users can hover over the bars or click on them in mobile to view specific data per faculty/college/unit.
 
