@@ -17,7 +17,7 @@ This is a voice assistance feature for the [student advising assistant project](
 
 ## High Level Architecture
 The following architecture diagram illustrates the various AWS components utilized to deliver the solution. For an in-depth explanation of the frontend and backend stacks, refer to the [Architecture Design](./docs/ArchitectureDesign.md).
-<!-- ![Architecture Diagram](docs/images/Architecture_Diagram.png) -->
+![Architecture Diagram](docs/images/architecture-diagram.jpg)
 
 ## Deployment
 For instructions on how to deploy the application, refer to the [Deployment Guide](./docs/DeploymentGuide.md).
@@ -30,8 +30,48 @@ For information on how the application was developed, refer to the [Development 
 
 ## Directories
 ```
-directory stturcture goes here
+├── README.md
+├── backend
+│   └── cdk
+│       ├── amplify
+│       ├── bin
+│       ├── bucket_config
+│       ├── bucket_config_img
+│       ├── glue
+│       ├── graphql
+│       ├── lambda
+│       ├── lib
+├── docs
+└── frontend
+    └── src
+        ├── App.jsx
+        ├── components
+        │   ├── charts
+        │   ├── home
+        │   ├── snapshot
+        │   ├── summary
+        │   └── util
+        ├── constants
+        ├── pages
 ```
+1. `/backend/cdk`: Contains the deployment code for the app's AWS infrastructure
+    - `/amplify`: Contains the configuration file needed for building Amplify app.
+    - `/bucket_config`: Contains the directory structure that will be uploaded to S3.
+    - `/bucket_config_img`: Contains the directory structure of the image bucket that will be uploaded to S3.
+    - `/glue`: Contains the database schema file.
+    - `/graphql`: Contains the GraphQL data schema file and request/response mapping template files.
+    - `lambda`: Contains the scripts for all lambda functions.
+    - `/lib`: Contains the deployment code for all 3 stacks of the infrastructure
+2. `/docs`: Contains all the documents.
+3. `/frontend`: Contains the user interface code for the solution.
+    - `/src/components`: Contains all components
+        - `/charts`: Classes used for rendering charts/graphs
+        - `/home`: Components used for home page
+        - `/snapshot`: Components used for project summary page
+        - `/summary`: Components used for individual summary page
+    - `/constants`: Contains all constants
+    - `/pages`: Contains user interface code for home page, project summary page, and individual summary page.
+
 
 ## Changelog
 N/A
