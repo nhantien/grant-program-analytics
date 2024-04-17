@@ -13,20 +13,22 @@ Once you have deployed the solution, the following user guide will help you navi
 | [Snapshot](#snapshot) | Walkthrough of the Snapshot page |
 
 ## Uploading Data
+Please refer to the Uploading Data Guide 
 
 ## Updating Data
+Please refer to the [Modifying Data Guide](./ModifyData.md)
 
 ## Home
 This page displays a table of TLEF funded proposals with information including: 
 
 - Funding Year - the funding year of the proposal
 - Project Type - there are five types of TLEF projects: Large TLEF, Small TLEF, Flexible Learning projects, Interdisciplinary Team-Teaching Grant projects, and Universal Design for Learning projects
-- Principal Investigator -
+- Principal Investigator -  the lead in charge of the particular proposal
 - Faculty - the faculty targeted by the project
 - Title - title of the funded proposal
 - Project Year - current duration of the project
 - Amount - amount of funding received
-- Status - active or inactive
+- Status - active or completed 
 - Report - project report, if it exists
 - Poster - project poster, if it exists
 
