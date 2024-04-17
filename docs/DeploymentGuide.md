@@ -87,7 +87,7 @@ You may run the following command to deploy the stacks all at once. Please repla
 cdk deploy --all --profile <profile-name>
 ```
 ### Step 4: Upload Data
-After the application is deployed, you will need to upload data to Amazon S3. See [our user guide]() for details.
+After the application is deployed, you will need to upload data to Amazon S3. See our [user guide](./UserGuide.md) for details.
 
 ### Extra: Taking down the deployed stacks
 To take down the deployed stack for a fresh redeployment in the future, navigate to AWS Cloudformation, click on the stack(s) and hit Delete. Please wait for the stacks in each step to be properly deleted before deleting the stack downstream. The deletion order is as followed:
