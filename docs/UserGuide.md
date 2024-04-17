@@ -85,17 +85,20 @@ Information displayed includes:
   <img width="1176" alt="Screenshot 2024-04-16 at 1 24 11 PM" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/4b2c01e4-8939-498e-ba81-b07a242a13e8">
 
 - Student Reach - bar chart view of student reach for selected projects
-  
+
+  <img width="1180" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/dd4fd661-e63b-4900-81d6-d14d22a1c0f8">
+
   Users can hover over the bars or click on them in mobile to view specific data per faculty/college/unit.
 
   <img width="812" alt="Screenshot 2024-04-17 at 10 39 50 AM" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/a060d372-a11a-4b76-b818-4f98b1795369">
   
 - Faculty and Student Engagement - additional information about student and faculty engagement
+  
   <img width="1171" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/71178ec7-aeeb-4cc6-ab38-8ebc7a997e68">
 
 
 
-*Please note that if there are no existing projects that apply to the filters the user chose, an message will be displayed instead. 
+*Please note that if there are no existing projects that apply to the filters the user chose, a message will be displayed instead. 
 
 <img width="1148" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/41312d7a-f53a-4c1a-bffb-77c6191b4992">
 
