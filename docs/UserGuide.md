@@ -9,6 +9,7 @@ Once you have deployed the solution, the following user guide will help you navi
 | [Uploading Data](#uploading-data)  | How to upload data |
 | [Updating Data](#updating-data)  | How to modify the data schema |
 | [Home](#home)  | Walkthrough of the Home page |
+| [Staging Website](#staging)  | Navigation to the Staging website |
 | [Individual Summary](#individual-summary) | Walkthrough of the Individual Summary page|
 | [Snapshot](#snapshot) | Walkthrough of the Snapshot page |
 
@@ -37,6 +38,17 @@ This page displays a table of TLEF funded proposals with information including:
 At the top of the page, users are able to search proposals by their title or principal investigator. The projects are also filterable by funding year, project type, faculty/college/unit, and focus area. Applied filters are displayed below the filter and search area. 
 
 The Generate Program Summary button will take users to the [Snapshot](#snapshot) page. 
+
+## Staging
+The staging website provides a controlled environment for reviewing changes to the data before they are made public.
+
+To navigate to staging, add `staging` to the end of the URL. 
+ie: `https://main.d1kbeedktpnze5.amplifyapp.com/` to `https://main.d1kbeedktpnze5.amplifyapp.com/staging`
+
+This will direct you to the login page.
+<img width="517" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/a908a4a7-287f-4347-82dd-429d32934eb2">
+
+Within the staging website, data that is currently in the `/staging` bucket in AWS S3 will be displayed. There are two additional features: confirming the new data changes, which will publish data to the main page, and logging out from the staging view. 
 
 ## Individual Summary 
 The individual summary page displays further data on each TLEF funded proposal. It can be accessed by clicking on title of the proposal you're interested in within the data table on the home page. 
