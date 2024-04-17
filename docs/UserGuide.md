@@ -34,7 +34,7 @@ This page displays a table of TLEF funded proposals with information including:
 
   <img width="1192" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/64710d10-a01c-4e90-a0b1-8a9987fa9f90">
 
-At the top of the page, users are able to search proposals by their title or principal investigator. The projects are also filterable by funding year, project type, faculty/unit, and focus area. Applied filters are displayed below the filter and search area. 
+At the top of the page, users are able to search proposals by their title or principal investigator. The projects are also filterable by funding year, project type, faculty/college/unit, and focus area. Applied filters are displayed below the filter and search area. 
 
 The Generate Program Summary button will take users to the [Snapshot](#snapshot) page. 
 
@@ -50,7 +50,7 @@ For each year of the project, there are details about the primary investigator(s
 
 <img width="1159" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/f13db8dc-0725-4bf0-a042-33874b3ef08f">
 
-If the project has posters, they are displayed under the project details for each year. If there are multiple years with posters, you can view them by clicking on the forward and back buttons. 
+If the project has posters, they are displayed under the project details for each year. If there are multiple years with posters, you can view each one by clicking on the forward and back buttons. 
 
 <img width="1137" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/4b480401-74c8-4284-bc9e-7eaa26f91e5a">
 
@@ -62,7 +62,7 @@ Similar projects and project outcomes are displayed at the bottom.
 ## Snapshot
 The Snapshot page generates a program summary and gives statistics and visualizations of the data.
   
-Users can filter by a singular funding year or a range of funding years, project type, faculty/college/unit, and focus area (refer to [home](#home) for further details on the data schema).
+Users can filter by a single funding year or a range of funding years, project type, faculty/college/unit, and focus area (refer to [home](#home) for further details on the data schema).
 Filters applied to the data are preserved when navigating between the Snapshot and Home pages. 
 
 <img width="1154" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/a6d82725-fadd-4699-9a53-0a91c2735430">
