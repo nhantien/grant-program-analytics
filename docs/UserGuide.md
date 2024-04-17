@@ -36,18 +36,23 @@ This page displays a table of TLEF funded proposals with information including:
 
 At the top of the page, users are able to search proposals by their title or principal investigator. The projects are also filterable by funding year, project type, faculty/unit, and focus area. Applied filters are displayed below the filter and search area. 
 
-The Generate Program summary button will take users to the [Snapshot](#snapshot) page. 
+The Generate Program Summary button will take users to the [Snapshot](#snapshot) page. 
 
 ## Individual Summary 
-The individual summary page displays further data on each TLEF funded proposal. It can be accessed by clicking on title of the proposal you're interested in. 
-
-<img width="1149" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/6b5c67e5-14c0-44d4-9955-87041f5f115a">
+The individual summary page displays further data on each TLEF funded proposal. It can be accessed by clicking on title of the proposal you're interested in within the data table on the home page. 
 
 The page provides an overview of the selected project. It includes details such as the project's status, the faculty/college/unit involved, and its duration. The summary outlines the project's objectives and overarching information. 
+Project reports can be viewed by clicking Link to Report, opening up the report as a PDF in a new window. 
+
+<img width="1146" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/d9607c6b-e3b8-4039-8f8c-8300d1ae1288">
 
 For each year of the project, there are details about the primary investigator(s), project types, funded amounts, focus areas, team members involved, and potentially the reach or impact of the projects. 
 
 <img width="1159" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/f13db8dc-0725-4bf0-a042-33874b3ef08f">
+
+If the project has posters, they are displayed under the project details for each year. If there are multiple years with posters, you can view them by clicking on the forward and back buttons. 
+
+<img width="1137" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/4b480401-74c8-4284-bc9e-7eaa26f91e5a">
 
 Similar projects and project outcomes are displayed at the bottom. 
 
@@ -57,7 +62,7 @@ Similar projects and project outcomes are displayed at the bottom.
 ## Snapshot
 The Snapshot page generates a program summary and gives statistics and visualizations of the data.
   
-Users can filter by a singular funding year or a range of funding years, project type, faculty/college/unit, and focus area (refer to [home](#home) for further details on the data schema). 
+Users can filter by a singular funding year or a range of funding years, project type, faculty/college/unit, and focus area (refer to [home](#home) for further details on the data schema).
 Filters applied to the data are preserved when navigating between the Snapshot and Home pages. 
 
 <img width="1154" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/a6d82725-fadd-4699-9a53-0a91c2735430">
@@ -80,12 +85,19 @@ Information displayed includes:
   <img width="1176" alt="Screenshot 2024-04-16 at 1 24 11 PM" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/4b2c01e4-8939-498e-ba81-b07a242a13e8">
 
 - Student Reach - bar chart view of student reach for selected projects
+
+  <img width="1185" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/d8944a74-a0ed-4f7f-a187-80dd21ba2d52">
   
   Users can hover over the bars or click on them in mobile to view specific data per faculty/college/unit.
 
-   <img width="1175" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/84a16f0a-5ce5-49a2-ac40-63123119bc27">
+  <img width="812" alt="Screenshot 2024-04-17 at 10 39 50 AM" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/a060d372-a11a-4b76-b818-4f98b1795369">
   
 - Faculty and Student Engagement - additional information about student and faculty engagement
-  
-  <img width="1162" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/8c9f0666-8d91-4398-9e6c-7c677fb7c4aa">
-  
+  <img width="1171" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/71178ec7-aeeb-4cc6-ab38-8ebc7a997e68">
+
+
+
+*Please note that if there are no existing projects that apply to the filters the user chose, an message will be displayed instead. 
+
+<img width="1148" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/41312d7a-f53a-4c1a-bffb-77c6191b4992">
+
