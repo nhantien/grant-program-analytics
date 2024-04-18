@@ -2,14 +2,16 @@ import { Stack, StackProps, Duration } from "aws-cdk-lib";
 import * as appsync from 'aws-cdk-lib/aws-appsync';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as iam from 'aws-cdk-lib/aws-iam';
-import * as wafv2 from 'aws-cdk-lib/aws-wafv2';
-import { CfnIdentityPool, CfnIdentityPoolRoleAttachment } from "aws-cdk-lib/aws-cognito";
+import * as cognito from "aws-cdk-lib/aws-cognito";
+import * as wafv2 from "aws-cdk-lib/aws-wafv2"
 import { DatabaseStack } from "./database-stack";
 import { Construct } from "constructs";
 
 export class ApiStack extends Stack {
 
-    private readonly idPool: CfnIdentityPool;
+    private readonly idPool: cognito.CfnIdentityPool;
+    private readonly userPool: cognito.UserPool;
+    private readonly userPoolClient: cognito.UserPoolClient;
     private readonly api: appsync.GraphqlApi;
     private readonly resolverRole: iam.Role;
 
@@ -19,6 +21,14 @@ export class ApiStack extends Stack {
 
     getIdentityPoolId() {
         return this.idPool.ref;
+    }
+    
+    getUserPoolId() {
+        return this.userPool.userPoolId;
+    }
+
+    getUserPoolClientId() {
+        return this.userPoolClient.userPoolClientId;
     }
 
     private assignResolver(query: string, ds: appsync.LambdaDataSource) {
@@ -134,16 +144,23 @@ export class ApiStack extends Stack {
             resourceArn: api.arn
         });
 
-        const appSyncInvokePolicy = new iam.PolicyDocument({
-            statements: [new iam.PolicyStatement({
-                actions: [
-                    "appsync:GraphQL",
-                ],
-                resources: [`${api.arn}/*`],
-            })],
+        const appsyncAllowPolicy = new iam.PolicyStatement({
+            effect: iam.Effect.ALLOW,
+            actions: [
+                "appsync:GraphQL",
+            ],
+            resources: [`${api.arn}/*`],
         });
 
-        const unauthenticatedPolicy = new iam.PolicyDocument({
+        const appSyncDenyPolicy = new iam.PolicyStatement({
+            effect: iam.Effect.DENY,
+            actions: [
+                "appsync:GraphQL",
+            ],
+            resources: [`${api.arn}/types/Query/fields/copyFilesToProduction`]
+        });
+
+        const cognitoPolicy = new iam.PolicyDocument({
             statements: [new iam.PolicyStatement({
                 effect: iam.Effect.ALLOW,
                 actions: [
@@ -153,9 +170,47 @@ export class ApiStack extends Stack {
             })]
         });
 
-        const identityPool = new CfnIdentityPool(this, 'TlefIdPool', {
+        const userPool = new cognito.UserPool(this, 'TlefUserPool', {
+            userPoolName: 'tlef-user-pool',
+            accountRecovery: cognito.AccountRecovery.NONE,
+        });
+
+        const userPoolClient = new cognito.UserPoolClient(this, 'TlefUserPoolClient', {
+            userPool: userPool,
+            userPoolClientName: 'tlef-admin-client',
+            supportedIdentityProviders: [ cognito.UserPoolClientIdentityProvider.COGNITO ],
+            authFlows: {
+                userSrp: true
+            }
+        });
+
+        const identityPool = new cognito.CfnIdentityPool(this, 'TlefIdPool', {
             identityPoolName: 'tlef-identity-pool',
-            allowUnauthenticatedIdentities: true
+            allowUnauthenticatedIdentities: true,
+            cognitoIdentityProviders: [{
+                clientId: userPoolClient.userPoolClientId,
+                providerName: userPool.userPoolProviderName
+            }]
+        });
+
+        const authenticatedRole = new iam.Role(this, 'TlefAuthenticatedRole', {
+            assumedBy: new iam.FederatedPrincipal(
+                'cognito-identity.amazonaws.com',
+                {
+                    "StringEquals": {
+                        "cognito-identity.amazonaws.com:aud": identityPool.ref
+                    },
+                    "ForAnyValue:StringLike": {
+                        "cognito-identity.amazonaws.com:amr": "authenticated"
+                    }
+                },
+                "sts:AssumeRoleWithWebIdentity"
+            ),
+            roleName: 'tlef-analytics-authenticated-role',
+            inlinePolicies: {
+                "AppSyncInvokePolicy": new iam.PolicyDocument({ statements: [ appsyncAllowPolicy ]}),
+                "UnauthenticatedPolicy": cognitoPolicy
+            }
         });
 
         const guestRole = new iam.Role(this, 'TlefGuestAccessRole', {
@@ -173,18 +228,21 @@ export class ApiStack extends Stack {
             ),
             roleName: 'tlef-analytics-guest-role',
             inlinePolicies: {
-                "AppSyncInvokePolicy": appSyncInvokePolicy,
-                "UnauthenticatedPolicy": unauthenticatedPolicy
+                "AppSyncInvokePolicy": new iam.PolicyDocument({ statements: [ appsyncAllowPolicy, appSyncDenyPolicy ]}),
+                "UnauthenticatedPolicy": cognitoPolicy
             }
         });
 
-        const idPoolRoleAttachment = new CfnIdentityPoolRoleAttachment(this, 'TlefIdPoolRoleAttachment', {
+        const idPoolRoleAttachment = new cognito.CfnIdentityPoolRoleAttachment(this, 'TlefIdPoolRoleAttachment', {
             identityPoolId: identityPool.ref,
             roles: {
+                authenticated: authenticatedRole.roleArn,
                 unauthenticated: guestRole.roleArn
             }
         });
 
+        this.userPool = userPool;
+        this.userPoolClient = userPoolClient;
         this.idPool = identityPool;
 
         const resolverRole = new iam.Role(this, 'TlefAnalyticsResolverRole', {
@@ -254,7 +312,7 @@ export class ApiStack extends Stack {
         });
 
         fileTransferFunction.addToRolePolicy(s3AccessPolicy);
-        
+
         const lambdaDataSource = new appsync.LambdaDataSource(this, 'file-transfer-lambda-data-source', {
             api: this.api,
             lambdaFunction: fileTransferFunction,
