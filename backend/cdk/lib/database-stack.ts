@@ -22,6 +22,10 @@ export class DatabaseStack extends Stack {
     private readonly tables: { [id: string] : glue.S3Table; };
     private readonly dist: cf.Distribution;
 
+    public getS3Bucket() {
+        return this.s3Bucket;
+    }
+ 
     public getS3BucketName() {
         return this.s3Bucket.bucketName;
     }
