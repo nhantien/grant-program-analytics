@@ -6,7 +6,6 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import * as cf from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
-import * as logs from 'aws-cdk-lib/aws-logs';
 import { S3EventSourceV2 } from "aws-cdk-lib/aws-lambda-event-sources";
 import { CfnCrawler } from "aws-cdk-lib/aws-glue";
 import { Construct } from "constructs";
