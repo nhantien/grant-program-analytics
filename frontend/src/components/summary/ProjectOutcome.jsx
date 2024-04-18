@@ -8,7 +8,7 @@ function ProjectOutcome({ data }) {
     return (
         <div className={styles.bg}>
             <div className={styles.title}>
-                Project Outcome
+                Project Outcomes
             </div>
             <div className={styles.container}>
                 <Grid container>
