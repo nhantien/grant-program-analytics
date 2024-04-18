@@ -15,8 +15,8 @@ import { SummaryTitle, SummaryDescription, SummaryTable, Posters, SimilarProject
 function Summary() {
     const { id } = useParams();
 
-    const [params, setParams] = useSearchParams();
-    const server = params.get("staging") ? "staging" : "production";
+    const path = window.location.pathname;
+    const server = path.includes("staging") ? "staging" : "production";
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -38,7 +38,6 @@ function Summary() {
         return total;
     }
 
-    // TODO: add similar projects query
     useEffect(() => {
         const fetchData = async () => {
             const query = `query MyQuery {
@@ -178,19 +177,6 @@ function Summary() {
             <ProjectOutcome data={projectOutcome} />
         </div>
     );
-
-    // return (
-
-    //     <div className={styles.Summary}>
-    //         <SummaryTitle project={project} />
-    //         <SummaryDescription project={project} />
-    //         <SummaryTable project={project} />
-    //         <Posters project={project} />
-    //         <SimilarProjects project={project} type="individual" />
-    //     </div>
-
-
-    // );
 };
 
 export default Summary;

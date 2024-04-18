@@ -163,7 +163,8 @@ EnhancedTableHead.propTypes = {
     orderBy: PropTypes.string.isRequired,
 };
 
-export default function ProjectTable({ projects, server }) {
+export default function ProjectTable({ projects }) {
+    const path = window.location.pathname;
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('funding_year');
     const [selected, setSelected] = React.useState([]);
@@ -231,7 +232,7 @@ export default function ProjectTable({ projects, server }) {
     );
 
     return (
-        <Box sx={{ maxWidth: '100%', m: 2}}>
+        <Box sx={{ maxWidth: '100%', m: 2 }}>
             <Paper sx={{ maxWidth: '100%', mb: 2 }}>
                 <TableContainer sx={{ width: "100%" }}>
                     <Table
@@ -277,7 +278,7 @@ export default function ProjectTable({ projects, server }) {
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "10%" }}>{project.pi_name}</TableCell>
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%" }}>{project.project_faculty}</TableCell>
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "35%" }}>
-                                            <Link to={`/summary/${project.id}${server === "staging" ? "?staging=true" : ""}`}>{project.title}</Link>
+                                            <Link to={`${path.includes('staging') ? '/staging' : ''}/summary/${project.id}`}>{project.title}</Link>
                                         </TableCell>
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "10%" }}>{project.project_year}</TableCell>
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "10%" }}>{formattedAmount(project.funding_amount)}</TableCell>
@@ -286,7 +287,13 @@ export default function ProjectTable({ projects, server }) {
                                             {project.report ? <a href={project.report} target='_blank'>Report</a> : 'N/A'}
                                         </TableCell>
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%" }}>
-                                            {project.poster ? <a href={project.poster} target='_blank'>Poster</a> : 'N/A'}
+                                            {
+                                                project.poster ?
+                                                    <a href={project.poster} target='_blank' style={{ cursor: 'pointer' }}>
+                                                        <img src={project.poster} style={{ width: "100%", height: "auto" }} />
+                                                    </a>
+                                                    : "N/A"
+                                            }
                                         </TableCell>
                                     </TableRow>
                                 );

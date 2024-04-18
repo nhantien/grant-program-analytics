@@ -5,19 +5,19 @@
 
 .text {
     color: #000;
-    font-family: Inter;
+    font-family: Arial, Helvetica, sans-serif;
     font-style: normal;
 }
 
 .title {
     composes: text;
-    text-align: start;
+    text-align: center;
     font-size: 1.375rem;
-    font-weight: 400;
+    font-weight: bold;
 }
 
 .container {
-    margin-top: 3rem;
+    /* margin-top: 3rem; */
     width: 100%;
     display: flex;
     justify-content: center;
@@ -46,7 +46,7 @@
 
 .btn {
     margin: 0 2% 0 2%;
-    height: 40rem;
+    height: 33rem;
     border: none;
     background-color: transparent;
     color: #081252;
@@ -54,14 +54,12 @@
     font-family: bold;
 }
 
+.btn:active,
+.btn:focus,
 .btn:hover {
-    background-color: #E8ECEE;
-    box-shadow: 0 0 5px 10px #E8ECEE;
-}
-
-.btn:active {
-    background-color: darkgray;
-    box-shadow: 0 0 5px 10px darkgray;
+    background-color: transparent;
+    box-shadow: none;
+    -webkit-box-shadow: none;
 }
 
 @media screen and (max-width: 576px) {

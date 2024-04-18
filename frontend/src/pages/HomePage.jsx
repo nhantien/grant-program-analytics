@@ -18,12 +18,10 @@ import { Filter, FilterList, FundingYearFilter } from "../components/util";
 // constants
 import { Project, PROJECT_TYPE, MARKS, CURRENT_YEAR } from '../constants';
 
-function HomePage() {
+function HomePage({ signOut }) {
 
-    const [params, setParams] = useSearchParams();
-    const server = params.get("staging") ? "staging" : "production";
-    console.log(server);
-
+    const path = window.location.pathname;
+    const server = path.includes("staging") ? "staging" : "production";
 
     const client = generateClient();
 
@@ -64,10 +62,6 @@ function HomePage() {
                 poster
             }
         }`;
-
-        console.log(str);
-
-        console.log(process.env.REACT_APP_APPSYNC_ENDPOINT)
 
         return str;
     }
@@ -147,8 +141,6 @@ function HomePage() {
 
                 const proposals = results.data.getFilteredProposals;
 
-                console.log(proposals);
-
                 const newProjects = proposals.map((proj) => {
                     return new Project(
                         proj.grant_id,
@@ -164,7 +156,7 @@ function HomePage() {
                         proj.poster
                     );
                 });
-                
+
                 setProjects(newProjects);
                 setLoading(false);
 
@@ -214,8 +206,39 @@ function HomePage() {
         document.getElementById("top").scrollIntoView({ behavior: "auto" });
     };
 
+    const handleFileTransfer = async () => {
+
+        if (!window.confirm('Do you want to tranfer file?')) return;
+
+        try {
+            const queryString = `query file {
+                copyFilesToProduction {
+                    status
+                    message
+                }
+            }`;
+
+            const results = await client.graphql({
+                query: queryString
+            });
+
+            const status = results.data.copyFilesToProduction;
+
+            window.alert(`${status.status}: ${status.message}`);
+
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     return (
         <div className={styles.bg}>
+            {
+                path.includes('staging') &&
+                <div className={styles['sign-out-div']}>
+                    <button onClick={signOut} className={styles['sign-out-btn']}>Sign Out</button>
+                </div>
+            }
             <header className={styles["app-header"]}>
 
                 <div className={styles.container}>
@@ -240,7 +263,7 @@ function HomePage() {
                                 <Filter options={optionsLoading ? {} : options.project_type} defaultValue="Project Type" type="project_type" snapshot={false} />
                             </Grid>
                             <Grid item xs={12} md={3}>
-                                <Filter options={optionsLoading ? {} : options.project_faculty} defaultValue="Faculty/Unit" type="project_faculty" snapshot={false} />
+                                <Filter options={optionsLoading ? {} : options.project_faculty} defaultValue="Faculty/College/Unit" type="project_faculty" snapshot={false} />
                             </Grid>
                             <Grid item xs={12} md={3}>
                                 <Filter options={optionsLoading ? {} : options.focus_area} defaultValue="Focus Area" type="focus_area" snapshot={false} />
@@ -297,21 +320,29 @@ function HomePage() {
 
                     <section id="top"></section>
 
-                    <div className={styles["generate-summary"]}>
-                        <p className={styles["generate-summary-txt"]}>View a detailed summary of the currently displayed projects</p>
-                        <div>
-                            <button className={styles["generate-summary-btn"]}>
-                                <Link
-                                    to={`/snapshot${server === "staging" ? "?staging=true" : ""}`}
-                                    state={{
-                                        projects: projects,
-                                        range: range,
-                                    }}
-                                    style={{ textDecoration: "none", color: "white" }}
-                                >
-                                    Generate Program Summary
-                                </Link>
-                            </button>
+                    <div>
+                        {
+                            path.includes('staging') &&
+                            <div className={styles["generate-summary"]}>
+                                <button className={styles['generate-summary-btn']} onClick={handleFileTransfer}>Confirm New Data Changes</button>
+                            </div>
+                        }
+                        <div className={styles["generate-summary"]}>
+                            <p className={styles["generate-summary-txt"]}>View a detailed summary of the currently displayed projects</p>
+                            <div>
+                                <button className={styles["generate-summary-btn"]}>
+                                    <Link
+                                        to={path.includes('staging') ? '/staging/snapshot' : 'snapshot'}
+                                        state={{
+                                            projects: projects,
+                                            range: range,
+                                        }}
+                                        style={{ textDecoration: "none", color: "white" }}
+                                    >
+                                        Generate Program Summary
+                                    </Link>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -334,14 +365,14 @@ function HomePage() {
                                             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                                                 {
                                                     projects.slice(10 * page, (Math.min(10 * (page + 1), projects.length))).map((project) =>
-                                                        <VerticalTableItem key={project.id} project={project} server={server} />
+                                                        <VerticalTableItem key={project.id} project={project} />
                                                     )
                                                 }
                                                 <Pagination count={Math.floor(projects.length / 10)} shape='rounded' showFirstButton
                                                     onChange={(event, page) => handlePaginationChange(page)} sx={{ margin: "auto" }} />
                                             </div>
                                             :
-                                            <ProjectTable projects={projects} server={server} />
+                                            <ProjectTable projects={projects} />
                                     }
                                 </Grid>
                             </Grid>
