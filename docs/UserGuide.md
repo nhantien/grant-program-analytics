@@ -14,7 +14,7 @@ Once you have deployed the solution, the following user guide will help you navi
 | [Snapshot](#snapshot) | Walkthrough of the Snapshot page |
 
 ## Uploading Data
-Please refer to the Uploading Data Guide 
+Please refer to the [Uploading Data Guide](./UploadData.md)
 
 ## Updating Data
 Please refer to the [Modifying Data Guide](./ModifyData.md)
@@ -42,13 +42,15 @@ The Generate Program Summary button will take users to the [Snapshot](#snapshot)
 ## Staging
 The staging website provides a controlled environment for reviewing changes to the data before they are made public.
 
-To navigate to staging, add `staging` to the end of the URL. 
-ie: `https://main.d1kbeedktpnze5.amplifyapp.com/` to `https://main.d1kbeedktpnze5.amplifyapp.com/staging`
+To navigate to staging, add `staging` to the end of the URL. For example:
+`https://main.d1kbeedktpnze5.amplifyapp.com/` to `https://main.d1kbeedktpnze5.amplifyapp.com/staging`
 
-This will direct you to the login page.
+This will direct you to the login page, where authorized users can sign in with their credentials.
 <img width="517" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/a908a4a7-287f-4347-82dd-429d32934eb2">
 
 Within the staging website, data that is currently in the `/staging` bucket in AWS S3 will be displayed. There are two additional features: confirming the new data changes, which will publish data to the main page, and logging out from the staging view. 
+
+<img width="1174" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/37816ccf-3169-47f0-9cc3-e48128e66b41">
 
 ## Individual Summary 
 The individual summary page displays further data on each TLEF funded proposal. It can be accessed by clicking on title of the proposal you're interested in within the data table on the home page. 
