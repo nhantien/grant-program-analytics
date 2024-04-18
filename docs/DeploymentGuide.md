@@ -16,8 +16,9 @@ Before you deploy, you must have the following installed on your device.
 - [AWS Account](https://aws.amazon.com/account/)
 - [GitHub Account](https://github.com/)
 - [AWS CLI](https://aws.amazon.com/cli/)
-- [AWS CDK](https://docs.aws.amazon.com/cdk/v2/guide/cli.html)
+- [AWS CDK](https://docs.aws.amazon.com/cdk/v2/guide/cli.html) *(v2.122.0 > required)*
 - [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- [node](https://nodejs.org/en/learn/getting-started/how-to-install-nodejs) *(v20.0.0 > required)*
 
 ## Pre-Deployment
 ### Create GitHub Personal Access Token
@@ -86,8 +87,26 @@ You may run the following command to deploy the stacks all at once. Please repla
 ```
 cdk deploy --all --profile <profile-name>
 ```
-### Step 4: Upload Data
-After the application is deployed, you will need to upload data to Amazon S3. See our [user guide](./UserGuide.md) for details.
+## Post-Deployment
+### Step 1: Build AWS Amplify App
+Log in to AWS console, and navigate to **AWS Amplify**. You can do so by typing `Amplify` in the search bar at the top.
+![AWS Amplify Console](./images/amplify-console.jpeg)
+
+Click `Run build` to start building the web application.
+![AWS Amplify Build Not Started](./images/amplify-build-not-started.jpeg)
+
+From `All apps`, click `tlef-analytics` to go to the app settings.
+
+When the build is completed, you will see the screen as shown in the below image.
+Please note down the URL highligted in red, as this will be the URL of the web application.
+
+![Amplify Build Complete](./images/amplify-build-complete.jpeg)
+
+### Step 2: Upload Data
+You will also need to upload data to Amazon S3. See our [user guide](./UserGuide.md) for details.
+
+### Step 3: Visig Web App
+Now you can navigate to the URL you created in step 1 to see your application in action.
 
 ### Extra: Taking down the deployed stacks
 To take down the deployed stack for a fresh redeployment in the future, navigate to AWS Cloudformation, click on the stack(s) and hit Delete. Please wait for the stacks in each step to be properly deleted before deleting the stack downstream. The deletion order is as followed:
