@@ -104,6 +104,7 @@ type Query {
   countTotalReachByFaculty(filter: Filter, method: String, server: String): StudentReachCount
   getFilteredProposals(filter: Filter, method: String, server: String): [Proposal]
   getIndividualSummaryInfo(grantId: String, method: String, server: String): [IndividualSummary]
+  getProjectOutcome(grantId: String, method: String, server: String): String
   getSimilarProjects(grantId: String, method: String, server: String): [Proposal]
   getStudentReachByGrantId(grantId: String, method: String, server: String): [StudentReachByGrant]
   getStudentReachInfo(filter: Filter, method: String, server: String): StudentReachInfo

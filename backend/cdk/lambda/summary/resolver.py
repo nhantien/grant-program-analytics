@@ -59,6 +59,8 @@ def lambda_handler(event, context):
         return getStudentReachByGrantId(event["grantId"], server)
     elif method == "getSimilarProjects":
         return getSimilarProjects(event["grantId"], server)
+    elif method == "getProjectOutcome":
+        return getProjectOutcome(event["grantId"], server)
     else:
         return None
 
@@ -241,3 +243,19 @@ def getSimilarProjects(grant_id, server):
     
     
     return list(res.values())
+    
+def getProjectOutcome(grant_id, server):
+    query_string = f'''SELECT project_outcomes
+    FROM {os.environ.get('PROJECT_OUTCOMES')}
+    WHERE project_id = (
+        SELECT project_id FROM {os.environ.get('PROJECT_DETAILS')} 
+        WHERE grant_id = '{grant_id}'
+    )
+    '''
+    
+    rows = execute_query(query_string, server)
+    
+    if len(rows) > 1:
+        return rows[1]["Data"][0]["VarCharValue"]
+    else:
+        return ""

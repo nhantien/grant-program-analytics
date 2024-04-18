@@ -86,6 +86,8 @@ function Summary() {
                     funding_year
                 }
 
+                getProjectOutcome(server: "${server}", method: "getProjectOutcome", grantId: "${id}")
+
                 loadFocusArea(server: "${server}", method: "loadFocusArea") {
                     label
                     value
@@ -143,7 +145,7 @@ function Summary() {
                 
                 setTableData(tableInfo);
                 setSimilarProjects(results.data.getSimilarProjects);
-                setProjectOutcome(summaryInfo[summaryInfo.length - 1].project_outcome);
+                setProjectOutcome(results.data.getProjectOutcome);
                 setPosters(posterInfo);
 
                 setIsLoading(false);

@@ -274,6 +274,7 @@ export class ApiStack extends Stack {
             'STUDENT_REACH': databaseStack.getTableName('student_reach'),
             'SIMILAR_PROJECTS': databaseStack.getTableName('similar_projects'),
             'UNIQUE_STUDENT': databaseStack.getTableName('unique_student'),
+            'PROJECT_OUTCOMES': databaseStack.getTableName('project_outcomes'),
             'CLOUDFRONT_DOMAIN_NAME': databaseStack.getDomainName(),
             'IMAGE_BUCKET_NAME': databaseStack.getImageBucketName()
         };
@@ -282,7 +283,7 @@ export class ApiStack extends Stack {
         this.createResolver('options', ['loadFaculty', 'loadFocusArea'], env);
         this.createResolver('success-rate', ['countDeclinedProjects'], env);
         this.createResolver('projects-and-grants', ['countProjectsAndGrants'], env);
-        this.createResolver('summary', ['getIndividualSummaryInfo', 'getTeamMembersByGrantId', 'getStudentReachByGrantId', 'getSimilarProjects'], env);
+        this.createResolver('summary', ['getIndividualSummaryInfo', 'getTeamMembersByGrantId', 'getStudentReachByGrantId', 'getSimilarProjects', 'getProjectOutcome'], env);
         this.createResolver('faculty-engagement', ['countFacultyMembersByStream', 'getUniqueStudent'], env);
         this.createResolver('student-reach', ['countTotalReachByFaculty', 'getStudentReachInfo'], env);
 
@@ -298,10 +299,6 @@ export class ApiStack extends Stack {
                 'S3_BUCKET_NAME': databaseStack.getS3BucketName()
             }
         });
-
-        // const transferLogGroup = new logs.LogGroup(this, 'converterLogGroup', {
-        //     logGroupName: `/aws/lambda/${fileTransferFunction.functionName}`,
-        // });
 
         const s3AccessPolicy = new iam.PolicyStatement({
             actions: [

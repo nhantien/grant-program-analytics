@@ -350,6 +350,17 @@ const SIMILAR_PROJECTS_SCHEMA = [
     }
 ];
 
+const PROJECT_OUTCOMES_SCHEMA = [
+    {
+        name: 'project_id',
+        type: glue.Schema.STRING
+    },
+    {
+        name: 'project_outcomes',
+        type: glue.Schema.STRING
+    }
+];
+
 export {
     PROJECT_DETAILS_SCHEMA,
     FACULTY_ENGAGEMENT_SCHEMA,
@@ -360,5 +371,6 @@ export {
     FACULTY_OPTIONS_SCHEMA,
     FOCUS_AREA_OPTIONS_SCHEMA,
     UNSUCCESSFUL_PROJECTS_SCHEMA,
-    SIMILAR_PROJECTS_SCHEMA
+    SIMILAR_PROJECTS_SCHEMA,
+    PROJECT_OUTCOMES_SCHEMA
 }

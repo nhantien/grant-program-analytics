@@ -118,8 +118,7 @@ export class DatabaseStack extends Stack {
         /**
          * S3 dataset bucket & deployments
          */
-        const s3DataBucket = new s3.Bucket(this, 'TlefAnalyticsS3Bucket', {
-            bucketName: 'tlef-analytics',
+        const s3DataBucket = new s3.Bucket(this, 'tlef-analytics', {
             blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
             encryption: s3.BucketEncryption.S3_MANAGED,
             removalPolicy: RemovalPolicy.DESTROY,
@@ -142,6 +141,12 @@ export class DatabaseStack extends Stack {
             sources: [s3Deploy.Source.asset("./bucket_config_raw")],
             destinationBucket: s3DataBucket,
             destinationKeyPrefix: 'raw/'
+        });
+
+        const InstitutionDataDeployment = new s3Deploy.BucketDeployment(this, 'InstitutionDataDeployment', {
+            sources: [s3Deploy.Source.asset("./INSTITUTION_DATA")],
+            destinationBucket: s3DataBucket,
+            destinationKeyPrefix: 'INSTITUTION_DATA/'
         });
 
         /**
@@ -178,16 +183,7 @@ export class DatabaseStack extends Stack {
             resources: [`${s3DataBucket.bucketArn}/*`]
         });
 
-        // const lambdaLogPolicy = new iam.PolicyStatement({
-        //     actions: [
-        //         "logs:CreateLogStream",
-        //         "logs:PutLogEvents"
-        //     ],
-        //     resources: [`${converterLogGroup.logGroupArn}:*`]
-        // });
-
         excelToParquetConverter.addToRolePolicy(s3AccessPolicy);
-        // excelToParquetConverter.addToRolePolicy(lambdaLogPolicy);
         excelToParquetConverter.addLayers(lambda.LayerVersion.fromLayerVersionArn(this, 'AwsPandasLayer', 'arn:aws:lambda:ca-central-1:336392948345:layer:AWSSDKPandas-Python311:10'));
         excelToParquetConverter.addEventSource(rawFolderUploadEvent);
 
@@ -195,8 +191,7 @@ export class DatabaseStack extends Stack {
         /**
          * S3 image bucket & deployment
          */
-        const s3ImageBucket = new s3.Bucket(this, 'TlefAnalyticsS3ImageBucket', {
-            bucketName: 'tlef-analytics-image',
+        const s3ImageBucket = new s3.Bucket(this, 'tlef-analytics-image', {
             blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
             encryption: s3.BucketEncryption.S3_MANAGED,
             removalPolicy: RemovalPolicy.DESTROY,
@@ -418,6 +413,24 @@ export class DatabaseStack extends Stack {
             s3Prefix: 'staging/similar_projects'
         });
 
+        const projectOutcomesProdTable = new glue.S3Table(this, 'ProjectOutcomesProdTable', {
+            database: prodDB,
+            tableName: 'project_outcomes',
+            columns: schemas.PROJECT_OUTCOMES_SCHEMA,
+            dataFormat: glue.DataFormat.PARQUET,
+            bucket: s3DataBucket,
+            s3Prefix: 'production/project_outcomes'
+        });
+
+        const projectOutcomesStagingTable = new glue.S3Table(this, 'ProjectOutcomesStagingTable', {
+            database: stagingDB,
+            tableName: 'project_outcomes',
+            columns: schemas.PROJECT_OUTCOMES_SCHEMA,
+            dataFormat: glue.DataFormat.PARQUET,
+            bucket: s3DataBucket,
+            s3Prefix: 'staging/project_outcomes'
+        });
+
         this.tables['project_details'] = projectDetailsProdTable;
         this.tables['faculty_engagement'] = facultyEngagementProdTable;
         this.tables['student_reach'] = studentReachProdTable;
@@ -428,5 +441,6 @@ export class DatabaseStack extends Stack {
         this.tables['focus_area_option'] = focusAreaOptionProdTable;
         this.tables['unsuccessful_projects'] = unsuccessfulProjectsProdTable;
         this.tables['similar_projects'] = similarProjectsProdTable;
+        this.tables['project_outcomes'] = projectDetailsProdTable;
     }
 }
