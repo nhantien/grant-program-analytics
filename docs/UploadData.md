@@ -8,13 +8,13 @@
 
 # Introduction
 The procedure of uploading the datasets differs depending on the dataset.\
-Most datasets can be uploaded in a simple way, whereas uploading `project_details` and `faculty_engagement` datasets requires a few additional steps.
+Most datasets can be uploaded in a simple way, whereas uploading `project_details` and `faculty_engagement` datasets requires a few more additional steps.
 
 # Project Details and Faculty Engagement
 `project_details` and `faculty_engagement` datasets will be pre-populated by our data cleaning process of raw Survey Monkey data. You can then populate the generated files by filling in empty columns, then re-upload them to make them viewable from the web application.
 
 ## Step 1: Upload Raw Data Files
-Firstly, you need to upload the raw survey monkey file to `/raw/survey_monkey` folder within `tlef-analytics` bucket.
+First, you need to upload the raw survey monkey file to `/raw/survey_monkey` folder within `tlef-analytics` bucket.
 ![Raw Survey Monkey Folder](./images/raw-sm-folder.jpeg)
 
 ## Step 2: Initiate Glue Job
@@ -32,7 +32,7 @@ Select the checkbox next to the item you would like to download, then click `Dow
 ## Step 4: Re-Upload Datasets
 Once you finish editing the pre-populated datasets, you will need to re-upload the complete datasets back to Amazon S3 at the appropriate locations.
 
-Before you upload the files, make sure the file names are the same as what you uploaded eariler in [step 1](#step-1-upload-raw-data-files).\
+Before you upload the files, **make sure the file names are the same** as what you uploaded earlier in [Step 1](#step-1-upload-raw-data-files).\
 Specifically, remove any number that has been added to the end of the file name, if there is any.\
 ex. If your downloaded file is named like `project_details(1).xlsx`, remove `(1)` from the file name and re-upload it.
 
@@ -45,7 +45,7 @@ For `project_details_{year}.xlsx`, upload the files to `/raw/project_details` fo
 ***Glue Job description***
 
 ## Step 6: Edit Data
-If you would like to edit data after [step 5](#step-5-start-the-second-glue-job), you can repeat steps 3 and 4 for changes to take place. 
+If you would like to edit data after [Step 5](#step-5-start-the-second-glue-job), you can repeat Steps 3 and 4 for changes to take place. 
 
 # Other Datasets
 ## Step 1: Name Datasets Appropriately
@@ -79,9 +79,9 @@ You can then preview the data you uploaded from the web application.
 ## Step 3: Editing Datasets
 If you would like to edit the contents of the datasets after the initial uploads, you can follow the procedures described below.
 
-### Step 3-1: Downloading File onto Local Computer
+### Step 3.1: Downloading File onto Local Computer
 Select the checkbox next to the item you would like to make changes to, then click `Download` from the top menu. This will allow you to download the file onto your computer. You can then edit the file in Microsoft Excel.
 
-### Step 3-2: Re-Uploading Datasets
+### Step 3.2: Re-Uploading Datasets
 
 
