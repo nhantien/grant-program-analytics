@@ -157,6 +157,6 @@ arguments = {
 }
 glue_client = boto3.client("glue")
 glue_client.start_job_run(
-    JobName="generate-embeddings-and-similar-projects",
+    JobName="tlef-generate-embeddings-and-similar-projects",
     Arguments=arguments
 )
