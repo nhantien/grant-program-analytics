@@ -2,7 +2,7 @@ import { Stack, StackProps, Duration } from "aws-cdk-lib";
 import * as appsync from 'aws-cdk-lib/aws-appsync';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as iam from 'aws-cdk-lib/aws-iam';
-import * as logs from 'aws-cdk-lib/aws-logs';
+import * as wafv2 from 'aws-cdk-lib/aws-wafv2';
 import { CfnIdentityPool, CfnIdentityPoolRoleAttachment } from "aws-cdk-lib/aws-cognito";
 import { DatabaseStack } from "./database-stack";
 import { Construct } from "constructs";
@@ -89,10 +89,50 @@ export class ApiStack extends Stack {
                 defaultAuthorization: {
                     authorizationType: appsync.AuthorizationType.IAM
                 }
+            },
+            logConfig: {
+                fieldLogLevel: appsync.FieldLogLevel.ALL
             }
         });
 
         this.api = api;
+
+        const webAcl = new wafv2.CfnWebACL(this, 'TlefAnalyticsAcl', {
+            defaultAction: {
+                allow: {}
+            },
+            scope: "REGIONAL",
+            visibilityConfig: { 
+                cloudWatchMetricsEnabled: true, 
+                metricName: "webACL",
+                sampledRequestsEnabled: true
+            },
+            rules: [ 
+                { 
+                    name: "AWS-AWSManagedRulesCommonRuleSet",
+                    priority: 1, 
+                    overrideAction: {
+                        none: {}
+                    },
+                    statement: {
+                        managedRuleGroupStatement: { 
+                            name: "AWSManagedRulesCommonRuleSet",
+                            vendorName: "AWS", 
+                        }
+                    },
+                    visibilityConfig: {
+                        cloudWatchMetricsEnabled: true,
+                        metricName: "awsCommonRules",
+                        sampledRequestsEnabled: true 
+                    } 
+                },
+            ]
+        });
+
+        const appSyncAssociation = new wafv2.CfnWebACLAssociation(this, "TlefWebAclAssociation", {
+            webAclArn: webAcl.attrArn,
+            resourceArn: api.arn
+        });
 
         const appSyncInvokePolicy = new iam.PolicyDocument({
             statements: [new iam.PolicyStatement({
