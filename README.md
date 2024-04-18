@@ -1,8 +1,6 @@
 # TLEF Analytics
 
-# Student Advising Voice Assistant
-
-This is a voice assistance feature for the [student advising assistant project](https://github.com/UBC-CIC/student-advising-assistant), where you can interact with the question answering system through Alexa. For more information visit the [CIC website](https://cic.ubc.ca/project/student-advising-assistant/).
+The TLEF (Teaching and Learning Enhancement Fund) Analytics prototype solutions aims to increase the visibility and accessibility of the TLEF portfolio. The prototype leverages AWS technology to move data storage to the cloud and simplify data cleaning processes, and innovates on the structure and presentation of data with advanced filtering and dynamic views. For more information visit the [CIC website](https://cic.ubc.ca/project/student-advising-assistant/).
 
 | Index | Description |
 | ----- | ----------- |
@@ -77,7 +75,7 @@ For information on how the application was developed, refer to the [Development 
 N/A
 
 ## Credits
-This application was architected and developed by Kotaro Ito, with project assistance by Franklin Ma. A special thanks to the UBC Cloud Innovation Centre Technical and Project Management teams for their guidance and support.
+This application was architected and developed by Kotaro Ito, Harshinee Sriram, Aurora Cheng, and Tien Nguyen, with project assistance by Franklin Ma. A special thanks to the UBC Cloud Innovation Centre Technical and Project Management teams for their guidance and support.
 
 ## License
 This project is distributed under the [MIT License](./LICENSE).
