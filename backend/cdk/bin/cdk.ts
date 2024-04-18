@@ -4,6 +4,7 @@ import * as cdk from 'aws-cdk-lib';
 import { DatabaseStack } from '../lib/database-stack';
 import { ApiStack } from '../lib/api-stack';
 import { HostingStack } from '../lib/hosting-stack';
+import { DataPipelineStack } from '../lib/datapipeline-stack';
 
 const app = new cdk.App();
 // new CdkStack(app, 'CdkStack', {
@@ -23,5 +24,6 @@ const app = new cdk.App();
 // });
 
 const db = new DatabaseStack(app, 'DatabaseStack', {});
+const pipeline = new DataPipelineStack(app, 'DataPipelineStack', db, {});
 const api = new ApiStack(app, db, 'ApiStack', {});
 const hosting = new HostingStack(app, api, 'HostingStack', {});
