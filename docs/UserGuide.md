@@ -58,15 +58,15 @@ If you have already logged in, you can continue to the website. Otherwise, the f
    <img width="812" alt="Screenshot 2024-04-18 at 2 47 14 PM" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/b8be328c-e410-4b03-b283-2b2420e69306">
 3. Next, we will create a user. Under Users, click on `Create user`.
    <img width="796" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/f46674f2-b3fc-4134-993c-5777684e6528">
-5. Under User information: 
-    Select `Send an email invitation`
-    Input the user's email address under the Email address field and mark as verified
-    Select `Generate a password`
-    Click `Create user`
+5. Under User information: \
+    Select `Send an email invitation` \
+    Input the user's email address under the Email address field and mark as verified \
+    Select `Generate a password` \
+    Click `Create user` \
    <img width="760" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/55982cd5-b4d9-4a15-b2ea-6e77419147e0">
 6. Now you will be able to login with the newly created admin user. Check your email for the temporary password to sign in. Upon sign in, you will be asked to change your password.
 
-
+### Navigating the staging website
 Within the staging website, data that is currently in the `/staging` bucket in AWS S3 will be displayed. There are two additional features: confirming the new data changes, which will publish data to the main page, and logging out from the staging view. 
 
 <img width="1174" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/37816ccf-3169-47f0-9cc3-e48128e66b41">
