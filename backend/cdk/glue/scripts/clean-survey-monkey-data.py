@@ -1,38 +1,35 @@
-#!/usr/bin/env python
-
-import warnings
-warnings.simplefilter(action='ignore', category=FutureWarning)
-
-import sys
-import io
 import boto3
-from botocore.exceptions import ClientError
 import pandas as pd
 import numpy as np
 import re
+import sys
 import datetime
 from fuzzywuzzy import fuzz
 import collections
+comprehend = boto3.client('comprehend', region_name='ca-central-1')
 
 # Glue parameters
 from awsglue.utils import getResolvedOptions
-args = getResolvedOptions(
-    sys.argv, ["BUCKET_NAME", "RAW_DATA_S3URI", "INSTITUTION_DATA_S3URI"])
+# in the Job details tab, the parameters has an extra -- in front, Glue expect it
+# this bit retrieve the environment variables (parameters) in the Job details into the Glue python environment
+args = getResolvedOptions(sys.argv, ["BUCKET_NAME", "INSTITUTION_DATA_S3_URI", "SURVEY_MONKEY_S3URI"])
+
 BUCKET_NAME = args["BUCKET_NAME"]
-RAW_DATA_S3URI = args["RAW_DATA_S3URI"]
-INSTITUTION_DATA_S3URI = args["INSTITUTION_DATA_S3URI"]
-
-comprehend = boto3.client('comprehend', region_name='ca-central-1')
-
+INSTITUTION_DATA_S3_URI = args["INSTITUTION_DATA_S3_URI"]
+SURVEY_MONKEY_S3URI = args["SURVEY_MONKEY_S3URI"]
 
 def return_df(bucket, data_key):
 
-    data_location = 's3://{}/{}'.format(bucket, data_key)
+    if "s3://" in data_key: # TIEN a full s3 URI is passed
+        data_location = data_key
+    else:
+        data_location = 's3://{}/{}'.format(bucket, data_key)
+
     if data_location[-3:] == 'csv':
         df = pd.read_csv(data_location)
     else:
         df = pd.read_excel(data_location)
-    
+
     delete_columns = []
     
     if '"Small TLEF Project Proposal" completion status' in list(df.columns):
@@ -45,68 +42,23 @@ def return_df(bucket, data_key):
     if 'Project Title (200 characters max.)' in list(df.columns):
         df.dropna(subset=['Project Title (200 characters max.)'], inplace=True)
     return df
-    
-def write_df_to_bucket(df, bucket, key, ind=False):
-    
-    """
-    Upload a file to s3
-
-    Arguments:
-        df: the pandas DataFrame
-        bucket: the destination bucket name
-        key: the key of the file to be written as on the bucket
-    """
-    
-    # create a buffer to write csv data to
-    csv_buffer = io.StringIO()
-    df.to_csv(csv_buffer, index=ind)
-
-    s3_bucket_clean = boto3.resource('s3')
-    try:
-        response = s3_bucket_clean.Object(bucket, key).put(Body=csv_buffer.getvalue())
-    except ClientError as e:
-        print(f"Error uploading file '{file_path}' to S3: {e}")
-
-        
-def process_s3uri(uri):
-    
-    """
-    Extract the key of a file from it's full URI
-    
-    Arguments:
-        uri: str, the uri
-    Returns:
-        tuple of str: the fullKey, the rootFolder, the fileName
-    """
-    fullKey = uri.split(f"s3://{BUCKET_NAME}/")[1]
-    split = uri.split("/")
-    fileName = split[-1]
-    rootFolder = split[3]
-    
-    # get the in between part of the file key if exists
-    # Split the path string into segments using '/'
-    segments = fullKey.split('/')
-    begin_index = segments.index(rootFolder)
-    end_index = -1
-    # Extract the substring between "begin" and "end"
-    inbetween = '/'.join(segments[begin_index + 1:end_index])
-    inbetween = inbetween + "/" if inbetween != "" else ""
-        
-    return rootFolder+"/", inbetween, fileName, fullKey
 
 def empty_to_zero(df):
     return df.fillna(0)
 
-def change_na_to_zero_or_no(df, column_name):
+def empty_to_blank(df):
+    return df.fillna('')
+
+def change_na_or_no_to_blank(df, column_name):
     
     df[column_name] = df[column_name].apply(
         lambda x: re.sub(
-            r'^(No(t\sapplicable\.?|ne\.?)|n(o(t\sapplicable\.?|ne\.?)|/a\.?)|N(/[Aa]|[Aa])\.?)$', '0', str(x)
+            r'^(No(t\sapplicable\.?|ne\.?)|n(o(t\sapplicable\.?|ne\.?)|/a\.?)|N(/[Aa]|[Aa])\.?)$', '', str(x)
         ))
     
     df[column_name] = df[column_name].apply(
         lambda x: re.sub(
-            r'.*[Nn]o.*', '0', str(x)
+            r'.*[Nn]o.*', '', str(x)
         ))
     
     return df
@@ -149,7 +101,6 @@ def course_info_mapping(df, column_list):
         # Iterate over each value in the current column by its index.
         for value_idx in range(len(list(df[column_name]))):
             
-            mentioned_course = 0
             this_course_info = ''.join(str(df[column_name].iloc[value_idx]).upper().split())  # Extract and clean the current value from the column, making it uppercase and removing spaces.
             course_info = re.findall(course_info_pattern, this_course_info)  # Use the compiled regex to find all matches of the course code pattern in the cleaned string.
             
@@ -179,8 +130,8 @@ def course_info_mapping(df, column_list):
                 new_column_values.append([course_code])  # Add the formatted course code to the new column values as a list containing a single element.
                 
             else:
-                # If no course code is found, append 0 to the new column values.
-                new_column_values.append(0)
+                # If no course code is found, append a blank to the new column values.
+                new_column_values.append('')
 
         df['cleaned_'+column_name] = new_column_values
     
@@ -279,7 +230,7 @@ def term_mapping(df, column_list):
             if mentioned_terms:
                 df[column_name].iloc[value_idx] = ','.join(mentioned_terms)
             else:
-                df[column_name].iloc[value_idx] = 0
+                df[column_name].iloc[value_idx] = ''
             
     return df
 
@@ -297,7 +248,7 @@ def year_mapping(df, column_list, year_start=0, upto_future_year=5):
             
             this_year_data = str(df[column_name].iloc[value_idx])
             if this_year_data == '20245/2025': # Exception
-                new_column_values.append(0)
+                new_column_values.append('') # Add a blank
                 continue
             this_year_data = process_colon(this_year_data)
             this_year_data = remove_except_numbers_dash_and_onward_no_space(this_year_data)
@@ -326,7 +277,7 @@ def year_mapping(df, column_list, year_start=0, upto_future_year=5):
                 new_column_values.append(mentioned_years)
 
             else:
-                new_column_values.append(0)
+                new_column_values.append('') # add a blank
                 
         df['cleaned_'+column_name] = new_column_values
             
@@ -396,7 +347,7 @@ def ner_mapping(df, column, bucket, data_key, faculty_code_dict):
     
     for this_free_text_idx in range(len(source_data)):
         this_free_text = source_data.iloc[this_free_text_idx]
-        if isinstance(this_free_text, str):
+        if isinstance(this_free_text, str) and this_free_text != '': # only accepting valid strings
             associated_entities = retrieve_member_info(this_free_text)
             cleaned_associated_entities = add_institution_info(
                 associated_entities,
@@ -668,7 +619,7 @@ def rename_columns(df):
     
     return df
 
-def generate_faculty_engagement_csv(df, ner_col_name='cleaned_Team Members'):
+def generate_faculty_engagement_xlsx(df, ner_col_name='cleaned_Team Members'):
     
     funding_year = []
     project_type = []
@@ -685,7 +636,7 @@ def generate_faculty_engagement_csv(df, ner_col_name='cleaned_Team Members'):
     
     for proj_idx in range(len(df)):
         this_member_info = df[ner_col_name].iloc[proj_idx]
-        if not isinstance(this_member_info, int):
+        if not isinstance(this_member_info, int) and this_member_info != '': # Not an integer or a blank string
             for this_team_member_name in list(this_member_info.keys()):
 
                 funding_year.append(df['Funding Year'].iloc[proj_idx])
@@ -698,48 +649,89 @@ def generate_faculty_engagement_csv(df, ner_col_name='cleaned_Team Members'):
                 if 'Team Member Title' in list(this_member_info[this_team_member_name].keys()):
                     team_member_title.append(this_member_info[this_team_member_name]['Team Member Title'])
                 else:
-                    team_member_title.append(0)
+                    team_member_title.append('')
 
                 if 'Team Member Stream' in list(this_member_info[this_team_member_name].keys()):
                     team_member_stream.append(this_member_info[this_team_member_name]['Team Member Stream'])
                 else:
-                    team_member_stream.append(0)
+                    team_member_stream.append('')
 
                 if 'Campus' in list(this_member_info[this_team_member_name].keys()):
                     campus.append(this_member_info[this_team_member_name]['Campus'])
                 else:
-                    campus.append(0)
+                    campus.append('')
 
                 if 'Team Member Faculty' in list(this_member_info[this_team_member_name].keys()):
                     team_member_faculty.append(this_member_info[this_team_member_name]['Team Member Faculty'])
                 else:
-                    team_member_faculty.append(0)
+                    team_member_faculty.append('')
 
                 if 'Team Member Department' in list(this_member_info[this_team_member_name].keys()):
                     team_member_department.append(this_member_info[this_team_member_name]['Team Member Department'])
                 else:
-                    team_member_department.append(0)
+                    team_member_department.append('')
 
                 if 'Team Member Email' in list(this_member_info[this_team_member_name].keys()):
                     team_member_email.append(this_member_info[this_team_member_name]['Team Member Email'])
                 else:
-                    team_member_email.append(0)
-                
-    faculty_engagement_df = pd.DataFrame(
-    {'Funding Year': funding_year,
-     'Project Type': project_type,
-     'Application Title': application_title,
-     'Project Faculty': project_faculty,
-     'Team Member Name': team_member_name,
-     'Team Member Title': team_member_title,
-     'Team Member Stream': team_member_stream,
-     'Campus': campus,
-     'Team Member Faculty': team_member_faculty,
-     'Team Member Department': team_member_department,
-     'Team Member Email': team_member_email
+                    team_member_email.append('')
+    
+    n_rows = len(funding_year)
+    
+    faculty_engagement_df = pd.DataFrame({
+        'funding_year': funding_year,
+        'project_type': project_type,
+        'project_id': application_title,
+        'grant_id': [''] * n_rows, # This info is not present in the raw survey monkey dataset
+        'project_faculty': project_faculty,
+        'member_name': team_member_name,
+        'member_title': team_member_title,
+        'member_stream': team_member_stream,
+        'member_campus': campus,
+        'member_faculty': team_member_faculty,
+        'member_unit': team_member_department,
+        'member_other': [''] * n_rows # This info is not available in the institution_data.csv file
     })
     
+    # Unused: team_member_email
+    
     return faculty_engagement_df
+
+def generate_project_details_xlsx(df):
+    funding_year = df['Funding Year']
+    n_rows = len(funding_year)
+    project_type = df['Project Type']
+    grant_id = df['Application Title']
+    project_id = [''] * n_rows # This info is not present in the raw survey monkey dataset
+    project_faculty = df['Project Faculty']
+    pi_name = df['PI']
+    pi_unit = df['Department']
+    funding_amount = df['Total Project Budget']
+    title = df['Project Title']
+    summary = df['Summary of Work Accomplished to Date (1000 words max.)']
+    co_applicants = df['Team Members']
+    generated_grant_id = [''] * n_rows # This info is not generated at this stage
+    project_year = [''] * n_rows # This info is not present in the raw survey monkey dataset
+    project_status = [''] * n_rows # This info is not present in the raw survey monkey dataset
+    
+    project_details_df = pd.DataFrame({
+        'funding_year': funding_year,
+        'project_type': project_type,
+        'grant_id': grant_id,
+        'project_id': project_id,
+        'project_faculty': project_faculty,
+        'pi_name': pi_name,
+        'pi_unit': pi_unit,
+        'funding_amount': funding_amount,
+        'title': title,
+        'summary': summary,
+        'co_applicants': co_applicants,
+        'generated_grant_id': generated_grant_id,
+        'project_year': project_year,
+        'project_status': project_status
+    })
+    
+    return project_details_df
 
 def tlef_raw_data_preprocessing(bucket, raw_data_key, institution_data_key):
     
@@ -771,11 +763,11 @@ def tlef_raw_data_preprocessing(bucket, raw_data_key, institution_data_key):
         data_key=raw_data_key
     )
     
-    print("1. Transforming empty values to 0...")
-    df = empty_to_zero(df)
+    print("1. Transforming empty values to blanks...")
+    df = empty_to_blank(df)
     
     print("\n\n2. Transforming irrelevant values to 0...")
-    df = change_na_to_zero_or_no(df, 'Special Classroom or Facilities Requirements (150 words max.)')
+    df = change_na_or_no_to_blank(df, 'Special Classroom or Facilities Requirements (150 words max.)')
     
     course_code_columns_list = [f'Students Reached by the Project |  | Course Code{f".{i}" if i > 0 else ""}' for i in range(10)]
     print("\n\n3. Mapping course codes...")
@@ -809,45 +801,25 @@ def tlef_raw_data_preprocessing(bucket, raw_data_key, institution_data_key):
     print("\n\n11. Change full faculty name to its faculty code...")
     df = assign_faculty_code(df, faculty_code_dict, col_name="Project Faculty")
     
-    print("\n\n11. Generate faculty engagement csv dataset...")
-    faculty_engagement_df = generate_faculty_engagement_csv(df)
+    print("\n\n11. Generate faculty engagement xlsx dataset...")
+    faculty_engagement_df = generate_faculty_engagement_xlsx(df)
+    
+    print("\n\n12. Generate project details xlsx dataset...")
+    project_details_df = generate_project_details_xlsx(df)
     
     print("Process completed!")
     
-    return df, faculty_engagement_df
-
-def main():
+    return df, faculty_engagement_df, project_details_df
     
-    _, rawInBW, _, rawDatKey = process_s3uri(RAW_DATA_S3URI)
-    instDatKey = process_s3uri(INSTITUTION_DATA_S3URI)[3]
-    
-    try:
-        clean_df, faculty_engagement_df = tlef_raw_data_preprocessing(
-            bucket=BUCKET_NAME,
-            raw_data_key = rawDatKey,
-            institution_data_key = instDatKey
-        )
-        
-        cleanSM_name = f'staging-data/{rawInBW}Clean_Survey_Monkey.csv'
-        cleanFE_name = f'staging-data/{rawInBW}Faculty_Engagement.csv'
-        write_df_to_bucket(clean_df, BUCKET_NAME, cleanSM_name)
-        write_df_to_bucket(faculty_engagement_df, BUCKET_NAME, cleanFE_name)
-        
-        print("Data processing finished execution")
-        print(f"The clean files are {cleanSM_name} and {cleanFE_name}")
+clean_df, faculty_engagement_df, project_details_df = tlef_raw_data_preprocessing(
+    bucket=BUCKET_NAME,
+    raw_data_key = SURVEY_MONKEY_S3URI,
+    institution_data_key = INSTITUTION_DATA_S3_URI
+)
 
-    except Exception as e:
-        # Handle any unexpected errors
-        print(f"An error occurred: {e}")
-        print("Script stop executing. No file will be written to S3")
+current_year = project_details_df["funding_year"][0] # TIEN, get the year
 
-
-if __name__ == "__main__":
-    main()
-
-
-
-
-
-
-
+# save directly to s3
+#clean_df.to_excel(f's3://{BUCKET_NAME}/raw/clean_survey_monkey_{current_year}.xlsx', index=False) # TIEN
+faculty_engagement_df.to_excel(f's3://{BUCKET_NAME}/raw/faculty_engagement/faculty_engagement_{current_year}.xlsx', index=False) # TIEN
+project_details_df.to_excel(f's3://{BUCKET_NAME}/raw/project_details/project_details_{current_year}.xlsx', index=False) # TIEN

@@ -16,8 +16,18 @@ export class DataPipelineStack extends cdk.Stack {
   ) {
     super(scope, id, props);
 
-    // Data storage bucket
-    const dataBucket = new s3.Bucket(this, "datapipeline-s3bucket", {
+    // files storage bucket
+    const dataBucket = new s3.Bucket(this, "data-s3bucket", {
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+      autoDeleteObjects: true,
+      versioned: false,
+      publicReadAccess: false,
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+      encryption: s3.BucketEncryption.S3_MANAGED,
+    });
+
+    // bucket for embeddings
+    const embeddingsBucket = new s3.Bucket(this, "embeddings-s3bucket", {
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
       versioned: false,
@@ -36,56 +46,56 @@ export class DataPipelineStack extends cdk.Stack {
       encryption: s3.BucketEncryption.S3_MANAGED,
     });
 
-    const triggerLambda = new cdk.triggers.TriggerFunction(
-      this,
-      "createFolders-lambda",
-      {
-        functionName: "createFolders",
-        runtime: lambda.Runtime.PYTHON_3_9,
-        handler: "createFolders.lambda_handler",
-        timeout: cdk.Duration.seconds(300),
-        memorySize: 512,
-        environment: {
-          BUCKET_NAME: dataBucket.bucketName,
-        },
-        vpc: vpcStack.vpc,
-        code: lambda.Code.fromAsset("./lambda/createFolders"),
-        layers: [],
-        executeAfter: [dataBucket],
-      }
-    );
+    // const triggerLambda = new cdk.triggers.TriggerFunction(
+    //   this,
+    //   "createFolders-lambda",
+    //   {
+    //     functionName: "createFolders",
+    //     runtime: lambda.Runtime.PYTHON_3_9,
+    //     handler: "createFolders.lambda_handler",
+    //     timeout: cdk.Duration.seconds(300),
+    //     memorySize: 512,
+    //     environment: {
+    //       BUCKET_NAME: dataBucket.bucketName,
+    //     },
+    //     vpc: vpcStack.vpc,
+    //     code: lambda.Code.fromAsset("./lambda/createFolders"),
+    //     layers: [],
+    //     executeAfter: [dataBucket],
+    //   }
+    // );
 
-    triggerLambda.addToRolePolicy(
-      new iam.PolicyStatement({
-        effect: iam.Effect.ALLOW,
-        actions: [
-          "s3:ListBucket",
-          "s3:ListObjectsV2",
-          "s3:PutObject",
-          "s3:PutObjectAcl",
-          "s3:GetObject",
-        ],
-        resources: [
-          `arn:aws:s3:::${dataBucket.bucketName}`,
-          `arn:aws:s3:::${dataBucket.bucketName}/*`,
-        ],
-      })
-    );
-    triggerLambda.addToRolePolicy(
-      new iam.PolicyStatement({
-        effect: iam.Effect.ALLOW,
-        actions: [
-          // CloudWatch Logs
-          "logs:CreateLogGroup",
-          "logs:CreateLogStream",
-          "logs:PutLogEvents",
-        ],
-        resources: ["arn:aws:logs:*:*:*"],
-      })
-    );
+    // triggerLambda.addToRolePolicy(
+    //   new iam.PolicyStatement({
+    //     effect: iam.Effect.ALLOW,
+    //     actions: [
+    //       "s3:ListBucket",
+    //       "s3:ListObjectsV2",
+    //       "s3:PutObject",
+    //       "s3:PutObjectAcl",
+    //       "s3:GetObject",
+    //     ],
+    //     resources: [
+    //       `arn:aws:s3:::${dataBucket.bucketName}`,
+    //       `arn:aws:s3:::${dataBucket.bucketName}/*`,
+    //     ],
+    //   })
+    // );
+    // triggerLambda.addToRolePolicy(
+    //   new iam.PolicyStatement({
+    //     effect: iam.Effect.ALLOW,
+    //     actions: [
+    //       // CloudWatch Logs
+    //       "logs:CreateLogGroup",
+    //       "logs:CreateLogStream",
+    //       "logs:PutLogEvents",
+    //     ],
+    //     resources: ["arn:aws:logs:*:*:*"],
+    //   })
+    // );
 
     // Create new Glue Role. DO NOT RENAME THE ROLE!!!
-    const roleName = "AWSGlueServiceRole-datapipeline";
+    const roleName = "AWSGlueServiceRole-gluedatapipeline";
     const glueRole = new iam.Role(this, roleName, {
       assumedBy: new iam.ServicePrincipal("glue.amazonaws.com"),
       description: "Glue Service Role",
@@ -96,24 +106,40 @@ export class DataPipelineStack extends cdk.Stack {
     const glueServiceRolePolicy = iam.ManagedPolicy.fromAwsManagedPolicyName(
       "service-role/AWSGlueServiceRole"
     );
-    // const glueAmazonS3FullAccessPolicy =
-    //   iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonS3FullAccess");
     const glueComprehendPolicy = iam.ManagedPolicy.fromAwsManagedPolicyName(
       "ComprehendFullAccess"
     );
+    const glueS3policy = iam.ManagedPolicy.fromAwsManagedPolicyName(
+      "AmazonS3FullAccess"
+    );
+    const glueEventBridgePolicy = iam.ManagedPolicy.fromAwsManagedPolicyName(
+      "AmazonEventBridgeFullAccess"
+    )
+    const glueSNSPolicy = iam.ManagedPolicy.fromAwsManagedPolicyName(
+      "AmazonSNSFullAccess"
+    )
+    const glueCloudwatchEventsPolicy = iam.ManagedPolicy.fromAwsManagedPolicyName(
+      "CloudWatchEventsFullAccess"
+    )
+
 
     glueRole.addManagedPolicy(glueServiceRolePolicy);
-    // glueRole.addManagedPolicy(glueAmazonS3FullAccessPolicy);
+    glueRole.addManagedPolicy(glueS3policy);
     glueRole.addManagedPolicy(glueComprehendPolicy);
+    glueRole.addManagedPolicy(glueEventBridgePolicy);
+    glueRole.addManagedPolicy(glueSNSPolicy);
+    glueRole.addManagedPolicy(glueCloudwatchEventsPolicy);
 
+    /* THESE ARE THE CONFIGURATION FOR GLUE */
     const PYTHON_VER = "3.9";
     const GLUE_VER = "3.0";
     const MAX_RETRIES = 0; // no retries, only execute once
-    const MAX_CAPACITY = 0.0625; // 1/16 of a DPU, lowest setting
+    const MAX_CAPACITY = 1 // or 0.0625; // 1 DPU
     const MAX_CONCURRENT_RUNS = 1; // 1 concurrent runs of the same job simultaneously
-    const TIMEOUT = 20; // 20 min timeout duration
-
-    const glueJob1Name = "clean-data";
+    const TIMEOUT = 120; // 120 min timeout duration
+    
+    // clean-survey-monkey-data
+    const glueJob1Name = "tlef-clean-survey-monkey-data";
     const glueJob1 = new glue.CfnJob(this, glueJob1Name, {
       name: glueJob1Name,
       role: glueRole.roleArn,
@@ -121,7 +147,7 @@ export class DataPipelineStack extends cdk.Stack {
         name: "pythonshell",
         pythonVersion: PYTHON_VER,
         scriptLocation:
-          "s3://" + glueS3Bucket.bucketName + "/scripts/clean-data.py",
+          "s3://" + glueS3Bucket.bucketName + "/scripts/clean-survey-monkey-data.py",
       },
       executionProperty: {
         maxConcurrentRuns: MAX_CONCURRENT_RUNS,
@@ -134,9 +160,60 @@ export class DataPipelineStack extends cdk.Stack {
         "--additional-python-modules": "openpyxl,fuzzywuzzy",
         "library-set": "analytics",
         "--BUCKET_NAME": dataBucket.bucketName,
-        "--RAW_DATA_S3URI": "n/a",
-        "--INSTITUTION_DATA_S3URI": "n/a",
-        "--LOG_BUCKET_NAME": "n/a",
+        "--SURVEY_MONKEY_S3URI": "n/a", // placeholder, to be copy paste by client on the console
+        "--INSTITUTION_DATA_S3URI": `s3://${dataBucket}/INSTITUTION_DATA/institution_data.csv`, // hardcoded folder name and file name
+      },
+    });
+
+    // generate-new-grant-ids
+    const glueJob2Name = "tlef-generate-new-grant-ids";
+    const glueJob2 = new glue.CfnJob(this, glueJob2Name, {
+      name: glueJob2Name,
+      role: glueRole.roleArn,
+      command: {
+        name: "pythonshell",
+        pythonVersion: PYTHON_VER,
+        scriptLocation:
+          "s3://" + glueS3Bucket.bucketName + "/scripts/generate-new-grant-ids.py",
+      },
+      executionProperty: {
+        maxConcurrentRuns: MAX_CONCURRENT_RUNS,
+      },
+      maxRetries: MAX_RETRIES,
+      maxCapacity: MAX_CAPACITY,
+      timeout: TIMEOUT,
+      glueVersion: GLUE_VER,
+      defaultArguments: {
+        "library-set": "analytics",
+        "--BUCKET_NAME": dataBucket.bucketName,
+        "--PROJECT_DETAILS_S3URI": "n/a", // placeholder, to be copy paste by client on the console
+      },
+    });
+
+    // 
+    const glueJob3Name = "tlef-generate-embeddings-and-similar-projects.py";
+    const glueJob3 = new glue.CfnJob(this, glueJob3Name, {
+      name: glueJob3Name,
+      role: glueRole.roleArn,
+      command: {
+        name: "pythonshell",
+        pythonVersion: PYTHON_VER,
+        scriptLocation:
+          "s3://" + glueS3Bucket.bucketName + "/scripts/generate-embeddings-and-similar-projects.py",
+      },
+      executionProperty: {
+        maxConcurrentRuns: MAX_CONCURRENT_RUNS,
+      },
+      maxRetries: MAX_RETRIES,
+      maxCapacity: MAX_CAPACITY,
+      timeout: TIMEOUT,
+      glueVersion: GLUE_VER,
+      defaultArguments: {
+        "--additional-python-modules": "sentence-transformers",
+        "library-set": "analytics",
+        "--BUCKET_NAME": dataBucket.bucketName,
+        "--EMBEDDINGS_BUCKET": embeddingsBucket.bucketName,
+        "--PROJECT_DETAILS_WITH_NEW_GRANT_IDS_S3URI": "n/a", // will be filled by the 2nd glue job
       },
     });
 
@@ -153,5 +230,7 @@ export class DataPipelineStack extends cdk.Stack {
 
     // Destroy Glue related resources when PatentDataStack is deleted
     glueJob1.applyRemovalPolicy(cdk.RemovalPolicy.DESTROY);
+    glueJob2.applyRemovalPolicy(cdk.RemovalPolicy.DESTROY);
+    glueJob3.applyRemovalPolicy(cdk.RemovalPolicy.DESTROY);
   }
 }
