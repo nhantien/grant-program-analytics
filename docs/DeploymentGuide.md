@@ -29,7 +29,7 @@ To deploy this solution, you will need to generate a GitHub personal access toke
 
 ## Deployment
 ### Step 1: Fork & Clone The Repository
-First, you need to fork the repository. A fork is a new repository that shares code and visibility settings with the original “upstream” repository. To create a fork, navigate to the [main branch]() of this repository. Then, in the top-right corner, click Fork.
+First, you need to fork the repository. A fork is a new repository that shares code and visibility settings with the original “upstream” repository. To create a fork, navigate to the [main branch](https://github.com/UBC-CIC/tlef-analytics) of this repository. Then, in the top-right corner, click `Fork`.
 
 ![](./images/fork-repo.jpeg)
 
@@ -89,7 +89,7 @@ cdk deploy --all --profile <profile-name>
 ### Step 4: Upload Data
 After the application is deployed, you will need to upload data to Amazon S3. See [our user guide]() for details.
 
-**Extra: Taking down the deployed stacks**
+### Extra: Taking down the deployed stacks
 To take down the deployed stack for a fresh redeployment in the future, navigate to AWS Cloudformation, click on the stack(s) and hit Delete. Please wait for the stacks in each step to be properly deleted before deleting the stack downstream. The deletion order is as followed:
 
 1. HostingStack
