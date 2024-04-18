@@ -17,7 +17,7 @@ Once you have deployed the solution, the following user guide will help you navi
 Please refer to the [Uploading Data Guide](./UploadData.md)
 
 ## Updating Data
-Please refer to the [Modifying Data Guide](./ModifyData.md)
+Please refer to the [Modifying Data Guide](./ModifyData.md).
 
 ## Home
 This page displays a table of TLEF funded proposals with information including: 
