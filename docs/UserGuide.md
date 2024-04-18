@@ -14,7 +14,7 @@ Once you have deployed the solution, the following user guide will help you navi
 | [Snapshot](#snapshot) | Walkthrough of the Snapshot page |
 
 ## Uploading Data
-Please refer to the [Uploading Data Guide](./UploadData.md). 
+Please refer to the [Uploading Data Guide](./UploadData.md)
 
 ## Updating Data
 Please refer to the [Modifying Data Guide](./ModifyData.md).
@@ -42,13 +42,34 @@ The Generate Program Summary button will take users to the [Snapshot](#snapshot)
 ## Staging
 The staging website provides a controlled environment for reviewing changes to the data before they are made public.
 
-To navigate to staging, add `staging` to the end of the URL. 
-ie: `https://main.d1kbeedktpnze5.amplifyapp.com/` to `https://main.d1kbeedktpnze5.amplifyapp.com/staging`
+### Navigate to Staging 
+To navigate to staging, add `staging` to the end of the URL. For example:
+`https://main.d1kbeedktpnze5.amplifyapp.com/` to `https://main.d1kbeedktpnze5.amplifyapp.com/staging`
 
-This will direct you to the login page.
+This will direct you to the login page, where authorized users can sign in with their credentials.
 <img width="517" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/a908a4a7-287f-4347-82dd-429d32934eb2">
 
+### Generate Admin User 
+If you have already logged in, you can continue to the website. Otherwise, the following section will walkthrough creating an Admin user and logging in to the Admin page. 
+
+1. Navigate to AWS Console by searching for cognito
+   <img width="796" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/8477d51c-d1bc-420d-83ea-693eb6b7d753">
+2. Navigate to User Pools in the sidebar and select the `tlef-user-pool` user pool
+   <img width="812" alt="Screenshot 2024-04-18 at 2 47 14 PM" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/b8be328c-e410-4b03-b283-2b2420e69306">
+3. Next, we will create a user. Under Users, click on `Create user`.
+   <img width="796" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/f46674f2-b3fc-4134-993c-5777684e6528">
+5. Under User information: \
+    Select `Send an email invitation` \
+    Input the user's email address under the Email address field and mark as verified \
+    Select `Generate a password` \
+    Click `Create user` \
+   <img width="760" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/55982cd5-b4d9-4a15-b2ea-6e77419147e0">
+6. Now you will be able to login with the newly created admin user. Check your email for the temporary password to sign in. Upon sign in, you will be asked to change your password.
+
+### Navigating the staging website
 Within the staging website, data that is currently in the `/staging` bucket in AWS S3 will be displayed. There are two additional features: confirming the new data changes, which will publish data to the main page, and logging out from the staging view. 
+
+<img width="1174" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/37816ccf-3169-47f0-9cc3-e48128e66b41">
 
 ## Individual Summary 
 The individual summary page displays further data on each TLEF funded proposal. It can be accessed by clicking on title of the proposal you're interested in within the data table on the home page. 
