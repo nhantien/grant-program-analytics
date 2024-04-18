@@ -136,7 +136,7 @@ export class DatabaseStack extends Stack {
         });
 
         const RawFolderDeployment = new s3Deploy.BucketDeployment(this, 'RawFolderDeployment', {
-            sources: [s3Deploy.Source.asset("./bucket_config")],
+            sources: [s3Deploy.Source.asset("./bucket_config_raw")],
             destinationBucket: s3DataBucket,
             destinationKeyPrefix: 'raw/'
         });
