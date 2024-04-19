@@ -87,6 +87,7 @@ type FacultyEngagement {
     <COLUMN-NAME>: <COLUMN-DATA-TYPE>
 }
 ```
-
 Make sure you replace `<COLUMN-NAME>` and `<COLUMN-DATA-TYPE>` with the name and data type of the newly added column.
+
+**Once you finish updating GraphQL Schema, Click `Save Schema` at the top right corner.**
 *Note: AppSync's data types are slightly different from AWS Glue. Visit [this document](https://docs.aws.amazon.com/appsync/latest/devguide/scalars.html) for reference, and find the matching data type.*
