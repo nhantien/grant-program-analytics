@@ -441,6 +441,6 @@ export class DatabaseStack extends Stack {
         this.tables['focus_area_option'] = focusAreaOptionProdTable;
         this.tables['unsuccessful_projects'] = unsuccessfulProjectsProdTable;
         this.tables['similar_projects'] = similarProjectsProdTable;
-        this.tables['project_outcomes'] = projectDetailsProdTable;
+        this.tables['project_outcomes'] = projectOutcomesProdTable;
     }
 }
