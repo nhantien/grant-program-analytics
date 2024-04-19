@@ -1,6 +1,6 @@
 ### Before Continuing with this User Guide, please make sure you have deployed the application.
 
-[Deployment Guide](./DeploymentGuide.md)
+- [Deployment Guide](./DeploymentGuide.md)
 
 Once you have deployed the solution, the following user guide will help you navigate the functions available.
 
@@ -14,7 +14,7 @@ Once you have deployed the solution, the following user guide will help you navi
 | [Snapshot](#snapshot) | Walkthrough of the Snapshot page |
 
 ## Uploading Data
-Please refer to the [Uploading Data Guide](./UploadData.md)
+Please refer to the [Uploading Data Guide](./UploadData.md).
 
 ## Updating Data
 Please refer to the [Modifying Data Guide](./ModifyData.md).
@@ -59,23 +59,24 @@ If you have already logged in, you can continue to the website. Otherwise, the f
 3. Next, we will create a user. Under Users, click on `Create user`.
    <img width="796" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/f46674f2-b3fc-4134-993c-5777684e6528">
 5. Under User information: \
-    Select `Send an email invitation` \
-    Input the user's email address under the Email address field and mark as verified \
+    Select `Don't send email invitation` \
+    Input the user's email address under the Email address field \
     Select `Generate a password` \
     Click `Create user` \
-   <img width="760" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/55982cd5-b4d9-4a15-b2ea-6e77419147e0">
+   <img width="808" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/7e695afd-0750-4aa5-a76b-e5740b0b4d2d">
+
 6. Now you will be able to login with the newly created admin user. Check your email for the temporary password to sign in. Upon sign in, you will be asked to change your password.
 
 ### Navigating the staging website
-Within the staging website, data that is currently in the `/staging` bucket in AWS S3 will be displayed. There are two additional features: confirming the new data changes, which will publish data to the main page, and logging out from the staging view. 
+Within the staging website, data that is currently in the `/staging` bucket in AWS S3 will be displayed. There are two additional features: confirming the new data changes (which will publish data to the main page), and logging out from the staging view. 
 
 <img width="1174" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/37816ccf-3169-47f0-9cc3-e48128e66b41">
 
 ## Individual Summary 
-The individual summary page displays further data on each TLEF funded proposal. It can be accessed by clicking on title of the proposal you're interested in within the data table on the home page. 
+The individual summary page displays detailed data on each TLEF funded proposal. It can be accessed by clicking on the title of the proposal you're interested in within the data table on the home page. 
 
 The page provides an overview of the selected project. It includes details such as the project's status, the faculty/college/unit involved, and its duration. The summary outlines the project's objectives and overarching information. 
-Project reports can be viewed by clicking Link to Report, opening up the report as a PDF in a new window. 
+Project reports can be viewed by clicking "Link to Report", opening up the report as a PDF in a new window. 
 
 <img width="1146" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/d9607c6b-e3b8-4039-8f8c-8300d1ae1288">
 
@@ -131,7 +132,7 @@ Information displayed includes:
 
 
 
-*Please note that if there are no existing projects that apply to the filters the user chose, a message will be displayed instead. 
+*Please note that if there are no existing projects that apply to the filters the user has chosen, a message will be displayed instead. 
 
 <img width="1148" alt="image" src="https://github.com/UBC-CIC/tlef-analytics/assets/113638422/41312d7a-f53a-4c1a-bffb-77c6191b4992">
 
