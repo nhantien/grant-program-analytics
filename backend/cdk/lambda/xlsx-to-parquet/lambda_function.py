@@ -16,7 +16,7 @@ def lambda_handler(event, context):
 
     dst_key = f"{newStage}/{folder}/{file_name}.parquet"
     
-    if (folder == "project_deatails"):
+    if (folder == "project_details" or folder == "survey_monkey"):
         print('project_details uploaded: skip')
         return
     

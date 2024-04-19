@@ -77,11 +77,15 @@ def getIndividualSummaryInfo(grant_id, server):
     LEFT JOIN {os.environ.get('FOCUS_AREA')} f ON p.grant_id = f.grant_id 
     WHERE p.project_id = (
         SELECT project_id FROM {os.environ.get('PROJECT_DETAILS')} 
-        WHERE grant_id = '{grant_id}')
+        WHERE grant_id = '{grant_id}' OR generated_grant_id = '{grant_id}')
+        OR p.grant_id = '{grant_id}'
+        OR p.generated_grant_id = '{grant_id}'
     '''
     
     rows = execute_query(query_string, server)
     headers = rows[0]["Data"]
+    
+    print(rows)
     
     res = []
     for row in rows[1:]:
@@ -212,10 +216,16 @@ def getSimilarProjects(grant_id, server):
     WHERE project_key = (
         SELECT project_id FROM {os.environ.get('PROJECT_DETAILS')}
         WHERE grant_id = '{grant_id}'
-    )
+    ) 
+    OR project_key = '{grant_id}'
     '''
     
-    project_ids = execute_query(first_query_string, server)[1]["Data"][0]["VarCharValue"].split(", ")
+    project_ids = execute_query(first_query_string, server)
+    
+    if len(project_ids) <= 1:
+        return []
+    
+    project_ids = project_ids[1]["Data"][0]["VarCharValue"].split(", ")
     
     second_query_string = f'''SELECT 
         project_id, grant_id, title, project_type, pi_name, project_faculty, funding_year
@@ -252,6 +262,8 @@ def getProjectOutcome(grant_id, server):
         WHERE grant_id = '{grant_id}'
     )
     '''
+    
+    print(query_string)
     
     rows = execute_query(query_string, server)
     

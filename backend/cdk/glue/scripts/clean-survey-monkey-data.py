@@ -817,7 +817,7 @@ clean_df, faculty_engagement_df, project_details_df = tlef_raw_data_preprocessin
     institution_data_key = INSTITUTION_DATA_S3_URI
 )
 
-current_year = project_details_df["funding_year"][0] # TIEN, get the year
+current_year = project_details_df["funding_year"].iloc[0] # TIEN, get the year
 
 # save directly to s3
 #clean_df.to_excel(f's3://{BUCKET_NAME}/raw/clean_survey_monkey_{current_year}.xlsx', index=False) # TIEN

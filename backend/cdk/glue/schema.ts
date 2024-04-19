@@ -10,7 +10,7 @@ const PROJECT_DETAILS_SCHEMA = [
         type: glue.Schema.STRING
     },
     {
-        name: 'old_grant_id',
+        name: 'grant_id',
         type: glue.Schema.STRING
     },
     {
@@ -46,7 +46,7 @@ const PROJECT_DETAILS_SCHEMA = [
         type: glue.Schema.STRING
     },
     {
-        name: 'grant_id',
+        name: 'generated_grant_id',
         type: glue.Schema.STRING
     },
     {
