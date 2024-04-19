@@ -1,10 +1,11 @@
 # How to Add New Columns to the Existing Datasets
 
 ## Table of Contents
-- Step 1: [Add a New Column](#add-a-new-column)
-- Step 2: [Upload New Datasets](#upload-new-datasets)
-- Step 3: [Modify Table Schema on AWS Glue](#modify-table-schema-on-aws-glue)
-- Step 4: [Update GraphQL Schema on AWS AppSync](#update-graphql-schema-on-aws-appsync)
+- [Step 1: Add a New Column](#step-1-add-a-new-column)
+- [Step 2: Upload New Datasets](#step-2-upload-new-datasets)
+- [Step 3: Modify Table Schema on AWS Glue](#step-4-update-graphql-schema-on-aws-appsync)
+- [Step 4: Update GraphQL Schema on AWS AppSync](#step-4-update-graphql-schema-on-aws-appsync)
+
 
 ## Step 1: Add a New Column
 When you want to update the existing datasets by adding new columns, you can simply add them to the end of each datasets (insert them to the **right** of the table). Make sure you insert them to the right, as not following this practice could result in breaking the existing table structures.

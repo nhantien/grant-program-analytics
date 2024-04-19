@@ -178,7 +178,7 @@ export class DatabaseStack extends Stack {
         const s3AccessPolicy = new iam.PolicyStatement({
             actions: [
                 "s3:*",
-                "s3-objcet-lambda:*"
+                "s3-object-lambda:*"
             ],
             resources: [`${s3DataBucket.bucketArn}/*`]
         });
