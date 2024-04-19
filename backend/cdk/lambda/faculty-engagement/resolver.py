@@ -35,7 +35,7 @@ def execute_query(query_string, server):
             "Database": str(os.environ.get("PROD_DB_NAME")) if server == "production" else str(os.environ.get("STAGING_DB_NAME"))
         },
         ResultConfiguration= {
-            'OutputLocation': os.environ.get("OUTPUT_LOCATION"),
+            'OutputLocation': str(os.environ.get("OUTPUT_LOCATION")),
         }
     )
     executionId = response["QueryExecutionId"]
@@ -49,6 +49,10 @@ def execute_query(query_string, server):
     
     query_results = ATHENA.get_query_results(QueryExecutionId = executionId)
     rows = query_results["ResultSet"]["Rows"]
+    
+    while query_results.get("NextToken"):
+        query_results = ATHENA.get_query_results(QueryExecutionId = executionId, NextToken=query_results["NextToken"])
+        rows += query_results["ResultSet"]["Rows"]
     
     return rows
     
@@ -73,7 +77,6 @@ def countFacultyMembersByStream(filters, server):
         LEFT JOIN {os.environ.get('FOCUS_AREA')} f ON p.grant_id = f.grant_id
         WHERE 1 = 1"""
     query_string += generate_filtered_query(filters) + " GROUP BY p.project_type, p.member_stream"
-    print(query_string)
     rows = execute_query(query_string, server)
     
     jsonItem = {

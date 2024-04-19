@@ -6,7 +6,7 @@ import sys
 import datetime
 from fuzzywuzzy import fuzz
 import collections
-comprehend = boto3.client('comprehend', region_name='ca-central-1')
+comprehend = boto3.client('comprehend')
 
 # Glue parameters
 from awsglue.utils import getResolvedOptions

@@ -305,7 +305,7 @@ export class ApiStack extends Stack {
                 "s3:*",
                 "s3-object-lambda:*"
             ],
-            resources: [`${databaseStack.getS3BucketArn()}/*`]
+            resources: ['*']
         });
 
         fileTransferFunction.addToRolePolicy(s3AccessPolicy);

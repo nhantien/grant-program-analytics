@@ -249,7 +249,6 @@ def main():
     find_all_summaries()
     embeddings_database = generate_embeddings_database(EMBEDDINGS_BUCKET)
     similar_projects_database = generate_similar_projects_database(EMBEDDINGS_BUCKET, embeddings_database)
-    print(similar_projects_database)
     
     save_similar_projects_database(
         similar_projects_database=similar_projects_database, 

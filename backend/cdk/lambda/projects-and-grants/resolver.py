@@ -55,6 +55,10 @@ def execute_query(query_string, server):
     query_results = ATHENA.get_query_results(QueryExecutionId = executionId)
     rows = query_results["ResultSet"]["Rows"]
     
+    while query_results.get("NextToken"):
+        query_results = ATHENA.get_query_results(QueryExecutionId = executionId, NextToken=query_results["NextToken"])
+        rows += query_results["ResultSet"]["Rows"]
+    
     return rows
     
 def lambda_handler(event, context):
