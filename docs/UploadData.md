@@ -83,7 +83,7 @@ These datasets are formatted and cleaned, but miss a few columns which should be
 
 ![raw/project_details](./images/project_details_folder.jpeg)
 
-Click on the item you would like to download, then click `Download` from the top menu to donwload the file onto your local computer.
+Click on the item you would like to download, then click `Download` from the top menu to download the file onto your local computer.
 
 ![project_details_download](./images/project_details_download.jpeg)
 
@@ -111,7 +111,7 @@ Again, navigate to AWS Glue console. If you are unsure of how to go to the conso
 Select `ETL jobs` from the left sidebar, then click `tlef-generate-new-grant-ids`.\
 Select Job details tab, then click `Advanced Properties` at the bottom.
 
-When you scroll down, you will see a section `Job parameters`.
+When you scroll down, you will see a section called `Job parameters`.
 Replace the `Value` of one of the parameters `--PROJECT_DETAILS_S3URI`. 
 
 After that, click `Save`, then `Run` to start the Glue job.
@@ -155,7 +155,7 @@ Click `Upload` at the bottom right corner to complete the process.
 
 ![File Upload](./images/raw-sm-upload.jpeg)
 
-After you upload each file to the correct location in the S3 bucket, data preparation process will automatically be triggered and the files will be stored into `/staging/` folder.
+After you upload each file to the correct location in the S3 bucket, the data preparation process will automatically be triggered and the files will be stored into `/staging/` folder.
 
 You can then preview the data you uploaded from the web application.
 
