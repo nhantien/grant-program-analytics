@@ -1,21 +1,21 @@
 # How to Add New Columns to the Existing Datasets
 
 ## Table of Contents
-- Step 0: Add a New Column
-- Step 1: Upload New Datasets
-- Step 2: Modify Table Schema on AWS Glue
-- Step 3: Update GraphQL Schema on AWS AppSync
+- Step 1: [Add a New Column](#add-a-new-column)
+- Step 2: [Upload New Datasets](#upload-new-datasets)
+- Step 3: [Modify Table Schema on AWS Glue](#modify-table-schema-on-aws-glue)
+- Step 4: [Update GraphQL Schema on AWS AppSync](#update-graphql-schema-on-aws-appsync)
 
-## Step 0: Add a New Column
+## Step 1: Add a New Column
 When you want to update the existing datasets by adding new columns, you can simply add them to the end of each datasets (insert them to the **right** of the table). Make sure you insert them to the right, as not following this practice could result in breaking the existing table structures.
 
-## Step 1: Upload New Datasets
+## Step 2: Upload New Datasets
 The next step would be uploading new datasets to the appropriate location in Amazon S3 bucket.
 Always upload new excel datasets (`~.xlsx`) to the `/raw` folder. This will ensure that all uploaded files will be converted to the appropriate format and be ready for consumption. 
 
 ex. When you add a new column to the `faculty engagement` datasets, you will need to upload a new file to `/raw/faculty_engagement` folder.
 
-## Step 2: Modify Table Schema on AWS Glue
+## Step 3: Modify Table Schema on AWS Glue
 In this step, you will update the table Schema defined in AWS Glue Data Catalog. 
 
 First, navigate to AWS Glue console. From the left side bar, select `Databases`, then select `tlef_analytics_staging` database from the listed options.
@@ -37,7 +37,7 @@ In this menu, you will need to enter the following information:
 
 After you enter these sections, click `Save`, then click `Save as new table version`.
 
-## Step 3: Update GraphQL Schema on AWS AppSync
+## Step 4: Update GraphQL Schema on AWS AppSync
 Lastly, go to AWS AppSync console and update GraphQL schema.
 From `APIs` list, select the API named `tlef-analytics-api`.
 Then select `Schema` menu from the left side bar.
