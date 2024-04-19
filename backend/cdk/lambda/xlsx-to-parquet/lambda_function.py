@@ -4,6 +4,8 @@ import boto3
 import io
 import os
 
+s3 = boto3.client('s3')
+
 def lambda_handler(event, context):
     
     obj_key = event['Records'][0]['s3']['object']['key']
@@ -22,21 +24,18 @@ def lambda_handler(event, context):
     
     print(f'{stage}/{folder} -> {newStage}/{folder}')
     
-    s3 = boto3.client('s3')
-    
     src = s3.get_object(Bucket=os.environ.get("S3_BUCKET_NAME"), Key=obj_key)
     excel_data = src['Body'].read()
     
     df = pd.read_excel(io.BytesIO(excel_data))
 
     # Convert DataFrame to Parquet format
-    parquet_data = io.BytesIO()
-    df.to_parquet(parquet_data, engine='pyarrow')
-
-    # Upload Parquet data to destination bucket
-    s3.put_object(Body=parquet_data.getvalue(), Bucket=str(os.environ.get("S3_BUCKET_NAME")), Key=dst_key)
+    with io.BytesIO() as parquet_data:
+        df.to_parquet(parquet_data, engine='pyarrow')
+        
+        # Upload Parquet data to destination bucket
+        s3.put_object(Body=parquet_data.getvalue(), Bucket=str(os.environ.get("S3_BUCKET_NAME")), Key=dst_key)
     
-    # TODO implement
     return {
         'statusCode': 200,
         'body': json.dumps('Hello from Lambda!')

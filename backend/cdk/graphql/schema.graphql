@@ -90,7 +90,7 @@ type Proposal {
   project_outcome: String
   project_status: String
   project_type: String
-  project_year: Float
+  project_year: String
   report: String
   summary: String
   title: String
