@@ -112,7 +112,7 @@ export class DataPipelineStack extends cdk.Stack {
         "library-set": "analytics",
         "--BUCKET_NAME": databaseStack.getS3BucketName(),
         "--SURVEY_MONKEY_S3URI": "n/a", // placeholder, to be copy paste by client on the console
-        "--INSTITUTION_DATA_S3URI": `s3://${databaseStack.getS3BucketName()}/INSTITUTION_DATA/institution_data.csv`, // hardcoded folder name and file name
+        "--INSTITUTION_DATA_S3_URI": `s3://${databaseStack.getS3BucketName()}/INSTITUTION_DATA/institution_data.csv`, // hardcoded folder name and file name
       },
     });
 
@@ -138,6 +138,7 @@ export class DataPipelineStack extends cdk.Stack {
         "library-set": "analytics",
         "--BUCKET_NAME": databaseStack.getS3BucketName(),
         "--PROJECT_DETAILS_S3URI": "n/a", // placeholder, to be copy paste by client on the console
+        "--EMBEDDINGS_BUCKET": embeddingsBucket.bucketName
       },
     });
 

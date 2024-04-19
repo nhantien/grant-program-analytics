@@ -110,6 +110,10 @@ def getFilteredProposals(filters, server):
                     jsonItem["poster"] = f"https://{os.environ.get('CLOUDFRONT_DOMAIN_NAME')}/{file_name}"
                 else:
                     jsonItem["poster"] = ""
+            
+            if len(data[i]) > 0 and header == "generated_grant_id" and jsonItem["grant_id"] == "":
+                jsonItem["grant_id"] = data[i]["VarCharValue"]
+                
                     
             if len(data[i]) > 0:
                 jsonItem[header] = data[i]["VarCharValue"]

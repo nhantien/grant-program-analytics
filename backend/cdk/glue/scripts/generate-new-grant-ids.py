@@ -9,10 +9,11 @@ from botocore.exceptions import ClientError
 
 # Glue parameters
 from awsglue.utils import getResolvedOptions
-args = getResolvedOptions(sys.argv, ["BUCKET_NAME", "PROJECT_DETAILS_S3URI"])
+args = getResolvedOptions(sys.argv, ["BUCKET_NAME", "PROJECT_DETAILS_S3URI", "EMBEDDINGS_BUCKET"])
 
 BUCKET_NAME = args["BUCKET_NAME"]
 PROJECT_DETAILS_S3URI = args["PROJECT_DETAILS_S3URI"]
+EMBEDDINGS_BUCKET = args["EMBEDDINGS_BUCKET"]
 
 
 def return_df(bucket, data_key):
@@ -151,7 +152,7 @@ store_df(
 # start generate-embeddings-and-similar-projects Glue Job
 arguments = {
     "--BUCKET_NAME": BUCKET_NAME,
-    "--EMBEDDINGS_BUCKET": "tlef-project-summary-embeddings",
+    "--EMBEDDINGS_BUCKET": EMBEDDINGS_BUCKET,
     "--PROJECT_DETAILS_WITH_NEW_GRANT_IDS_S3URI": f"s3://{BUCKET_NAME}/{file_key}",
     "--additional-python-modules": "sentence-transformers"
 }
