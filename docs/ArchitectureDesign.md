@@ -2,15 +2,10 @@
 This document provides a more in-depth explanation of the system's architecture and operation.
 
 ## Table of Contents
-- Architecture Design
-    - Table Of Contents
-- Introduction
-- System Overview
-    - Data Preparation
-    - Data Retrieval
-    - Data Consumption
-- AWS Infrastructure
-    - Architecture Diagram
+- [Architecture](#architecture) 
+- [Data Preparation(1-7)](#data-preparation1-7)
+- [Previewing Staged Data(8-17)](#previewing-staged-data8-17)
+- [Public User Visits the Web Application(18)](#public-user-visits-the-web-application18)
 
 ## Architecture
 ![Architecture Design](./images/architecture_design.jpg)
@@ -29,9 +24,16 @@ This document provides a more in-depth explanation of the system's architecture 
 ## Previewing Staged Data(8-17)
 The existence of `/staging` folder allows administrators to preview staged data and detect any errors before it's published.
 
-8. Uploaded images will be accessed via AWS CloudFront. 
+8. Uploaded images will be accessed via AWS CloudFront. CloudFront accesses private resources (posters, reports) stored inside Amazon S3, and distributes them to the user.
+9. Generated URL to the image will then be passed to the frontend, and displays the thumbnail of images and provides clickable links to the user. Users can view and download those images.
+10. In order for administrators to preview staged data, they will need to access the endpoint `/staging`. For instance, if the web application's endpoint is `https://main.abcde12345.amplifyapp.com`, you will need to access `https://main.abcde12345.amplifyapp.com/staging` to access staged contents. 
+11. The application prompts the administrator to login. This feature is implemented with Amazon Cognito user pool. Administrators can log in to the staging website using the username and password they created on Amazon Cognito console.
+12. React website hosted on AWS Amplify makes API calls to retrieve data from the backend. AWS WAF controls HTTP traffic between the website and GraphQL API endpoint to protect backend resources from malicious activities. 
+13. GraphQL API defined in AWS AppSync processes allowed requests. 
+14. AppSync communicates with resolvers running on AWS Lambda to retrieve data.
+15. AWS Lambda functions serve as GraphQl API resolvers. Using `boto3` Python library, it interacts with AWS Athena to query data from data files stored in S3.
+16. AWS Athena is triggered by Lambda functions, and runs SQL queries to fetch data. The query results will then be sent back to AWS Lambda, and also be stored in `/result` folder in S3 storage.
+17. One of the defined GraphQL queries triggers file transfer from `/staging` to `/production` to publish staged data into production environment. Only authenticated user (administrators) can invoke it. Lambda resolver that handles this specific queries use `boto3` to access S3, copy contents in `/staging` folder and transfer them to `/production`.
 
-After datasets are cleaned and stored in the appropriate location, the solution uses Amazon Athena to perform data retrieval. Amazon Athena is an interactive query service that makes it easy to analyze data directly in Amazon S3 using standard SQL. Athena utilizes the table schemas defined in AWS Glue, and query directly from datasets stored in Amazon S3.
-
-## Data Consumption
-### Website hosted by AWS Amplify
+## Public User Visits the Web Application(18)
+As a last step, public users (guest users) access web application to view data. This does not require any login step, and they can view/filter data and generate graphs to visualize it.
