@@ -1,6 +1,6 @@
-# TLEF Analytics
+# Grant Program Analytics
 
-The TLEF (Teaching and Learning Enhancement Fund) Analytics prototype solutions aims to increase the visibility and accessibility of the TLEF portfolio. The prototype leverages AWS technology to move data storage to the cloud and simplify data cleaning processes, and innovates on the structure and presentation of data with advanced filtering and dynamic views. For more information visit the [CIC website](https://cic.ubc.ca/project/student-advising-assistant/).
+The Grant Program Analytics prototype aims to increase the discoverability of funds that are used to enrich student learning. The prototype leverages AWS technology to move data storage to the cloud and simplify data cleaning processes, and innovates on the structure and presentation of data with advanced filtering and dynamic views. For more information visit the [CIC website](https://cic.ubc.ca/project/student-advising-assistant/).
 
 | Index | Description |
 | ----- | ----------- |
@@ -20,7 +20,7 @@ The following architecture diagram illustrates the various AWS components utiliz
 For instructions on how to deploy the application, refer to the [Deployment Guide](./docs/DeploymentGuide.md).
 
 ## User Guide
-For instructions on how interact with the application via Alexa, refer to the [User Guide](./docs/UserGuide.md).
+For instructions on how to navigate the web app interface, refer to the [User Guide](./docs/UserGuide.md).
 
 ## Directories
 ```
