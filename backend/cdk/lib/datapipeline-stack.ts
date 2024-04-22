@@ -15,16 +15,6 @@ export class DataPipelineStack extends cdk.Stack {
   ) {
     super(scope, id, props);
 
-    // files storage bucket
-    const dataBucket = new s3.Bucket(this, "data-s3bucket", {
-      removalPolicy: cdk.RemovalPolicy.DESTROY,
-      autoDeleteObjects: true,
-      versioned: false,
-      publicReadAccess: false,
-      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
-      encryption: s3.BucketEncryption.S3_MANAGED,
-    });
-
     // bucket for embeddings
     const embeddingsBucket = new s3.Bucket(this, "embeddings-s3bucket", {
       removalPolicy: cdk.RemovalPolicy.DESTROY,
@@ -32,7 +22,8 @@ export class DataPipelineStack extends cdk.Stack {
       versioned: false,
       publicReadAccess: false,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
-      encryption: s3.BucketEncryption.S3_MANAGED,
+      encryption: s3.BucketEncryption.S3_MANAGED, 
+      enforceSSL: true,
     });
 
     // Glue deployment bucket
@@ -42,7 +33,8 @@ export class DataPipelineStack extends cdk.Stack {
       versioned: false,
       publicReadAccess: false,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
-      encryption: s3.BucketEncryption.S3_MANAGED,
+      encryption: s3.BucketEncryption.S3_MANAGED, 
+      enforceSSL: true,
     });
 
     // Create new Glue Role. DO NOT RENAME THE ROLE!!!

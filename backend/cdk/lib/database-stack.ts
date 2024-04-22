@@ -122,7 +122,8 @@ export class DatabaseStack extends Stack {
             blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
             encryption: s3.BucketEncryption.S3_MANAGED,
             removalPolicy: RemovalPolicy.DESTROY,
-            versioned: true
+            versioned: true, 
+            enforceSSL: true
         });
 
         const ProductionFolderDeployment = new s3Deploy.BucketDeployment(this, 'ProductionFolderDeployment', {
@@ -184,7 +185,7 @@ export class DatabaseStack extends Stack {
         });
 
         excelToParquetConverter.addToRolePolicy(s3AccessPolicy);
-        excelToParquetConverter.addLayers(lambda.LayerVersion.fromLayerVersionArn(this, 'AwsPandasLayer', 'arn:aws:lambda:ca-central-1:336392948345:layer:AWSSDKPandas-Python311:10'));
+        excelToParquetConverter.addLayers(lambda.LayerVersion.fromLayerVersionArn(this, 'AwsPandasLayer', `arn:aws:lambda:ca-central-1:336392948345:layer:AWSSDKPandas-Python311:10`));
         excelToParquetConverter.addEventSource(rawFolderUploadEvent);
 
 
@@ -195,7 +196,8 @@ export class DatabaseStack extends Stack {
             blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
             encryption: s3.BucketEncryption.S3_MANAGED,
             removalPolicy: RemovalPolicy.DESTROY,
-            versioned: true
+            versioned: true, 
+            enforceSSL: true
         });
 
         const ImageBucketDeployment = new s3Deploy.BucketDeployment(this, 'ImageBucketDeployment', {
