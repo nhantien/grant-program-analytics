@@ -24,9 +24,9 @@ os.environ['TRANSFORMERS_CACHE'] = model_custom_path
 
 from sentence_transformers import SentenceTransformer, util
 
-def return_df(bucket, data_key): # TIEN
+def return_df(bucket, data_key): 
     
-    if "s3://" in data_key: # TIEN a full s3 URI is passed
+    if "s3://" in data_key: # a full s3 URI is passed
         data_location = data_key
     else:
         data_location = 's3://{}/{}'.format(bucket, data_key)

@@ -20,7 +20,7 @@ SURVEY_MONKEY_S3URI = args["SURVEY_MONKEY_S3URI"]
 
 def return_df(bucket, data_key):
 
-    if "s3://" in data_key: # TIEN a full s3 URI is passed
+    if "s3://" in data_key: # a full s3 URI is passed
         data_location = data_key
     else:
         data_location = 's3://{}/{}'.format(bucket, data_key)
@@ -817,9 +817,9 @@ clean_df, faculty_engagement_df, project_details_df = tlef_raw_data_preprocessin
     institution_data_key = INSTITUTION_DATA_S3_URI
 )
 
-current_year = project_details_df["funding_year"].iloc[0] # TIEN, get the year
+current_year = project_details_df["funding_year"].iloc[0] # get the year
 
 # save directly to s3
-#clean_df.to_excel(f's3://{BUCKET_NAME}/raw/clean_survey_monkey_{current_year}.xlsx', index=False) # TIEN
-faculty_engagement_df.to_excel(f's3://{BUCKET_NAME}/raw/faculty_engagement/faculty_engagement_{current_year}.xlsx', index=False) # TIEN
-project_details_df.to_excel(f's3://{BUCKET_NAME}/raw/project_details/project_details_{current_year}.xlsx', index=False) # TIEN
+#clean_df.to_excel(f's3://{BUCKET_NAME}/raw/clean_survey_monkey_{current_year}.xlsx', index=False)
+faculty_engagement_df.to_excel(f's3://{BUCKET_NAME}/raw/faculty_engagement/faculty_engagement_{current_year}.xlsx', index=False)
+project_details_df.to_excel(f's3://{BUCKET_NAME}/raw/project_details/project_details_{current_year}.xlsx', index=False) 
