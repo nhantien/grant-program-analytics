@@ -64,7 +64,6 @@ function FundingChart({ projects }) {
     }
 
     const CustomToolTip = ({ active, payload, label }) => {
-        //console.log('PAYLOAD', payload)
 
         if (active && payload && label) {
             return (
@@ -106,7 +105,6 @@ function FundingChart({ projects }) {
 
 
     const hasData = projects && projects.length > 0;
-    console.log(projects)
 
     if (!hasData) {
         return <div> No summaries matching this criteria. </div>;
@@ -151,26 +149,6 @@ function FundingChart({ projects }) {
             
         </React.Fragment>
     );
-
-    // different version: bar graph with one color
-    // return (
-    //     <React.Fragment>
-    //         <div className={styles.chart}>
-    //             <BarChart width={width} height={height} layout={layout} data={res} >
-    //                 {xAxis}
-    //                 {yAxis}
-    //                 {isMobile() && <Tooltip content={<CustomToolTip />} cursor={{ fill: "transparent" }} position={{ x: 100, y: 25 }} />}
-    //                 <Bar dataKey="value" fill="#081252" background={{ fill: "#EEE" }} activeBar={<Rectangle fill="lightblue" />}>
-    //                     {label}
-    //                 </Bar>
-    //             </BarChart>
-    //         </div>
-    //         <div className={styles.space}></div>
-    //         <div className={styles.description}>
-    //             The TLEF awarded the total of {formattedAmount(total)} funding for selected {len} projects.
-    //         </div>
-    //     </React.Fragment>
-    // );
 };
 
 export default FundingChart;

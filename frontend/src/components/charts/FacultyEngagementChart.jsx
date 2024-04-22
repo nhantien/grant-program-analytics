@@ -33,9 +33,6 @@ function FacultyEngagementChart({projects, amount, unique}) {
         }
     });
 
-
-    console.log(projects)
-
     //calculate total funding amount 
     const calculateTotalFunding = () => {
         const totalamount = amount.reduce((total, project) => total + amount.funding_amount, 0);

@@ -248,8 +248,6 @@ function Snapshot() {
                 setReachInfo(reachInfo);
                 setFacultyEngagement(facultyEngagement);
                 setUniqueStudent(uniqueStudent);
-                console.log("reach count:", reach);
-                console.log("unique student", uniqueStudent)
 
                 setLoading(false);
             } catch (e) {

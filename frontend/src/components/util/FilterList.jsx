@@ -16,13 +16,6 @@ function FilterList({ options, rangeString, setRangeString }) {
   const searchText = appliedFilters["search_text"].join(" OR ");
 
   const handleClearFilter = (filterValue, filterType) => {
-    // if (filterType === "search_text") {
-    //   setAppliedFilters((prevFilters) => ({
-    //     ...prevFilters,
-    //     "search_text": [],
-    //   }));
-    //   return;
-    // }
 
     // remove the selected item from the list of filters
     const updatedFilters = appliedFilters[filterType].filter((filter) => filter !== filterValue);
@@ -80,16 +73,3 @@ function FilterList({ options, rangeString, setRangeString }) {
 };
 
 export default FilterList;
-
-// filterType === 'search_text' && filterValues.length > 0 ? (
-//   <Chip
-//     key={filterType}
-//     label={searchText}
-//     onDelete={() => handleClearFilter(filterValues, filterType)}
-//     deleteIcon={<ClearIcon />}
-//     style={{
-//       margin: '4px',
-//       backgroundColor: '#77AEED',
-//     }}
-//   />
-// ) : 

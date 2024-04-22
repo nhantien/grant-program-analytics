@@ -65,17 +65,6 @@ function SnapshotHeader({ options, optionsLoading, range, setRange, server }) {
         setRangeString(min + "/" + (min + 1) + " - " + max + "/" + (max + 1));
     }
 
-    // go back and preserve filters 
-    // const goBack = () => {
-    //     Navigate({
-    //         pathname: '/',
-    //         state: {
-    //             // projects: projects,
-    //             range: range,
-    //         }
-    //     });
-    // };
-
     return (
         <div className={styles.bg}>
              <div className={styles["back"]}>
@@ -151,32 +140,6 @@ function SnapshotHeader({ options, optionsLoading, range, setRange, server }) {
                         </div>
                     </Grid>
                 </Grid>
-
-                {/* <div className={styles.dropdowns}>
-
-                    <div className={styles["dropdown-filters"]}>
-                        <FundingYearFilter options={optionsLoading ? {} : options.funding_year} setShowSlider={setShowSlider} snapshot={true} />
-                        <Filter options={optionsLoading ? {} : options.project_type} defaultValue="Project Type" type="project_type" snapshot={true} />
-                        <Filter options={optionsLoading ? {} : options.project_faculty} defaultValue="Faculty/Unit" type="project_faculty" snapshot={true} />
-                        <Filter options={optionsLoading ? {} : options.focus_area} defaultValue="Focus Area" type="focus_area" snapshot={true} />
-                    </div>
-
-
-
-                    <div className={styles["applied-filters"]}>
-                        <span style={{ marginTop: "1rem", marginBottom: "0.5rem" }}>Applied Filters</span>
-                        <div className={styles["filters-box"]}>
-                            <FilterList options={optionsLoading ? { 'funding_year': { '2022': '2022/2023' } } : options} rangeString={rangeString} setRangeString={setRangeString} />
-                            <div className={styles["clear-filters-div"]}>
-                                <p className={styles.text}>Clear All</p>
-                                <IconButton onClick={handleClearAll} size="small">
-                                    <ClearIcon />
-                                </IconButton>
-                            </div>
-                        </div>
-                    </div>
-
-                </div> */}
 
             </div>
         </div>

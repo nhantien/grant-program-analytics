@@ -1,7 +1,7 @@
 // react
 import { useEffect, useState } from "react";
 // react-router
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 // mui
 import { CircularProgress } from "@mui/material";
 // amplify
