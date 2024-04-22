@@ -22,6 +22,7 @@ For instructions on how to deploy the application, refer to the [Deployment Guid
 ## User Guide
 For instructions on how to navigate the web app interface, refer to the [User Guide](./docs/UserGuide.md).
 
+
 ## Directories
 ```
 ├── README.md
