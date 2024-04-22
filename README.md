@@ -54,7 +54,7 @@ For instructions on how to navigate the web app interface, refer to the [User Gu
     - `/bucket_config_img`: Contains the directory structure of the image bucket that will be uploaded to S3.
     - `/glue`: Contains the database schema file.
     - `/graphql`: Contains the GraphQL data schema file and request/response mapping template files.
-    - `lambda`: Contains the scripts for all lambda functions.
+    - `/lambda`: Contains the scripts for all lambda functions.
     - `/lib`: Contains the deployment code for all 3 stacks of the infrastructure
 2. `/docs`: Contains all the documents.
 3. `/frontend`: Contains the user interface code for the solution.
