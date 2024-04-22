@@ -2,7 +2,7 @@
 import React from 'react';
 import { useState, useEffect, useContext } from 'react';
 // react-router
-import { Link, useSearchParams, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 // mui
 import ClearIcon from '@mui/icons-material/Clear';
 import { IconButton, CircularProgress, Collapse, Slider, Grid, Pagination } from '@mui/material';
@@ -114,9 +114,6 @@ function HomePage({ signOut }) {
 
                 const faculties = results.data.loadFaculty;
                 const focusAreas = results.data.loadFocusArea;
-
-                console.log(faculties);
-                console.log(focusAreas);
 
                 setDropdownOptions(faculties, focusAreas);
                 setOptionsLoading(false);

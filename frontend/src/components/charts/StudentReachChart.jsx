@@ -11,10 +11,6 @@ function StudentReachChart( {projects, reachdata, unique}) {
 
     const { appliedFilters } = useContext(FiltersContext);
 
-    //const appliedscience = projects.filter(proj => projects.project_faculty === 'APSC');
-    //console.log(appliedscience)
-    // console.log('FILTERS', appliedFilters)
-
     let isDataComplete = true;
     let isUniqueDataComplete = true;
 
@@ -29,7 +25,6 @@ function StudentReachChart( {projects, reachdata, unique}) {
     // no student reach data prior to 2016: flag if current filters contain years before 2016
     // displays warning message
     const years = appliedFilters["funding_year"];
-    console.log(years);
     years.map((year) => {
         const yearInt = convertYear(year);
         console.log(yearInt)
@@ -42,13 +37,10 @@ function StudentReachChart( {projects, reachdata, unique}) {
     const uniqueyears = appliedFilters["funding_year"];
     uniqueyears.map((year) => {
         const yearInt = convertYear(year);
-        console.log(yearInt)
         if (yearInt < 2017) {
             isUniqueDataComplete = false;
         }
     });
-
-    console.log(isUniqueDataComplete)
 
     const customLabel = (props) => {
         const { x, y, width, height, value } = props;
@@ -61,7 +53,6 @@ function StudentReachChart( {projects, reachdata, unique}) {
 
     // calculate data 
     const STUDENT_REACH = [];
-    console.log(projects)
 
     const calculateSmallReach = (faculty) => {
         const smallReach = projects.Small.find((item) => item.project_faculty === faculty)?.reach || 0;
@@ -75,7 +66,6 @@ function StudentReachChart( {projects, reachdata, unique}) {
     
       const totalLargeReach = projects.Large.reduce((sum, item) => sum + item.reach, 0);
       const totalSmallReach = projects.Small.reduce((sum, item) => sum + item.reach, 0);
-      console.log('total large reach', totalLargeReach)
     
       projects.Small.forEach((item) => {
         const faculty = item.project_faculty;
@@ -89,10 +79,6 @@ function StudentReachChart( {projects, reachdata, unique}) {
           total: largeReach + smallReach
         });
     });
-    
-    console.log(STUDENT_REACH)
-    console.log(reachdata)
-    console.log(isUniqueDataComplete)
 
     const formattedAmount = (amount) => {
         return parseInt(amount).toLocaleString("en-CA");

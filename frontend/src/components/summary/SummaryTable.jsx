@@ -17,7 +17,6 @@ function SummaryTable({ data }) {
     data.team_members.sort((a, b) => a.member_name.localeCompare(b.member_name));
 
     const pi_names = data.pi_name.split('; ');
-    console.log(pi_names);
 
     const pi_as_member = data.team_members.filter(function (member) {
         return pi_names.includes(member.member_name);

@@ -2,10 +2,9 @@
 import React, { createContext, useState } from "react";
 // react-router
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { useLocation } from 'react-router-dom';
 // amplify
 import { Amplify } from 'aws-amplify';
-import { Authenticator, withAuthenticator } from '@aws-amplify/ui-react';
+import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 // components
 import HomePage from "./pages/HomePage";
