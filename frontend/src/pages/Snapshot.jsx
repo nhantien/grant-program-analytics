@@ -232,7 +232,7 @@ function Snapshot() {
                 const declinedProjects = results.data.countDeclinedProjects;
                 const projectsAndGrants = results.data.countProjectsAndGrants;
                 const proposals = results.data.getFilteredProposals;
-                const largeProposals = proposals.filter(proj => proj.project_type === 'Large');
+                const largeProposals = proposals.filter(proj => proj.project_type === 'Large' || proj.project_type === "Flexible Learning");
                 const smallProposals = proposals.filter(proj => proj.project_type === 'Small' || proj.project_type === "Interdisciplinary Team-Teaching Grant");
                 const reach = results.data.countTotalReachByFaculty;
                 const reachInfo = results.data.getStudentReachInfo;

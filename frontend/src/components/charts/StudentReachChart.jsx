@@ -7,7 +7,7 @@ import styles from "./charts.module.css";
 // context
 import { FiltersContext } from '../../App';
 
-function StudentReachChart( {projects, reachdata, unique}) {
+function StudentReachChart({ projects, reachdata, unique }) {
 
     const { appliedFilters } = useContext(FiltersContext);
 
@@ -57,27 +57,42 @@ function StudentReachChart( {projects, reachdata, unique}) {
     const calculateSmallReach = (faculty) => {
         const smallReach = projects.Small.find((item) => item.project_faculty === faculty)?.reach || 0;
         return smallReach;
-      };
+    };
 
     const calculateLargeReach = (faculty) => {
         const largeReach = projects.Large.find((item) => item.project_faculty === faculty)?.reach || 0;
         return largeReach;
-      };
-    
-      const totalLargeReach = projects.Large.reduce((sum, item) => sum + item.reach, 0);
-      const totalSmallReach = projects.Small.reduce((sum, item) => sum + item.reach, 0);
-    
-      projects.Small.forEach((item) => {
+    };
+
+    const totalLargeReach = projects.Large.reduce((sum, item) => sum + item.reach, 0);
+    const totalSmallReach = projects.Small.reduce((sum, item) => sum + item.reach, 0);
+
+    projects.Small.forEach((item) => {
         const faculty = item.project_faculty;
         const smallReach = calculateSmallReach(faculty);
-        const largeReach = calculateLargeReach(faculty);    
-      
+        const largeReach = calculateLargeReach(faculty);
+
         STUDENT_REACH.push({
-          name: faculty,
-          "Large TLEF": largeReach,
-          "Small TLEF": smallReach,
-          total: largeReach + smallReach
+            name: faculty,
+            "Large TLEF": largeReach,
+            "Small TLEF": smallReach,
+            total: largeReach + smallReach
         });
+    });
+
+    projects.Large.forEach((item) => {
+        const faculty = item.project_faculty;
+        const smallReach = calculateSmallReach(faculty);
+        const largeReach = calculateLargeReach(faculty);
+
+        if (smallReach === 0) {
+            STUDENT_REACH.push({
+                name: faculty,
+                "Large TLEF": largeReach,
+                "Small TLEF": smallReach,
+                total: largeReach + smallReach
+            });
+        }
     });
 
     const formattedAmount = (amount) => {
@@ -111,68 +126,70 @@ function StudentReachChart( {projects, reachdata, unique}) {
         return null;
     }
 
+    console.log(STUDENT_REACH);
+
     const hasData = projects.Large.length > 0 || projects.Small.length > 0;
     if (!hasData) {
-            return <div> No summaries matching this criteria. 
+        return <div> No summaries matching this criteria.
             <p className={styles.warning}>Please note, this particular TLEF metric is not available prior to the 2016/17 academic year.</p>
-            </div>;
-        }
+        </div>;
+    }
     return (
         <React.Fragment>
-                <div className={styles.chart}>
+            <div className={styles.chart}>
                 <ResponsiveContainer width='100%' height={500}>
-                <BarChart width={800} height={500} layout='vertical' data={STUDENT_REACH}>
-                    <XAxis type='number' padding={{ right: 150}} hide="true"/>
-                    <YAxis type='category' dataKey="name" width={120} />
-                    {isMobile() && <Tooltip content={<CustomToolTip />} wrapperStyle={{ backgroundColor: "white"}} position={{ x: 100, y: 25 }} />}
-                    <Tooltip content={CustomToolTip} />
-                    <Legend verticalAlign='top' iconType='square' height={36} />
-                    <Bar dataKey="Small TLEF" stackId="a" maxBarSize={120} background={{ fill: "#EEEE" }} fill="#FB812D" />
-                    <Bar dataKey="Large TLEF" stackId="a" maxBarSize={120} fill="#2F5D7C">
-                    <LabelList  
-                    dataKey="total" fill="#081252" style={{ fontStyle: "italic" }} width='98%' position='right' content={customLabel}
-                    />
-                    </Bar>
-                </BarChart>
+                    <BarChart width={800} height={500} layout='vertical' data={STUDENT_REACH}>
+                        <XAxis type='number' padding={{ right: 150 }} hide="true" />
+                        <YAxis type='category' dataKey="name" width={120} />
+                        {isMobile() && <Tooltip content={<CustomToolTip />} wrapperStyle={{ backgroundColor: "white" }} position={{ x: 100, y: 25 }} />}
+                        <Tooltip content={CustomToolTip} />
+                        <Legend verticalAlign='top' iconType='square' height={36} />
+                        <Bar dataKey="Small TLEF" stackId="a" maxBarSize={120} background={{ fill: "#EEEE" }} fill="#FB812D" />
+                        <Bar dataKey="Large TLEF" stackId="a" maxBarSize={120} fill="#2F5D7C">
+                            <LabelList
+                                dataKey="total" fill="#081252" style={{ fontStyle: "italic" }} width='98%' position='right' content={customLabel}
+                            />
+                        </Bar>
+                    </BarChart>
                 </ResponsiveContainer>
             </div>
             <div className={styles.space}></div>
             <div className={styles.description}>
-            <p className={styles["chart-annotation"]}>
-                    Hover/click on the bars to display further data 
-                 </p>
+                <p className={styles["chart-annotation"]}>
+                    Hover/click on the bars to display further data
+                </p>
                 <p>TLEF projects funded in the selected year(s) reached <b>{formattedAmount(totalSmallReach)}</b> students in Small TLEF innovation projects and
-                 <b> {formattedAmount(totalLargeReach)}</b> students in Large TLEF Transformation projects.</p>
+                    <b> {formattedAmount(totalLargeReach)}</b> students in Large TLEF Transformation projects.</p>
                 <p>Overall, the projects reached <b>{formattedAmount(reachdata.course)}</b> courses (undergraduate and graduate) and <b>{reachdata.section}</b> sections
-                 across <b>{reachdata.faculty}</b> Faculties at the UBCV campus, impacting <b>{formattedAmount(totalSmallReach + totalLargeReach)}</b> enrolment. </p>
+                    across <b>{reachdata.faculty}</b> Faculties at the UBCV campus, impacting <b>{formattedAmount(totalSmallReach + totalLargeReach)}</b> enrolment. </p>
 
-                 {isUniqueDataComplete && appliedFilters && appliedFilters["funding_year"].length === 1 
-                 && (appliedFilters.project_faculty).length === 0 &&
-                 (appliedFilters.project_type).length === 0 &&
-                 (appliedFilters.focus_area).length === 0 &&
-                 (appliedFilters.search_text).length === 0 &&
-                 // conditional rendering of the unique students when no filter is applied
-                 <p> Overall for the year <b>{unique.funding_year}</b>, the projects have reached <b>{formattedAmount(unique.unique_student)}</b> unique students.*</p>
+                {isUniqueDataComplete && appliedFilters && appliedFilters["funding_year"].length === 1
+                    && (appliedFilters.project_faculty).length === 0 &&
+                    (appliedFilters.project_type).length === 0 &&
+                    (appliedFilters.focus_area).length === 0 &&
+                    (appliedFilters.search_text).length === 0 &&
+                    // conditional rendering of the unique students when no filter is applied
+                    <p> Overall for the year <b>{unique.funding_year}</b>, the projects have reached <b>{formattedAmount(unique.unique_student)}</b> unique students.*</p>
                 }
-                 <p className={styles["reach-annotation"]}>
+                <p className={styles["reach-annotation"]}>
                     *Students enrolled in more than one TLEF-supported course are only counted once.
-                 </p>
-                 <p className={styles.warning}>Please note, this particular TLEF metric is not available prior to the 2016/17 academic year.</p>
-                 <div className={styles.dataBox}>
+                </p>
+                <p className={styles.warning}>Please note, this particular TLEF metric is not available prior to the 2016/17 academic year.</p>
+                <div className={styles.dataBox}>
                     <h3 className={styles['hidden']}>Chart Data</h3>
                     {STUDENT_REACH.map((item, index) => (
                         <div key={index} className={styles.valueColumn}>
                             <span className={styles.valueFaculty}><b className={styles['hidden']}>{item.name}: </b></span>
                             {(item['Small TLEF'] !== 0) && (
-                            <span className={styles.valueSmall}>Small: {(item['Small TLEF'])}</span>
+                                <span className={styles.valueSmall}>Small: {(item['Small TLEF'])}</span>
                             )}
                             {(item['Large TLEF'] !== 0) && (
-                             <span className={styles.valueLarge}>Large: {(item['Large TLEF'])}</span>
+                                <span className={styles.valueLarge}>Large: {(item['Large TLEF'])}</span>
                             )}
                         </div>
                     ))}
                 </div>
-                </div>
+            </div>
         </React.Fragment>
     );
 };

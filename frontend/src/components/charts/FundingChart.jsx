@@ -21,7 +21,7 @@ function FundingChart({ projects }) {
         const map = new Map();
         let total = 0;
         projects.forEach((project) => {
-            const t = project.project_type;
+            const t = project.project_type === 'Large' || project.project_type === "Flexible Learning" ? 'Large' : 'Small';
             const f = project.project_faculty;
             const a = project.funding_amount;
 
