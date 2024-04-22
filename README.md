@@ -14,7 +14,7 @@ The TLEF (Teaching and Learning Enhancement Fund) Analytics prototype solutions 
 
 ## High Level Architecture
 The following architecture diagram illustrates the various AWS components utilized to deliver the solution. For an in-depth explanation of the frontend and backend stacks, refer to the [Architecture Design](./docs/ArchitectureDesign.md).
-![Architecture Diagram](docs/images/architecture_design.jpg)
+![Architecture Diagram](docs/images/architecture-diagram.jpg)
 
 ## Deployment
 For instructions on how to deploy the application, refer to the [Deployment Guide](./docs/DeploymentGuide.md).
