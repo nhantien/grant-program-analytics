@@ -33,7 +33,7 @@ The existence of the `/staging` folder allows administrators to preview staged d
 14. AppSync communicates with resolvers running on AWS Lambda to retrieve data.
 15. AWS Lambda functions serve as GraphQl API resolvers. Using the `boto3` Python library, it interacts with AWS Athena to query data from data files stored in S3.
 16. AWS Athena is triggered by Lambda functions, and runs SQL queries to fetch data. The query results will then be sent back to AWS Lambda and stored in the `/result` folder in S3 storage.
-17. One of the defined GraphQL queries triggers file transfer from `/staging` to `/production` to publish staged data into the production environment. Only authenticated user (administrators) can invoke it. The Lambda resolver that handles these specific queries use `boto3` to access S3, copy the contents in the `/staging` folder, and transfer them to `/production`.
+17. One of the defined GraphQL queries triggers file transfer from `/staging` to `/production` to publish staged data into the production environment. Only authenticated users (administrators) can invoke it. The Lambda resolver that handles these specific queries uses `boto3` to access S3, copy the contents in the `/staging` folder, and transfer them to `/production`.
 
 ## Public User Visits the Web Application(18)
-As a last step, public users (guest users) access web application to view data. This does not require any login step, and they can view/filter data and generate graphs to visualize the data.
+As a last step, public users (guest users) access the web application to view data. This does not require any login step, and they can view/filter data and generate graphs to visualize the data.
