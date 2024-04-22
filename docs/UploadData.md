@@ -33,13 +33,13 @@ Most datasets can be uploaded in a simple way, whereas uploading `project_detail
 
 ## Step 1: Name Datasets Appropriately
 When you upload datasets, make sure the file name follows our naming convention.\
-Raw survey monkey data file should be named `survey_monkey_{year}.xlsx`, where `{year}` is replaced by the current funding year.
+Raw survey monkey data file should be named `survey_monkey_{year}.xlsx`, where `{year}` is replaced by the current funding year. For details, please refer to [our data lake schema](DataLakeSchema.md)
 
 ex. When you upload raw survey monkey data file for the year 2030, it should be named `survey_monkey_2030.xlsx`.
 
 ## Step 2: Upload Raw Data File
-Firstly, you need to upload the raw survey monkey file to `/raw/survey_monkey` folder within `tlef-analytics` bucket.\
-Click `Upload` to upload the file.
+Firstly, you need to upload the raw survey monkey file to `/raw/survey_monkey` folder within a bucket whose name starts with `databasestack-tlefanalytics`. For details, please refer to [our data lake schema](DataLakeSchema.md).\
+Click `Upload` to upload the file. 
 
 ![Raw Survey Monkey Folder](./images/raw-sm-folder.jpeg)
 
@@ -124,9 +124,9 @@ If you would like to edit data after [step 6](#step-6-start-the-second-glue-job)
 
 # Other Datasets
 ## Step 1: Name Datasets Appropriately
-When you upload datasets, make sure the file name follows our naming convention. Please check the table below for the details.
+When you upload datasets, make sure the file name follows our naming convention. Please check the table below, or refer to [our data lake schema](DataLakeSchema.md) for the details.
 
-| Data Yype | Naming Convention | Example |
+| Data Type | Naming Convention | Example |
 | --------- | ----------------- | ------- |
 | Focus Area | `focus_area_{year}.xlsx` | `focus_area_2024.xlsx`|
 | Faculty Options | `options_faculty.xlsx` | `options_faculty.xlsx` |
@@ -134,9 +134,10 @@ When you upload datasets, make sure the file name follows our naming convention.
 | Student Reach | `student_reach_{year}.xlsx` | `student_reach_2024.xlsx` |
 | Unique Student | `unique_student_{year}.xlsx` | `unique_student_2024.xlsx` |
 | Unsuccessful Projects | `unsuccessful_projects_{year}.xlsx` | `unsuccessful_projects_2024.xlsx` |
+| Co Curricular Reach | `co_curricular_reach_{year}.xlsx` | `co_curricular_reach_2024.xlsx` |
 
 ## Step 2: Uploading files
-Once you name each file correctly, upload the files to the appropriate location in Amazon S3. Please refer to the table below for details.
+Once you name each file correctly, upload the files to the appropriate location in Amazon S3. Please refer to the table below, or refer to [our data lake schema](DataLakeSchema.md) for details.
 
 | Data Type | Location |
 | --------- | -------- |
@@ -146,6 +147,7 @@ Once you name each file correctly, upload the files to the appropriate location 
 | Student Reach | `/raw/student_reach/` |
 | Unique Student | `/raw/unique_student/` | 
 | Unsuccessful Projects | `/raw/unsuccessful_projects/` |
+| Co Curricular Reach | `/raw/co_curricular_reach/` |
 
 Navigate to your folder, and click `Upload`.
 ![folder](./images/folder.jpeg)
@@ -173,7 +175,7 @@ Go to Amazon S3 console, and upload files by repeating [step 2](#step-2-uploadin
 # Posters and Reports
 ## Step 1: Name Posters and Reports Appropriately
 
-When you upload datasets, make sure the file name follows our naming convention. Please check the table below for the details.
+When you upload datasets, make sure the file name follows our naming convention. Please check the table below, or refer to [our data lake schema](DataLakeSchema.md) for the details.
 
 | Data Type | Naming Convention | Example |
 | --------- | ----------------- | ------- |
@@ -181,12 +183,12 @@ When you upload datasets, make sure the file name follows our naming convention.
 | Report | `<project id>-Report.png` | `2030-SP-SCI-001.png` |
 
 ## Step 2: Upload Posters and Reports
-Once you name each file correctly, upload the files to the appropriate location in a S3 bucket named `tlef-analytics-image`. Please refer to the table below for details.
+Once you name each file correctly, upload the files to the appropriate location in a S3 bucket whose name starts with `databasestack-tlefanalyticsimage`. Please refer to the table below, or refer to [our data lake schema](DataLakeSchema.md) for details.
 
 | Data Type | Location |
 | --------- | -------- |
-| Poster | `tlef-analytics-image/poster/` |
-| Report | `tlef-anaytics-image/report/` |
+| Poster | `poster/` |
+| Report | `report/` |
 
 Navigate to your folder, and click `Upload`.
 ![folder](./images/folder.jpeg)
