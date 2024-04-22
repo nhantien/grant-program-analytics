@@ -8,7 +8,7 @@ This document provides a more in-depth explanation of the system's architecture 
 - [Public User Visits the Web Application(18)](#public-user-visits-the-web-application18)
 
 ## Architecture
-![Architecture Design](./images/architecture_design.jpg)
+![Architecture Design](./images/architecture-diagram.jpg)
 
 ## Data Preparation(1-7)
 
