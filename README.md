@@ -7,7 +7,6 @@ The TLEF (Teaching and Learning Enhancement Fund) Analytics prototype solutions 
 | [High Level Architecture](#high-level-architecture) | High level overview illustrating component interactions |
 | [Deployment](#deployment) | How to deploy the project |
 | [User Guide](#user-guide) | The working solution |
-| [Development](#development) | Information about the application's development |
 | [Directories](#directories) | Project's general directory structure |
 | [Changelog](#changelog) | Any changes post publish |
 | [Credits](#credits) | Meet the team behind the solution |
@@ -22,9 +21,6 @@ For instructions on how to deploy the application, refer to the [Deployment Guid
 
 ## User Guide
 For instructions on how interact with the application via Alexa, refer to the [User Guide](./docs/UserGuide.md).
-
-## Development
-For information on how the application was developed, refer to the [Development Document](./docs/DevelopmentDocument.md).
 
 ## Directories
 ```
