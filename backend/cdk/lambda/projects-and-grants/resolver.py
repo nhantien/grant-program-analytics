@@ -75,7 +75,7 @@ def lambda_handler(event, context):
     
 def countProjectsAndGrants(filters, server):
     query_string = f"""SELECT 
-        p.project_type, COUNT (DISTINCT(p.grant_id)), COUNT (DISTINCT(p.project_id))
+        p.project_type, COUNT (DISTINCT(p.generated_grant_id)), COUNT (DISTINCT(p.project_id))
         FROM {os.environ.get('PROJECT_DETAILS')} p
         LEFT JOIN {os.environ.get('FOCUS_AREA')} f ON p.grant_id = f.grant_id
         WHERE 1 = 1"""
@@ -97,7 +97,7 @@ def countProjectsAndGrants(filters, server):
         type = row["Data"][0]["VarCharValue"]
         print(type)
         data = row["Data"]
-        if type == "Large":
+        if type == "Large" or type == "Flexible Learning":
             jsonItem["grant"]["Large"] += int(data[1]["VarCharValue"])
             jsonItem["project"]["Large"] += int(data[2]["VarCharValue"])
         else:
