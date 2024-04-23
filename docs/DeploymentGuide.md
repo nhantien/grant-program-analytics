@@ -113,4 +113,5 @@ To take down the deployed stack for a fresh redeployment in the future, navigate
 
 1. HostingStack
 2. ApiStack
-3. DatabaseStack
+3. DataPipelineStack
+4. DatabaseStack
