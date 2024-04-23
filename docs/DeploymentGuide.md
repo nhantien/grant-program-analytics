@@ -105,7 +105,7 @@ Please note down the URL highligted in red, as this will be the URL of the web a
 ### Step 2: Upload Data
 You will also need to upload data to Amazon S3. See our [user guide](./UserGuide.md) for details.
 
-### Step 3: Visig Web App
+### Step 3: Visit Web App
 Now you can navigate to the URL you created in step 1 to see your application in action.
 
 ### Extra: Taking down the deployed stacks
