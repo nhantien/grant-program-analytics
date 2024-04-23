@@ -9,12 +9,15 @@ def generate_filtered_query(filters):
     for key, values in filters.items():
         
         if key == 'search_text' and len(values) > 0:
-            continue
-            # str += " AND ("
-            # for value in values:
-            #     str += f"p.pi_name LIKE '%{value}%' OR "
-            #     # str += f"TITLE LIKE '%{value}%' OR pi_name LIKE '%{value}%' OR "
-            # str = str[:str.rindex("OR ")] + ")"
+            str += " AND ("
+            for value in values:
+                str += f"""
+                    LOWER(p.title) LIKE '%{value.lower()}%' OR 
+                    LOWER(p.pi_name) LIKE '%{value.lower()}%' OR 
+                    LOWER(p.summary) LIKE '%{value.lower()}%' OR 
+                """
+                # LOWER(p.project_outcome) LIKE '%{value.lower()}%' OR 
+            str = str[:str.rindex("OR ")] + ")"
         
         elif key == 'funding_year' and len(values) > 0:
             str += " AND p.%s IN (%s)" % (key, ",".join(values))
@@ -73,11 +76,12 @@ def lambda_handler(event, context):
 
 def countTotalReachByFaculty(filters, server):
     query_string = f"""
-        SELECT p.project_type, p.project_faculty, SUM(p.reach) 
-        FROM {os.environ.get('STUDENT_REACH')} p
+        SELECT s.project_type, s.project_faculty, SUM(s.reach) 
+        FROM {os.environ.get('PROJECT_DETAILS')} p
+        LEFT JOIN {os.environ.get('STUDENT_REACH')} s ON p.grant_id = s.grant_id
         LEFT JOIN {os.environ.get('FOCUS_AREA')} f ON p.grant_id = f.grant_id
         WHERE 1 = 1"""
-    query_string += generate_filtered_query(filters) + " GROUP BY p.project_type, p.project_faculty"
+    query_string += generate_filtered_query(filters) + " GROUP BY s.project_type, s.project_faculty"
     print(query_string)
     rows = execute_query(query_string, server)
     
@@ -102,10 +106,11 @@ def countTotalReachByFaculty(filters, server):
 def getStudentReachInfo(filters, server):
     query_string = f"""
         SELECT 
-            COUNT (DISTINCT(p.project_faculty)), 
-            COUNT (DISTINCT(p.course_name)), 
-            COUNT (p.section) 
-        FROM {os.environ.get('STUDENT_REACH')} p
+            COUNT (DISTINCT(s.project_faculty)), 
+            COUNT (DISTINCT(s.course_name)), 
+            COUNT (s.section) 
+        FROM {os.environ.get('PROJECT_DETAILS')} p
+        LEFT JOIN {os.environ.get('STUDENT_REACH')} s on p.grant_id = s.grant_id
         LEFT JOIN {os.environ.get('FOCUS_AREA')} f ON p.grant_id = f.grant_id
         WHERE 1 = 1"""
     query_string += generate_filtered_query(filters)
