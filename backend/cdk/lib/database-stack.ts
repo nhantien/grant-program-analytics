@@ -121,7 +121,7 @@ export class DatabaseStack extends Stack {
         const s3DataBucket = new s3.Bucket(this, 'tlef-analytics', {
             blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
             encryption: s3.BucketEncryption.S3_MANAGED,
-            removalPolicy: RemovalPolicy.DESTROY,
+            removalPolicy: RemovalPolicy.RETAIN,
             versioned: true, 
             enforceSSL: true
         });
@@ -195,7 +195,7 @@ export class DatabaseStack extends Stack {
         const s3ImageBucket = new s3.Bucket(this, 'tlef-analytics-image', {
             blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
             encryption: s3.BucketEncryption.S3_MANAGED,
-            removalPolicy: RemovalPolicy.DESTROY,
+            removalPolicy: RemovalPolicy.RETAIN,
             versioned: true, 
             enforceSSL: true
         });
