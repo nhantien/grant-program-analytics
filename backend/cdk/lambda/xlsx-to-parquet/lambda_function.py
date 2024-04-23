@@ -13,8 +13,12 @@ def lambda_handler(event, context):
     
     stage = names[0]
     newStage = "staging" if stage == "raw" else "production"
-    folder = names[1]
-    file_name = names[2].replace(".xlsx", "")
+    if names[1] == "options":
+        folder = f"{names[1]}/{names[2]}"
+        file_name = names[3].replace(".xlsx", "")
+    else:
+        folder = names[1]
+        file_name = names[2].replace(".xlsx", "")
 
     dst_key = f"{newStage}/{folder}/{file_name}.parquet"
     

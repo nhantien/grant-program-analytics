@@ -6,6 +6,7 @@ This document provides a more in-depth explanation of the system's architecture 
 - [Data Preparation(1-7)](#data-preparation1-7)
 - [Previewing Staged Data(8-17)](#previewing-staged-data8-17)
 - [Public User Visits the Web Application(18)](#public-user-visits-the-web-application18)
+- [Database Schema](#database-schema)
 
 ## Architecture
 ![Architecture Design](./images/architecture-diagram.jpg)
@@ -38,3 +39,7 @@ The existence of the `/staging` folder allows administrators to preview staged d
 
 ## Public User Visits the Web Application(18)
 As a last step, public users (guest users) access the web application to view data. This does not require any login step, and they can view/filter data and generate graphs to visualize the data.
+
+## Database Schema
+The schema below illustrates the structure of each table and how they are related to each other.
+![Database Schema](./images/db-schema.jpeg)
