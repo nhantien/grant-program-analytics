@@ -30,7 +30,7 @@ To deploy this solution, you will need to generate a GitHub personal access toke
 
 ## Deployment
 ### Step 1: Fork & Clone The Repository
-First, you need to fork the repository. A fork is a new repository that shares code and visibility settings with the original “upstream” repository. To create a fork, navigate to the [main branch](https://github.com/UBC-CIC/tlef-analytics) of this repository. Then, in the top-right corner, click `Fork`.
+First, you need to fork the repository. To create a fork, navigate to the [main branch](https://github.com/UBC-CIC/tlef-analytics) of this repository. Then, in the top-right corner, click `Fork`.
 
 ![](./images/fork-repo.jpeg)
 
