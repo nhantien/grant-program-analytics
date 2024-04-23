@@ -34,7 +34,7 @@ Files in these directories are stored in parquet format.\
 | Unique Student | `unique_student/` | `unique_student_{year}.parquet` | `unique_student_2024.parquet` |
 | Unsuccessful Projects | `unsuccessful_projects/` | `unsuccessful_projects_{year}.parquet` | `unsuccessful_projects_2024.parquet` |
 | Faculty Engagement | `faculty_engagement/` | `faculty_engagement_{year}.parquet` | `faculty_engagement_2024.parquet` |
-| Project Details | `project_details` | `project_details_{year}.xlsx` | `project_details_2024.parquet` |
+| Project Details | `project_details` | `project_details_{year}.parquet` | `project_details_2024.parquet` |
 | Co Curricular Reach | `co_curricular_reach` | `co_curricular_reach_{year}.parquet` |`co_curricular_reach_2024.parquet` |
 | Similar Projects | `similar_projects/` | `similar_projects.parquet` | `similar_projects.parquet` |
 
