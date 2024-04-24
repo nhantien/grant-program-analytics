@@ -273,6 +273,15 @@ b {
     font-weight: 700;
 }
 
+.sr-description {
+    width: 25%;
+    color: #000;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 400;
+}
+
 @media (max-width: 768px) {
     .sr-pie {
         width: 50%;
@@ -280,6 +289,11 @@ b {
 
     .sr-title {
         font-size: 1.2rem;
+    }
+
+    .sr-description {
+        width: 100%;
+        padding-top: 80px;
     }
 }
 

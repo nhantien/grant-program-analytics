@@ -131,7 +131,7 @@ function SuccessRateChart({ projects, totalprojects, largeprojects, smallproject
                 </Grid>
             </div>
             <div className={styles.space}></div>
-            <div className={styles.description}>
+            <div className={styles['sr-description']}>
                 <p><b>{totalprojects.length}</b> projects received funding during selected TLEF rounds.</p>
             </div>
         </React.Fragment>
