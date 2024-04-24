@@ -13,7 +13,7 @@ export class HostingStack extends Stack {
 
         const codeProvider = new amplify.GitHubSourceCodeProvider({
             owner: ssm.StringParameter.valueForStringParameter(this, 'tlef-analytics-owner-name'),
-            repository: 'tlef-analytics',
+            repository: 'grant-program-analytics',
             oauthToken: SecretValue.secretsManager('github-personal-access-token', {
                 jsonField: 'my-github-token'
             })
