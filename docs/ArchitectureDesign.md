@@ -14,7 +14,7 @@ This document provides a more in-depth explanation of the system's architecture 
 ## Data Preparation(1-7)
 
 1. Administrators upload files (datasets, posters, reports) to appropriate locations in Amazon S3.\
-    For specific location in the storage to which each datasets are uploaded, refer to [our data lake schema]().
+    For specific location in the storage to which each datasets are uploaded, refer to [our data lake schema](./DataLakeSchema.md).
 2. Datasets other than raw Survey Monkey data will be automatically converted from Excel format to Parquet format and be ready for ingestion.
 3. Converted datasets will be transferred to the `/staging` folder, where all staged datasets are stored.
 
