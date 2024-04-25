@@ -185,7 +185,7 @@ export class DatabaseStack extends Stack {
         });
 
         excelToParquetConverter.addToRolePolicy(s3AccessPolicy);
-        excelToParquetConverter.addLayers(lambda.LayerVersion.fromLayerVersionArn(this, 'AwsPandasLayer', `arn:aws:lambda:ca-central-1:336392948345:layer:AWSSDKPandas-Python311:10`));
+        excelToParquetConverter.addLayers(lambda.LayerVersion.fromLayerVersionArn(this, 'AwsPandasLayer', `arn:aws:lambda:${this.region}:336392948345:layer:AWSSDKPandas-Python311:12`));
         excelToParquetConverter.addEventSource(rawFolderUploadEvent);
 
 
