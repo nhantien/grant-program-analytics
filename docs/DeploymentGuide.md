@@ -92,10 +92,9 @@ cdk deploy --all --profile <profile-name>
 Log in to AWS console, and navigate to **AWS Amplify**. You can do so by typing `Amplify` in the search bar at the top.
 ![AWS Amplify Console](./images/amplify-console.jpeg)
 
+From `All apps`, click `tlef-analytics` to go to the app settings.\
 Click `Run build` to start building the web application.
 ![AWS Amplify Build Not Started](./images/amplify-build-not-started.jpeg)
-
-From `All apps`, click `tlef-analytics` to go to the app settings.
 
 When the build is completed, you will see the screen as shown in the below image.
 Please note down the URL highligted in red, as this will be the URL of the web application.
