@@ -32,8 +32,8 @@ Most datasets can be uploaded in a simple way, whereas uploading `project_detail
 `project_details` and `faculty_engagement` datasets will be pre-populated by our data cleaning process of raw Survey Monkey data. You can then populate the generated files by filling in empty columns, then re-upload them to make them viewable from the web application.
 
 ## Step 1: Name Datasets Appropriately
-When you upload datasets, make sure the file name follows our naming convention.\
-Raw survey monkey data file should be named `survey_monkey_{year}.xlsx`, where `{year}` is replaced by the current funding year. For details, please refer to [our data lake schema](DataLakeSchema.md)
+When you upload datasets, make sure the file name follows our naming convention, and the column names are consistent with our database schema.\
+Raw survey monkey data file should be named `survey_monkey_{year}.xlsx`, where `{year}` is replaced by the current funding year. Please refer to [our data lake schema](DataLakeSchema.md) for the naming convention, and [data catalogue](DataCatalogue.md) for the column names.
 
 ex. When you upload raw survey monkey data file for the year 2030, it should be named `survey_monkey_2030.xlsx`.
 
@@ -124,7 +124,7 @@ If you would like to edit data after [step 6](#step-6-start-the-second-glue-job)
 
 # Other Datasets
 ## Step 1: Name Datasets Appropriately
-When you upload datasets, make sure the file name follows our naming convention. Please check the table below, or refer to [our data lake schema](DataLakeSchema.md) for the details.
+When you upload datasets, make sure the file name follows our naming convention, and the column names are consistent with our database schema. Please check the table below refer to [our data lake schema](DataLakeSchema.md) for the naming convention, and [data catalogue](DataCatalogue.md) for column names.
 
 | Data Type | Naming Convention | Example |
 | --------- | ----------------- | ------- |
@@ -164,7 +164,7 @@ You can then preview the data you uploaded from the web application.
 ## Step 3: Editing Datasets
 If you would like to edit the contents of the datasets after the initial uploads, you can follow the procedures described below.
 
-### Step 3.1: Downloading File onto Local Computer
+### Step 3-1: Downloading File onto Local Computer
 Select the checkbox next to the item you would like to make changes to, then click `Download` from the top menu. This will allow you to download the file onto your computer. You can then edit the file in Microsoft Excel.
 
 ### Step 3-2: Re-Uploading Datasets
