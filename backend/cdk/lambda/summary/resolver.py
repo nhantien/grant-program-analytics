@@ -71,12 +71,13 @@ def lambda_handler(event, context):
 def getIndividualSummaryInfo(grant_id, server):
     query_string = f'''SELECT 
         p.grant_id, p.project_id, p.funding_year, p.project_type, p.project_faculty, p.pi_name, p.funding_amount, p.title, 
-        p.summary, p.project_year, p.project_status, 
+        p.summary, p.project_year, o.project_status, 
         c.description,
         f.resource_development, f.infrastructure_development, f.student_engagement, f.innovative_assessments, 
         f.teaching_roles_and_training, f.curriculum, f.student_experience, f.work_integrated_learning, 
         f.indigenous_focused_curricula, f.diversity_and_inclusion, f.open_educational_resources 
-    FROM {os.environ.get('PROJECT_DETAILS')} p 
+    FROM {os.environ.get('PROJECT_DETAILS')} p
+    LEFT JOIN {os.environ.get("PROJECT_OUTCOMES")} o ON p.project_id = o.project_id
     LEFT JOIN {os.environ.get('CO_CURRICULAR_REACH')} c ON p.grant_id = c.grant_id 
     LEFT JOIN {os.environ.get('FOCUS_AREA')} f ON p.grant_id = f.grant_id 
     WHERE p.project_id = (
@@ -113,7 +114,7 @@ def getIndividualSummaryInfo(grant_id, server):
                 else:
                     jsonItem[header] = value
             elif header == "description" or header == "project_outcome":
-                jsonItem[header] = ""
+                jsonItem[header] = "" # might need to change this to display description or project_outcome?
         
         jsonItem["focus_areas"] = focus_areas
         res.append(jsonItem)

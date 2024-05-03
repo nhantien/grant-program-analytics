@@ -79,7 +79,6 @@ CREATE TABLE `project_details` (
   `co_applicants` string,
   `generated_grant_id` string,
   `project_year` bigint,
-  `project_status` string
 );
 
 CREATE TABLE `unique_student` (
@@ -101,6 +100,7 @@ CREATE TABLE `unsuccessful_projects` (
 CREATE TABLE `project_outcomes` (
   `project_id` string,
   `project_outcomes` string
+  `project_status` string
 );
 
 CREATE TABLE `similar_projects` (

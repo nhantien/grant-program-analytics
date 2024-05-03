@@ -76,13 +76,13 @@
 | co_applicants       | The names of the co-applicants                                 | String     |
 | generated_grant_id  | The cleaned, standardized unique identifier of the grant       | String     |
 | project_year        | The project's ordinal year for this grant (1st, 2nd, etc.)    | Bigint     |
-| project_status      | Whether the project is completed or active                    | String     |
 
 ### project_outcomes 
 | Column Name    | Description                        | Data Types |
 |----------------|------------------------------------|------------|
 | project_id     | The unique identifier of the project | String   |
 | project_outcomes | The outcomes of the project       | String     |
+| project_status      | Whether the project is completed or active  | String     |
 
 ### similar_projects 
 | Column Name       | Description                                               |

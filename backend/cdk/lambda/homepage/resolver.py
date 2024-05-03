@@ -86,7 +86,13 @@ def execute_query(query_string, server):
     return rows
 
 def getFilteredProposals(filters, server):
-    query_string = f"SELECT p.* FROM {os.environ.get('PROJECT_DETAILS')} p LEFT JOIN {os.environ.get('FOCUS_AREA')} f ON p.grant_id = f.grant_id WHERE 1 = 1"
+    query_string = f"""
+        SELECT p.* FROM {os.environ.get('PROJECT_DETAILS')} p 
+        LEFT JOIN {os.environ.get('FOCUS_AREA')} f ON p.grant_id = f.grant_id
+        LEFT JOIN (
+            SELECT project_id, project_status from {os.environ.get('PROJECT_OUTCOMES')}
+        ) AS o ON p.project_id = o.project_id WHERE 1 = 1;         
+    """
     query_string += generate_filtered_query(filters)
     
     rows = execute_query(query_string, server)
@@ -96,10 +102,10 @@ def getFilteredProposals(filters, server):
     
     results = []
     for row in rows[1:]:
-        data = row["Data"]
+        data = row["Data"] # a tuple/row
         jsonItem = {}
-        for i in range (len(data)):
-            header = headers[i]["VarCharValue"]
+        for i in range (len(data)): # iterate through the fields of a tuple
+            header = headers[i]["VarCharValue"] # get the field name
             if len(data[i]) > 0 and header == "project_id":
                 file_name = f'report/{data[i]["VarCharValue"]}-Report.pdf'
                 if file_name in images:

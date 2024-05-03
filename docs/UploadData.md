@@ -1,28 +1,30 @@
 # How to Upload Data
 
 ## Table of Contents
+- [How to Upload Data](#how-to-upload-data)
+  - [Table of Contents](#table-of-contents)
 - [Introduction](#introduction)
 - [Project Details and Faculty Engagement](#project-details-and-faculty-engagement)
-    - [Step 1: Name Datasets Appropriately](#step-1-name-datasets-appropriately)
-    - [Step 2: Upload Raw Data File](#step-2-upload-raw-data-file)
-    - [Step 3: Initiate Glue Job](#step-3-initiate-glue-job)
-        - [Step 3-1: Copy S3 URI](#step-3-1-copy-s3-uri)
-        - [Step 3-2: Update Glue Job Parameter](#step-3-2-update-glue-job-parameter)
-    - [Step 4: Complete Pre-Populated Datasets](#step-4-complete-pre-populated-datasets)
-    - [Step 5: Re-Upload Datasets](#step-5-re-upload-datasets)
-    - [Step 6: Start the Second Glue Job](#step-6-start-the-second-glue-job)
-        - [Step 6-1: Copy S3 URI](#step-6-1-copy-s3-uri)
-        - [Step 6-2: Update Glue Job Parameter](#step-6-2-update-glue-job-parameter)
-    - [Step 7: Edit Data](#step-7-edit-data) 
+  - [Step 1: Name Datasets Appropriately](#step-1-name-datasets-appropriately)
+  - [Step 2: Upload Raw Data File](#step-2-upload-raw-data-file)
+  - [Step 3: Initiate Glue Job](#step-3-initiate-glue-job)
+    - [Step 3-1: Copy S3 URI](#step-3-1-copy-s3-uri)
+    - [Step 3-2: Update Glue Job Parameter](#step-3-2-update-glue-job-parameter)
+  - [Step 4: Complete Pre-Populated Datasets](#step-4-complete-pre-populated-datasets)
+  - [Step 5: Re-Upload Datasets](#step-5-re-upload-datasets)
+  - [Step 6: Start the Second Glue Job](#step-6-start-the-second-glue-job)
+    - [Step 6-1: Copy S3 URI](#step-6-1-copy-s3-uri)
+    - [Step 6-2: Update Glue Job Parameter](#step-6-2-update-glue-job-parameter)
+  - [Step 7: Edit Data](#step-7-edit-data)
 - [Other Datasets](#other-datasets)
-    - [Step 1: Name Datasets Appropriately](#step-1-name-datasets-appropriately-1)
-    - [Step 2: Uploading files](#step-2-uploading-files)
-    - [Step 3: Editing Datasets](#step-3-editing-datasets)
-        - [Step 3-1: Downloading File onto Local Computer](#step-3-1-downloading-file-onto-local-computer)
-        - [Step 3-2: Re-Uploading Datasets](#step-3-2-re-uploading-datasets)
+  - [Step 1: Name Datasets Appropriately](#step-1-name-datasets-appropriately-1)
+  - [Step 2: Uploading files](#step-2-uploading-files)
+  - [Step 3: Editing Datasets](#step-3-editing-datasets)
+    - [Step 3-1: Downloading File onto Local Computer](#step-3-1-downloading-file-onto-local-computer)
+    - [Step 3-2: Re-Uploading Datasets](#step-3-2-re-uploading-datasets)
 - [Posters and Reports](#posters-and-reports)
-    - [Step 1: Name Posters and Reports Appropriately](#step-1-name-posters-and-reports-appropriately)
-    - [Step 2: Upload Posters and Reports](#step-2-upload-posters-and-reports)
+  - [Step 1: Name Posters and Reports Appropriately](#step-1-name-posters-and-reports-appropriately)
+  - [Step 2: Upload Posters and Reports](#step-2-upload-posters-and-reports)
 
 # Introduction
 The procedure of uploading the datasets differs depending on the dataset.\
@@ -135,6 +137,7 @@ When you upload datasets, make sure the file name follows our naming convention,
 | Unique Student | `unique_student_{year}.xlsx` | `unique_student_2024.xlsx` |
 | Unsuccessful Projects | `unsuccessful_projects_{year}.xlsx` | `unsuccessful_projects_2024.xlsx` |
 | Co Curricular Reach | `co_curricular_reach_{year}.xlsx` | `co_curricular_reach_2024.xlsx` |
+| Project Outcome | `project_outcomes.xlsx` | `project_outcomes.xlsx` |
 
 ## Step 2: Uploading files
 Once you name each file correctly, upload the files to the appropriate location in Amazon S3. Please refer to the table below, or refer to [our data lake schema](DataLakeSchema.md) for details.
@@ -148,6 +151,7 @@ Once you name each file correctly, upload the files to the appropriate location 
 | Unique Student | `/raw/unique_student/` | 
 | Unsuccessful Projects | `/raw/unsuccessful_projects/` |
 | Co Curricular Reach | `/raw/co_curricular_reach/` |
+| Project Outcomes | `/raw/project_outcomes/` |
 
 Navigate to your folder, and click `Upload`.
 ![folder](./images/folder.jpeg)
