@@ -82,7 +82,7 @@
 |----------------|------------------------------------|------------|
 | project_id     | The unique identifier of the project | String   |
 | project_outcomes | The outcomes of the project       | String     |
-| project_status      | Whether the project is completed or active  | String     |
+| project_status      | Whether the project is completed or active     | String     |
 
 ### similar_projects 
 | Column Name       | Description                                               |
