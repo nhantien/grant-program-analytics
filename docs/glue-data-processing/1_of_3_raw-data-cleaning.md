@@ -1,27 +1,46 @@
 # Cleaning the raw dataset <a name="dataset-cleaning-documentation"></a>
 
 ## Table of Contents <a name="table-of-contents"></a> 
-1. [Project Summary and Process Documentation](#project-summary-and-process-documentation)
-   - [Script Overview](#script-overview)
-     - [Import Libraries](#import-libraries)
-     - [AWS Configuration and Parameters](#aws-configuration-and-parameters)
-     - [Helper Functions](#helper-functions)
-     - [Main Data Processing Functions](#main-data-processing-functions)
-     - [Execution Flow](#execution-flow)
-2. [Main Function (`raw_data_preprocessing`)](#main-function-raw_data_preprocessing)
-   - [Data Retrieval and Preprocessing](#data-retrieval-and-preprocessing)
-   - [Mapping and Cleaning Data](#mapping-and-cleaning-data)
-   - [Final Outputs and S3 Interaction](#final-outputs-and-s3-interaction)
-3. [Detailed Function Descriptions](#detailed-function-descriptions)
-   - [`course_info_mapping`](#course-info-mapping-detailed)
-   - [`year_mapping`](#year-mapping-detailed)
-   - [`check_string_for_20`](#check-string-for-20-detailed)
-   - [`term_mapping`](#term-mapping-detailed)
-   - [`ner_mapping`](#ner-mapping-detailed)
-   - [`retrieve_member_info`](#retrieve-member-info-detailed)
-   - [`get-faculty`](#get-faculty-detailed)
-   - [`generate_faculty_engagement_xlsx`](#generate-faculty-engagement-xlsx-detailed)
-   - [`generate_project_details_xlsx`](#generate-project-details-xlsx-detailed)
+- [Cleaning the raw dataset ](#cleaning-the-raw-dataset-)
+  - [Table of Contents ](#table-of-contents-)
+  - [Script Overview ](#script-overview-)
+    - [Import Libraries ](#import-libraries-)
+    - [AWS Configuration and Parameters ](#aws-configuration-and-parameters-)
+    - [Helper Functions ](#helper-functions-)
+    - [Main Data Processing Functions ](#main-data-processing-functions-)
+    - [Execution Flow ](#execution-flow-)
+  - [Main Function (`raw_data_preprocessing`) ](#main-function-raw_data_preprocessing-)
+    - [Data Retrieval and Preprocessing ](#data-retrieval-and-preprocessing-)
+    - [Mapping and Cleaning Data ](#mapping-and-cleaning-data-)
+    - [Final Outputs and S3 Interaction ](#final-outputs-and-s3-interaction-)
+  - [Detailed Function Descriptions ](#detailed-function-descriptions-)
+    - [`course_info_mapping` ](#course_info_mapping-)
+      - [Detailed Process Flow](#detailed-process-flow)
+      - [Inputs and Outputs](#inputs-and-outputs)
+    - [`year_mapping` ](#year_mapping-)
+      - [Detailed Process Flow](#detailed-process-flow-1)
+      - [Inputs and Outputs](#inputs-and-outputs-1)
+    - [`check_string_for_20` ](#check_string_for_20-)
+      - [Detailed Process Flow](#detailed-process-flow-2)
+      - [Inputs and Outputs](#inputs-and-outputs-2)
+    - [`term_mapping` ](#term_mapping-)
+      - [Detailed Process Flow](#detailed-process-flow-3)
+      - [Inputs and Outputs](#inputs-and-outputs-3)
+    - [`ner_mapping` ](#ner_mapping-)
+      - [Detailed Process Flow](#detailed-process-flow-4)
+      - [Inputs and Outputs](#inputs-and-outputs-4)
+    - [`retrieve_member_info` ](#retrieve_member_info-)
+      - [Detailed Process Flow](#detailed-process-flow-5)
+      - [Inputs and Outputs](#inputs-and-outputs-5)
+    - [`get_faculty` ](#get_faculty-)
+      - [Detailed Process Flow](#detailed-process-flow-6)
+      - [Inputs and Outputs](#inputs-and-outputs-6)
+    - [`generate_faculty_engagement_xlsx` ](#generate_faculty_engagement_xlsx-)
+      - [Detailed Process Flow](#detailed-process-flow-7)
+      - [Inputs and Outputs](#inputs-and-outputs-7)
+    - [`generate_project_details_xlsx` ](#generate_project_details_xlsx-)
+      - [Detailed Process Flow](#detailed-process-flow-8)
+      - [Inputs and Outputs](#inputs-and-outputs-8)
 
 ## Script Overview <a name="script-overview"></a>
 This documentation outlines the processes and methodologies implemented in the Python script designed to preprocess and analyze project data within an educational context, particularly focusing on faculty engagement and project details for the analysis of funded projects.
@@ -691,7 +710,6 @@ def generate_project_details_xlsx(df):
     co_applicants = df['Team Members']
     generated_grant_id = [''] * n_rows  # This info is not generated at this stage
     project_year = [''] * n_rows  # This info is not present in the raw survey monkey dataset
-    project_status = [''] * n_rows  # This info is not present in the raw survey monkey dataset
 
     project_details_df = pd.DataFrame({
         'funding_year': funding_year,
@@ -707,7 +725,6 @@ def generate_project_details_xlsx(df):
         'co_applicants': co_applicants,
         'generated_grant_id': generated_grant_id,
         'project_year': project_year,
-        'project_status': project_status
     })
 
     return project_details_df

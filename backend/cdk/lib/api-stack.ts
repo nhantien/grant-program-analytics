@@ -254,6 +254,7 @@ export class ApiStack extends Stack {
                 iam.ManagedPolicy.fromAwsManagedPolicyName('AwsAppSyncAdministrator'),
                 iam.ManagedPolicy.fromAwsManagedPolicyName('AwsAppSyncInvokeFullAccess'),
                 iam.ManagedPolicy.fromAwsManagedPolicyName('AwsGlueConsoleFullAccess'),
+                iam.ManagedPolicy.fromAwsManagedPolicyName('CloudWatchLogsFullAccess')
             ],
             description: 'IAM role for the lambda resolver function'
         });

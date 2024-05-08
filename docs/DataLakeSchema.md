@@ -16,9 +16,10 @@ All datasets (i.e. Excel files) should be stored in a bucket whose name starts w
 | Unique Student | `raw/unique_student/` | `unique_student_{year}.xlsx` | `unique_student_2024.xlsx` |
 | Unsuccessful Projects | `raw/unsuccessful_projects/` | `unsuccessful_projects_{year}.xlsx` | `unsuccessful_projects_2024.xlsx` |
 | Faculty Engagement | `raw/faculty_engagement/` | `faculty_engagement_{year}.xlsx` | `faculty_engagement_2024.xlsx` |
-| Project Details | `raw/project_details` | `project_details_{year}.xlsx` | `project_details_2024.xlsx` |
-| Survey Monkey Data | `raw/survey_monkey` | `survey_monkey_{year}.xlsx` | `survey_monkey_2024.xlsx` |
-| Co Curricular Reach | `raw/co_curricular_reach` | `co_curricular_reach_{year}.xlsx` |`co_curricular_reach_2024.xlsx` |
+| Project Details | `raw/project_details/` | `project_details_{year}.xlsx` | `project_details_2024.xlsx` |
+| Survey Monkey Data | `raw/survey_monkey/` | `survey_monkey_{year}.xlsx` | `survey_monkey_2024.xlsx` |
+| Co Curricular Reach | `raw/co_curricular_reach/` | `co_curricular_reach_{year}.xlsx` |`co_curricular_reach_2024.xlsx` |
+| Project Outcomes | `raw/project_outcomes/` | `project_outcomes.xlsx` | `project_outcomes.xlsx` |
 
 ### `staging/` and `production/` folder
 
@@ -37,6 +38,7 @@ Files in these directories are stored in parquet format.\
 | Project Details | `project_details` | `project_details_{year}.parquet` | `project_details_2024.parquet` |
 | Co Curricular Reach | `co_curricular_reach` | `co_curricular_reach_{year}.parquet` |`co_curricular_reach_2024.parquet` |
 | Similar Projects | `similar_projects/` | `similar_projects.parquet` | `similar_projects.parquet` |
+| Project Outcomes | `project_outcomes/` | `project_outcomes.parquet` | `project_outcomes.parquet` |
 
 ## Images
 Images (posters and reports) will be stored in the bucket whose name starts with `databasestack-tlefanalyticsimage`.

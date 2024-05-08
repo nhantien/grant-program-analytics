@@ -87,7 +87,7 @@ type Proposal {
   poster: String
   project_faculty: String
   project_id: String
-  project_outcome: String
+  project_outcomes: String
   project_status: String
   project_type: String
   project_year: String

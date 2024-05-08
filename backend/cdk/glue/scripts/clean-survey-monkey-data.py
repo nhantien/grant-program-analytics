@@ -712,7 +712,6 @@ def generate_project_details_xlsx(df):
     co_applicants = df['Team Members']
     generated_grant_id = [''] * n_rows # This info is not generated at this stage
     project_year = [''] * n_rows # This info is not present in the raw survey monkey dataset
-    project_status = [''] * n_rows # This info is not present in the raw survey monkey dataset
     
     project_details_df = pd.DataFrame({
         'funding_year': funding_year,
@@ -728,7 +727,6 @@ def generate_project_details_xlsx(df):
         'co_applicants': co_applicants,
         'generated_grant_id': generated_grant_id,
         'project_year': project_year,
-        'project_status': project_status
     })
     
     return project_details_df

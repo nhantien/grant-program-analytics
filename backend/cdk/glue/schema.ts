@@ -52,10 +52,6 @@ const PROJECT_DETAILS_SCHEMA = [
     {
         name: 'project_year',
         type: glue.Schema.BIG_INT
-    },
-    {
-        name: 'project_status',
-        type: glue.Schema.STRING
     }
 ];
 
@@ -357,6 +353,10 @@ const PROJECT_OUTCOMES_SCHEMA = [
     },
     {
         name: 'project_outcomes',
+        type: glue.Schema.STRING
+    },
+    {
+        name: "project_status",
         type: glue.Schema.STRING
     }
 ];

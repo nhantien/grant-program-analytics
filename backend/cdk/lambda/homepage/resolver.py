@@ -1,10 +1,29 @@
 from boto3 import client, resource
 import os
+import json
 
 # parameters for connecting to athena
 ATHENA = client('athena')
 S3 = client('s3')
 S3_resource = resource('s3')
+
+type_Proposal_attr = (
+	"co_applicants",
+	"funding_amount",
+	"funding_year",
+	"grant_id",
+	"pi_name",
+	"pi_unit",
+	"poster",
+	"project_faculty",
+	"project_id",
+	"project_outcomes",
+	"project_status",
+	"project_type",
+	"project_year",
+	"report",
+	"title"
+)
 
 def lambda_handler(event, context):
     
@@ -72,9 +91,11 @@ def execute_query(query_string, server):
     status = None
     
     while status == 'QUEUED' or status == 'RUNNING' or status is None:
-        status = ATHENA.get_query_execution(QueryExecutionId = executionId)['QueryExecution']['Status']['State']
+        query_info = ATHENA.get_query_execution(QueryExecutionId = executionId)['QueryExecution']
+        status = query_info['Status']['State']
         if status == 'FAILED' or status == 'CANCELLED':
-            raise Exception('Athena query failed or was cancelled')
+            error_msg = query_info["Status"]["StateChangeReason"]
+            raise Exception(f'Athena query {status}. Reason: {error_msg}')
     
     query_results = ATHENA.get_query_results(QueryExecutionId = executionId)
     rows = query_results["ResultSet"]["Rows"]
@@ -86,20 +107,26 @@ def execute_query(query_string, server):
     return rows
 
 def getFilteredProposals(filters, server):
-    query_string = f"SELECT p.* FROM {os.environ.get('PROJECT_DETAILS')} p LEFT JOIN {os.environ.get('FOCUS_AREA')} f ON p.grant_id = f.grant_id WHERE 1 = 1"
+    query_string = f"""
+        SELECT p.*, o.* FROM {os.environ.get('PROJECT_DETAILS')} p 
+        LEFT JOIN {os.environ.get('FOCUS_AREA')} f ON p.grant_id = f.grant_id
+        LEFT JOIN (
+            SELECT project_id, project_outcomes, project_status from {os.environ.get('PROJECT_OUTCOMES')}
+        ) AS o ON p.project_id = o.project_id WHERE 1 = 1      
+    """
     query_string += generate_filtered_query(filters)
-    
     rows = execute_query(query_string, server)
-    
     headers = rows[0]["Data"]
     images = retrieve_images()
     
     results = []
     for row in rows[1:]:
-        data = row["Data"]
+        data = row["Data"] # a tuple/row
         jsonItem = {}
-        for i in range (len(data)):
-            header = headers[i]["VarCharValue"]
+        for i in range (len(data)): # iterate through the fields of a tuple
+            header = headers[i]["VarCharValue"] # get the field name
+            if header not in type_Proposal_attr: # we want to retain only attributes/fields defined in graphQL type Proposal
+                continue
             if len(data[i]) > 0 and header == "project_id":
                 file_name = f'report/{data[i]["VarCharValue"]}-Report.pdf'
                 if file_name in images:
@@ -116,14 +143,12 @@ def getFilteredProposals(filters, server):
             
             if len(data[i]) > 0 and header == "generated_grant_id" and jsonItem["grant_id"] == "":
                 jsonItem["grant_id"] = data[i]["VarCharValue"]
-                
-                    
             if len(data[i]) > 0:
                 jsonItem[header] = data[i]["VarCharValue"]
             else:
                 print(f'{header} is null')
                 jsonItem[header] = ""
-            
+
         results.append(jsonItem)
     
     return results
