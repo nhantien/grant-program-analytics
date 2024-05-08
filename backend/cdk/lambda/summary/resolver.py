@@ -1,6 +1,7 @@
 from boto3 import client
 import os
 import operator
+import json
 
 # parameters for connecting to athena
 ATHENA = client('athena')
@@ -113,7 +114,7 @@ def getIndividualSummaryInfo(grant_id, server):
                     focus_areas.append(header)
                 else:
                     jsonItem[header] = value
-            elif header == "description" or header == "project_outcome":
+            elif header == "description":
                 jsonItem[header] = "" # might need to change this to display description or project_outcome?
         
         jsonItem["focus_areas"] = focus_areas
@@ -271,7 +272,7 @@ def getProjectOutcome(grant_id, server):
     
     rows = execute_query(query_string, server)
     
-    if len(rows) > 1:
+    if len(rows) > 1 and ("VarCharValue" in rows[1]["Data"][0].keys()):
         return rows[1]["Data"][0]["VarCharValue"]
     else:
         return ""
