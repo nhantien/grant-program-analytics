@@ -89,17 +89,24 @@ cdk deploy --all --profile <profile-name>
 ```
 ## Post-Deployment
 ### Step 1: Build AWS Amplify App
+
 Log in to AWS console, and navigate to **AWS Amplify**. You can do so by typing `Amplify` in the search bar at the top.
 ![AWS Amplify Console](./images/amplify-console.jpeg)
 
-From `All apps`, click `tlef-analytics` to go to the app settings.\
-Click `Run build` to start building the web application.
-![AWS Amplify Build Not Started](./images/amplify-build-not-started.jpeg)
+From `All apps`, click `tlef-analytics` to go to the app settings. Note down the app-id.\
+![image](https://github.com/UBC-CIC/grant-program-analytics/assets/113638422/894e60a2-8c61-4749-a35f-d09080fcbc30)
 
+
+You may run the following command to build the app. Please replace `<app-id>` with the app ID found in amplify and `<profile-name>` with the appropriate AWS profile used earlier. 
+```
+aws amplify start-job --job-type RELEASE --app-id <app-id> --branch-name main --profile <profile-name>
+```
+This will trigger the build. 
 When the build is completed, you will see the screen as shown in the below image.
-Please note down the URL highligted in red, as this will be the URL of the web application.
+Please note down the URL highlighted in red, as this will be the URL of the web application.
+![image](https://github.com/UBC-CIC/grant-program-analytics/assets/113638422/7845c352-ed69-424a-917f-11040e2a567d)
 
-![Amplify Build Complete](./images/amplify-build-complete.jpeg)
+
 
 ### Step 2: Upload Data
 You will also need to upload data to Amazon S3. See our [user guide](./UserGuide.md) for details.
