@@ -1,8 +1,8 @@
 ## Lambda Function Documentation 
+Note: Every resolver includes a lambda_handler and execute_query function. These functions will not included in each table to avoid redundancy. \
+*This is a catalogue of resolvers related to the data and frontend, additional backend resolvers (ie. amplify login resolvers) are not included here.*
 
-Note: Every resolver includes a lambda_handler and execute_query function. These functions will not included in each table to avoid redundancy.
-
-### tlef-resolver-options
+### tlef-analytics-options-resolver
 | Function         | Description                                                                                                                                           |
 |------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
 | loadFaculty      | Retrieves faculties                         |
@@ -38,7 +38,7 @@ Note: Every resolver includes a lambda_handler and execute_query function. These
 | generate_filtered_query | Constructs SQL clause based on the provided filters.                                                                                 |
 | getFilteredProposals| Retrieves filtered proposals|
 
-### tlef-resolver-summary
+### tlef-analytics-summary-resolver
 | Function                     | Description                                                                                                                                       |
 |------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
 | getIndividualSummaryInfo    | Retrieves individual summary information  |
