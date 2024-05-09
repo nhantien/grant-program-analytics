@@ -40,7 +40,8 @@ Raw survey monkey data file should be named `survey_monkey_{year}.xlsx`, where `
 ex. When you upload raw survey monkey data file for the year 2030, it should be named `survey_monkey_2030.xlsx`.
 
 ## Step 2: Upload Raw Data File
-Firstly, you need to upload the raw survey monkey file to `/raw/survey_monkey` folder within a bucket whose name starts with `databasestack-tlefanalytics`. For details, please refer to [our data lake schema](DataLakeSchema.md).\
+Firstly, you need to upload `institution_data.csv` to the `INSTITUTION_DATA/` folder.
+Then you need to upload the raw survey monkey file to `/raw/survey_monkey` folder within a bucket whose name starts with `databasestack-tlefanalytics`. For details, please refer to [our data lake schema](DataLakeSchema.md).\
 Click `Upload` to upload the file. 
 
 ![Raw Survey Monkey Folder](./images/raw-sm-folder.jpeg)
