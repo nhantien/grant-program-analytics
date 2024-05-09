@@ -33,7 +33,7 @@ The existence of the `/staging` folder allows administrators to preview staged d
 12. The React website hosted on AWS Amplify makes API calls to retrieve data from the backend. AWS WAF controls HTTP traffic between the website and the GraphQL API endpoint to protect backend resources from malicious activities. 
 13. The GraphQL API defined in AWS AppSync processes allowed requests. 
 14. AppSync communicates with resolvers running on AWS Lambda to retrieve data.
-15. AWS Lambda functions serve as GraphQl API resolvers. Using the `boto3` Python library, it interacts with AWS Athena to query data from data files stored in S3. For more details about the Lambda functions, please visit [Lambda Documentation] (./LambdaDoc.md)
+15. AWS Lambda functions serve as GraphQl API resolvers. Using the `boto3` Python library, it interacts with AWS Athena to query data from data files stored in S3. For more details about the Lambda functions, please visit [Lambda Documentation](./LambdaDoc.md)
 16. AWS Athena is triggered by Lambda functions, and runs SQL queries to fetch data. The query results will then be sent back to AWS Lambda and stored in the `/result` folder in S3 storage.
 17. One of the defined GraphQL queries triggers file transfer from `/staging` to `/production` to publish staged data into the production environment. Only authenticated users (administrators) can invoke it. The Lambda resolver that handles these specific queries uses `boto3` to access S3, copy the contents in the `/staging` folder, and transfer them to `/production`.
 
