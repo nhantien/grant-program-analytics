@@ -111,7 +111,7 @@ def getFilteredProposals(filters, server):
         SELECT p.*, o.* FROM {os.environ.get('PROJECT_DETAILS')} p 
         LEFT JOIN {os.environ.get('FOCUS_AREA')} f ON p.grant_id = f.grant_id
         LEFT JOIN (
-            SELECT project_id, project_outcomes, project_status from {os.environ.get('PROJECT_OUTCOMES')}
+            SELECT DISTINCT project_id, project_outcomes, project_status from {os.environ.get('PROJECT_OUTCOMES')}
         ) AS o ON p.project_id = o.project_id WHERE 1 = 1      
     """
     query_string += generate_filtered_query(filters)
