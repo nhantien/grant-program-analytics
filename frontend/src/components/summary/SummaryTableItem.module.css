@@ -71,12 +71,14 @@
 .courses {
     width: 100%;
     display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
+    flex-direction: row;   /* Switch to row to enable wrapping */
+    flex-wrap: wrap;       /* Allow items to wrap within the container width */
     align-items: flex-start;
     align-content: flex-start;
     min-height: 5rem;
     max-height: 10rem;
+    overflow-y: scroll;      /* Adds vertical scrollbar if items exceed max height */
+    gap: 0.5rem;           /* Optional: Space between courses */
 }
 
 .course {

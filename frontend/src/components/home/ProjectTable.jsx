@@ -105,7 +105,7 @@ function EnhancedTableHead(props) {
                                 height: "3rem",
                                 "&.Mui-active": {
                                     color: "white",
-                                    fontWeight: 700,
+                                    fontWeight: 700
                                 },
                                 "& .MuiTableSortLabel-icon": {
                                     color: "white !important",
@@ -135,7 +135,8 @@ EnhancedTableHead.propTypes = {
 export default function ProjectTable({ projects }) {
     const path = window.location.pathname;
     const [order, setOrder] = React.useState('asc'); // sort ascending by default
-    const [orderBy, setOrderBy] = React.useState('funding_year');
+    // 'funding_year', 'title'
+    const [orderBy, setOrderBy] = React.useState('pi_name');
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -190,7 +191,7 @@ export default function ProjectTable({ projects }) {
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - projects.length) : 0;
-    
+    console.log(projects[0])
     const project_lists = projects.map(project => {
         const parts = project.id.split('-');
         const newAttribute = [parts[1], parts[3], parts[4], parts[2]].join('-'); 
@@ -248,7 +249,7 @@ export default function ProjectTable({ projects }) {
                             {visibleProjects
                             .map((project, index) => {
                                 const labelId = `enhanced-table-checkbox-${index}`;
-                                // console.log(project.proj_sort_key)
+                                console.log(project.proj_sort_key)
                                 return (
                                     <TableRow
                                         onClick={(event) => handleClick(event, project.id)}

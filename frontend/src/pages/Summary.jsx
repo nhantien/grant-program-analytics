@@ -122,7 +122,7 @@ function Summary() {
 
                 let focusAreasJSON = {};
                 focusAreas.map((area) => {
-                    focusAreasJSON[area.value] = area.label;
+                    return focusAreasJSON[area.value] = area.label;
                 });
 
                 let tableInfo = [];
@@ -131,6 +131,7 @@ function Summary() {
                     tableInfo.push({
                         funding_year: grant.funding_year,
                         project_year: grant.project_year,
+                        index_year: index,
                         pi_name: grant.pi_name,
                         project_type: grant.project_type,
                         funding_amount: grant.funding_amount,
@@ -155,7 +156,7 @@ function Summary() {
         };
 
         fetchData();
-    }, [id]);
+    }, [id, server]);
 
     if (isLoading) return (
         <div className={styles.Summary}>

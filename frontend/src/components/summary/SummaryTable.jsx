@@ -36,7 +36,7 @@ function SummaryTable({ data }) {
 
     let totalCount = 0;
     data.student_reach.map((course) => {
-        totalCount += course.reach;
+        return totalCount += course.reach;
     });
 
     const reachData = {
@@ -50,7 +50,7 @@ function SummaryTable({ data }) {
             <Grid container>
                 <Grid item xs={12}>
                     <div className={styles.title}>
-                        Year {data.project_year} ({formattedYear})
+                        Year {data.index_year + 1} ({formattedYear})
                     </div>
                 </Grid>
                 <Grid item xs={12}>
