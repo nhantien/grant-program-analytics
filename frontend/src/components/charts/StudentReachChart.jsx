@@ -10,8 +10,7 @@ import { FiltersContext } from '../../App';
 function StudentReachChart({ projects, reachdata, unique }) {
 
     const { appliedFilters } = useContext(FiltersContext);
-
-    let isDataComplete = true;
+    // let isDataComplete  = true;
     let isUniqueDataComplete = true;
 
     // convert funding_year value from string to int
@@ -24,13 +23,13 @@ function StudentReachChart({ projects, reachdata, unique }) {
 
     // no student reach data prior to 2016: flag if current filters contain years before 2016
     // displays warning message
-    const years = appliedFilters["funding_year"];
-    years.map((year) => {
-        const yearInt = convertYear(year);
-        if (yearInt < 2016) {
-            isDataComplete = false;
-        }
-    });
+    // const years = appliedFilters["funding_year"];
+    // years.map((year) => {
+    //     const yearInt = convertYear(year);
+    //     if (yearInt < 2016) {
+    //         isDataComplete = false;
+    //     }
+    // });
 
     // no unique student data prior to 2017
     const uniqueyears = appliedFilters["funding_year"];
@@ -39,10 +38,11 @@ function StudentReachChart({ projects, reachdata, unique }) {
         if (yearInt < 2017) {
             isUniqueDataComplete = false;
         }
+        return null
     });
 
     const customLabel = (props) => {
-        const { x, y, width, height, value } = props;
+        const { y, width, height, value } = props;
         return (
             <text x={width} y={y + height / 3 * 2} textAnchor="end" fill="#081252" fontStyle="italic">
                 {value.toLocaleString()} Students

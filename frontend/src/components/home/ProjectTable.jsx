@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 // mui
 import {
     Box, Table, TableBody, TableCell, TableContainer,
-    TableHead, TablePagination, TableRow, TableSortLabel, Paper, Grid
+    TableHead, TablePagination, TableRow, TableSortLabel, Paper
 } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 // prop-types
@@ -282,12 +282,12 @@ export default function ProjectTable({ projects }) {
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "10%" }}>{formattedAmount(project.funding_amount)}</TableCell>
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%", color: project.status === "Active" ? "#64b53c" : "#d4734c" }}>{project.status}</TableCell>
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%" }}>
-                                            {project.report ? <a href={project.report} target='_blank'>Report</a> : 'N/A'}
+                                            {project.report ? <a href={project.report} target='_blank' rel='noreferrer'>Report</a> : 'N/A'}
                                         </TableCell>
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%" }}>
                                             {
                                                 project.poster ?
-                                                    <a href={project.poster} target='_blank' style={{ cursor: 'pointer' }}>
+                                                    <a href={project.poster} target='_blank' rel='noreferrer' style={{ cursor: 'pointer' }}>
                                                         <img src={project.poster} style={{ width: "100%", height: "auto" }} />
                                                     </a>
                                                     : "N/A"
