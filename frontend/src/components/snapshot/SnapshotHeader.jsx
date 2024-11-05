@@ -110,7 +110,7 @@ function SnapshotHeader({ options, optionsLoading, range, setRange, server }) {
                                 </Grid>
                                 <Grid xs={12} md={10}>
                                     <Slider
-                                        max={2023}
+                                        max={CURRENT_YEAR}
                                         min={1999}
                                         value={range}
                                         onChange={handleSliderChange}

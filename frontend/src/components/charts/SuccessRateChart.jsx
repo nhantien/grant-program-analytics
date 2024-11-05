@@ -13,7 +13,6 @@ function SuccessRateChart({ projects, totalprojects, largeprojects, smallproject
     // checking if filter by Small or Large 
     const { appliedFilters } = useContext(FiltersContext);
     const project_type = appliedFilters.project_type;
-    console.log(project_type)
     const filterLarge = (project_type.includes("Large") && !project_type.includes('Small')) // Large only
     const filterSmall = (project_type.includes("Small") && !project_type.includes('Large')) // Small only
     const filterAll =  (project_type.includes("Large") &&  project_type.includes('Small')) || project_type.length === 0

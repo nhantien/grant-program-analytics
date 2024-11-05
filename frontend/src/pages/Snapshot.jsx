@@ -2,7 +2,7 @@
 import React from "react";
 import { useState, useEffect, useContext } from "react";
 // react-router
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 // amplify
 import { generateClient } from 'aws-amplify/api';
 // mui
@@ -44,7 +44,7 @@ function Snapshot() {
     // loading states 
     const [loading, setLoading] = useState(true);
     const [optionsLoading, setOptionsLoading] = useState(true);
-
+    console.log(range);
     const generateQuery = (filters) => {
         const str = `query test {
             countDeclinedProjects(server: "${server}", method: "countDeclinedProjects", filter: {
