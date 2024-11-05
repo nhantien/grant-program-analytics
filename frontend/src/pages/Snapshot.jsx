@@ -161,12 +161,12 @@ function Snapshot() {
     const setDropdownOptions = (faculties, focusAreas) => {
         let facultiesJSON = {};
         faculties.map((faculty) => {
-            facultiesJSON[faculty.faculty_code] = faculty.faculty_name;
+            return facultiesJSON[faculty.faculty_code] = faculty.faculty_name;
         });
 
         let focusAreasJSON = {};
         focusAreas.map((area) => {
-            focusAreasJSON[area.value] = area.label;
+            return focusAreasJSON[area.value] = area.label;
         });
 
         const currentYear = new Date().getFullYear();
@@ -256,7 +256,7 @@ function Snapshot() {
 
         fetchData();
     }, [appliedFilters]);
-  
+    
     const handleClick = (section) => {
         document.getElementById(section).scrollIntoView({ behavior: "smooth" });
     };
