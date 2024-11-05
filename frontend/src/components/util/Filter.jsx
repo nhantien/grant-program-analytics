@@ -37,7 +37,7 @@ function Filter({ options, defaultValue, type, snapshot }) {
 
 
   const items = Object.keys(options).map((key) => [key, options[key]]);
-  items.sort((a, b) => a[1] - b[1]);
+  items.sort((a, b) => a[1].localeCompare(b[1]));
 
   const isMobile = () => {
     return window.screen.width <= 576;

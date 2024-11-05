@@ -27,7 +27,6 @@ function StudentReachChart({ projects, reachdata, unique }) {
     const years = appliedFilters["funding_year"];
     years.map((year) => {
         const yearInt = convertYear(year);
-        console.log(yearInt)
         if (yearInt < 2016) {
             isDataComplete = false;
         }
@@ -125,8 +124,6 @@ function StudentReachChart({ projects, reachdata, unique }) {
 
         return null;
     }
-
-    console.log(STUDENT_REACH);
 
     const hasData = projects.Large.length > 0 || projects.Small.length > 0;
     if (!hasData) {

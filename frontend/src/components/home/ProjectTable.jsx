@@ -191,8 +191,7 @@ export default function ProjectTable({ projects }) {
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - projects.length) : 0;
-    console.log(projects[0])
-    const project_lists = projects.map(project => {
+        const project_lists = projects.map(project => {
         const parts = project.id.split('-');
         const newAttribute = [parts[1], parts[3], parts[4], parts[2]].join('-'); 
           
@@ -227,7 +226,7 @@ export default function ProjectTable({ projects }) {
                 rowsPerPage === -1 ? 0 : page * rowsPerPage,
                 rowsPerPage === -1 ? projects.length : page * rowsPerPage + rowsPerPage,
             ),
-        [order, orderBy, page, rowsPerPage],
+        [order, orderBy, page, rowsPerPage, project_lists, projects.length],
     );
 
     return (
@@ -249,7 +248,6 @@ export default function ProjectTable({ projects }) {
                             {visibleProjects
                             .map((project, index) => {
                                 const labelId = `enhanced-table-checkbox-${index}`;
-                                console.log(project.proj_sort_key)
                                 return (
                                     <TableRow
                                         onClick={(event) => handleClick(event, project.id)}
