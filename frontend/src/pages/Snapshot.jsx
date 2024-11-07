@@ -44,7 +44,7 @@ function Snapshot() {
     // loading states 
     const [loading, setLoading] = useState(true);
     const [optionsLoading, setOptionsLoading] = useState(true);
-    console.log(range);
+
     const generateQuery = (filters) => {
         const str = `query test {
             countDeclinedProjects(server: "${server}", method: "countDeclinedProjects", filter: {
