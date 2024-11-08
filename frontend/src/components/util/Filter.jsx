@@ -1,14 +1,21 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FiltersContext } from '../../App';
 import { Grid, FormControl, Select, OutlinedInput, MenuItem, Checkbox, Typography } from '@mui/material';
 import styles from "./Filter.module.css";
 
-function Filter({ options, defaultValue, type }) {
+function Filter({ options, defaultValue, type, filterListDelete }) {
     const { appliedFilters, setAppliedFilters } = useContext(FiltersContext);
 
     // Local state for managing selection within the dropdown
     const [stagedFilters, setStagedFilters] = useState(appliedFilters[type] || []);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Track open/close state
+
+   useEffect(() => {
+    // check if a filter label is deleted from the filter list
+    if (filterListDelete) {
+        appliedFilters[type].length > 0 ? setStagedFilters(appliedFilters[type]) : setStagedFilters([])
+    }
+  }, [filterListDelete]);
 
     const handleChange = (event) => {
         const value = event.target.value;
@@ -19,9 +26,7 @@ function Filter({ options, defaultValue, type }) {
             setStagedFilters(value); // Update staged filters only
         }
     };
-    if (stagedFilters.length > appliedFilters[type].length) {
-        setStagedFilters(appliedFilters[type])
-    }
+
     // Apply staged filters to context when dropdown closes
     const handleDropdownClose = () => {
         setIsDropdownOpen(false);

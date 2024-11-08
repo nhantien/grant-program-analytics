@@ -24,7 +24,8 @@ function SnapshotHeader({ options, optionsLoading, range, setRange, server }) {
 
     const [showSlider, setShowSlider] = useState(appliedFilters["funding_year"].length > 1);
     const [rangeString, setRangeString] = useState(range[0] + "/" + (range[0] + 1) + " - " + range[1] + "/" + (range[1] + 1));
-
+    // to sync up drop down filters and the filter list when deleting item from filter list
+    const [filterListDelete, setFilterListDelete] = useState(false)
     const convertYear = (year) => {
         const yearStr = year.substring(0, year.indexOf("/"));
         return parseInt(yearStr);
@@ -84,16 +85,16 @@ function SnapshotHeader({ options, optionsLoading, range, setRange, server }) {
                     <Grid xs={12} className={styles["dropdown-filters"]}>
                         <Grid container spacing={1}>
                             <Grid item xs={12} md={3}>
-                                <FundingYearFilter options={optionsLoading ? {} : options.funding_year} setShowSlider={setShowSlider} snapshot={false} />
+                                <FundingYearFilter options={optionsLoading ? {} : options.funding_year} setShowSlider={setShowSlider} snapshot={false} filterListDelete={filterListDelete}/>
                             </Grid>
                             <Grid item xs={12} md={3}>
-                                <Filter options={optionsLoading ? {} : options.project_type} defaultValue="Project Type" type="project_type" snapshot={false} />
+                                <Filter options={optionsLoading ? {} : options.project_type} defaultValue="Project Type" type="project_type" snapshot={false} filterListDelete={filterListDelete}/>
                             </Grid>
                             <Grid item xs={12} md={3}>
-                                <Filter options={optionsLoading ? {} : options.project_faculty} defaultValue="Faculty/College/Unit" type="project_faculty" snapshot={false} />
+                                <Filter options={optionsLoading ? {} : options.project_faculty} defaultValue="Faculty/College/Unit" type="project_faculty" snapshot={false} filterListDelete={filterListDelete}/>
                             </Grid>
                             <Grid item xs={12} md={3}>
-                                <Filter options={optionsLoading ? {} : options.focus_area} defaultValue="Focus Area" type="focus_area" snapshot={false} />
+                                <Filter options={optionsLoading ? {} : options.focus_area} defaultValue="Focus Area" type="focus_area" snapshot={false} filterListDelete={filterListDelete}/>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -128,7 +129,7 @@ function SnapshotHeader({ options, optionsLoading, range, setRange, server }) {
                             <span style={{ marginTop: "1rem", marginBottom: "0.5rem" }}>Applied Filters</span>
                             <div className={styles["filters-box"]}>
                             { !optionsLoading &&
-                                    <FilterList options={optionsLoading ? { 'funding_year': { '2024': '2024/2025' } } : options} rangeString={rangeString} setRangeString={setRangeString} />
+                                    <FilterList options={optionsLoading ? { 'funding_year': { '2024': '2024/2025' } } : options} rangeString={rangeString} setRangeString={setRangeString} setFilterListDelete={setFilterListDelete}/>
                                 }
                                 <div className={styles["clear-filters-div"]}>
                                     <p className={styles.text}>Clear All</p>
