@@ -38,6 +38,7 @@ b {
     min-height: 20rem;
     height: 100%;
     margin-left: -2rem;
+    align-items: center;
 }
 
 .space {
@@ -317,9 +318,10 @@ b {
 /* Student Reach Chart */
 .reach-annotation {
     margin-top: 2rem;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     font-weight: 300;
     font-style: italic;
+    text-align: center;
 }
 
 @media screen and (max-width: 576px) {

@@ -136,6 +136,12 @@ function StudentReachChart({ projects, reachdata, unique }) {
             <p className={styles.warning}>Please note, this particular TLEF metric is not available prior to the 2016/17 academic year.</p>
         </div>;
     }
+    if (appliedFilters.funding_year.length > 1) {
+        return <div> This metric is only available for a single funding year at a time.
+        <p className={styles.warning}>Please note, this particular TLEF metric is not available prior to the 2016/17 academic year.</p>
+    </div>;
+    }
+
     return (
         <React.Fragment>
             <div className={styles.chart}>
@@ -154,6 +160,9 @@ function StudentReachChart({ projects, reachdata, unique }) {
                         </Bar>
                     </BarChart>
                 </ResponsiveContainer>
+                <p className={styles["reach-annotation"]}>
+                        *Students enrolled in more than one TLEF-supported course are only counted once.
+                </p>
             </div>
             <div className={styles.space}></div>
             <div className={styles.description}>
@@ -178,9 +187,6 @@ function StudentReachChart({ projects, reachdata, unique }) {
                     // conditional rendering of the unique students when no filter is applied
                     <p> Overall for the year <b>{unique.funding_year}</b>, the projects have reached <b>{formattedAmount(unique.unique_student)}</b> unique students.*</p>
                 }
-                <p className={styles["reach-annotation"]}>
-                    *Students enrolled in more than one TLEF-supported course are only counted once.
-                </p>
                 <p className={styles.warning}>Please note, this particular TLEF metric is not available prior to the 2016/17 academic year.</p>
                 <div className={styles.dataBox}>
                     <h3 className={styles['hidden']}>Chart Data</h3>
