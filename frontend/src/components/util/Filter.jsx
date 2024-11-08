@@ -19,12 +19,8 @@ function Filter({ options, defaultValue, type, filterListDelete }) {
 
     const handleChange = (event) => {
         const value = event.target.value;
-        
-        if (value.indexOf("clear") > -1) {
-            setStagedFilters([]); // Clear selection locally
-        } else {
-            setStagedFilters(value); // Update staged filters only
-        }
+        console.log(value)
+        !value.includes(undefined) && setStagedFilters(value); // Update staged filters only
     };
 
     // Apply staged filters to context when dropdown closes
@@ -39,6 +35,19 @@ function Filter({ options, defaultValue, type, filterListDelete }) {
         }
        
     };
+    
+    const handleClearAll = () => {
+        setStagedFilters([])
+    }
+
+    const handleApply = () => {
+        setIsDropdownOpen(false);
+        setAppliedFilters((prevFilters) => ({
+            ...prevFilters,
+            [type]: stagedFilters,
+        }));
+    };
+    
 
     const ITEM_HEIGHT = 48;
     const ITEM_PADDING_TOP = 8;
@@ -83,12 +92,13 @@ function Filter({ options, defaultValue, type, filterListDelete }) {
                         }}
                         MenuProps={MenuProps}
                     >
+                        <div style={{ display: 'flex', flexWrap: 'wrap', width: '100%' }}>
                         <MenuItem
                             selected={false}
-                            value="clear"
+                            onClick={handleClearAll}
                             disableGutters
                             sx={{
-                                width: "100%",
+                                width: "50%",
                                 backgroundColor: "#EBECEE",
                                 borderRadius: "5px",
                                 padding: "0.5rem 0 0 0",
@@ -98,9 +108,26 @@ function Filter({ options, defaultValue, type, filterListDelete }) {
                         >
                             <Typography>Clear All</Typography>
                         </MenuItem>
+                        <MenuItem
+                            selected={false}
+                            value="apply"
+                            disableGutters
+                            onClick={handleApply}
+                            sx={{
+                                width: "50%",
+                                backgroundColor: "#002145",
+                                borderRadius: "5px",
+                                padding: "0.5rem 0 0 0",
+                                display: "flex",
+                                justifyContent: "center"
+                            }}
+                        >
+                            <Typography sx={{color: "#FFF"}}>Apply</Typography>
+                        </MenuItem>
+                        </div>
                         {items.map((item) => (
                             <MenuItem key={item[1]} value={item[0]} style={{ width: "100%", whiteSpace: "normal" }}>
-                                <Checkbox checked={stagedFilters.indexOf(item[0]) > -1} />
+                                <Checkbox checked={stagedFilters.includes(item[0])} />
                                 <Typography noWrap>{item[1]}</Typography>
                             </MenuItem>
                         ))}
