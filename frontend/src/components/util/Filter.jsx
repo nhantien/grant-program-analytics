@@ -19,7 +19,9 @@ function Filter({ options, defaultValue, type }) {
             setStagedFilters(value); // Update staged filters only
         }
     };
-
+    if (stagedFilters.length > appliedFilters[type].length) {
+        setStagedFilters(appliedFilters[type])
+    }
     // Apply staged filters to context when dropdown closes
     const handleDropdownClose = () => {
         setIsDropdownOpen(false);
