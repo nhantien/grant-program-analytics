@@ -30,10 +30,14 @@ function Filter({ options, defaultValue, type, filterListDelete }) {
     // Apply staged filters to context when dropdown closes
     const handleDropdownClose = () => {
         setIsDropdownOpen(false);
-        setAppliedFilters((prevFilters) => ({
-            ...prevFilters,
-            [type]: stagedFilters,
-        }));
+        if (stagedFilters !== appliedFilters[type]) {
+            // only apply filters if the user actually select different filters
+            setAppliedFilters((prevFilters) => ({
+                ...prevFilters,
+                [type]: stagedFilters,
+            }));
+        }
+       
     };
 
     const ITEM_HEIGHT = 48;
