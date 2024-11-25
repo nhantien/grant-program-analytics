@@ -33,16 +33,10 @@ function FacultyEngagementChart({projects, amount, unique}) {
         }
     });
 
-    //calculate total funding amount 
-    const calculateTotalFunding = () => {
-        const totalamount = amount.reduce((total, project) => total + amount.funding_amount, 0);
-        return totalamount;
-      };
-
     const formattedAmount = (amount) => {
         return parseInt(amount).toLocaleString("en-CA");
     };
-
+    
     const project_type = appliedFilters.project_type;
     const filterLarge = (project_type.includes("Large") && !project_type.includes('Small'))
     const filterSmall = (project_type.includes("Small") && !project_type.includes('Large'))

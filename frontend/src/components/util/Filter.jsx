@@ -19,7 +19,6 @@ function Filter({ options, defaultValue, type, filterListDelete }) {
 
     const handleChange = (event) => {
         const value = event.target.value;
-        console.log(value)
         !value.includes(undefined) && setStagedFilters(value); // Update staged filters only
     };
 
@@ -99,7 +98,7 @@ function Filter({ options, defaultValue, type, filterListDelete }) {
                             disableGutters
                             sx={{
                                 width: "50%",
-                                backgroundColor: "#EBECEE",
+                                backgroundColor: "#D9DADC", // Slightly darker grey
                                 borderRadius: "5px",
                                 padding: "0.5rem 0 0 0",
                                 display: "flex",
@@ -114,15 +113,21 @@ function Filter({ options, defaultValue, type, filterListDelete }) {
                             disableGutters
                             onClick={handleApply}
                             sx={{
-                                width: "50%",
-                                backgroundColor: "#002145",
-                                borderRadius: "5px",
-                                padding: "0.5rem 0 0 0",
-                                display: "flex",
-                                justifyContent: "center"
-                            }}
+                                    width: "50%",
+                                    backgroundColor: "#002145",
+                                    borderRadius: "5px",
+                                    padding: "0.5rem 0 0 0",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    "&:hover": {
+                                        backgroundColor: "#f0f0f0", // Light grey hover
+                                        "& .MuiTypography-root": {
+                                            color: "#002145", // Change text color to dark blue on hover
+                                        },
+                                },
+                             }}
                         >
-                            <Typography sx={{color: "#FFF"}}>Apply</Typography>
+                            <Typography sx={{ color: "#FFF" }}>Apply</Typography>
                         </MenuItem>
                         </div>
                         {items.map((item) => (
