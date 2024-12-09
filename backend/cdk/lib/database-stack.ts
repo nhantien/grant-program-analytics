@@ -433,6 +433,24 @@ export class DatabaseStack extends Stack {
             s3Prefix: 'staging/project_outcomes'
         });
 
+        const studentEngagementProdTable = new glue.S3Table(this, 'StudentEngagementProdTable', {
+            database: prodDB,
+            tableName: 'student_engagement',
+            columns: schemas.STUDENT_ENGAGEMENT_SCHEMA,
+            dataFormat: glue.DataFormat.PARQUET,
+            bucket: s3DataBucket,
+            s3Prefix: 'production/student_engagement'
+        });
+
+        const studentEngagementStagingTable = new glue.S3Table(this, 'StudentEngagementStagingTable', {
+            database: stagingDB,
+            tableName: 'student_engagement',
+            columns: schemas.STUDENT_ENGAGEMENT_SCHEMA,
+            dataFormat: glue.DataFormat.PARQUET,
+            bucket: s3DataBucket,
+            s3Prefix: 'staging/student_engagement'
+        });
+
         this.tables['project_details'] = projectDetailsProdTable;
         this.tables['faculty_engagement'] = facultyEngagementProdTable;
         this.tables['student_reach'] = studentReachProdTable;
@@ -444,5 +462,6 @@ export class DatabaseStack extends Stack {
         this.tables['unsuccessful_projects'] = unsuccessfulProjectsProdTable;
         this.tables['similar_projects'] = similarProjectsProdTable;
         this.tables['project_outcomes'] = projectOutcomesProdTable;
+        this.tables['student_engagement'] = studentEngagementProdTable;
     }
 }

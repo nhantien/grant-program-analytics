@@ -276,6 +276,7 @@ export class ApiStack extends Stack {
             'SIMILAR_PROJECTS': databaseStack.getTableName('similar_projects'),
             'UNIQUE_STUDENT': databaseStack.getTableName('unique_student'),
             'PROJECT_OUTCOMES': databaseStack.getTableName('project_outcomes'),
+            'STUDENT_ENGAGEMENT': databaseStack.getTableName('student_engagement'),
             'CLOUDFRONT_DOMAIN_NAME': databaseStack.getDomainName(),
             'IMAGE_BUCKET_NAME': databaseStack.getImageBucketName()
         };
@@ -285,7 +286,7 @@ export class ApiStack extends Stack {
         this.createResolver('success-rate', ['countDeclinedProjects'], env);
         this.createResolver('projects-and-grants', ['countProjectsAndGrants'], env);
         this.createResolver('summary', ['getIndividualSummaryInfo', 'getTeamMembersByGrantId', 'getStudentReachByGrantId', 'getSimilarProjects', 'getProjectOutcome'], env);
-        this.createResolver('faculty-engagement', ['countFacultyMembersByStream', 'getUniqueStudent'], env);
+        this.createResolver('faculty-engagement', ['countFacultyMembersByStream', 'getUniqueStudent', 'getStudentEngagement'], env);
         this.createResolver('student-reach', ['countTotalReachByFaculty', 'getStudentReachInfo'], env);
 
         const fileTransferFunction = new lambda.Function(this, 'FileTransferFunction', {

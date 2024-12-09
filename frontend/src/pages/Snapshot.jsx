@@ -39,6 +39,7 @@ function Snapshot() {
     const [selectedRange, setSelectedRange] = useState(range);
     const [selectedLargeProjects, setSelectedLargeProjects] = useState({});
     const [selectedSmallProjects, setSelectedSmallProjects] = useState({});
+    const [studentEngagement, setStudentEngagement] = useState({});
     const [options, setOptions] = useState({});
 
     // loading states 
@@ -153,6 +154,19 @@ function Snapshot() {
                     Teaching
                 }
             }
+            
+            getStudentEngagement(server: "${server}", method: "getStudentEngagement", filter: {
+                funding_year: ${JSON.stringify(filters["funding_year"])},
+                project_faculty: ${JSON.stringify(filters["project_faculty"])},
+                project_type: ${JSON.stringify(filters["project_type"])},
+                focus_area: ${JSON.stringify(filters["focus_area"])},
+                search_text: ${JSON.stringify(filters["search_text"])}
+            }) {
+                funding_year
+                project_type
+                student_positions
+                student_funding
+            }
         }`;
 
         return str;
@@ -236,6 +250,7 @@ function Snapshot() {
                 const reachInfo = results.data.getStudentReachInfo;
                 const facultyEngagement = results.data.countFacultyMembersByStream;
                 const uniqueStudent = results.data.getUniqueStudent;
+                const studentEng = results.data.getStudentEngagement;
 
                 setDeclinedProjects(declinedProjects);
                 setNumProjectsAndGrants(projectsAndGrants);
@@ -246,6 +261,7 @@ function Snapshot() {
                 setReachInfo(reachInfo);
                 setFacultyEngagement(facultyEngagement);
                 setUniqueStudent(uniqueStudent);
+                setStudentEngagement(studentEng);
 
                 setLoading(false);
             } catch (e) {
@@ -266,7 +282,7 @@ function Snapshot() {
         numProjects: (<NumProjectsChart projects={numProjectsAndGrants} />),
         funding: (<FundingChart projects={selectedProjects} />),
         studentReach: (<StudentReachChart projects={reachCount} reachdata={reachInfo} unique={uniqueStudent} />),
-        teamMember: (<FacultyEngagementChart projects={facultyEngagement} amount={selectedProjects} unique={uniqueStudent}/>)
+        teamMember: (<FacultyEngagementChart projects={facultyEngagement} amount={selectedProjects} studentEngagement={studentEngagement}/>)
     };
 
     return (

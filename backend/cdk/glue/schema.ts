@@ -361,6 +361,37 @@ const PROJECT_OUTCOMES_SCHEMA = [
     }
 ];
 
+const STUDENT_ENGAGEMENT_SCHEMA = [
+    {
+        name: 'funding_year',
+        type: glue.Schema.BIG_INT
+    },
+    {
+        name: 'project_type',
+        type: glue.Schema.STRING
+    },
+    {
+        name: 'grant_id',
+        type: glue.Schema.STRING
+    },
+    {
+        name: 'project_id',
+        type: glue.Schema.STRING
+    },
+    {
+        name: 'project_faculty',
+        type: glue.Schema.STRING
+    },
+    {
+        name: 'student_positions',
+        type: glue.Schema.BIG_INT
+    },
+    {
+        name: 'student_funding',
+        type: glue.Schema.BIG_INT
+    }
+]
+
 export {
     PROJECT_DETAILS_SCHEMA,
     FACULTY_ENGAGEMENT_SCHEMA,
@@ -372,5 +403,6 @@ export {
     FOCUS_AREA_OPTIONS_SCHEMA,
     UNSUCCESSFUL_PROJECTS_SCHEMA,
     SIMILAR_PROJECTS_SCHEMA,
-    PROJECT_OUTCOMES_SCHEMA
+    PROJECT_OUTCOMES_SCHEMA,
+    STUDENT_ENGAGEMENT_SCHEMA
 }

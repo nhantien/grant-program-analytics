@@ -20,6 +20,16 @@ CREATE TABLE `faculty_engagement` (
   `member_other` string
 );
 
+CREATE TABLE `student_engagement` (
+  `funding_year` bigint,
+  `project_type` string,
+  `grant_id` string,
+  `project_id` string,
+  `project_faculty` string,
+  `student_positions` bigint,
+  `student_funding` bigint
+);
+
 CREATE TABLE `focus_area` (
   `funding_year` bigint,
   `project_type` string,
@@ -114,6 +124,8 @@ CREATE TABLE `focus_area_options` (
 );
 
 ALTER TABLE `faculty_engagement` ADD FOREIGN KEY (`grant_id`) REFERENCES `project_details` (`grant_id`);
+
+ALTER TABLE `student_engagement` ADD FOREIGN KEY (`grant_id`) REFERENCES `project_details` (`grant_id`);
 
 ALTER TABLE `focus_area` ADD FOREIGN KEY (`grant_id`) REFERENCES `project_details` (`grant_id`);
 

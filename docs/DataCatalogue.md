@@ -1,6 +1,7 @@
 ## TLEF Data Catalogue
 
 ### co-curricular-reach
+
 | Column Name    | Description                                | Data Types |
 |----------------|--------------------------------------------|------------|
 | funding_year   | The year in which this grant is provided  | Bigint     |
@@ -8,7 +9,8 @@
 | estimated_reach| The estimated student reach                | String     |
 | description    | A description of the project              | String     |
 
-### faculty_engagement 
+### faculty_engagement
+
 | Column Name     | Description                                                  | Data Types |
 |-----------------|--------------------------------------------------------------|------------|
 | funding_year    | The year in which this grant is provided                    | Bigint     |
@@ -24,13 +26,27 @@
 | member_unit     | The unit of the team member                                  | String     |
 | member_other    | Other information about the team members                     | String     |
 
-### faculty_options 
+### student_engagement
+
+| Column Name     | Description                                                  | Data Types |
+|-----------------|--------------------------------------------------------------|------------|
+| funding_year    | The year in which this grant is provided                    | Bigint     |
+| project_type    | Whether it is a Small or Large TLEF project                 | String     |
+| grant_id        | The unique identifier for the grant                         | String     |
+| project_id      | The unique identifier for the project                       | String     |
+| project_faculty | The faculty / college / unit this project belongs to        | String     |
+| student_positions | Number of student positions | Bigint |
+| student_funding | The funding amount | Bigint |
+
+### faculty_options
+
 | Column Name   | Description                                | Data Types |
 |---------------|--------------------------------------------|------------|
 | faculty_name  | The name of the faculty / college / unit   | String     |
 | faculty_code  | The faculty / college / unit's code        | String     |
 
-### focus_area 
+### focus_area
+
 | Column Name                  | Description                                               | Data Types |
 |------------------------------|-----------------------------------------------------------|------------|
 | funding_year                 | The year in which this grant is provided                  | Number     |
@@ -54,13 +70,15 @@
 | diversity_and_inclusion      | Whether or not Diversity and Inclusion is a focus area    | Boolean    |
 | open_educational_resources  | Whether or not Open Educational Resources is a focus area| Boolean    |
 
-### focus_area_options 
+### focus_area_options
+
 | Column Name | Description                        | Data Types |
 |-------------|------------------------------------|------------|
 | label       | The focus area's label             | String     |
 | value       | The focus area's value             | String     |
 
-### project_details 
+### project_details
+
 | Column Name         | Description                                                   | Data Types |
 |---------------------|---------------------------------------------------------------|------------|
 | funding_year        | The year in which this grant is provided                      | Bigint     |
@@ -77,20 +95,23 @@
 | generated_grant_id  | The cleaned, standardized unique identifier of the grant       | String     |
 | project_year        | The project's ordinal year for this grant (1st, 2nd, etc.)    | Bigint     |
 
-### project_outcomes 
+### project_outcomes
+
 | Column Name    | Description                        | Data Types |
 |----------------|------------------------------------|------------|
 | project_id     | The unique identifier of the project | String   |
 | project_outcomes | The outcomes of the project       | String     |
 | project_status      | Whether the project is completed or active     | String     |
 
-### similar_projects 
+### similar_projects
+
 | Column Name       | Description                                               |
 |-------------------|-----------------------------------------------------------|
 | project_key       | The project's key by which similarity is compared against|
 | similar_projects  | A list of similar projects for the project                |
 
-### student_reach 
+### student_reach
+
 | Column Name    | Description                                           | Data Types |
 |----------------|-------------------------------------------------------|------------|
 | funding_year   | The year in which this grant is provided              | Bigint     |
@@ -108,7 +129,8 @@
 | reach          | The amount of students affected by the course        | Bigint     |
 | fte            | The full-time equivalency of the course               | Double     |
 
-### unique_student 
+### unique_student
+
 | Column Name    | Description                                           | Data Types |
 |----------------|-------------------------------------------------------|------------|
 | funding_year   | The year in which this grant is provided              | Bigint     |
@@ -127,6 +149,7 @@
 | fte            | The full-time equivalency of the course               | Double     |
 
 ### unsuccessful_project
+
 | Column Name        | Description                                            | Data Types |
 |--------------------|--------------------------------------------------------|------------|
 | funding_year       | The year in which this grant is provided               | Bigint     |

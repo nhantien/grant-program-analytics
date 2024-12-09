@@ -51,7 +51,6 @@ def execute_query(query_string, server):
     return rows
     
 def lambda_handler(event, context):
-    
     # get method name
     method = event["method"]
     server = event["server"]
@@ -61,6 +60,8 @@ def lambda_handler(event, context):
         return countFacultyMembersByStream(event["filter"], server)
     elif method == "getUniqueStudent":
         return getUniqueStudent(event["fundingYear"], server)
+    elif method == "getStudentEngagement":
+        return getStudentEngagement(event["filter"], server)
     else:
         return None
 
@@ -124,3 +125,42 @@ def getUniqueStudent(year, server):
             jsonItem[column_name] = int(value) if column_name == "funding_year" else float(value)
     
     return jsonItem
+
+def getStudentEngagement(filters, server):
+    def generate_filter(filters):
+        str = ""
+        for key, values in filters.items():
+            # for now only able to filter for funding_year, project_type, project_faculty
+            if key == 'funding_year' and len(values) > 0:
+                str += " AND %s IN (%s)" % (key, ",".join(values))
+            elif key in 'project_type' and len(values) > 0:
+                str += f" AND regexp_like({key}, '"
+                for idx, v in enumerate(values):
+                    str += f"{v}"
+                    if idx < len(values) - 1:
+                        str += "|"
+                str += "')"
+            elif key in 'project_faculty' and len(values) > 0:
+                str += " AND %s IN (%s)" % (key, "'" + "','".join(values) + "'")
+
+        return str
+
+    result_list = []
+    query_string = f""" SELECT 
+            funding_year, 
+            project_type, 
+            SUM(student_positions) AS student_positions, 
+            SUM(student_funding) AS student_funding
+        FROM student_engagement
+        WHERE 1 = 1"""
+    query_string += generate_filter(filters) + " GROUP BY funding_year, project_type;"
+    rows = execute_query(query_string, server)
+
+    for r in rows[1:]:
+        json_item = {}
+        json_item['funding_year'] = int(r["Data"][0]["VarCharValue"])
+        json_item['project_type'] = r["Data"][1]["VarCharValue"]
+        json_item['student_positions'] = float(r["Data"][2]["VarCharValue"])
+        json_item['student_funding'] = float(r["Data"][3]["VarCharValue"])
+        result_list.append(json_item)
+    return result_list
