@@ -138,6 +138,7 @@ function FacultyEngagementChart({projects, amount, studentEngagement}) {
                  (appliedFilters.project_type).length === 0 &&
                  (appliedFilters.focus_area).length === 0 &&
                  (appliedFilters.search_text).length === 0 &&
+                 (student_funding_amt > 0 && student_positions_count > 0) && 
                 <p>
                     Approximately <b>${formattedAmount(student_funding_amt)}</b> in 
                     TLEF-awarded funding will employ over <b>{student_positions_count}</b> UBC students 
