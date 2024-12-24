@@ -19,8 +19,10 @@ def generate_filtered_query(filters):
                 # LOWER(p.project_outcome) LIKE '%{value.lower()}%' OR 
             str = str[:str.rindex("OR ")] + ")"
         
-        elif key in ['funding_year', 'project_type'] and len(values) > 0:
+        elif key in 'funding_year' and len(values) > 0:
             str += " AND s.%s IN (%s)" % (key, ",".join(values))
+        elif key in 'project_type' and len(values) > 0:
+            str += " AND s.%s IN ('%s')" % (key, "','".join(values))
         elif key == 'focus_area' and len(values) > 0:
             str += " AND ("
             for value in values:
