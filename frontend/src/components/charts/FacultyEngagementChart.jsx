@@ -11,7 +11,7 @@ import styles from "./charts.module.css";
 import { FiltersContext } from '../../App';
 
 
-function FacultyEngagementChart({projects, amount, unique}) {
+function FacultyEngagementChart({projects, amount, studentEngagement}) {
 
     const { appliedFilters } = useContext(FiltersContext);
 
@@ -33,16 +33,10 @@ function FacultyEngagementChart({projects, amount, unique}) {
         }
     });
 
-    //calculate total funding amount 
-    const calculateTotalFunding = () => {
-        const totalamount = amount.reduce((total, project) => total + amount.funding_amount, 0);
-        return totalamount;
-      };
-
     const formattedAmount = (amount) => {
         return parseInt(amount).toLocaleString("en-CA");
     };
-
+    
     const project_type = appliedFilters.project_type;
     const filterLarge = (project_type.includes("Large") && !project_type.includes('Small'))
     const filterSmall = (project_type.includes("Small") && !project_type.includes('Large'))
@@ -55,6 +49,21 @@ function FacultyEngagementChart({projects, amount, unique}) {
             <p className={styles.warning}>Please note, this particular TLEF metric is not available prior to the 2017/18 academic year.</p>
         </div>;
     }
+
+    function calculateBasedOnFilter(arr, key) {
+        if (filterLarge) {
+            return arr.filter((obj) => obj.project_type.toLowerCase().includes('large')).reduce((total, obj) => total + obj[key], 0)
+        } else if  (filterSmall) {
+            return arr.filter((obj) => obj.project_type.toLowerCase().includes('small')).reduce((total, obj) => total + obj[key], 0)
+        } else {
+            return arr.reduce((total, obj) => total + obj[key], 0)
+        }
+    }
+
+    // it can calculate the result depends on if the filter is for large or small, or both.
+    const student_funding_amt = calculateBasedOnFilter(studentEngagement, 'student_funding')
+    const student_positions_count = calculateBasedOnFilter(studentEngagement, 'student_positions')
+
     return (
         <React.Fragment>
 
@@ -129,7 +138,12 @@ function FacultyEngagementChart({projects, amount, unique}) {
                  (appliedFilters.project_type).length === 0 &&
                  (appliedFilters.focus_area).length === 0 &&
                  (appliedFilters.search_text).length === 0 &&
-                <p>Approximately <b>${formattedAmount(unique.funding_amount)}</b> in TLEF-awarded funding will employ over <b>{projects.Small.Student + projects.Large.Student}</b> UBC students to support the development, implementation and evaluation of TLEF projects.</p>
+                 (student_funding_amt > 0 && student_positions_count > 0) && 
+                <p>
+                    Approximately <b>${formattedAmount(student_funding_amt)}</b> in 
+                    TLEF-awarded funding will employ over <b>{student_positions_count}</b> UBC students 
+                    to support the development, implementation and evaluation of TLEF projects.
+                </p>
             }
             <p className={styles.warning}>Please note, this particular TLEF metric is not available prior to the 2017/18 academic year.</p>
             </div>

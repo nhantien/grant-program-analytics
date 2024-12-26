@@ -37,6 +37,8 @@ function HomePage({ signOut }) {
     const [rangeString, setRangeString] = useState("");
 
     const [page, setPage] = useState(0);
+    // to sync up drop down filters and the filter list when deleting item from filter list
+    const [filterListDelete, setFilterListDelete] = useState(false)
 
     const generateQueryString = (filters) => {
 
@@ -254,16 +256,16 @@ function HomePage({ signOut }) {
                         <span className={styles["filter-text"]}>Filter by</span>
                         <Grid container spacing={1} className={styles.filters}>
                             <Grid item xs={12} md={3}>
-                                <FundingYearFilter options={optionsLoading ? {} : options.funding_year} setShowSlider={setShowSlider} snapshot={false} />
+                                <FundingYearFilter options={optionsLoading ? {} : options.funding_year} setShowSlider={setShowSlider} snapshot={false} filterListDelete={filterListDelete}/>
                             </Grid>
                             <Grid item xs={12} md={3}>
-                                <Filter options={optionsLoading ? {} : options.project_type} defaultValue="Project Type" type="project_type" snapshot={false} />
+                                <Filter options={optionsLoading ? {} : options.project_type} defaultValue="Project Type" type="project_type" snapshot={false} filterListDelete={filterListDelete}/>
                             </Grid>
                             <Grid item xs={12} md={3}>
-                                <Filter options={optionsLoading ? {} : options.project_faculty} defaultValue="Faculty/College/Unit" type="project_faculty" snapshot={false} />
+                                <Filter options={optionsLoading ? {} : options.project_faculty} defaultValue="Faculty/College/Unit" type="project_faculty" snapshot={false} filterListDelete={filterListDelete}/>
                             </Grid>
                             <Grid item xs={12} md={3}>
-                                <Filter options={optionsLoading ? {} : options.focus_area} defaultValue="Focus Area" type="focus_area" snapshot={false} />
+                                <Filter options={optionsLoading ? {} : options.focus_area} defaultValue="Focus Area" type="focus_area" snapshot={false} filterListDelete={filterListDelete}/>
                             </Grid>
                         </Grid>
                     </div>
@@ -304,7 +306,7 @@ function HomePage({ signOut }) {
                         <div className={styles["filters-box"]}>
                             {
                                 !optionsLoading &&
-                                <FilterList options={options} rangeString={rangeString} setRangeString={setRangeString} />
+                                <FilterList options={options} rangeString={rangeString} setRangeString={setRangeString} setFilterListDelete={setFilterListDelete}/>
                             }
                             <div className={styles["clear-filters-div"]}>
                                 <p className={styles.text}>Clear All</p>

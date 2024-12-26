@@ -10,15 +10,12 @@ import { FiltersContext } from "../../App";
 
 function SuccessRateChart({ projects, totalprojects, largeprojects, smallprojects }) {
 
-    const largeprog = totalprojects.filter(proj => proj.project_type === 'Large');
-
     // checking if filter by Small or Large 
     const { appliedFilters } = useContext(FiltersContext);
     const project_type = appliedFilters.project_type;
-
-    const filterLarge = (project_type.includes("Large") && !project_type.includes('Small'))
-    const filterSmall = (project_type.includes("Small") && !project_type.includes('Large'))
-
+    const filterLarge = (project_type.includes("Large") && !project_type.includes('Small')) // Large only
+    const filterSmall = (project_type.includes("Small") && !project_type.includes('Large')) // Small only
+    const filterAll =  (project_type.includes("Large") &&  project_type.includes('Small')) || project_type.length === 0
     const small = [
         {
             "name": "Rejected Small TLEF Projects",
@@ -59,9 +56,9 @@ function SuccessRateChart({ projects, totalprojects, largeprojects, smallproject
                     <Grid item xs={filterLarge ? 3 : 6}>
                         <div className={`${filterLarge ? styles['filter-hidden'] : ''}`}>
                             <ResponsiveContainer height={300} width='99%'>
-                                {!filterLarge && <p className={styles["sr-title"]}>Small TLEF Innovation Projects</p>}
-                                {!filterLarge && <p className={styles["sr-info"]}>Proposals: {smallprojects.length + projects.Small} | Funded: {smallprojects.length} </p>}
-                                <PieChart>
+                                {(filterAll || !filterLarge) && <p className={styles["sr-title"]}>Small TLEF Innovation Projects</p>}
+                                {(filterAll || !filterLarge) && <p className={styles["sr-info"]}>Proposals: {smallprojects.length + projects.Small} | Funded: {smallprojects.length} </p>}
+                               {(filterAll || !filterLarge) && (<PieChart>
                                     <Pie
                                         data={small}
                                         dataKey={"value"}
@@ -89,15 +86,15 @@ function SuccessRateChart({ projects, totalprojects, largeprojects, smallproject
                                             }}
                                         />
                                     </Pie>
-                                </PieChart>
+                                </PieChart>)}
                             </ResponsiveContainer>
                         </div>
                     </Grid>
                     <Grid item xs={filterSmall ? 3 : 6} container justifyContent='flex-end' >
                         <ResponsiveContainer height={300} width='99%'>
-                            {!filterSmall && <p className={styles["sr-title"]}>Large TLEF Innovation Projects</p>}
-                            {!filterSmall && <p className={styles["sr-info"]}>Proposals: {largeprojects.length + projects.Large} | Funded: {largeprojects.length} </p>}
-                            <PieChart>
+                            {(filterAll || !filterSmall) &&  <p className={styles["sr-title"]}>Large TLEF Innovation Projects</p>}
+                            {(filterAll || !filterSmall) &&  <p className={styles["sr-info"]}>Proposals: {largeprojects.length + projects.Large} | Funded: {largeprojects.length} </p>}
+                            {(filterAll || !filterSmall) && (<PieChart>
                                 <Pie
                                     data={large}
                                     dataKey={"value"}
@@ -125,7 +122,7 @@ function SuccessRateChart({ projects, totalprojects, largeprojects, smallproject
                                         }}
                                     />
                                 </Pie>
-                            </PieChart>
+                            </PieChart>)}
                         </ResponsiveContainer>
                     </Grid>
                 </Grid>

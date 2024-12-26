@@ -5,43 +5,12 @@ import { Link } from 'react-router-dom';
 // mui
 import {
     Box, Table, TableBody, TableCell, TableContainer,
-    TableHead, TablePagination, TableRow, TableSortLabel, Paper, Grid
+    TableHead, TablePagination, TableRow, TableSortLabel, Paper
 } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 // prop-types
 import PropTypes from 'prop-types';
 
-function descendingComparator(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
-        return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-        return 1;
-    }
-    return 0;
-}
-
-function getComparator(order, orderBy) {
-    return order === 'desc'
-        ? (a, b) => descendingComparator(a, b, orderBy)
-        : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-// Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
-// stableSort() brings sort stability to non-modern browsers (notably IE11). If you
-// only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
-// with exampleArray.slice().sort(exampleComparator)
-function stableSort(array, comparator) {
-    const stabilizedThis = array.map((el, index) => [el, index]);
-    stabilizedThis.sort((a, b) => {
-        const order = comparator(a[0], b[0]);
-        if (order !== 0) {
-            return order;
-        }
-        return a[1] - b[1];
-    });
-    return stabilizedThis.map((el) => el[0]);
-}
 
 const headCells = [
     {
@@ -136,7 +105,7 @@ function EnhancedTableHead(props) {
                                 height: "3rem",
                                 "&.Mui-active": {
                                     color: "white",
-                                    fontWeight: 700,
+                                    fontWeight: 700
                                 },
                                 "& .MuiTableSortLabel-icon": {
                                     color: "white !important",
@@ -165,8 +134,9 @@ EnhancedTableHead.propTypes = {
 
 export default function ProjectTable({ projects }) {
     const path = window.location.pathname;
-    const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('funding_year');
+    const [order, setOrder] = React.useState('asc'); // sort ascending by default
+    // 'funding_year', 'title'
+    const [orderBy, setOrderBy] = React.useState('pi_name');
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -221,14 +191,42 @@ export default function ProjectTable({ projects }) {
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - projects.length) : 0;
+        const project_lists = projects.map(project => {
+        const parts = project.id.split('-');
+        const newAttribute = [parts[1], parts[3], parts[4], parts[2]].join('-'); 
+          
+        return {
+            ...project,           // Spread existing object properties
+               proj_sort_key: newAttribute // Add the new attribute with custom ID
+            };
+        })
 
     const visibleProjects = React.useMemo(
-        () =>
-            stableSort(projects, getComparator(order, orderBy)).slice(
+        () =>            
+            project_lists.sort((p1, p2) => {
+                const aVal = p1[orderBy]
+                const bVal = p2[orderBy]
+                
+                // sort by the primary sorting key (column) first
+                let sort_cond1 = null
+                if (typeof aVal === 'string' && typeof bVal === 'string') {
+                    // String comparison in descending order
+                    sort_cond1 = order === "asc" ? aVal.localeCompare(bVal) : -aVal.localeCompare(bVal)
+                } else if (typeof aVal === 'number' && typeof bVal === 'number') {
+                    // Number comparison in descending order
+                    sort_cond1 = order === "asc" ? bVal - aVal : -(bVal - aVal)
+                }
+                
+                // then sort by a second condition
+                const sort_cond2 = p1.proj_sort_key.localeCompare(p2.proj_sort_key)
+
+                return sort_cond1 || sort_cond2
+            })
+            .slice(
                 rowsPerPage === -1 ? 0 : page * rowsPerPage,
                 rowsPerPage === -1 ? projects.length : page * rowsPerPage + rowsPerPage,
             ),
-        [order, orderBy, page, rowsPerPage],
+        [order, orderBy, page, rowsPerPage, project_lists, projects.length],
     );
 
     return (
@@ -247,9 +245,9 @@ export default function ProjectTable({ projects }) {
                             onRequestSort={handleRequestSort}
                         />
                         <TableBody>
-                            {visibleProjects.map((project, index) => {
+                            {visibleProjects
+                            .map((project, index) => {
                                 const labelId = `enhanced-table-checkbox-${index}`;
-
                                 return (
                                     <TableRow
                                         onClick={(event) => handleClick(event, project.id)}
@@ -284,12 +282,12 @@ export default function ProjectTable({ projects }) {
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "10%" }}>{formattedAmount(project.funding_amount)}</TableCell>
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%", color: project.status === "Active" ? "#64b53c" : "#d4734c" }}>{project.status}</TableCell>
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%" }}>
-                                            {project.report ? <a href={project.report} target='_blank'>Report</a> : 'N/A'}
+                                            {project.report ? <a href={project.report} target='_blank' rel='noreferrer'>Report</a> : 'N/A'}
                                         </TableCell>
                                         <TableCell align="left" sx={{ height: "5rem", maxWidth: "5%" }}>
                                             {
                                                 project.poster ?
-                                                    <a href={project.poster} target='_blank' style={{ cursor: 'pointer' }}>
+                                                    <a href={project.poster} target='_blank' rel='noreferrer' style={{ cursor: 'pointer' }}>
                                                         <img src={project.poster} style={{ width: "100%", height: "auto" }} />
                                                     </a>
                                                     : "N/A"

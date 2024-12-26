@@ -1,4 +1,4 @@
-import { Stack, StackProps, Duration } from "aws-cdk-lib";
+import { Stack, StackProps, Duration, RemovalPolicy } from "aws-cdk-lib";
 import * as appsync from 'aws-cdk-lib/aws-appsync';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as iam from 'aws-cdk-lib/aws-iam';
@@ -55,9 +55,9 @@ export class ApiStack extends Stack {
             architecture: lambda.Architecture.X86_64,
             timeout: Duration.minutes(1),
             role: this.resolverRole,
-            environment: env
+            environment: env,
         });
-
+        resolver.applyRemovalPolicy(RemovalPolicy.DESTROY)
         const lambdaDSPolicy = new iam.PolicyDocument({
             statements: [new iam.PolicyStatement({
                 effect: iam.Effect.ALLOW,
@@ -78,6 +78,7 @@ export class ApiStack extends Stack {
                 "AppSyncDSLambdaPolicy": lambdaDSPolicy
             }
         });
+        lambdaDSRole.applyRemovalPolicy(RemovalPolicy.DESTROY)
 
         const lambdaDataSource = new appsync.LambdaDataSource(this, `${folderName}-lambda-data-source`, {
             api: this.api,
@@ -85,6 +86,7 @@ export class ApiStack extends Stack {
             name: `${folderName}-lambda-data-source`,
             // serviceRole: lambdaDSRole
         });
+        appsync.LambdaDataSource
 
         queries.forEach(query => this.assignResolver(query, lambdaDataSource));
     }
@@ -104,7 +106,7 @@ export class ApiStack extends Stack {
                 fieldLogLevel: appsync.FieldLogLevel.ALL
             }
         });
-
+        api.applyRemovalPolicy(RemovalPolicy.DESTROY)
         this.api = api;
 
         const webAcl = new wafv2.CfnWebACL(this, 'TlefAnalyticsAcl', {
@@ -138,12 +140,12 @@ export class ApiStack extends Stack {
                 },
             ]
         });
-
+        webAcl.applyRemovalPolicy(RemovalPolicy.DESTROY)
         const appSyncAssociation = new wafv2.CfnWebACLAssociation(this, "TlefWebAclAssociation", {
             webAclArn: webAcl.attrArn,
             resourceArn: api.arn
         });
-
+        appSyncAssociation.applyRemovalPolicy(RemovalPolicy.DESTROY)
         const appsyncAllowPolicy = new iam.PolicyStatement({
             effect: iam.Effect.ALLOW,
             actions: [
@@ -174,7 +176,7 @@ export class ApiStack extends Stack {
             userPoolName: 'tlef-user-pool',
             accountRecovery: cognito.AccountRecovery.NONE,
         });
-
+        userPool.applyRemovalPolicy(RemovalPolicy.RETAIN)
         const userPoolClient = new cognito.UserPoolClient(this, 'TlefUserPoolClient', {
             userPool: userPool,
             userPoolClientName: 'tlef-admin-client',
@@ -183,7 +185,7 @@ export class ApiStack extends Stack {
                 userSrp: true
             }
         });
-
+        userPoolClient.applyRemovalPolicy(RemovalPolicy.RETAIN)
         const identityPool = new cognito.CfnIdentityPool(this, 'TlefIdPool', {
             identityPoolName: 'tlef-identity-pool',
             allowUnauthenticatedIdentities: true,
@@ -192,7 +194,7 @@ export class ApiStack extends Stack {
                 providerName: userPool.userPoolProviderName
             }]
         });
-
+        identityPool.applyRemovalPolicy(RemovalPolicy.RETAIN)
         const authenticatedRole = new iam.Role(this, 'TlefAuthenticatedRole', {
             assumedBy: new iam.FederatedPrincipal(
                 'cognito-identity.amazonaws.com',
@@ -212,7 +214,7 @@ export class ApiStack extends Stack {
                 "UnauthenticatedPolicy": cognitoPolicy
             }
         });
-
+        authenticatedRole.applyRemovalPolicy(RemovalPolicy.DESTROY)
         const guestRole = new iam.Role(this, 'TlefGuestAccessRole', {
             assumedBy: new iam.FederatedPrincipal(
                 'cognito-identity.amazonaws.com',
@@ -232,7 +234,7 @@ export class ApiStack extends Stack {
                 "UnauthenticatedPolicy": cognitoPolicy
             }
         });
-
+        guestRole.applyRemovalPolicy(RemovalPolicy.DESTROY)
         const idPoolRoleAttachment = new cognito.CfnIdentityPoolRoleAttachment(this, 'TlefIdPoolRoleAttachment', {
             identityPoolId: identityPool.ref,
             roles: {
@@ -258,7 +260,7 @@ export class ApiStack extends Stack {
             ],
             description: 'IAM role for the lambda resolver function'
         });
-
+        resolverRole.applyRemovalPolicy(RemovalPolicy.DESTROY)
         this.resolverRole = resolverRole;
 
         const env = {
@@ -276,6 +278,7 @@ export class ApiStack extends Stack {
             'SIMILAR_PROJECTS': databaseStack.getTableName('similar_projects'),
             'UNIQUE_STUDENT': databaseStack.getTableName('unique_student'),
             'PROJECT_OUTCOMES': databaseStack.getTableName('project_outcomes'),
+            'STUDENT_ENGAGEMENT': databaseStack.getTableName('student_engagement'),
             'CLOUDFRONT_DOMAIN_NAME': databaseStack.getDomainName(),
             'IMAGE_BUCKET_NAME': databaseStack.getImageBucketName()
         };
@@ -285,7 +288,7 @@ export class ApiStack extends Stack {
         this.createResolver('success-rate', ['countDeclinedProjects'], env);
         this.createResolver('projects-and-grants', ['countProjectsAndGrants'], env);
         this.createResolver('summary', ['getIndividualSummaryInfo', 'getTeamMembersByGrantId', 'getStudentReachByGrantId', 'getSimilarProjects', 'getProjectOutcome'], env);
-        this.createResolver('faculty-engagement', ['countFacultyMembersByStream', 'getUniqueStudent'], env);
+        this.createResolver('faculty-engagement', ['countFacultyMembersByStream', 'getUniqueStudent', 'getStudentEngagement'], env);
         this.createResolver('student-reach', ['countTotalReachByFaculty', 'getStudentReachInfo'], env);
 
         const fileTransferFunction = new lambda.Function(this, 'FileTransferFunction', {
@@ -300,7 +303,7 @@ export class ApiStack extends Stack {
                 'S3_BUCKET_NAME': databaseStack.getS3BucketName()
             }
         });
-
+        fileTransferFunction.applyRemovalPolicy(RemovalPolicy.DESTROY)
         const s3AccessPolicy = new iam.PolicyStatement({
             actions: [
                 "s3:*",

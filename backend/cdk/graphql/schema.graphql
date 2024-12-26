@@ -96,6 +96,13 @@ type Proposal {
   title: String
 }
 
+type StudentEngagement {
+  funding_year: Int,
+  project_type: String,
+  student_positions: Float,
+  student_funding: Float
+}
+
 type Query {
   copyFilesToProduction: Status
   countDeclinedProjects(filter: Filter, method: String, server: String): CountByProjectType
@@ -110,6 +117,7 @@ type Query {
   getStudentReachInfo(filter: Filter, method: String, server: String): StudentReachInfo
   getTeamMembersByGrantId(grantId: String, method: String, server: String): [TeamMembers]
   getUniqueStudent(fundingYear: String, method: String, server: String): UniqueStudent
+  getStudentEngagement(filter: Filter, method: String, server: String): [StudentEngagement]
   loadFaculty(method: String, server: String): [Faculty]
   loadFocusArea(method: String, server: String): [FocusArea]
 }

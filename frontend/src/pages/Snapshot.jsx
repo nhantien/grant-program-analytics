@@ -2,7 +2,7 @@
 import React from "react";
 import { useState, useEffect, useContext } from "react";
 // react-router
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 // amplify
 import { generateClient } from 'aws-amplify/api';
 // mui
@@ -26,7 +26,6 @@ function Snapshot() {
     const client = generateClient();
 
     const { appliedFilters } = useContext(FiltersContext);
-    console.log(appliedFilters)
 
     const location = useLocation();
     const { projects, range } = location.state;
@@ -40,6 +39,7 @@ function Snapshot() {
     const [selectedRange, setSelectedRange] = useState(range);
     const [selectedLargeProjects, setSelectedLargeProjects] = useState({});
     const [selectedSmallProjects, setSelectedSmallProjects] = useState({});
+    const [studentEngagement, setStudentEngagement] = useState({});
     const [options, setOptions] = useState({});
 
     // loading states 
@@ -154,6 +154,19 @@ function Snapshot() {
                     Teaching
                 }
             }
+            
+            getStudentEngagement(server: "${server}", method: "getStudentEngagement", filter: {
+                funding_year: ${JSON.stringify(filters["funding_year"])},
+                project_faculty: ${JSON.stringify(filters["project_faculty"])},
+                project_type: ${JSON.stringify(filters["project_type"])},
+                focus_area: ${JSON.stringify(filters["focus_area"])},
+                search_text: ${JSON.stringify(filters["search_text"])}
+            }) {
+                funding_year
+                project_type
+                student_positions
+                student_funding
+            }
         }`;
 
         return str;
@@ -162,12 +175,12 @@ function Snapshot() {
     const setDropdownOptions = (faculties, focusAreas) => {
         let facultiesJSON = {};
         faculties.map((faculty) => {
-            facultiesJSON[faculty.faculty_code] = faculty.faculty_name;
+            return facultiesJSON[faculty.faculty_code] = faculty.faculty_name;
         });
 
         let focusAreasJSON = {};
         focusAreas.map((area) => {
-            focusAreasJSON[area.value] = area.label;
+            return focusAreasJSON[area.value] = area.label;
         });
 
         const currentYear = new Date().getFullYear();
@@ -224,7 +237,6 @@ function Snapshot() {
             try {
                 setLoading(true);
                 const query_string = generateQuery(appliedFilters);
-                console.log(query_string);
                 const results = await client.graphql({
                     query: query_string,
                 });
@@ -238,6 +250,7 @@ function Snapshot() {
                 const reachInfo = results.data.getStudentReachInfo;
                 const facultyEngagement = results.data.countFacultyMembersByStream;
                 const uniqueStudent = results.data.getUniqueStudent;
+                const studentEng = results.data.getStudentEngagement;
 
                 setDeclinedProjects(declinedProjects);
                 setNumProjectsAndGrants(projectsAndGrants);
@@ -248,6 +261,7 @@ function Snapshot() {
                 setReachInfo(reachInfo);
                 setFacultyEngagement(facultyEngagement);
                 setUniqueStudent(uniqueStudent);
+                setStudentEngagement(studentEng);
 
                 setLoading(false);
             } catch (e) {
@@ -258,7 +272,7 @@ function Snapshot() {
 
         fetchData();
     }, [appliedFilters]);
-  
+    
     const handleClick = (section) => {
         document.getElementById(section).scrollIntoView({ behavior: "smooth" });
     };
@@ -268,7 +282,7 @@ function Snapshot() {
         numProjects: (<NumProjectsChart projects={numProjectsAndGrants} />),
         funding: (<FundingChart projects={selectedProjects} />),
         studentReach: (<StudentReachChart projects={reachCount} reachdata={reachInfo} unique={uniqueStudent} />),
-        teamMember: (<FacultyEngagementChart projects={facultyEngagement} amount={selectedProjects} unique={uniqueStudent}/>)
+        teamMember: (<FacultyEngagementChart projects={facultyEngagement} amount={selectedProjects} studentEngagement={studentEngagement}/>)
     };
 
     return (

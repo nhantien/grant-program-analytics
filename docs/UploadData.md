@@ -127,6 +127,7 @@ If you would like to edit data after [step 6](#step-6-start-the-second-glue-job)
 
 # Other Datasets
 ## Step 1: Name Datasets Appropriately
+
 When you upload datasets, make sure the file name follows our naming convention, and the column names are consistent with our database schema. Please check the table below refer to [our data lake schema](DataLakeSchema.md) for the naming convention, and [data catalogue](DataCatalogue.md) for column names.
 
 | Data Type | Naming Convention | Example |
@@ -139,6 +140,7 @@ When you upload datasets, make sure the file name follows our naming convention,
 | Unsuccessful Projects | `unsuccessful_projects_{year}.xlsx` | `unsuccessful_projects_2024.xlsx` |
 | Co Curricular Reach | `co_curricular_reach_{year}.xlsx` | `co_curricular_reach_2024.xlsx` |
 | Project Outcome | `project_outcomes.xlsx` | `project_outcomes.xlsx` |
+| Student Engagement | `student_engagement_{year}.xlsx` | `student_engagement_2024.xlsx` |
 
 ## Step 2: Uploading files
 Once you name each file correctly, upload the files to the appropriate location in Amazon S3. Please refer to the table below, or refer to [our data lake schema](DataLakeSchema.md) for details.
@@ -153,6 +155,7 @@ Once you name each file correctly, upload the files to the appropriate location 
 | Unsuccessful Projects | `/raw/unsuccessful_projects/` |
 | Co Curricular Reach | `/raw/co_curricular_reach/` |
 | Project Outcomes | `/raw/project_outcomes/` |
+| Student Engagement | `/raw/student_engagement/` |
 
 Navigate to your folder, and click `Upload`.
 ![folder](./images/folder.jpeg)
