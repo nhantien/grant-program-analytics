@@ -10,10 +10,8 @@ import { FiltersContext } from '../../App';
 function StudentReachChart({ projects, reachdata, unique }) {
 
     const { appliedFilters } = useContext(FiltersContext);
-
-    let isDataComplete = true;
+    // let isDataComplete  = true;
     let isUniqueDataComplete = true;
-
     // convert funding_year value from string to int
     // e.g. "2022/2023" -> 2022
     const convertYear = (year) => {
@@ -21,17 +19,15 @@ function StudentReachChart({ projects, reachdata, unique }) {
         return parseInt(year);
     }
 
-
     // no student reach data prior to 2016: flag if current filters contain years before 2016
     // displays warning message
-    const years = appliedFilters["funding_year"];
-    years.map((year) => {
-        const yearInt = convertYear(year);
-        console.log(yearInt)
-        if (yearInt < 2016) {
-            isDataComplete = false;
-        }
-    });
+    // const years = appliedFilters["funding_year"];
+    // years.map((year) => {
+    //     const yearInt = convertYear(year);
+    //     if (yearInt < 2016) {
+    //         isDataComplete = false;
+    //     }
+    // });
 
     // no unique student data prior to 2017
     const uniqueyears = appliedFilters["funding_year"];
@@ -40,10 +36,11 @@ function StudentReachChart({ projects, reachdata, unique }) {
         if (yearInt < 2017) {
             isUniqueDataComplete = false;
         }
+        return null
     });
 
     const customLabel = (props) => {
-        const { x, y, width, height, value } = props;
+        const { y, width, height, value } = props;
         return (
             <text x={width} y={y + height / 3 * 2} textAnchor="end" fill="#081252" fontStyle="italic">
                 {value.toLocaleString()} Students
@@ -80,6 +77,13 @@ function StudentReachChart({ projects, reachdata, unique }) {
         });
     });
 
+    let showStudentReach = "Both";
+    if (projects.Large.length > 0 && projects.Small.length === 0) {
+        showStudentReach = "Large"
+    } else if (projects.Large.length === 0 && projects.Small.length > 0) {
+        showStudentReach = "Small"
+    }
+    
     projects.Large.forEach((item) => {
         const faculty = item.project_faculty;
         const smallReach = calculateSmallReach(faculty);
@@ -126,14 +130,18 @@ function StudentReachChart({ projects, reachdata, unique }) {
         return null;
     }
 
-    console.log(STUDENT_REACH);
-
     const hasData = projects.Large.length > 0 || projects.Small.length > 0;
     if (!hasData) {
         return <div> No summaries matching this criteria.
             <p className={styles.warning}>Please note, this particular TLEF metric is not available prior to the 2016/17 academic year.</p>
         </div>;
     }
+    if (appliedFilters.funding_year.length > 1) {
+        return <div> This metric is only available for a single funding year at a time.
+        <p className={styles.warning}>Please note, this particular TLEF metric is not available prior to the 2016/17 academic year.</p>
+    </div>;
+    }
+
     return (
         <React.Fragment>
             <div className={styles.chart}>
@@ -145,35 +153,40 @@ function StudentReachChart({ projects, reachdata, unique }) {
                         <Tooltip content={CustomToolTip} />
                         <Legend verticalAlign='top' iconType='square' height={36} />
                         <Bar dataKey="Small TLEF" stackId="a" maxBarSize={120} background={{ fill: "#EEEE" }} fill="#FB812D" />
-                        <Bar dataKey="Large TLEF" stackId="a" maxBarSize={120} fill="#2F5D7C">
+                        <Bar dataKey="Large TLEF" stackId="a" maxBarSize={120} fill="#2F5D7C" >
                             <LabelList
                                 dataKey="total" fill="#081252" style={{ fontStyle: "italic" }} width='98%' position='right' content={customLabel}
                             />
                         </Bar>
                     </BarChart>
                 </ResponsiveContainer>
+                <p className={styles["reach-annotation"]}>
+                        <b>*</b>Students enrolled in more than one TLEF-supported course are only counted once.
+                </p>
             </div>
             <div className={styles.space}></div>
             <div className={styles.description}>
                 <p className={styles["chart-annotation"]}>
                     Hover/click on the bars to display further data
                 </p>
-                <p>TLEF projects funded in the selected year(s) reached <b>{formattedAmount(totalSmallReach)}</b> students in Small TLEF innovation projects and
-                    <b> {formattedAmount(totalLargeReach)}</b> students in Large TLEF Transformation projects.</p>
-                <p>Overall, the projects reached <b>{formattedAmount(reachdata.course)}</b> courses (undergraduate and graduate) and <b>{reachdata.section}</b> sections
-                    across <b>{reachdata.faculty}</b> Faculties at the UBCV campus, impacting <b>{formattedAmount(totalSmallReach + totalLargeReach)}</b> enrolment. </p>
-
+                    <p>TLEF projects funded in the selected year(s) reached 
+                        {["Both", "Small"].includes(showStudentReach) && (<> <b>{formattedAmount(totalSmallReach)}</b> students in Small TLEF innovation projects </>) } 
+                        {showStudentReach === "Both" && <>and</>} 
+                        {["Both", "Large"].includes(showStudentReach) && (<><b> {formattedAmount(totalLargeReach)}</b> students in Large TLEF Transformation projects.</>)}
+                    </p>
+                    <p>Overall, the
+                        {showStudentReach === "Both" ? " " : " " + showStudentReach + " "}
+                        TLEF projects reached <b>{formattedAmount(reachdata.course)}</b> courses (undergraduate and graduate) and <b>{reachdata.section}</b> sections
+                        across <b>{reachdata.faculty}</b> Faculties at the UBCV campus, impacting <b>{formattedAmount(totalSmallReach + totalLargeReach)}</b> enrolment. 
+                    </p>
                 {isUniqueDataComplete && appliedFilters && appliedFilters["funding_year"].length === 1
                     && (appliedFilters.project_faculty).length === 0 &&
                     (appliedFilters.project_type).length === 0 &&
                     (appliedFilters.focus_area).length === 0 &&
                     (appliedFilters.search_text).length === 0 &&
                     // conditional rendering of the unique students when no filter is applied
-                    <p> Overall for the year <b>{unique.funding_year}</b>, the projects have reached <b>{formattedAmount(unique.unique_student)}</b> unique students.*</p>
+                    <p> Overall for the year <b>{unique.funding_year}</b>, the projects have reached <b>{formattedAmount(unique.unique_student)}</b> unique students.<b>*</b></p>
                 }
-                <p className={styles["reach-annotation"]}>
-                    *Students enrolled in more than one TLEF-supported course are only counted once.
-                </p>
                 <p className={styles.warning}>Please note, this particular TLEF metric is not available prior to the 2016/17 academic year.</p>
                 <div className={styles.dataBox}>
                     <h3 className={styles['hidden']}>Chart Data</h3>

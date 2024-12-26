@@ -8,28 +8,17 @@ def generate_filtered_query(filters):
     str = ""
     for key, values in filters.items():
         
-        if key == 'search_text' and len(values) > 0:
-            str += " AND ("
-            for value in values:
-                str += f"""
-                    LOWER(p.title) LIKE '%{value.lower()}%' OR 
-                    LOWER(p.pi_name) LIKE '%{value.lower()}%' OR 
-                    LOWER(p.summary) LIKE '%{value.lower()}%' OR 
-                """
-                # LOWER(p.project_outcome) LIKE '%{value.lower()}%' OR 
-            str = str[:str.rindex("OR ")] + ")"
+        if key == 'funding_year' and len(values) > 0:
+            str += " AND e.%s IN (%s)" % (key, ",".join(values))
         
-        elif key == 'funding_year' and len(values) > 0:
-            str += " AND p.%s IN (%s)" % (key, ",".join(values))
-            
         elif key == 'focus_area' and len(values) > 0:
             str += " AND ("
             for value in values:
                 str += "f.%s = true OR " % (value)
             str = str[:str.rindex("OR ")] + ")"
-            
+        
         elif len(values) > 0:
-            str += " AND p.%s IN ('%s')" % (key, "','".join(values))
+            str += " AND e.%s IN ('%s')" % (key, "','".join(values))
     
     return str
     
@@ -62,7 +51,6 @@ def execute_query(query_string, server):
     return rows
     
 def lambda_handler(event, context):
-    
     # get method name
     method = event["method"]
     server = event["server"]
@@ -72,15 +60,16 @@ def lambda_handler(event, context):
         return countFacultyMembersByStream(event["filter"], server)
     elif method == "getUniqueStudent":
         return getUniqueStudent(event["fundingYear"], server)
+    elif method == "getStudentEngagement":
+        return getStudentEngagement(event["filter"], server)
     else:
         return None
 
 def countFacultyMembersByStream(filters, server):
     query_string = f"""SELECT 
         e.project_type, e.member_stream, COUNT (e.member_stream) 
-        FROM {os.environ.get('PROJECT_DETAILS')} p
-        LEFT JOIN {os.environ.get('FACULTY_ENGAGEMENT')} e ON p.grant_id = e.grant_id
-        LEFT JOIN {os.environ.get('FOCUS_AREA')} f ON p.grant_id = f.grant_id
+        FROM {os.environ.get('FACULTY_ENGAGEMENT')} e 
+        LEFT JOIN {os.environ.get('FOCUS_AREA')} f ON e.grant_id = f.grant_id
         WHERE 1 = 1"""
     query_string += generate_filtered_query(filters) + " GROUP BY e.project_type, e.member_stream"
     rows = execute_query(query_string, server)
@@ -136,3 +125,42 @@ def getUniqueStudent(year, server):
             jsonItem[column_name] = int(value) if column_name == "funding_year" else float(value)
     
     return jsonItem
+
+def getStudentEngagement(filters, server):
+    def generate_filter(filters):
+        str = ""
+        for key, values in filters.items():
+            # for now only able to filter for funding_year, project_type, project_faculty
+            if key == 'funding_year' and len(values) > 0:
+                str += " AND %s IN (%s)" % (key, ",".join(values))
+            elif key in 'project_type' and len(values) > 0:
+                str += f" AND regexp_like({key}, '"
+                for idx, v in enumerate(values):
+                    str += f"{v}"
+                    if idx < len(values) - 1:
+                        str += "|"
+                str += "')"
+            elif key in 'project_faculty' and len(values) > 0:
+                str += " AND %s IN (%s)" % (key, "'" + "','".join(values) + "'")
+
+        return str
+
+    result_list = []
+    query_string = f""" SELECT 
+            funding_year, 
+            project_type, 
+            SUM(student_positions) AS student_positions, 
+            SUM(student_funding) AS student_funding
+        FROM student_engagement
+        WHERE 1 = 1"""
+    query_string += generate_filter(filters) + " GROUP BY funding_year, project_type;"
+    rows = execute_query(query_string, server)
+
+    for r in rows[1:]:
+        json_item = {}
+        json_item['funding_year'] = int(r["Data"][0]["VarCharValue"])
+        json_item['project_type'] = r["Data"][1]["VarCharValue"]
+        json_item['student_positions'] = float(r["Data"][2]["VarCharValue"])
+        json_item['student_funding'] = float(r["Data"][3]["VarCharValue"])
+        result_list.append(json_item)
+    return result_list

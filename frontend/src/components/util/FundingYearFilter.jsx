@@ -30,7 +30,7 @@ function FundingYearFilter({ options, setShowSlider, snapshot }) {
     const MenuProps = {
         PaperProps: {
             style: {
-                maxHeight: ITEM_HEIGHT * 10 + ITEM_PADDING_TOP,
+                maxHeight: ITEM_HEIGHT * 5 + ITEM_PADDING_TOP,
                 width: 250,
             },
         },

@@ -78,7 +78,7 @@ def getIndividualSummaryInfo(grant_id, server):
         f.teaching_roles_and_training, f.curriculum, f.student_experience, f.work_integrated_learning, 
         f.indigenous_focused_curricula, f.diversity_and_inclusion, f.open_educational_resources 
     FROM {os.environ.get('PROJECT_DETAILS')} p
-    LEFT JOIN {os.environ.get("PROJECT_OUTCOMES")} o ON p.project_id = o.project_id
+    LEFT JOIN (SELECT DISTINCT * FROM {os.environ.get("PROJECT_OUTCOMES")}) o ON p.project_id = o.project_id
     LEFT JOIN {os.environ.get('CO_CURRICULAR_REACH')} c ON p.grant_id = c.grant_id 
     LEFT JOIN {os.environ.get('FOCUS_AREA')} f ON p.grant_id = f.grant_id 
     WHERE p.project_id = (

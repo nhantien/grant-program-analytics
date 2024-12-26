@@ -3,7 +3,7 @@ import styles from "./ProjectOutcome.module.css";
 
 function ProjectOutcome({ data }) {
 
-    if (data === "") return null;
+    if (data === "" ||  data === "TBD") return null;
 
     return (
         <div className={styles.bg}>

@@ -9,7 +9,7 @@ import { Grid } from '@mui/material';
 // constants
 import { CURRENT_YEAR } from '../../constants';
 
-function FilterList({ options, rangeString, setRangeString }) {
+function FilterList({ options, rangeString, setRangeString, setFilterListDelete }) {
 
   const { appliedFilters, setAppliedFilters } = useContext(FiltersContext);
 
@@ -19,6 +19,9 @@ function FilterList({ options, rangeString, setRangeString }) {
 
     // remove the selected item from the list of filters
     const updatedFilters = appliedFilters[filterType].filter((filter) => filter !== filterValue);
+    // return the filter label that was delted from the filter list 
+    // the actual value is not currently being used, it just serves as a truthy value
+    setFilterListDelete({filterType: filterType, filterValue: filterValue})
     setAppliedFilters((prevFilters) => ({
       ...prevFilters,
       [filterType]: updatedFilters,
