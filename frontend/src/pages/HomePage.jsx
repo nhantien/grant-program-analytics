@@ -13,7 +13,7 @@ import styles from './HomePage.module.css';
 // context
 import { FiltersContext } from '../App';
 // components
-import { SearchBar, VerticalTableItem, ProjectTable } from '../components/home';
+import { SearchBar, VerticalTableItem, ProjectTable, ProjectList } from '../components/home';
 import { Filter, FilterList, FundingYearFilter } from "../components/util";
 // constants
 import { Project, PROJECT_TYPE, MARKS, CURRENT_YEAR } from '../constants';
@@ -143,6 +143,7 @@ function HomePage({ signOut }) {
                 const newProjects = proposals.map((proj) => {
                     return new Project(
                         proj.grant_id,
+                        proj.project_id,
                         proj.funding_year + "/" + (+proj.funding_year + 1),
                         proj.project_type,
                         proj.pi_name,
@@ -229,7 +230,7 @@ function HomePage({ signOut }) {
             console.log(e);
         }
     }
-
+    console.log(projects)
     return (
         <div className={styles.bg}>
             {
@@ -371,7 +372,9 @@ function HomePage({ signOut }) {
                                                     onChange={(event, page) => handlePaginationChange(page)} sx={{ margin: "auto" }} />
                                             </div>
                                             :
-                                            <ProjectTable projects={projects} />
+                                            // <ProjectTable projects={projects} />
+                                            <ProjectList projects={projects} />
+
                                     }
                                 </Grid>
                             </Grid>
