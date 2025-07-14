@@ -230,7 +230,7 @@ function HomePage({ signOut }) {
             console.log(e);
         }
     }
-    console.log(projects)
+
     return (
         <div className={styles.bg}>
             {
