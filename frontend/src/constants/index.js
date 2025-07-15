@@ -1,5 +1,6 @@
 class Project {
     id;
+    project_id;
     funding_year;
     project_type;
     pi_name;
@@ -11,8 +12,9 @@ class Project {
     report;
     poster;
 
-    constructor(id, fundingYear, type, investigator, faculty, title, projectYear, amount, status, report, poster) {
+    constructor(id, projectId, fundingYear, type, investigator, faculty, title, projectYear, amount, status, report, poster) {
         this.id = id;
+        this.project_id = projectId;
         this.funding_year = fundingYear;
         this.project_type = type;
         this.pi_name = investigator;
