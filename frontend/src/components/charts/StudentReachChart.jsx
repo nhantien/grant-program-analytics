@@ -136,11 +136,6 @@ function StudentReachChart({ projects, reachdata, unique }) {
             <p className={styles.warning}>Please note, this particular TLEF metric is not available prior to the 2016/17 academic year.</p>
         </div>;
     }
-    if (appliedFilters.funding_year.length > 1) {
-        return <div> This metric is only available for a single funding year at a time.
-        <p className={styles.warning}>Please note, this particular TLEF metric is not available prior to the 2016/17 academic year.</p>
-    </div>;
-    }
 
     return (
         <React.Fragment>
@@ -185,7 +180,7 @@ function StudentReachChart({ projects, reachdata, unique }) {
                     (appliedFilters.focus_area).length === 0 &&
                     (appliedFilters.search_text).length === 0 &&
                     // conditional rendering of the unique students when no filter is applied
-                    <p> Overall for the year <b>{unique.funding_year}</b>, the projects have reached <b>{formattedAmount(unique.unique_student)}</b> unique students.<b>*</b></p>
+                    (appliedFilters.funding_year.length === 1 && <p> Overall for the year <b>{unique.funding_year}</b>, the projects have reached <b>{formattedAmount(unique.unique_student)}</b> unique students.<b>*</b></p>)
                 }
                 <p className={styles.warning}>Please note, this particular TLEF metric is not available prior to the 2016/17 academic year.</p>
                 <div className={styles.dataBox}>
